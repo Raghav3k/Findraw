@@ -7,6 +7,7 @@ import genshinCatalog from "./genshinCatalog.json";
 import leagueOfLegendsCatalog from "./leagueOfLegendsCatalog.json";
 import rainbowSixCatalog from "./rainbowSixCatalog.json";
 import valorantCatalog from "./valorantCatalog.json";
+import { assetUrl } from "../assetUrls";
 
 export type AutoDrawStage = {
   label: string;
@@ -117,7 +118,7 @@ function processCatalog(
     for (const item of items) {
       if (!item || !item.file || !item.answer) continue;
 
-      const imageUrl = `/auto-draw/${gameFolder}/${folderName}/${item.file}`;
+      const imageUrl = assetUrl(`/auto-draw/${gameFolder}/${folderName}/${item.file}`);
       const id = item.id || `${gameFolder}-${folderName}-${item.answer}`.replace(/[^a-z0-9]+/g, "-");
 
       assets.push({

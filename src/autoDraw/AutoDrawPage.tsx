@@ -14,6 +14,7 @@ import { CategoryPickerWindow, type CategoryPickerGroup } from "../ui/CategoryPi
 import { AutoDrawCanvas } from "./AutoDrawCanvas";
 import { AUTO_DRAW_ASSETS } from "./autoDrawAssets";
 import { GAME_TITLES, UNIFIED_DOMAINS, matchesCategorySelection as matchesCategory, getCategory } from "../dashboard/gameData";
+import { assetUrl } from "../assetUrls";
 
 type Props = { onNavigate: (path: string) => void };
 type Status = "idle" | "playing" | "paused" | "complete";
@@ -28,14 +29,14 @@ const categories = [...new Set(AUTO_DRAW_ASSETS.map(({ category }) => category))
 
 const categoryArtwork = (selection: string) => {
   const value = selection.toLowerCase();
-  if (value.includes("valorant")) return "/category-art/valorant-sketch.webp";
-  if (value.includes("deadlock")) return "/category-art/deadlock-sketch.webp";
-  if (value.includes("rainbow")) return "/category-art/rainbow-six-siege-sketch.webp";
-  if (value.includes("clash of clans")) return "/category-art/clash-of-clans-sketch.webp";
-  if (value.includes("clash royale")) return "/category-art/clash-royale-sketch.webp";
-  if (value.includes("fortnite")) return "/category-art/fortnite-sketch.webp";
-  if (value.includes("minecraft")) return "/category-art/minecraft-sketch.webp";
-  return "/category-art/random.jpg";
+  if (value.includes("valorant")) return assetUrl("/category-art/valorant-sketch.webp");
+  if (value.includes("deadlock")) return assetUrl("/category-art/deadlock-sketch.webp");
+  if (value.includes("rainbow")) return assetUrl("/category-art/rainbow-six-siege-sketch.webp");
+  if (value.includes("clash of clans")) return assetUrl("/category-art/clash-of-clans-sketch.webp");
+  if (value.includes("clash royale")) return assetUrl("/category-art/clash-royale-sketch.webp");
+  if (value.includes("fortnite")) return assetUrl("/category-art/fortnite-sketch.webp");
+  if (value.includes("minecraft")) return assetUrl("/category-art/minecraft-sketch.webp");
+  return assetUrl("/category-art/random.jpg");
 };
 
 export function AutoDrawPage({ onNavigate }: Props) {
@@ -503,7 +504,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
                     onChange={chooseCategory}
                     onReset={resetMixCategories}
                     onSelectAll={selectAllCategories}
-                    selectedArtwork="/category-art/random.jpg"
+                    selectedArtwork={assetUrl("/category-art/random.jpg")}
                     selectedId={selectedCategory}
                     selectedKicker={selectedKickerText}
                     selectedLabels={selectedLabels}

@@ -14,6 +14,7 @@ import {
 import { usePersistentState } from "../ui/usePersistentState";
 import type { TwitchSession } from "../twitch/twitchApi";
 import { CategoryPickerWindow } from "../ui/CategoryPickerWindow";
+import { assetUrl } from "../assetUrls";
 
 type SupportTab = "categories" | "settings";
 
@@ -90,8 +91,8 @@ export function SupportPanel({
     : getCategory(selectedCategoryId) ?? randomCategory;
   const currentCategory = getCategory(currentCategoryId);
   const selectedCategoryArtwork = selectedCategory.id === "random" || selectedTokens.length > 1
-    ? "/category-art/random.jpg"
-    : `/category-art/${selectedCategory.id.replace("game:", "")}.jpg`;
+    ? assetUrl("/category-art/random.jpg")
+    : assetUrl(`/category-art/${selectedCategory.id.replace("game:", "")}.jpg`);
 
   return (
     <section className="feed-card support-card">

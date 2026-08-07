@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { PointerEvent } from "react";
 import { AUTO_DRAW_OBSCURITY_LEVELS, type AutoDrawAsset } from "./autoDrawAssets";
+import { assetUrl } from "../assetUrls";
 
 type AutoDrawCanvasProps = {
   asset: AutoDrawAsset;
@@ -30,7 +31,7 @@ type Cloud = {
 type DrawingTransform = { drawX: number; drawY: number; scale: number };
 type ScanPoint = { x: number; y: number };
 
-const CLOUD_SPRITE_URL = "/auto-draw/particles/cloud-cover.png";
+const CLOUD_SPRITE_URL = assetUrl("/auto-draw/particles/cloud-cover.png");
 const FALLBACK_PAPER = "#fff2cf";
 const FRAME_SEQUENCE = [0, 1, 2, 1];
 const STAGE_OBSCURITY = [...AUTO_DRAW_OBSCURITY_LEVELS.map((value) => value / 100), 0];
@@ -469,3 +470,4 @@ const handlePointerEnter = (event: PointerEvent<HTMLCanvasElement>) => {
     />
   );
 }
+
