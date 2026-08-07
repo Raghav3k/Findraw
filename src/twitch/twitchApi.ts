@@ -1,3 +1,5 @@
+import { apiUrl } from "../apiUrls";
+
 export type EventSubStatus = "disconnected" | "connecting" | "connected" | "reconnecting" | "revoked";
 
 export type TwitchSession = {
@@ -27,7 +29,7 @@ export type LiveEvent =
   | { type: "round-ended"; payload: { roundId: string; reason: string } };
 
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(url, {
+  const response = await fetch(apiUrl(url), {
     ...init,
     headers: { "Content-Type": "application/json", ...init?.headers },
   });
@@ -36,6 +38,7 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
   return body as T;
 }
 
+export const twitchEventsUrl = () => apiUrl("/api/events");
 export const fetchTwitchSession = () => request<TwitchSession>("/api/twitch/session");
 export const fetchLeaderboard = () => request<LeaderboardEntry[]>("/api/leaderboard");
 export const disconnectTwitch = () => request<{ ok: boolean }>("/api/twitch/disconnect", { method: "POST" });

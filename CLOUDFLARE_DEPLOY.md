@@ -26,3 +26,17 @@ If this value is empty, asset URLs stay relative, which is best for local develo
 ## Twitch backend
 
 The current Twitch integration uses `server/index.mjs`, Express, local file storage, Server-Sent Events, and an outbound Twitch EventSub WebSocket. That server is not part of the static Pages deployment. The live deployed frontend will still load, but Twitch chat features need a later Cloudflare Worker/Durable Object migration or another hosted Node backend.
+
+## Backend Worker
+
+The Twitch/live-chat backend has a Worker + Durable Object migration in `cloudflare/backend`. Deploy that Worker first, then set this Pages variable:
+
+- `VITE_API_BASE_URL=https://findraw-backend.YOUR_SUBDOMAIN.workers.dev`
+
+The backend Worker requires these secrets:
+
+- `TWITCH_CLIENT_ID`
+- `TWITCH_CLIENT_SECRET`
+- `SESSION_SECRET`
+
+Also update `FRONTEND_URL` and `TWITCH_REDIRECT_URI` in `cloudflare/backend/wrangler.toml` before deploying. The Twitch Developer Console callback URL must match `TWITCH_REDIRECT_URI`.

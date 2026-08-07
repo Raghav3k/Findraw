@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerE
 import {
   endServerRound,
   fetchTwitchSession,
+  twitchEventsUrl,
   startServerRound,
   type LiveChatMessage,
   type LiveEvent,
@@ -95,7 +96,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
   useEffect(() => {
     let mounted = true;
     fetchTwitchSession().then((session) => { if (mounted) setTwitchSession(session); }).catch(() => undefined);
-    const events = new EventSource("/api/events");
+    const events = new EventSource(twitchEventsUrl());
     events.onmessage = (message) => {
       const event = JSON.parse(message.data) as LiveEvent;
       if (event.type === "twitch-session") setTwitchSession(event.payload);

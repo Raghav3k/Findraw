@@ -9,6 +9,7 @@ import {
 import { ExcalidrawStage } from "../canvas/ExcalidrawStage";
 import { StreamSourceSidebar, type ChatMessage } from "./StreamSourceSidebar";
 import { SupportPanel } from "./SupportPanel";
+import { twitchAuthStartUrl } from "../apiUrls";
 import {
   DEFAULT_KEYBOARD_SHORTCUTS,
   type ShortcutAction,
@@ -20,6 +21,7 @@ import {
   endServerRound,
   fetchLeaderboard,
   fetchTwitchSession,
+  twitchEventsUrl,
   startServerRound,
   type LeaderboardEntry,
   type LiveEvent,
@@ -229,7 +231,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         if (active) setConnectionNotice(`Local server unavailable: ${error.message}`);
       });
 
-    const events = new EventSource("/api/events");
+    const events = new EventSource(twitchEventsUrl());
     events.onmessage = (message) => {
       const event = JSON.parse(message.data) as LiveEvent;
       if (event.type === "twitch-session") setTwitchSession(event.payload);
@@ -364,7 +366,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     setRoundStatus("ended");
   };
 
-  const connectTwitch = () => window.location.assign("/auth/twitch/start");
+  const connectTwitch = () => window.location.assign(twitchAuthStartUrl());
 
   const disconnectFromTwitch = async () => {
     try {

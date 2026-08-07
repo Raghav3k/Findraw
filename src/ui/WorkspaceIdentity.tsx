@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { twitchAuthStartUrl } from "../apiUrls";
 
 type WorkspaceIdentityProps = {
   connected: boolean;
@@ -63,7 +64,7 @@ export function WorkspaceIdentity({ connected, configured, displayName, modeName
               </div>
               <p>{connected ? "Your Twitch display name and live chat are ready in this workspace." : configured ? "Connect Twitch to show your account name and receive live chat." : "Twitch setup is not available yet. You can keep using the local profile."}</p>
               <div className="workspace-profile-menu-actions">
-                <button disabled={!configured} onClick={() => window.location.assign("/auth/twitch/start?returnTo=" + encodeURIComponent(returnTo))} type="button">
+                <button disabled={!configured} onClick={() => window.location.assign(twitchAuthStartUrl(returnTo))} type="button">
                   <span className="material-symbols-outlined">link</span>
                   {connected ? "Reconnect Twitch" : configured ? "Connect Twitch" : "Twitch setup needed"}
                 </button>
