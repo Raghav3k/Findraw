@@ -40,7 +40,10 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
 
 export const twitchEventsUrl = () => apiUrl("/api/events");
 export const fetchTwitchSession = () => request<TwitchSession>("/api/twitch/session");
-export const fetchLeaderboard = () => request<LeaderboardEntry[]>("/api/leaderboard");
+export const fetchLeaderboard = async () => {
+  const result = await request<LeaderboardEntry[]>("/api/leaderboard");
+  return Array.isArray(result) ? result : [];
+};
 export const disconnectTwitch = () => request<{ ok: boolean }>("/api/twitch/disconnect", { method: "POST" });
 export const startServerRound = (answer: string, target: number, aliases: string[] = [], testBots: boolean = false) => request<{ roundId: string }>("/api/round/start", {
   method: "POST",

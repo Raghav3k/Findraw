@@ -243,7 +243,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           ? current
           : [...current, event.payload.solver]);
       }
-      if (event.type === "leaderboard") setLeaderboard(event.payload);
+      if (event.type === "leaderboard") setLeaderboard(Array.isArray(event.payload) ? event.payload : []);
       if (event.type === "round-started") activeRoundIdRef.current = event.payload.roundId;
       if (event.type === "round-ended" && event.payload.roundId === activeRoundIdRef.current) {
         setRoundStatus("ended");
