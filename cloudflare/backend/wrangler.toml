@@ -13,4 +13,4 @@ new_sqlite_classes = ["FindrawSession"]
 
 [vars]
 FRONTEND_URL = "https://findraw.pages.dev"
-TWITCH_REDIRECT_URI = "https://findraw-backend.YOUR_SUBDOMAIN.workers.dev/auth/twitch/callback"
+TWITCH_REDIRECT_URI = "https://findraw-backend.bonamsairaghavendra.workers.dev/auth/twitch/callback"
