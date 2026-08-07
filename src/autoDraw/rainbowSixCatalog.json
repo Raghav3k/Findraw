@@ -1,0 +1,1395 @@
+{
+  "gadgets": [
+    {
+      "id": "r6-gadget-active-defense-system",
+      "answer": "Active Defense System",
+      "aliases": [
+        "ADS",
+        "Jager ADS",
+        "Jäger ADS",
+        "active defense system"
+      ],
+      "file": "active-defense-system.webp"
+    },
+    {
+      "id": "r6-gadget-airjab",
+      "answer": "Airjab",
+      "aliases": [
+        "airjab"
+      ],
+      "file": "airjab.webp"
+    },
+    {
+      "id": "r6-gadget-armor-pack",
+      "answer": "Armor Pack",
+      "aliases": [
+        "armor pack"
+      ],
+      "file": "armor-pack.webp"
+    },
+    {
+      "id": "r6-gadget-banshee-sonic-defense",
+      "answer": "Banshee Sonic Defense",
+      "aliases": [
+        "banshee sonic defense"
+      ],
+      "file": "banshee-sonic-defense.webp"
+    },
+    {
+      "id": "r6-gadget-black-eye-camera",
+      "answer": "Black Eye Camera",
+      "aliases": [
+        "black eye camera"
+      ],
+      "file": "black-eye-camera.webp"
+    },
+    {
+      "id": "r6-gadget-black-mirror",
+      "answer": "Black Mirror",
+      "aliases": [
+        "black mirror"
+      ],
+      "file": "black-mirror.webp"
+    },
+    {
+      "id": "r6-gadget-breaching-hammer",
+      "answer": "Breaching Hammer",
+      "aliases": [
+        "Sledge Hammer",
+        "Caber",
+        "breaching hammer"
+      ],
+      "file": "breaching-hammer.webp"
+    },
+    {
+      "id": "r6-gadget-bu-gi-auto-breacher",
+      "answer": "BU-GI Auto-Breacher",
+      "aliases": [
+        "bu gi auto breacher"
+      ],
+      "file": "bu-gi-auto-breacher.webp"
+    },
+    {
+      "id": "r6-gadget-candela",
+      "answer": "Candela",
+      "aliases": [
+        "candela"
+      ],
+      "file": "candela.webp"
+    },
+    {
+      "id": "r6-gadget-cluster-charge",
+      "answer": "Cluster Charge",
+      "aliases": [
+        "cluster charge"
+      ],
+      "file": "cluster-charge.webp"
+    },
+    {
+      "id": "r6-gadget-electroclaw",
+      "answer": "Electroclaw",
+      "aliases": [
+        "electroclaw"
+      ],
+      "file": "electroclaw.webp"
+    },
+    {
+      "id": "r6-gadget-entry-denial-device",
+      "answer": "Entry Denial Device",
+      "aliases": [
+        "EDD",
+        "Kapkan Trap",
+        "entry denial device"
+      ],
+      "file": "entry-denial-device.webp"
+    },
+    {
+      "id": "r6-gadget-evil-eye",
+      "answer": "Evil Eye",
+      "aliases": [
+        "evil eye"
+      ],
+      "file": "evil-eye.webp"
+    },
+    {
+      "id": "r6-gadget-exothermic-charge",
+      "answer": "Exothermic Charge",
+      "aliases": [
+        "exothermic charge"
+      ],
+      "file": "exothermic-charge.webp"
+    },
+    {
+      "id": "r6-gadget-f-natt-dread-mine",
+      "answer": "F-NATT Dread Mine",
+      "aliases": [
+        "F-NATT",
+        "Fenrir Mine",
+        "f natt dread mine"
+      ],
+      "file": "f-natt-dread-mine.webp"
+    },
+    {
+      "id": "r6-gadget-grzmot-mine",
+      "answer": "Grzmot Mine",
+      "aliases": [
+        "grzmot mine"
+      ],
+      "file": "grzmot-mine.webp"
+    },
+    {
+      "id": "r6-gadget-gu-mine",
+      "answer": "Gu Mine",
+      "aliases": [
+        "gu mine"
+      ],
+      "file": "gu-mine.webp"
+    },
+    {
+      "id": "r6-gadget-kludge-drone",
+      "answer": "Kludge Drone",
+      "aliases": [
+        "kludge drone"
+      ],
+      "file": "kludge-drone.webp"
+    },
+    {
+      "id": "r6-gadget-ks79-lifeline",
+      "answer": "KS79 Lifeline",
+      "aliases": [
+        "ks79 lifeline"
+      ],
+      "file": "ks79-lifeline.webp"
+    },
+    {
+      "id": "r6-gadget-pest-launcher",
+      "answer": "Pest Launcher",
+      "aliases": [
+        "pest launcher"
+      ],
+      "file": "pest-launcher.webp"
+    },
+    {
+      "id": "r6-gadget-razorbloom-shell",
+      "answer": "Razorbloom Shell",
+      "aliases": [
+        "razorbloom shell"
+      ],
+      "file": "razorbloom-shell.webp"
+    },
+    {
+      "id": "r6-gadget-rce-ratero-charge",
+      "answer": "RCE-Ratero Charge",
+      "aliases": [
+        "rce ratero charge"
+      ],
+      "file": "rce-ratero-charge.webp"
+    },
+    {
+      "id": "r6-gadget-remote-gas-grenade",
+      "answer": "Remote Gas Grenade",
+      "aliases": [
+        "remote gas grenade"
+      ],
+      "file": "remote-gas-grenade.webp"
+    },
+    {
+      "id": "r6-gadget-selma-aqua-breacher",
+      "answer": "SELMA Aqua Breacher",
+      "aliases": [
+        "selma aqua breacher"
+      ],
+      "file": "selma-aqua-breacher.webp"
+    },
+    {
+      "id": "r6-gadget-shock-drone",
+      "answer": "Shock Drone",
+      "aliases": [
+        "shock drone"
+      ],
+      "file": "shock-drone.webp"
+    },
+    {
+      "id": "r6-gadget-shock-wire",
+      "answer": "Shock Wire",
+      "aliases": [
+        "shock wire"
+      ],
+      "file": "shock-wire.webp"
+    },
+    {
+      "id": "r6-gadget-signal-disruptor",
+      "answer": "Signal Disruptor",
+      "aliases": [
+        "signal disruptor"
+      ],
+      "file": "signal-disruptor.webp"
+    },
+    {
+      "id": "r6-gadget-talon-8-shield",
+      "answer": "Talon-8 Shield",
+      "aliases": [
+        "talon 8 shield"
+      ],
+      "file": "talon-8-shield.webp"
+    },
+    {
+      "id": "r6-gadget-welcome-mat",
+      "answer": "Welcome Mat",
+      "aliases": [
+        "welcome mat"
+      ],
+      "file": "welcome-mat.webp"
+    },
+    {
+      "id": "r6-gadget-x-kairos",
+      "answer": "X-KAIROS",
+      "aliases": [
+        "X Kairos",
+        "Hibana Pellets",
+        "x kairos"
+      ],
+      "file": "x-kairos.webp"
+    },
+    {
+      "id": "r6-gadget-yokai-drone",
+      "answer": "Yokai Drone",
+      "aliases": [
+        "Echo Drone",
+        "Yokai",
+        "yokai drone"
+      ],
+      "file": "yokai-drone.webp"
+    }
+  ],
+  "gameplayObjects": [
+    {
+      "id": "r6-gameplay-object-barbed-wire",
+      "answer": "Barbed Wire",
+      "aliases": [
+        "barbed wire"
+      ],
+      "file": "barbed-wire.webp"
+    },
+    {
+      "id": "r6-gameplay-object-barricade",
+      "answer": "Barricade",
+      "aliases": [
+        "barricade"
+      ],
+      "file": "barricade.webp"
+    },
+    {
+      "id": "r6-gameplay-object-breach-charge",
+      "answer": "Breach Charge",
+      "aliases": [
+        "breach charge"
+      ],
+      "file": "breach-charge.webp"
+    },
+    {
+      "id": "r6-gameplay-object-bulletproof-camera",
+      "answer": "Bulletproof Camera",
+      "aliases": [
+        "bulletproof camera"
+      ],
+      "file": "bulletproof-camera.webp"
+    },
+    {
+      "id": "r6-gameplay-object-claymore",
+      "answer": "Claymore",
+      "aliases": [
+        "claymore"
+      ],
+      "file": "claymore.webp"
+    },
+    {
+      "id": "r6-gameplay-object-deployable-shield",
+      "answer": "Deployable Shield",
+      "aliases": [
+        "deployable shield"
+      ],
+      "file": "deployable-shield.webp"
+    },
+    {
+      "id": "r6-gameplay-object-frag-grenade",
+      "answer": "Frag Grenade",
+      "aliases": [
+        "frag grenade"
+      ],
+      "file": "frag-grenade.webp"
+    },
+    {
+      "id": "r6-gameplay-object-hard-breach-charge",
+      "answer": "Hard Breach Charge",
+      "aliases": [
+        "hard breach charge"
+      ],
+      "file": "hard-breach-charge.webp"
+    },
+    {
+      "id": "r6-gameplay-object-impact-emp-grenade",
+      "answer": "Impact EMP Grenade",
+      "aliases": [
+        "impact emp grenade"
+      ],
+      "file": "impact-emp-grenade.webp"
+    },
+    {
+      "id": "r6-gameplay-object-impact-grenade",
+      "answer": "Impact Grenade",
+      "aliases": [
+        "impact grenade"
+      ],
+      "file": "impact-grenade.webp"
+    },
+    {
+      "id": "r6-gameplay-object-nitro-cell",
+      "answer": "Nitro Cell",
+      "aliases": [
+        "nitro cell"
+      ],
+      "file": "nitro-cell.webp"
+    },
+    {
+      "id": "r6-gameplay-object-observation-blocker",
+      "answer": "Observation Blocker",
+      "aliases": [
+        "observation blocker"
+      ],
+      "file": "observation-blocker.webp"
+    },
+    {
+      "id": "r6-gameplay-object-proximity-alarm",
+      "answer": "Proximity Alarm",
+      "aliases": [
+        "proximity alarm"
+      ],
+      "file": "proximity-alarm.webp"
+    },
+    {
+      "id": "r6-gameplay-object-reinforced-wall",
+      "answer": "Reinforced Wall",
+      "aliases": [
+        "reinforced wall"
+      ],
+      "file": "reinforced-wall.webp"
+    },
+    {
+      "id": "r6-gameplay-object-smoke-grenade",
+      "answer": "Smoke Grenade",
+      "aliases": [
+        "smoke grenade"
+      ],
+      "file": "smoke-grenade.webp"
+    },
+    {
+      "id": "r6-gameplay-object-stun-grenade",
+      "answer": "Stun Grenade",
+      "aliases": [
+        "stun grenade"
+      ],
+      "file": "stun-grenade.webp"
+    }
+  ],
+  "maps": [
+    {
+      "id": "r6-map-bank",
+      "answer": "Bank",
+      "aliases": [
+        "bank"
+      ],
+      "file": "bank.jpg"
+    },
+    {
+      "id": "r6-map-border",
+      "answer": "Border",
+      "aliases": [
+        "border"
+      ],
+      "file": "border.jpg"
+    },
+    {
+      "id": "r6-map-calypso-casino",
+      "answer": "Calypso Casino",
+      "aliases": [
+        "calypso casino"
+      ],
+      "file": "calypso-casino.png"
+    },
+    {
+      "id": "r6-map-chalet",
+      "answer": "CHALET",
+      "aliases": [
+        "chalet"
+      ],
+      "file": "chalet.jpg"
+    },
+    {
+      "id": "r6-map-close-quarter",
+      "answer": "CLOSE QUARTER",
+      "aliases": [
+        "close quarter"
+      ],
+      "file": "close-quarter.jpg"
+    },
+    {
+      "id": "r6-map-clubhouse",
+      "answer": "Clubhouse",
+      "aliases": [
+        "clubhouse"
+      ],
+      "file": "clubhouse.jpg"
+    },
+    {
+      "id": "r6-map-coastline",
+      "answer": "Coastline",
+      "aliases": [
+        "coastline"
+      ],
+      "file": "coastline.jpg"
+    },
+    {
+      "id": "r6-map-consulate",
+      "answer": "Consulate",
+      "aliases": [
+        "consulate"
+      ],
+      "file": "consulate.jpg"
+    },
+    {
+      "id": "r6-map-emerald-plains",
+      "answer": "EMERALD PLAINS",
+      "aliases": [
+        "emerald plains"
+      ],
+      "file": "emerald-plains.jpg"
+    },
+    {
+      "id": "r6-map-favela",
+      "answer": "Favela",
+      "aliases": [
+        "favela"
+      ],
+      "file": "favela.jpg"
+    },
+    {
+      "id": "r6-map-fortress",
+      "answer": "Fortress",
+      "aliases": [
+        "fortress"
+      ],
+      "file": "fortress.jpg"
+    },
+    {
+      "id": "r6-map-hereford-base",
+      "answer": "Hereford Base",
+      "aliases": [
+        "hereford base"
+      ],
+      "file": "hereford-base.jpg"
+    },
+    {
+      "id": "r6-map-house",
+      "answer": "House",
+      "aliases": [
+        "house"
+      ],
+      "file": "house.jpg"
+    },
+    {
+      "id": "r6-map-kafe-dostoyevsky",
+      "answer": "Kafe Dostoyevsky",
+      "aliases": [
+        "kafe dostoyevsky"
+      ],
+      "file": "kafe-dostoyevsky.jpg"
+    },
+    {
+      "id": "r6-map-kanal",
+      "answer": "Kanal",
+      "aliases": [
+        "kanal"
+      ],
+      "file": "kanal.jpg"
+    },
+    {
+      "id": "r6-map-lair",
+      "answer": "Lair",
+      "aliases": [
+        "lair"
+      ],
+      "file": "lair.jpg"
+    },
+    {
+      "id": "r6-map-nighthaven-labs",
+      "answer": "Nighthaven Labs",
+      "aliases": [
+        "nighthaven labs"
+      ],
+      "file": "nighthaven-labs.jpg"
+    },
+    {
+      "id": "r6-map-oregon",
+      "answer": "Oregon",
+      "aliases": [
+        "oregon"
+      ],
+      "file": "oregon.jpg"
+    },
+    {
+      "id": "r6-map-outback",
+      "answer": "Outback",
+      "aliases": [
+        "outback"
+      ],
+      "file": "outback.jpg"
+    },
+    {
+      "id": "r6-map-presidential-plane",
+      "answer": "Presidential Plane",
+      "aliases": [
+        "presidential plane"
+      ],
+      "file": "presidential-plane.jpg"
+    },
+    {
+      "id": "r6-map-skyscraper",
+      "answer": "Skyscraper",
+      "aliases": [
+        "skyscraper"
+      ],
+      "file": "skyscraper.jpg"
+    },
+    {
+      "id": "r6-map-stadium-alpha",
+      "answer": "Stadium Alpha",
+      "aliases": [
+        "stadium alpha"
+      ],
+      "file": "stadium-alpha.jpg"
+    },
+    {
+      "id": "r6-map-stadium-bravo",
+      "answer": "Stadium Bravo",
+      "aliases": [
+        "stadium bravo"
+      ],
+      "file": "stadium-bravo.jpg"
+    },
+    {
+      "id": "r6-map-theme-park",
+      "answer": "Theme Park",
+      "aliases": [
+        "theme park"
+      ],
+      "file": "theme-park.jpg"
+    },
+    {
+      "id": "r6-map-tower",
+      "answer": "Tower",
+      "aliases": [
+        "tower"
+      ],
+      "file": "tower.jpg"
+    },
+    {
+      "id": "r6-map-villa",
+      "answer": "Villa",
+      "aliases": [
+        "villa"
+      ],
+      "file": "villa.jpg"
+    },
+    {
+      "id": "r6-map-yacht",
+      "answer": "Yacht",
+      "aliases": [
+        "yacht"
+      ],
+      "file": "yacht.jpg"
+    }
+  ],
+  "operators": [
+    {
+      "id": "r6-operator-ace",
+      "answer": "Ace",
+      "aliases": [
+        "ace"
+      ],
+      "file": "ace.webp"
+    },
+    {
+      "id": "r6-operator-alibi",
+      "answer": "Alibi",
+      "aliases": [
+        "alibi"
+      ],
+      "file": "alibi.webp"
+    },
+    {
+      "id": "r6-operator-amaru",
+      "answer": "Amaru",
+      "aliases": [
+        "amaru"
+      ],
+      "file": "amaru.webp"
+    },
+    {
+      "id": "r6-operator-aruni",
+      "answer": "Aruni",
+      "aliases": [
+        "aruni"
+      ],
+      "file": "aruni.webp"
+    },
+    {
+      "id": "r6-operator-ash",
+      "answer": "Ash",
+      "aliases": [
+        "ash"
+      ],
+      "file": "ash.webp"
+    },
+    {
+      "id": "r6-operator-azami",
+      "answer": "Azami ",
+      "aliases": [
+        "azami"
+      ],
+      "file": "azami.webp"
+    },
+    {
+      "id": "r6-operator-bandit",
+      "answer": "Bandit",
+      "aliases": [
+        "bandit"
+      ],
+      "file": "bandit.webp"
+    },
+    {
+      "id": "r6-operator-blackbeard",
+      "answer": "Blackbeard",
+      "aliases": [
+        "blackbeard"
+      ],
+      "file": "blackbeard.webp"
+    },
+    {
+      "id": "r6-operator-blitz",
+      "answer": "Blitz",
+      "aliases": [
+        "blitz"
+      ],
+      "file": "blitz.webp"
+    },
+    {
+      "id": "r6-operator-brava",
+      "answer": "Brava",
+      "aliases": [
+        "brava"
+      ],
+      "file": "brava.webp"
+    },
+    {
+      "id": "r6-operator-buck",
+      "answer": "Buck",
+      "aliases": [
+        "buck"
+      ],
+      "file": "buck.webp"
+    },
+    {
+      "id": "r6-operator-capitao",
+      "answer": "CAPITÃO",
+      "aliases": [
+        "capitao"
+      ],
+      "file": "capitao.webp"
+    },
+    {
+      "id": "r6-operator-castle",
+      "answer": "Castle",
+      "aliases": [
+        "castle"
+      ],
+      "file": "castle.webp"
+    },
+    {
+      "id": "r6-operator-caveira",
+      "answer": "Caveira",
+      "aliases": [
+        "caveira"
+      ],
+      "file": "caveira.webp"
+    },
+    {
+      "id": "r6-operator-clash",
+      "answer": "Clash",
+      "aliases": [
+        "clash"
+      ],
+      "file": "clash.webp"
+    },
+    {
+      "id": "r6-operator-deimos",
+      "answer": "Deimos",
+      "aliases": [
+        "deimos"
+      ],
+      "file": "deimos.webp"
+    },
+    {
+      "id": "r6-operator-denari",
+      "answer": "Denari",
+      "aliases": [
+        "denari"
+      ],
+      "file": "denari.webp"
+    },
+    {
+      "id": "r6-operator-doc",
+      "answer": "Doc",
+      "aliases": [
+        "doc"
+      ],
+      "file": "doc.webp"
+    },
+    {
+      "id": "r6-operator-dokkaebi",
+      "answer": "Dokkaebi",
+      "aliases": [
+        "dokkaebi"
+      ],
+      "file": "dokkaebi.webp"
+    },
+    {
+      "id": "r6-operator-echo",
+      "answer": "Echo",
+      "aliases": [
+        "echo"
+      ],
+      "file": "echo.webp"
+    },
+    {
+      "id": "r6-operator-ela",
+      "answer": "Ela",
+      "aliases": [
+        "ela"
+      ],
+      "file": "ela.webp"
+    },
+    {
+      "id": "r6-operator-fenrir",
+      "answer": "Fenrir",
+      "aliases": [
+        "fenrir"
+      ],
+      "file": "fenrir.webp"
+    },
+    {
+      "id": "r6-operator-finka",
+      "answer": "Finka",
+      "aliases": [
+        "finka"
+      ],
+      "file": "finka.webp"
+    },
+    {
+      "id": "r6-operator-flores",
+      "answer": "Flores",
+      "aliases": [
+        "flores"
+      ],
+      "file": "flores.webp"
+    },
+    {
+      "id": "r6-operator-frost",
+      "answer": "Frost",
+      "aliases": [
+        "frost"
+      ],
+      "file": "frost.webp"
+    },
+    {
+      "id": "r6-operator-fuze",
+      "answer": "Fuze",
+      "aliases": [
+        "fuze"
+      ],
+      "file": "fuze.webp"
+    },
+    {
+      "id": "r6-operator-glaz",
+      "answer": "Glaz",
+      "aliases": [
+        "glaz"
+      ],
+      "file": "glaz.webp"
+    },
+    {
+      "id": "r6-operator-goyo",
+      "answer": "Goyo",
+      "aliases": [
+        "goyo"
+      ],
+      "file": "goyo.webp"
+    },
+    {
+      "id": "r6-operator-gridlock",
+      "answer": "Gridlock",
+      "aliases": [
+        "gridlock"
+      ],
+      "file": "gridlock.webp"
+    },
+    {
+      "id": "r6-operator-grim",
+      "answer": "Grim",
+      "aliases": [
+        "grim"
+      ],
+      "file": "grim.webp"
+    },
+    {
+      "id": "r6-operator-hibana",
+      "answer": "Hibana",
+      "aliases": [
+        "hibana"
+      ],
+      "file": "hibana.webp"
+    },
+    {
+      "id": "r6-operator-iana",
+      "answer": "Iana",
+      "aliases": [
+        "iana"
+      ],
+      "file": "iana.webp"
+    },
+    {
+      "id": "r6-operator-iq",
+      "answer": "IQ",
+      "aliases": [
+        "iq"
+      ],
+      "file": "iq.webp"
+    },
+    {
+      "id": "r6-operator-jackal",
+      "answer": "Jackal",
+      "aliases": [
+        "jackal"
+      ],
+      "file": "jackal.webp"
+    },
+    {
+      "id": "r6-operator-jager",
+      "answer": "Jäger",
+      "aliases": [
+        "jager"
+      ],
+      "file": "jager.webp"
+    },
+    {
+      "id": "r6-operator-kaid",
+      "answer": "Kaid",
+      "aliases": [
+        "kaid"
+      ],
+      "file": "kaid.webp"
+    },
+    {
+      "id": "r6-operator-kali",
+      "answer": "Kali",
+      "aliases": [
+        "kali"
+      ],
+      "file": "kali.webp"
+    },
+    {
+      "id": "r6-operator-kapkan",
+      "answer": "Kapkan",
+      "aliases": [
+        "kapkan"
+      ],
+      "file": "kapkan.webp"
+    },
+    {
+      "id": "r6-operator-lesion",
+      "answer": "Lesion",
+      "aliases": [
+        "lesion"
+      ],
+      "file": "lesion.webp"
+    },
+    {
+      "id": "r6-operator-lion",
+      "answer": "Lion",
+      "aliases": [
+        "lion"
+      ],
+      "file": "lion.webp"
+    },
+    {
+      "id": "r6-operator-maestro",
+      "answer": "Maestro",
+      "aliases": [
+        "maestro"
+      ],
+      "file": "maestro.webp"
+    },
+    {
+      "id": "r6-operator-maverick",
+      "answer": "Maverick",
+      "aliases": [
+        "maverick"
+      ],
+      "file": "maverick.webp"
+    },
+    {
+      "id": "r6-operator-melusi",
+      "answer": "Melusi",
+      "aliases": [
+        "melusi"
+      ],
+      "file": "melusi.webp"
+    },
+    {
+      "id": "r6-operator-mira",
+      "answer": "Mira",
+      "aliases": [
+        "mira"
+      ],
+      "file": "mira.webp"
+    },
+    {
+      "id": "r6-operator-montagne",
+      "answer": "Montagne",
+      "aliases": [
+        "montagne"
+      ],
+      "file": "montagne.webp"
+    },
+    {
+      "id": "r6-operator-mozzie",
+      "answer": "Mozzie",
+      "aliases": [
+        "mozzie"
+      ],
+      "file": "mozzie.webp"
+    },
+    {
+      "id": "r6-operator-mute",
+      "answer": "Mute",
+      "aliases": [
+        "mute"
+      ],
+      "file": "mute.webp"
+    },
+    {
+      "id": "r6-operator-nokk",
+      "answer": "NØKK",
+      "aliases": [
+        "nokk"
+      ],
+      "file": "nokk.webp"
+    },
+    {
+      "id": "r6-operator-nomad",
+      "answer": "Nomad",
+      "aliases": [
+        "nomad"
+      ],
+      "file": "nomad.webp"
+    },
+    {
+      "id": "r6-operator-oryx",
+      "answer": "Oryx",
+      "aliases": [
+        "oryx"
+      ],
+      "file": "oryx.webp"
+    },
+    {
+      "id": "r6-operator-osa",
+      "answer": "Osa",
+      "aliases": [
+        "osa"
+      ],
+      "file": "osa.webp"
+    },
+    {
+      "id": "r6-operator-pulse",
+      "answer": "Pulse",
+      "aliases": [
+        "pulse"
+      ],
+      "file": "pulse.webp"
+    },
+    {
+      "id": "r6-operator-ram",
+      "answer": "Ram",
+      "aliases": [
+        "ram"
+      ],
+      "file": "ram.webp"
+    },
+    {
+      "id": "r6-operator-rauora",
+      "answer": "Rauora",
+      "aliases": [
+        "rauora"
+      ],
+      "file": "rauora.webp"
+    },
+    {
+      "id": "r6-operator-rook",
+      "answer": "Rook",
+      "aliases": [
+        "rook"
+      ],
+      "file": "rook.webp"
+    },
+    {
+      "id": "r6-operator-sens",
+      "answer": "Sens",
+      "aliases": [
+        "sens"
+      ],
+      "file": "sens.webp"
+    },
+    {
+      "id": "r6-operator-sentry",
+      "answer": "Sentry",
+      "aliases": [
+        "sentry"
+      ],
+      "file": "sentry.png"
+    },
+    {
+      "id": "r6-operator-skopos",
+      "answer": "Skopós",
+      "aliases": [
+        "skopos"
+      ],
+      "file": "skopos.webp"
+    },
+    {
+      "id": "r6-operator-sledge",
+      "answer": "Sledge",
+      "aliases": [
+        "sledge"
+      ],
+      "file": "sledge.webp"
+    },
+    {
+      "id": "r6-operator-smoke",
+      "answer": "Smoke",
+      "aliases": [
+        "smoke"
+      ],
+      "file": "smoke.webp"
+    },
+    {
+      "id": "r6-operator-solis",
+      "answer": "Solis",
+      "aliases": [
+        "solis"
+      ],
+      "file": "solis.webp"
+    },
+    {
+      "id": "r6-operator-striker",
+      "answer": "Striker",
+      "aliases": [
+        "striker"
+      ],
+      "file": "striker.png"
+    },
+    {
+      "id": "r6-operator-tachanka",
+      "answer": "Tachanka",
+      "aliases": [
+        "tachanka"
+      ],
+      "file": "tachanka.webp"
+    },
+    {
+      "id": "r6-operator-thatcher",
+      "answer": "Thatcher",
+      "aliases": [
+        "thatcher"
+      ],
+      "file": "thatcher.webp"
+    },
+    {
+      "id": "r6-operator-thermite",
+      "answer": "Thermite",
+      "aliases": [
+        "thermite"
+      ],
+      "file": "thermite.webp"
+    },
+    {
+      "id": "r6-operator-thorn",
+      "answer": "Thorn",
+      "aliases": [
+        "thorn"
+      ],
+      "file": "thorn.webp"
+    },
+    {
+      "id": "r6-operator-thunderbird",
+      "answer": "Thunderbird",
+      "aliases": [
+        "thunderbird"
+      ],
+      "file": "thunderbird.webp"
+    },
+    {
+      "id": "r6-operator-tubarao",
+      "answer": "Tubarão",
+      "aliases": [
+        "tubarao"
+      ],
+      "file": "tubarao.webp"
+    },
+    {
+      "id": "r6-operator-twitch",
+      "answer": "Twitch",
+      "aliases": [
+        "twitch"
+      ],
+      "file": "twitch.webp"
+    },
+    {
+      "id": "r6-operator-valkyrie",
+      "answer": "Valkyrie",
+      "aliases": [
+        "valkyrie"
+      ],
+      "file": "valkyrie.webp"
+    },
+    {
+      "id": "r6-operator-vigil",
+      "answer": "Vigil",
+      "aliases": [
+        "vigil"
+      ],
+      "file": "vigil.webp"
+    },
+    {
+      "id": "r6-operator-wamai",
+      "answer": "Wamai",
+      "aliases": [
+        "wamai"
+      ],
+      "file": "wamai.webp"
+    },
+    {
+      "id": "r6-operator-warden",
+      "answer": "Warden",
+      "aliases": [
+        "warden"
+      ],
+      "file": "warden.webp"
+    },
+    {
+      "id": "r6-operator-ying",
+      "answer": "Ying",
+      "aliases": [
+        "ying"
+      ],
+      "file": "ying.webp"
+    },
+    {
+      "id": "r6-operator-zero",
+      "answer": "Zero",
+      "aliases": [
+        "zero"
+      ],
+      "file": "zero.webp"
+    },
+    {
+      "id": "r6-operator-zofia",
+      "answer": "Zofia",
+      "aliases": [
+        "zofia"
+      ],
+      "file": "zofia.webp"
+    }
+  ],
+  "weapons": [
+    {
+      "id": "r6-weapon-416-c-carbine",
+      "answer": "416-C Carbine",
+      "aliases": [
+        "416C",
+        "416-C",
+        "416 c carbine"
+      ],
+      "file": "416-c-carbine.webp"
+    },
+    {
+      "id": "r6-weapon-9x19vsn",
+      "answer": "9x19VSN",
+      "aliases": [
+        "9x19vsn"
+      ],
+      "file": "9x19vsn.webp"
+    },
+    {
+      "id": "r6-weapon-ak-12",
+      "answer": "AK-12",
+      "aliases": [
+        "ak 12"
+      ],
+      "file": "ak-12.webp"
+    },
+    {
+      "id": "r6-weapon-ballistic-shield",
+      "answer": "Ballistic Shield",
+      "aliases": [
+        "ballistic shield"
+      ],
+      "file": "ballistic-shield.webp"
+    },
+    {
+      "id": "r6-weapon-bosg-12-2",
+      "answer": "BOSG.12.2",
+      "aliases": [
+        "bosg 12 2"
+      ],
+      "file": "bosg-12-2.webp"
+    },
+    {
+      "id": "r6-weapon-c7e",
+      "answer": "C7E",
+      "aliases": [
+        "c7e"
+      ],
+      "file": "c7e.webp"
+    },
+    {
+      "id": "r6-weapon-csrx-300",
+      "answer": "CSRX 300",
+      "aliases": [
+        "csrx 300"
+      ],
+      "file": "csrx-300.webp"
+    },
+    {
+      "id": "r6-weapon-dp27",
+      "answer": "DP27",
+      "aliases": [
+        "dp27"
+      ],
+      "file": "dp27.webp"
+    },
+    {
+      "id": "r6-weapon-f2",
+      "answer": "F2",
+      "aliases": [
+        "f2"
+      ],
+      "file": "f2.webp"
+    },
+    {
+      "id": "r6-weapon-g8a1",
+      "answer": "G8A1",
+      "aliases": [
+        "g8a1"
+      ],
+      "file": "g8a1.webp"
+    },
+    {
+      "id": "r6-weapon-l85a2",
+      "answer": "L85A2",
+      "aliases": [
+        "l85a2"
+      ],
+      "file": "l85a2.webp"
+    },
+    {
+      "id": "r6-weapon-m590a1",
+      "answer": "M590A1",
+      "aliases": [
+        "m590a1"
+      ],
+      "file": "m590a1.webp"
+    },
+    {
+      "id": "r6-weapon-m870",
+      "answer": "M870",
+      "aliases": [
+        "m870"
+      ],
+      "file": "m870.webp"
+    },
+    {
+      "id": "r6-weapon-mk-14-ebr",
+      "answer": "Mk 14 EBR",
+      "aliases": [
+        "mk 14 ebr"
+      ],
+      "file": "mk-14-ebr.webp"
+    },
+    {
+      "id": "r6-weapon-mp5",
+      "answer": "MP5",
+      "aliases": [
+        "mp5"
+      ],
+      "file": "mp5.webp"
+    },
+    {
+      "id": "r6-weapon-ots-03",
+      "answer": "OTs-03",
+      "aliases": [
+        "ots 03"
+      ],
+      "file": "ots-03.webp"
+    },
+    {
+      "id": "r6-weapon-p90",
+      "answer": "P90",
+      "aliases": [
+        "p90"
+      ],
+      "file": "p90.webp"
+    },
+    {
+      "id": "r6-weapon-r4-c",
+      "answer": "R4-C",
+      "aliases": [
+        "r4 c"
+      ],
+      "file": "r4-c.webp"
+    },
+    {
+      "id": "r6-weapon-scorpion-evo-3-a1",
+      "answer": "Scorpion EVO 3 A1",
+      "aliases": [
+        "scorpion evo 3 a1"
+      ],
+      "file": "scorpion-evo-3-a1.webp"
+    },
+    {
+      "id": "r6-weapon-smg-11",
+      "answer": "SMG-11",
+      "aliases": [
+        "smg 11"
+      ],
+      "file": "smg-11.webp"
+    },
+    {
+      "id": "r6-weapon-vector-45-acp",
+      "answer": "Vector .45 ACP",
+      "aliases": [
+        "vector 45 acp"
+      ],
+      "file": "vector-45-acp.webp"
+    }
+  ]
+}

@@ -1,0 +1,534 @@
+{
+  "buildings": [
+    {
+      "id": "clash-of-clans-buildings-air-defense",
+      "answer": "air defense",
+      "aliases": [],
+      "file": "air-defense.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-air-sweeper",
+      "answer": "air sweeper",
+      "aliases": [],
+      "file": "air-sweeper.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-archer-tower",
+      "answer": "archer tower",
+      "aliases": [],
+      "file": "archer-tower.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-barracks",
+      "answer": "barracks",
+      "aliases": [],
+      "file": "barracks.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-blacksmith",
+      "answer": "blacksmith",
+      "aliases": [],
+      "file": "blacksmith.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-bomb-tower",
+      "answer": "bomb tower",
+      "aliases": [],
+      "file": "bomb-tower.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-builder-hut",
+      "answer": "builder hut",
+      "aliases": [],
+      "file": "builder-hut.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-cannon",
+      "answer": "cannon",
+      "aliases": [],
+      "file": "cannon.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-clan-castle",
+      "answer": "clan castle",
+      "aliases": [],
+      "file": "clan-castle.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-dark-barracks",
+      "answer": "dark barracks",
+      "aliases": [],
+      "file": "dark-barracks.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-dark-elixir-drill",
+      "answer": "dark elixir drill",
+      "aliases": [],
+      "file": "dark-elixir-drill.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-dark-spell-factory",
+      "answer": "dark spell factory",
+      "aliases": [],
+      "file": "dark-spell-factory.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-eagle-artillery",
+      "answer": "eagle artillery",
+      "aliases": [],
+      "file": "eagle-artillery.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-elixir-collector",
+      "answer": "elixir collector",
+      "aliases": [],
+      "file": "elixir-collector.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-elixir-storage",
+      "answer": "elixir storage",
+      "aliases": [],
+      "file": "elixir-storage.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-firespitter",
+      "answer": "firespitter",
+      "aliases": [],
+      "file": "firespitter.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-gold-storage",
+      "answer": "gold storage",
+      "aliases": [],
+      "file": "gold-storage.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-hero-hall",
+      "answer": "hero hall",
+      "aliases": [],
+      "file": "hero-hall.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-hidden-tesla",
+      "answer": "hidden tesla",
+      "aliases": [],
+      "file": "hidden-tesla.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-inferno-tower",
+      "answer": "inferno tower",
+      "aliases": [],
+      "file": "inferno-tower.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-laboratory",
+      "answer": "laboratory",
+      "aliases": [],
+      "file": "laboratory.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-monolith",
+      "answer": "monolith",
+      "aliases": [],
+      "file": "monolith.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-mortar",
+      "answer": "mortar",
+      "aliases": [],
+      "file": "mortar.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-multi-archer-tower",
+      "answer": "multi archer tower",
+      "aliases": [],
+      "file": "multi-archer-tower.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-pet-house",
+      "answer": "pet house",
+      "aliases": [],
+      "file": "pet-house.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-revenge-tower",
+      "answer": "revenge tower",
+      "aliases": [],
+      "file": "revenge-tower.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-ricochet-cannon",
+      "answer": "ricochet cannon",
+      "aliases": [],
+      "file": "ricochet-cannon.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-scattershot",
+      "answer": "scattershot",
+      "aliases": [],
+      "file": "scattershot.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-spell-factory",
+      "answer": "spell factory",
+      "aliases": [],
+      "file": "spell-factory.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-spell-tower",
+      "answer": "spell tower",
+      "aliases": [],
+      "file": "spell-tower.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-super-wizard-tower",
+      "answer": "super wizard tower",
+      "aliases": [],
+      "file": "super-wizard-tower.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-town-hall",
+      "answer": "town hall",
+      "aliases": [],
+      "file": "town-hall.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-wizard-tower",
+      "answer": "wizard tower",
+      "aliases": [],
+      "file": "wizard-tower.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-workshop",
+      "answer": "workshop",
+      "aliases": [],
+      "file": "workshop.png"
+    },
+    {
+      "id": "clash-of-clans-buildings-x-bow",
+      "answer": "x bow",
+      "aliases": [],
+      "file": "x-bow.png"
+    }
+  ],
+  "heroes": [
+    {
+      "id": "clash-of-clans-heroes-archer-queen",
+      "answer": "archer queen",
+      "aliases": [],
+      "file": "archer-queen.png"
+    },
+    {
+      "id": "clash-of-clans-heroes-barbarian-king",
+      "answer": "barbarian king",
+      "aliases": [],
+      "file": "barbarian-king.png"
+    },
+    {
+      "id": "clash-of-clans-heroes-dragon-duke",
+      "answer": "dragon duke",
+      "aliases": [],
+      "file": "dragon-duke.png"
+    },
+    {
+      "id": "clash-of-clans-heroes-grand-warden",
+      "answer": "grand warden",
+      "aliases": [],
+      "file": "grand-warden.png"
+    },
+    {
+      "id": "clash-of-clans-heroes-minion-prince",
+      "answer": "minion prince",
+      "aliases": [],
+      "file": "minion-prince.png"
+    },
+    {
+      "id": "clash-of-clans-heroes-royal-champion",
+      "answer": "royal champion",
+      "aliases": [],
+      "file": "royal-champion.png"
+    }
+  ],
+  "pets": [
+    {
+      "id": "clash-of-clans-pets-angry-jelly",
+      "answer": "angry jelly",
+      "aliases": [],
+      "file": "angry-jelly.png"
+    },
+    {
+      "id": "clash-of-clans-pets-electro-owl",
+      "answer": "electro owl",
+      "aliases": [],
+      "file": "electro-owl.png"
+    },
+    {
+      "id": "clash-of-clans-pets-frosty",
+      "answer": "frosty",
+      "aliases": [],
+      "file": "frosty.png"
+    },
+    {
+      "id": "clash-of-clans-pets-greedy-raven",
+      "answer": "greedy raven",
+      "aliases": [],
+      "file": "greedy-raven.png"
+    },
+    {
+      "id": "clash-of-clans-pets-lassi",
+      "answer": "lassi",
+      "aliases": [],
+      "file": "lassi.png"
+    },
+    {
+      "id": "clash-of-clans-pets-poison-lizard",
+      "answer": "poison lizard",
+      "aliases": [],
+      "file": "poison-lizard.png"
+    },
+    {
+      "id": "clash-of-clans-pets-sneezy",
+      "answer": "sneezy",
+      "aliases": [],
+      "file": "sneezy.png"
+    },
+    {
+      "id": "clash-of-clans-pets-spirit-fox",
+      "answer": "spirit fox",
+      "aliases": [],
+      "file": "spirit-fox.png"
+    },
+    {
+      "id": "clash-of-clans-pets-unicorn",
+      "answer": "unicorn",
+      "aliases": [],
+      "file": "unicorn.png"
+    }
+  ],
+  "siege-machines": [
+    {
+      "id": "clash-of-clans-siege-machines-battle-blimp",
+      "answer": "battle blimp",
+      "aliases": [],
+      "file": "battle-blimp.png"
+    },
+    {
+      "id": "clash-of-clans-siege-machines-battle-drill",
+      "answer": "battle drill",
+      "aliases": [],
+      "file": "battle-drill.png"
+    },
+    {
+      "id": "clash-of-clans-siege-machines-flame-flinger",
+      "answer": "flame flinger",
+      "aliases": [],
+      "file": "flame-flinger.png"
+    },
+    {
+      "id": "clash-of-clans-siege-machines-log-launcher",
+      "answer": "log launcher",
+      "aliases": [],
+      "file": "log-launcher.png"
+    },
+    {
+      "id": "clash-of-clans-siege-machines-siege-barracks",
+      "answer": "siege barracks",
+      "aliases": [],
+      "file": "siege-barracks.png"
+    },
+    {
+      "id": "clash-of-clans-siege-machines-sky-wagon",
+      "answer": "sky wagon",
+      "aliases": [],
+      "file": "sky-wagon.png"
+    },
+    {
+      "id": "clash-of-clans-siege-machines-troop-launcher",
+      "answer": "troop launcher",
+      "aliases": [],
+      "file": "troop-launcher.png"
+    },
+    {
+      "id": "clash-of-clans-siege-machines-wall-wrecker",
+      "answer": "wall wrecker",
+      "aliases": [],
+      "file": "wall-wrecker.png"
+    }
+  ],
+  "troops": [
+    {
+      "id": "clash-of-clans-troops-apprentice-warden",
+      "answer": "apprentice warden",
+      "aliases": [],
+      "file": "apprentice-warden.png"
+    },
+    {
+      "id": "clash-of-clans-troops-archer",
+      "answer": "archer",
+      "aliases": [],
+      "file": "archer.png"
+    },
+    {
+      "id": "clash-of-clans-troops-baby-dragon",
+      "answer": "baby dragon",
+      "aliases": [],
+      "file": "baby-dragon.png"
+    },
+    {
+      "id": "clash-of-clans-troops-balloon",
+      "answer": "balloon",
+      "aliases": [],
+      "file": "balloon.png"
+    },
+    {
+      "id": "clash-of-clans-troops-barbarian",
+      "answer": "barbarian",
+      "aliases": [],
+      "file": "barbarian.png"
+    },
+    {
+      "id": "clash-of-clans-troops-bowler",
+      "answer": "bowler",
+      "aliases": [],
+      "file": "bowler.png"
+    },
+    {
+      "id": "clash-of-clans-troops-dragon-rider",
+      "answer": "dragon rider",
+      "aliases": [],
+      "file": "dragon-rider.png"
+    },
+    {
+      "id": "clash-of-clans-troops-dragon",
+      "answer": "dragon",
+      "aliases": [],
+      "file": "dragon.png"
+    },
+    {
+      "id": "clash-of-clans-troops-druid",
+      "answer": "druid",
+      "aliases": [],
+      "file": "druid.png"
+    },
+    {
+      "id": "clash-of-clans-troops-electro-titan",
+      "answer": "electro titan",
+      "aliases": [],
+      "file": "electro-titan.png"
+    },
+    {
+      "id": "clash-of-clans-troops-furnace",
+      "answer": "furnace",
+      "aliases": [],
+      "file": "furnace.png"
+    },
+    {
+      "id": "clash-of-clans-troops-giant",
+      "answer": "giant",
+      "aliases": [],
+      "file": "giant.png"
+    },
+    {
+      "id": "clash-of-clans-troops-goblin",
+      "answer": "goblin",
+      "aliases": [],
+      "file": "goblin.png"
+    },
+    {
+      "id": "clash-of-clans-troops-golem",
+      "answer": "golem",
+      "aliases": [],
+      "file": "golem.png"
+    },
+    {
+      "id": "clash-of-clans-troops-headhunter",
+      "answer": "headhunter",
+      "aliases": [],
+      "file": "headhunter.png"
+    },
+    {
+      "id": "clash-of-clans-troops-healer",
+      "answer": "healer",
+      "aliases": [],
+      "file": "healer.png"
+    },
+    {
+      "id": "clash-of-clans-troops-ice-golem",
+      "answer": "ice golem",
+      "aliases": [],
+      "file": "ice-golem.png"
+    },
+    {
+      "id": "clash-of-clans-troops-lava-hound",
+      "answer": "lava hound",
+      "aliases": [],
+      "file": "lava-hound.png"
+    },
+    {
+      "id": "clash-of-clans-troops-meteor-golem",
+      "answer": "meteor golem",
+      "aliases": [],
+      "file": "meteor-golem.png"
+    },
+    {
+      "id": "clash-of-clans-troops-miner",
+      "answer": "miner",
+      "aliases": [],
+      "file": "miner.png"
+    },
+    {
+      "id": "clash-of-clans-troops-minion",
+      "answer": "minion",
+      "aliases": [],
+      "file": "minion.png"
+    },
+    {
+      "id": "clash-of-clans-troops-pekka",
+      "answer": "pekka",
+      "aliases": [],
+      "file": "pekka.png"
+    },
+    {
+      "id": "clash-of-clans-troops-ruin-witch",
+      "answer": "ruin witch",
+      "aliases": [],
+      "file": "ruin-witch.png"
+    },
+    {
+      "id": "clash-of-clans-troops-thrower",
+      "answer": "thrower",
+      "aliases": [],
+      "file": "thrower.png"
+    },
+    {
+      "id": "clash-of-clans-troops-valkyrie",
+      "answer": "valkyrie",
+      "aliases": [],
+      "file": "valkyrie.png"
+    },
+    {
+      "id": "clash-of-clans-troops-wall-breaker",
+      "answer": "wall breaker",
+      "aliases": [],
+      "file": "wall-breaker.png"
+    },
+    {
+      "id": "clash-of-clans-troops-witch",
+      "answer": "witch",
+      "aliases": [],
+      "file": "witch.png"
+    },
+    {
+      "id": "clash-of-clans-troops-wizard",
+      "answer": "wizard",
+      "aliases": [],
+      "file": "wizard.png"
+    },
+    {
+      "id": "clash-of-clans-troops-yeti",
+      "answer": "yeti",
+      "aliases": [],
+      "file": "yeti.png"
+    }
+  ]
+}

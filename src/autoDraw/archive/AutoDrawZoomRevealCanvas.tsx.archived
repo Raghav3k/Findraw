@@ -1,0 +1,339 @@
+import { useEffect, useRef } from "react";
+import type { AutoDrawAsset } from "./autoDrawAssets";
+
+type AutoDrawCanvasProps = {
+  asset: AutoDrawAsset;
+  active: boolean;
+  stageIndex: number;
+  stageProgress: number;
+};
+
+type CameraRect = { x: number; y: number; width: number; height: number };
+type GridCell = { column: number; row: number; x: number; y: number; width: number; height: number };
+
+const FALLBACK_PAPER = "#fff2cf";
+const MOVE_PHASE = 0.12;
+const GRID_COLUMNS = 24;
+const clamp = (value: number, minimum = 0, maximum = 1) => Math.max(minimum, Math.min(maximum, value));
+const smoothstep = (value: number) => {
+  const amount = clamp(value);
+  return amount * amount * (3 - 2 * amount);
+};
+
+const mix = (start: number, end: number, amount: number) => start + (end - start) * amount;
+
+const revealRectForStage = (
+  image: HTMLImageElement,
+  asset: AutoDrawAsset,
+  stageIndex: number,
+): CameraRect => {
+  const stage = asset.stages[Math.max(0, Math.min(asset.stages.length - 1, stageIndex))];
+  const bounds = asset.subjectBounds;
+  const subjectCenterX = bounds.x + bounds.width / 2;
+  const subjectCenterY = bounds.y + bounds.height / 2;
+  const centerX = mix(asset.detailFocus.x, subjectCenterX, stage.recenter) * image.naturalWidth;
+  const centerY = mix(asset.detailFocus.y, subjectCenterY, stage.recenter) * image.naturalHeight;
+  const width = image.naturalWidth * bounds.width * stage.revealWidth;
+  const height = image.naturalHeight * bounds.height * stage.revealHeight;
+
+  return {
+    x: centerX - width / 2,
+    y: centerY - height / 2,
+    width,
+    height,
+  };
+};
+
+const subjectCenter = (image: HTMLImageElement, asset: AutoDrawAsset) => ({
+  x: image.naturalWidth * (asset.subjectBounds.x + asset.subjectBounds.width / 2),
+  y: image.naturalHeight * (asset.subjectBounds.y + asset.subjectBounds.height / 2),
+});
+
+const intersectImage = (rect: CameraRect, image: HTMLImageElement): CameraRect => {
+  const left = Math.max(0, rect.x);
+  const top = Math.max(0, rect.y);
+  const right = Math.min(image.naturalWidth, rect.x + rect.width);
+  const bottom = Math.min(image.naturalHeight, rect.y + rect.height);
+  return {
+    x: left,
+    y: top,
+    width: Math.max(0, right - left),
+    height: Math.max(0, bottom - top),
+  };
+};
+
+const gridCellsForRect = (
+  rect: CameraRect,
+  image: HTMLImageElement,
+): GridCell[] => {
+  if (rect.width <= 0 || rect.height <= 0) return [];
+  const cellSize = image.naturalWidth / GRID_COLUMNS;
+  const firstColumn = Math.max(0, Math.floor(rect.x / cellSize));
+  const lastColumn = Math.min(GRID_COLUMNS - 1, Math.ceil((rect.x + rect.width) / cellSize) - 1);
+  const rowCount = Math.ceil(image.naturalHeight / cellSize);
+  const firstRow = Math.max(0, Math.floor(rect.y / cellSize));
+  const lastRow = Math.min(rowCount - 1, Math.ceil((rect.y + rect.height) / cellSize) - 1);
+  const cells: GridCell[] = [];
+
+  for (let row = firstRow; row <= lastRow; row += 1) {
+    for (let column = firstColumn; column <= lastColumn; column += 1) {
+      const x = column * cellSize;
+      const y = row * cellSize;
+      const width = Math.min(cellSize, image.naturalWidth - x);
+      const height = Math.min(cellSize, image.naturalHeight - y);
+      const centerX = x + width / 2;
+      const centerY = y + height / 2;
+      if (
+        centerX >= rect.x
+        && centerX <= rect.x + rect.width
+        && centerY >= rect.y
+        && centerY <= rect.y + rect.height
+      ) {
+        cells.push({ column, row, x, y, width, height });
+      }
+    }
+  }
+
+  return cells;
+};
+
+const cellKey = (cell: GridCell) => `${cell.column}:${cell.row}`;
+
+const addCellsToPath = (
+  context: CanvasRenderingContext2D,
+  cells: GridCell[],
+) => {
+  for (const cell of cells) {
+    context.rect(cell.x - 0.5, cell.y - 0.5, cell.width + 1, cell.height + 1);
+  }
+};
+
+const fillGridCells = (
+  context: CanvasRenderingContext2D,
+  cells: GridCell[],
+) => {
+  if (!cells.length) return;
+  context.save();
+  context.fillStyle = "#fff";
+  context.beginPath();
+  addCellsToPath(context, cells);
+  context.fill();
+  context.restore();
+};
+
+const drawBrushReveal = (
+  context: CanvasRenderingContext2D,
+  cells: GridCell[],
+  progress: number,
+  seed: number,
+) => {
+  const amount = clamp(progress);
+  if (!cells.length || amount <= 0) return;
+  if (amount >= 0.995) {
+    fillGridCells(context, cells);
+    return;
+  }
+
+  const left = Math.min(...cells.map((cell) => cell.x));
+  const top = Math.min(...cells.map((cell) => cell.y));
+  const right = Math.max(...cells.map((cell) => cell.x + cell.width));
+  const bottom = Math.max(...cells.map((cell) => cell.y + cell.height));
+  const centerX = (left + right) / 2;
+  const centerY = (top + bottom) / 2;
+  const span = Math.hypot(right - left, bottom - top);
+  const spacing = Math.max(10, span / 48);
+  const strokeCount = Math.ceil(span / spacing) + 4;
+  const strokePosition = amount * strokeCount;
+  const angle = ((seed % 2 === 0 ? -11 : 9) * Math.PI) / 180;
+
+  context.save();
+  context.beginPath();
+  addCellsToPath(context, cells);
+  context.clip();
+  context.translate(centerX, centerY);
+  context.rotate(angle);
+  context.translate(-centerX, -centerY);
+  context.strokeStyle = "rgba(255,255,255,.94)";
+  context.lineCap = "round";
+  context.lineJoin = "round";
+
+  for (let index = 0; index < strokeCount; index += 1) {
+    const localProgress = clamp(strokePosition - index);
+    if (localProgress <= 0) break;
+    const direction = index % 2 === 0 ? 1 : -1;
+    const y = centerY - span / 2 + index * spacing;
+    const jitter = Math.sin(index * 2.17 + seed) * spacing * 0.22;
+    const startX = centerX - direction * span * 0.54;
+    const endX = startX + direction * span * 1.08 * localProgress;
+    const controlX = (startX + endX) / 2;
+    const controlY = y + Math.sin(index * 1.31 + seed) * spacing * 0.55;
+    context.lineWidth = spacing * (1.08 + ((index + seed) % 4) * 0.06);
+    context.beginPath();
+    context.moveTo(startX, y + jitter);
+    context.quadraticCurveTo(controlX, controlY, endX, y - jitter * 0.4);
+    context.stroke();
+
+    context.save();
+    context.globalAlpha = 0.32;
+    context.lineWidth = Math.max(2, spacing * 0.16);
+    context.beginPath();
+    context.moveTo(startX, y + spacing * 0.34);
+    context.quadraticCurveTo(controlX, controlY + spacing * 0.24, endX, y + spacing * 0.18);
+    context.stroke();
+    context.restore();
+  }
+  context.restore();
+};
+export function AutoDrawCanvas({ asset, active, stageIndex, stageProgress }: AutoDrawCanvasProps) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const maskCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const revealedCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const imageRef = useRef<HTMLImageElement | null>(null);
+
+  useEffect(() => {
+    const image = new Image();
+    image.decoding = "async";
+    image.src = asset.imageUrl;
+    image.onload = () => {
+      imageRef.current = image;
+      window.dispatchEvent(new Event("autodraw-image-ready"));
+    };
+    return () => {
+      image.onload = null;
+      if (imageRef.current === image) imageRef.current = null;
+    };
+  }, [asset.imageUrl]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const context = canvas.getContext("2d");
+    if (!context) return;
+
+    const render = () => {
+      const bounds = canvas.getBoundingClientRect();
+      const ratio = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+      const displayWidth = Math.max(1, bounds.width);
+      const displayHeight = Math.max(1, bounds.height);
+      const pixelWidth = Math.max(1, Math.round(displayWidth * ratio));
+      const pixelHeight = Math.max(1, Math.round(displayHeight * ratio));
+      if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
+        canvas.width = pixelWidth;
+        canvas.height = pixelHeight;
+      }
+
+      context.setTransform(1, 0, 0, 1, 0, 0);
+      context.clearRect(0, 0, pixelWidth, pixelHeight);
+      const paper = getComputedStyle(canvas).getPropertyValue("--auto-canvas-paper").trim() || FALLBACK_PAPER;
+      context.fillStyle = paper;
+      context.fillRect(0, 0, pixelWidth, pixelHeight);
+
+      const image = imageRef.current;
+      if (!active || !image?.complete || !image.naturalWidth) return;
+
+      const safeStageIndex = Math.max(0, Math.min(asset.stages.length - 1, stageIndex));
+      const stage = asset.stages[safeStageIndex];
+      const previousStage = safeStageIndex === 0 ? null : asset.stages[safeStageIndex - 1];
+      const cameraProgress = safeStageIndex === 0 ? 1 : smoothstep(stageProgress / MOVE_PHASE);
+      const currentFrame = intersectImage(
+        revealRectForStage(image, asset, safeStageIndex),
+        image,
+      );
+      const previousFrame = safeStageIndex === 0 ? currentFrame : intersectImage(
+        revealRectForStage(image, asset, safeStageIndex - 1),
+        image,
+      );
+      const scaleForFrame = (frameRect: CameraRect) => Math.min(
+        displayWidth * 0.8 / frameRect.width,
+        displayHeight * 0.9 / frameRect.height,
+      );
+      const scale = mix(scaleForFrame(previousFrame), scaleForFrame(currentFrame), cameraProgress);
+      const previousRecenter = previousStage?.recenter ?? stage.recenter;
+      const recenter = mix(previousRecenter, stage.recenter, cameraProgress);
+      const centered = subjectCenter(image, asset);
+      const focusX = mix(image.naturalWidth * asset.detailFocus.x, centered.x, recenter);
+      const focusY = mix(image.naturalHeight * asset.detailFocus.y, centered.y, recenter);
+      const drawX = displayWidth * 0.5 - focusX * scale;
+      const drawY = displayHeight * 0.51 - focusY * scale;
+
+      const mask = maskCanvasRef.current ?? document.createElement("canvas");
+      maskCanvasRef.current = mask;
+      if (mask.width !== image.naturalWidth || mask.height !== image.naturalHeight) {
+        mask.width = image.naturalWidth;
+        mask.height = image.naturalHeight;
+      }
+      const maskContext = mask.getContext("2d");
+      if (!maskContext) return;
+      maskContext.setTransform(1, 0, 0, 1, 0, 0);
+      maskContext.globalAlpha = 1;
+      maskContext.globalCompositeOperation = "source-over";
+      maskContext.clearRect(0, 0, mask.width, mask.height);
+
+      const completedCells = new Map<string, GridCell>();
+      for (let index = 0; index < safeStageIndex; index += 1) {
+        const completedRect = intersectImage(
+          revealRectForStage(image, asset, index),
+          image,
+        );
+        for (const cell of gridCellsForRect(completedRect, image)) {
+          completedCells.set(cellKey(cell), cell);
+        }
+      }
+      fillGridCells(maskContext, [...completedCells.values()]);
+
+      const targetRect = currentFrame;
+      const revealProgress = safeStageIndex === 0
+        ? clamp(stageProgress / 0.9)
+        : clamp((stageProgress - MOVE_PHASE + 0.03) / (1 - MOVE_PHASE));
+      const newCells = gridCellsForRect(targetRect, image)
+        .filter((cell) => !completedCells.has(cellKey(cell)));
+      drawBrushReveal(maskContext, newCells, revealProgress, safeStageIndex * 19 + asset.id.length);
+
+      const revealed = revealedCanvasRef.current ?? document.createElement("canvas");
+      revealedCanvasRef.current = revealed;
+      if (revealed.width !== image.naturalWidth || revealed.height !== image.naturalHeight) {
+        revealed.width = image.naturalWidth;
+        revealed.height = image.naturalHeight;
+      }
+      const revealedContext = revealed.getContext("2d");
+      if (!revealedContext) return;
+      revealedContext.setTransform(1, 0, 0, 1, 0, 0);
+      revealedContext.globalAlpha = 1;
+      revealedContext.globalCompositeOperation = "source-over";
+      revealedContext.clearRect(0, 0, revealed.width, revealed.height);
+      revealedContext.drawImage(image, 0, 0);
+      revealedContext.globalCompositeOperation = "destination-in";
+      revealedContext.filter = `blur(${clamp(18 / scale, 3, 64)}px)`;
+      revealedContext.drawImage(mask, 0, 0);
+      revealedContext.filter = "none";
+
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      context.imageSmoothingEnabled = true;
+      context.imageSmoothingQuality = "high";
+      context.drawImage(
+        revealed,
+        drawX,
+        drawY,
+        image.naturalWidth * scale,
+        image.naturalHeight * scale,
+      );
+    };
+
+    render();
+    const observer = new ResizeObserver(render);
+    observer.observe(canvas);
+    window.addEventListener("autodraw-image-ready", render);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("autodraw-image-ready", render);
+    };
+  }, [active, asset, stageIndex, stageProgress]);
+
+  return (
+    <canvas
+      aria-label={`Zooming sketch reveal, stage ${stageIndex + 1} of ${asset.stages.length}`}
+      className="auto-draw-canvas"
+      ref={canvasRef}
+    />
+  );
+}

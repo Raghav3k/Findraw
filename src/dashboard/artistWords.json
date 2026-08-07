@@ -1,0 +1,8586 @@
+[
+  {
+    "id": "artist-valorant-1",
+    "answer": "Ascent Tree",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-2",
+    "answer": "Ascent Wine",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-3",
+    "answer": "Ascent Market",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-4",
+    "answer": "Ascent Boathouse",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-5",
+    "answer": "Ascent Heaven",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-6",
+    "answer": "Ascent Hell",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-7",
+    "answer": "Bind Hookah",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-8",
+    "answer": "Bind U-Hall",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-9",
+    "answer": "Bind Elbow",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-10",
+    "answer": "Haven Garage",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-11",
+    "answer": "Icebox Screens",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-12",
+    "answer": "Icebox Yellow",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-13",
+    "answer": "Haven C Long",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-14",
+    "answer": "Haven A Short",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-15",
+    "answer": "Split Mail",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-16",
+    "answer": "Split Ropes",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-17",
+    "answer": "Breeze Pyramids",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-18",
+    "answer": "Lotus Waterfall",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-19",
+    "answer": "Bind Teleporter",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-20",
+    "answer": "Lotus Rotating Door",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-21",
+    "answer": "Fracture Zipline",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-22",
+    "answer": "Icebox Kitchen",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-23",
+    "answer": "Sunset Market",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-24",
+    "answer": "Pearl Art",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-25",
+    "answer": "One-Way Smoke",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-26",
+    "answer": "Lineup",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-27",
+    "answer": "Post Plant",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-28",
+    "answer": "Wallbang",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-29",
+    "answer": "Eco Round",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-30",
+    "answer": "Crossfire",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-31",
+    "answer": "Retake",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-32",
+    "answer": "Spycam",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-33",
+    "answer": "Healing Orb",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-34",
+    "answer": "Dark Cover",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-35",
+    "answer": "Hot Hands",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-36",
+    "answer": "Recon Bolt",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-37",
+    "answer": "Boom Bot",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-38",
+    "answer": "Paint Shells",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-39",
+    "answer": "Owl Drone",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-40",
+    "answer": "Resurrection",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-41",
+    "answer": "Lockdown",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-42",
+    "answer": "Updraft",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-43",
+    "answer": "Cloudburst",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-44",
+    "answer": "Lightspeed",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-45",
+    "answer": "Stealth Drone",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-46",
+    "answer": "Armageddon",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-47",
+    "answer": "Trapwire",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-48",
+    "answer": "Nanoswarm",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-49",
+    "answer": "Alarmbot",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-50",
+    "answer": "Showstopper",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-51",
+    "answer": "Blade Storm",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-52",
+    "answer": "Viper's Pit",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-53",
+    "answer": "Thrash",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-54",
+    "answer": "Seekers",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-55",
+    "answer": "Prime Vandal",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-56",
+    "answer": "Reaver Vandal",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-57",
+    "answer": "Kuronami Vandal",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-58",
+    "answer": "Elderflame Vandal",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-valorant-59",
+    "answer": "Neural Theft",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-60",
+    "answer": "Harmonize",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-61",
+    "answer": "M-pulse",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-62",
+    "answer": "Saturate",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-63",
+    "answer": "Refract",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-64",
+    "answer": "Convergent Paths",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-65",
+    "answer": "Crosscut",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-66",
+    "answer": "Interceptor",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-67",
+    "answer": "Dimensional Drift",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-68",
+    "answer": "Tour De Force",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-69",
+    "answer": "Orbital Strike",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-70",
+    "answer": "Nightfall",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-71",
+    "answer": "NULL/CMD",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-72",
+    "answer": "Rolling Thunder",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-73",
+    "answer": "Cosmic Divide",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-74",
+    "answer": "From the Shadows",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-75",
+    "answer": "Hunter's Fury",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-76",
+    "answer": "Run It Back",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-77",
+    "answer": "Prime Frenzy",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-78",
+    "answer": "Reaver Sheriff",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-79",
+    "answer": "Kuronami Sheriff",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-80",
+    "answer": "Elderflame Frenzy",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-81",
+    "answer": "Magepunk Ghost",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-82",
+    "answer": "Neo Frontier Sheriff",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-83",
+    "answer": "Spectrum Phantom",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-84",
+    "answer": "Araxys Vandal",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-85",
+    "answer": "Prelude to Chaos Vandal",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-valorant-86",
+    "answer": "Sentinels of Light Vandal",
+    "aliases": [],
+    "category": "Valorant Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-87",
+    "answer": "Drone",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-rainbow-six-siege-88",
+    "answer": "Reinforcement",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-rainbow-six-siege-89",
+    "answer": "Defuser",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-rainbow-six-siege-90",
+    "answer": "Solid Snake",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-rainbow-six-siege-91",
+    "answer": "Bank Red Stairs",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-92",
+    "answer": "Chalet Blue Stairs",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-93",
+    "answer": "Clubhouse Garage Rafters",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-94",
+    "answer": "Clubhouse CCTV Room",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-95",
+    "answer": "Chalet Piano Room",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-96",
+    "answer": "Chalet Wine Cellar",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-97",
+    "answer": "Oregon Kids Dorms",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-98",
+    "answer": "Consulate Yellow Stairs",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-99",
+    "answer": "Kafe Cocktail Lounge",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-100",
+    "answer": "Oregon Freezer",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-101",
+    "answer": "Coastline Hookah",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-102",
+    "answer": "Villa Astronomy",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-103",
+    "answer": "Bank Server Room",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-104",
+    "answer": "Clubhouse Construction",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-105",
+    "answer": "Rotation Hole",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-106",
+    "answer": "Pixel Peek",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-107",
+    "answer": "Bandit Trick",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-108",
+    "answer": "Spawn Peek",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-109",
+    "answer": "Hard Breach",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-110",
+    "answer": "Soft Wall",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-rainbow-six-siege-111",
+    "answer": "Sledge Breaching Hammer",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-112",
+    "answer": "Dokkaebi Jegeo Payload",
+    "aliases": [
+      "Dokkaebi Logic Bomb"
+    ],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-113",
+    "answer": "Thermite Exothermic Charge",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-114",
+    "answer": "Twitch Shock Drone",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-115",
+    "answer": "Valkyrie Black Eye",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-116",
+    "answer": "Rook Armor Pack",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-117",
+    "answer": "Mute Signal Disruptor",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-118",
+    "answer": "Frost Welcome Mat",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-119",
+    "answer": "Echo Yokai Drone",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-120",
+    "answer": "Maestro Evil Eye",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-121",
+    "answer": "Nomad Airjab",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-122",
+    "answer": "Lesion Gu Mine",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-123",
+    "answer": "Hibana X-Kairos",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-124",
+    "answer": "Fuze Cluster Charge",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-125",
+    "answer": "Pulse Heartbeat Sensor",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-126",
+    "answer": "Ash Breaching Round",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-127",
+    "answer": "Brava Kludge Drone",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-128",
+    "answer": "Ram BU-GI Auto-Breacher",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-129",
+    "answer": "Denari T.R.I.P. Connector",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-rainbow-six-siege-130",
+    "answer": "Jager Active Defense System",
+    "aliases": [],
+    "category": "Rainbow Six Siege Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-131",
+    "answer": "Creeper",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-minecraft-132",
+    "answer": "Zombie",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-minecraft-133",
+    "answer": "Enderman",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-minecraft-134",
+    "answer": "Diamond",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-minecraft-135",
+    "answer": "Crafting Table",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-minecraft-136",
+    "answer": "Torch",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-minecraft-137",
+    "answer": "Villager",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-minecraft-138",
+    "answer": "Pig",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-minecraft-139",
+    "answer": "Minecart",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-minecraft-140",
+    "answer": "Nether Portal",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-minecraft-141",
+    "answer": "TNT",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-minecraft-142",
+    "answer": "Bed",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-minecraft-143",
+    "answer": "Chest",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-minecraft-144",
+    "answer": "Diamond Sword",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-minecraft-145",
+    "answer": "Fishing Rod",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-minecraft-146",
+    "answer": "Ender Dragon",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-minecraft-147",
+    "answer": "Axolotl",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-148",
+    "answer": "Elytra",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-149",
+    "answer": "Beehive",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-150",
+    "answer": "Stronghold",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-151",
+    "answer": "Ocean Monument",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-152",
+    "answer": "Nether Fortress",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-153",
+    "answer": "Ender Pearl",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-154",
+    "answer": "Potion Stand",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-155",
+    "answer": "Enchantment Table",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-156",
+    "answer": "Redstone Repeater",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-157",
+    "answer": "Piston",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-158",
+    "answer": "Mangrove Swamp",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-159",
+    "answer": "Deep Dark",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-160",
+    "answer": "Ancient City",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-161",
+    "answer": "Silk Touch",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-162",
+    "answer": "Frost Walker",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-163",
+    "answer": "End Crystal",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-164",
+    "answer": "Woodland Mansion",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-165",
+    "answer": "Bastion Remnant",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-166",
+    "answer": "Recovery Compass",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-minecraft-167",
+    "answer": "Comparator Clock",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-168",
+    "answer": "Observer Pulse",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-169",
+    "answer": "Redstone Item Sorter",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-170",
+    "answer": "Slime Block Flying Machine",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-171",
+    "answer": "Bud Switch",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-172",
+    "answer": "Zero Tick Farm",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-173",
+    "answer": "Nether Roof",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-174",
+    "answer": "End Gateway",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-175",
+    "answer": "Chunk Loader",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-176",
+    "answer": "Redstone Torch Burnout",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-177",
+    "answer": "Sculk Catalyst",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-178",
+    "answer": "Calibrated Sculk Sensor",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-179",
+    "answer": "Trial Spawner",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-180",
+    "answer": "Vault Block",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-181",
+    "answer": "Ominous Bottle",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-182",
+    "answer": "Wind Charge",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-183",
+    "answer": "Respawn Anchor",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-184",
+    "answer": "Crafter Block",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-185",
+    "answer": "Lodestone Compass",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-minecraft-186",
+    "answer": "Netherite Upgrade",
+    "aliases": [],
+    "category": "Minecraft Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-187",
+    "answer": "Battle Bus",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-fortnite-188",
+    "answer": "Loot Llama",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-fortnite-189",
+    "answer": "Victory Royale",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-fortnite-190",
+    "answer": "Glider",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-fortnite-191",
+    "answer": "Shield Potion",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-fortnite-192",
+    "answer": "Storm Circle",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-fortnite-193",
+    "answer": "Treasure Chest",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-fortnite-194",
+    "answer": "Reboot Van",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-fortnite-195",
+    "answer": "Medkit",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-fortnite-196",
+    "answer": "Emote",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-fortnite-197",
+    "answer": "Back Bling",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-fortnite-198",
+    "answer": "Supply Drop",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-fortnite-199",
+    "answer": "V-Bucks",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-fortnite-200",
+    "answer": "Battle Pass",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-fortnite-201",
+    "answer": "Peely",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-fortnite-202",
+    "answer": "Jonesy",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-fortnite-203",
+    "answer": "Cuddle Team Leader",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-fortnite-204",
+    "answer": "Durr Burger",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-fortnite-205",
+    "answer": "Launch Pad",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-fortnite-206",
+    "answer": "Boogie Bomb",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-fortnite-207",
+    "answer": "Chug Jug",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-fortnite-208",
+    "answer": "Bush",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-fortnite-209",
+    "answer": "Shockwave Grenade",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-fortnite-210",
+    "answer": "Fishing Rod",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-fortnite-211",
+    "answer": "Bounty Board",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-fortnite-212",
+    "answer": "Vending Machine",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-fortnite-213",
+    "answer": "Gold Bars",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-fortnite-214",
+    "answer": "Reboot Card",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-fortnite-215",
+    "answer": "Zero Build",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-fortnite-216",
+    "answer": "Rift",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-fortnite-217",
+    "answer": "Mythic Weapon",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-fortnite-218",
+    "answer": "Slurp Juice",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-fortnite-219",
+    "answer": "Shield Keg",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-fortnite-220",
+    "answer": "Grappler",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-fortnite-221",
+    "answer": "Crash Pad",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-fortnite-222",
+    "answer": "Port-a-Fort",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-223",
+    "answer": "Rift-to-Go",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-224",
+    "answer": "Kinetic Blade",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-225",
+    "answer": "Grapple Glove",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-226",
+    "answer": "Shockwave Hammer",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-227",
+    "answer": "Recon Scanner",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-228",
+    "answer": "Cow Catcher",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-229",
+    "answer": "Sideways Scythe",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-230",
+    "answer": "Reality Sapling",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-231",
+    "answer": "Falcon Scout",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-232",
+    "answer": "Chug Cannon",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-233",
+    "answer": "Storm Flip",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-234",
+    "answer": "Junk Rift",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-235",
+    "answer": "Harpoon Gun",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-236",
+    "answer": "Slurp Barrel",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-237",
+    "answer": "Upgrade Bench",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-238",
+    "answer": "Kinetic Boomerang",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-239",
+    "answer": "Kingsman Umbrella",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-240",
+    "answer": "Inflate-A-Bull",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-fortnite-241",
+    "answer": "Plasma Cannon",
+    "aliases": [],
+    "category": "Fortnite Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-deadlock-242",
+    "answer": "Zipline",
+    "aliases": [],
+    "category": "Deadlock Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-deadlock-243",
+    "answer": "Soul Urn",
+    "aliases": [],
+    "category": "Deadlock Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-deadlock-244",
+    "answer": "Heavy Melee",
+    "aliases": [],
+    "category": "Deadlock Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-deadlock-245",
+    "answer": "Hook",
+    "aliases": [],
+    "category": "Deadlock Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-deadlock-246",
+    "answer": "Hyper Beam",
+    "aliases": [],
+    "category": "Deadlock Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-deadlock-247",
+    "answer": "Flame Dash",
+    "aliases": [],
+    "category": "Deadlock Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-deadlock-248",
+    "answer": "Seismic Impact",
+    "aliases": [],
+    "category": "Deadlock Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-deadlock-249",
+    "answer": "Itani Lo Sahn",
+    "aliases": [],
+    "category": "Deadlock Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-deadlock-250",
+    "answer": "Return to Shadows",
+    "aliases": [],
+    "category": "Deadlock Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-deadlock-251",
+    "answer": "Dazzling Trick",
+    "aliases": [],
+    "category": "Deadlock Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-deadlock-252",
+    "answer": "Luggage Cart",
+    "aliases": [],
+    "category": "Deadlock Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-deadlock-253",
+    "answer": "Kinetic Carbine",
+    "aliases": [],
+    "category": "Deadlock Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-deadlock-254",
+    "answer": "Bullet Dance",
+    "aliases": [],
+    "category": "Deadlock Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-deadlock-255",
+    "answer": "Affliction",
+    "aliases": [],
+    "category": "Deadlock Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-deadlock-256",
+    "answer": "Diviner's Kevlar",
+    "aliases": [],
+    "category": "Deadlock Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-royale-257",
+    "answer": "Mini P.E.K.K.A",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-clash-royale-258",
+    "answer": "P.E.K.K.A",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-clash-royale-259",
+    "answer": "King Tower",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-clash-royale-260",
+    "answer": "Princess Tower",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-clash-royale-261",
+    "answer": "Elixir",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-clash-royale-262",
+    "answer": "Chest",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-clash-royale-263",
+    "answer": "X-Bow",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-clash-royale-264",
+    "answer": "Evolution Shard",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-clash-royale-265",
+    "answer": "Wild Card",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-clash-royale-266",
+    "answer": "Dashing Dash",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-royale-267",
+    "answer": "Soul Summoning",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-royale-268",
+    "answer": "Cloaking Cape",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-royale-269",
+    "answer": "Explosive Escape",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-royale-270",
+    "answer": "Gateway Grenade",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-royale-271",
+    "answer": "Pensive Protection",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-royale-272",
+    "answer": "Royal Rescue",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-royale-273",
+    "answer": "Lightning Link",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-royale-274",
+    "answer": "Hero Mini P.E.K.K.A",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-royale-275",
+    "answer": "Breakfast Boost",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-royale-276",
+    "answer": "Hero Barbarian Barrel",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-royale-277",
+    "answer": "Rowdy Reroll",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-royale-278",
+    "answer": "Hero Magic Archer",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-royale-279",
+    "answer": "Triple Threat",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-royale-280",
+    "answer": "Princess Gambit",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-royale-281",
+    "answer": "Collection Level",
+    "aliases": [],
+    "category": "Clash Royale Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-of-clans-282",
+    "answer": "P.E.K.K.A",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-clash-of-clans-283",
+    "answer": "Wall",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-clash-of-clans-284",
+    "answer": "Gold Mine",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-clash-of-clans-285",
+    "answer": "Root Rider",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-clash-of-clans-286",
+    "answer": "Lightning Spell",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-clash-of-clans-287",
+    "answer": "Rage Spell",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-clash-of-clans-288",
+    "answer": "Freeze Spell",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-clash-of-clans-289",
+    "answer": "Jump Spell",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-clash-of-clans-290",
+    "answer": "Clone Spell",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-clash-of-clans-291",
+    "answer": "Stone Slammer",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-clash-of-clans-292",
+    "answer": "Phoenix Pet",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-of-clans-293",
+    "answer": "Diggy",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-of-clans-294",
+    "answer": "L.A.S.S.I",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-of-clans-295",
+    "answer": "Mighty Yak",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-of-clans-296",
+    "answer": "Earthquake Boots",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-of-clans-297",
+    "answer": "Giant Gauntlet",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-of-clans-298",
+    "answer": "Frozen Arrow",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-of-clans-299",
+    "answer": "Magic Mirror",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-of-clans-300",
+    "answer": "Spiky Ball",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-of-clans-301",
+    "answer": "Fireball Equipment",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-of-clans-302",
+    "answer": "Healing Tome",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-of-clans-303",
+    "answer": "Eternal Tome",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-of-clans-304",
+    "answer": "Hog Rider Puppet",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-of-clans-305",
+    "answer": "Rocket Spear",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-of-clans-306",
+    "answer": "Seeking Shield",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-of-clans-307",
+    "answer": "Super Witch",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-of-clans-308",
+    "answer": "Super Hog Rider",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clash-of-clans-309",
+    "answer": "Ice Hound",
+    "aliases": [],
+    "category": "Clash of Clans Lore & Mechanics",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-310",
+    "answer": "Elephant",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-311",
+    "answer": "Giraffe",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-312",
+    "answer": "Kangaroo",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-313",
+    "answer": "Penguin",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-314",
+    "answer": "Lion",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-315",
+    "answer": "Tiger",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-316",
+    "answer": "Monkey",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-317",
+    "answer": "Rabbit",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-318",
+    "answer": "Horse",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-319",
+    "answer": "Panda",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-320",
+    "answer": "Crocodile",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-321",
+    "answer": "Owl",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-322",
+    "answer": "Turtle",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-323",
+    "answer": "Peacock",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-324",
+    "answer": "Dolphin",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-325",
+    "answer": "Bear",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-326",
+    "answer": "Dog",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-327",
+    "answer": "Cat",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-328",
+    "answer": "Cow",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-329",
+    "answer": "Zebra",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-animals-330",
+    "answer": "Hedgehog",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-331",
+    "answer": "Chameleon",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-332",
+    "answer": "Rhinoceros",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-333",
+    "answer": "Flamingo",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-334",
+    "answer": "Koala",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-335",
+    "answer": "Sloth",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-336",
+    "answer": "Armadillo",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-337",
+    "answer": "Porcupine",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-338",
+    "answer": "Meerkat",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-339",
+    "answer": "Orangutan",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-340",
+    "answer": "Platypus",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-341",
+    "answer": "Lemur",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-342",
+    "answer": "Wombat",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-343",
+    "answer": "Toucan",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-344",
+    "answer": "Komodo Dragon",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-345",
+    "answer": "Capybara",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-346",
+    "answer": "Badger",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-347",
+    "answer": "Mongoose",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-348",
+    "answer": "Tapir",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-349",
+    "answer": "Red Panda",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-animals-350",
+    "answer": "Aye-Aye",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-351",
+    "answer": "Pangolin",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-352",
+    "answer": "Okapi",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-353",
+    "answer": "Saiga Antelope",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-354",
+    "answer": "Fossa",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-355",
+    "answer": "Quokka",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-356",
+    "answer": "Tarsier",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-357",
+    "answer": "Kakapo",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-358",
+    "answer": "Shoebill",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-359",
+    "answer": "Axolotl",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-360",
+    "answer": "Naked Mole Rat",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-361",
+    "answer": "Maned Wolf",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-362",
+    "answer": "Binturong",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-363",
+    "answer": "Proboscis Monkey",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-364",
+    "answer": "Secretary Bird",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-365",
+    "answer": "Leafy Sea Dragon",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-366",
+    "answer": "Gerenuk",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-367",
+    "answer": "Markhor",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-368",
+    "answer": "Dhole",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-animals-369",
+    "answer": "Numbat",
+    "aliases": [],
+    "category": "Animals",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-370",
+    "answer": "Shark",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-371",
+    "answer": "Whale",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-372",
+    "answer": "Dolphin",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-373",
+    "answer": "Octopus",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-374",
+    "answer": "Jellyfish",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-375",
+    "answer": "Seahorse",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-376",
+    "answer": "Starfish",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-377",
+    "answer": "Crab",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-378",
+    "answer": "Lobster",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-379",
+    "answer": "Sea Turtle",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-380",
+    "answer": "Clownfish",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-381",
+    "answer": "Swordfish",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-382",
+    "answer": "Seal",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-383",
+    "answer": "Coral Reef",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-384",
+    "answer": "Pufferfish",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-385",
+    "answer": "Manta Ray",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-386",
+    "answer": "Eel",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-387",
+    "answer": "Shrimp",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-388",
+    "answer": "Walrus",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-389",
+    "answer": "Pelican",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-ocean-life-390",
+    "answer": "Anglerfish",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-391",
+    "answer": "Hammerhead",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-392",
+    "answer": "Narwhal",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-393",
+    "answer": "Barracuda",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-394",
+    "answer": "Moray Eel",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-395",
+    "answer": "Lionfish",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-396",
+    "answer": "Stingray",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-397",
+    "answer": "Blue Whale",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-398",
+    "answer": "Hermit Crab",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-399",
+    "answer": "Sea Urchin",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-400",
+    "answer": "Squid",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-401",
+    "answer": "Orca",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-402",
+    "answer": "Manatee",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-403",
+    "answer": "Flying Fish",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-404",
+    "answer": "Nautilus",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-405",
+    "answer": "Sea Cucumber",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-406",
+    "answer": "Horseshoe Crab",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-407",
+    "answer": "Cuttlefish",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-408",
+    "answer": "Sawfish",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-409",
+    "answer": "Whale Shark",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-ocean-life-410",
+    "answer": "Goblin Shark",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-411",
+    "answer": "Vampire Squid",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-412",
+    "answer": "Oarfish",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-413",
+    "answer": "Blobfish",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-414",
+    "answer": "Dumbo Octopus",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-415",
+    "answer": "Coelacanth",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-416",
+    "answer": "Mantis Shrimp",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-417",
+    "answer": "Cookiecutter Shark",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-418",
+    "answer": "Giant Isopod",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-419",
+    "answer": "Frilled Shark",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-420",
+    "answer": "Wolffish",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-421",
+    "answer": "Siphonophore",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-422",
+    "answer": "Barreleye Fish",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-423",
+    "answer": "Sarcastic Fringehead",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-424",
+    "answer": "Bobbit Worm",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-425",
+    "answer": "Leafy Sea Dragon",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-426",
+    "answer": "Yeti Crab",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-427",
+    "answer": "Sea Pig",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-428",
+    "answer": "Gulper Eel",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-ocean-life-429",
+    "answer": "Japanese Spider Crab",
+    "aliases": [],
+    "category": "Ocean & Fish",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-430",
+    "answer": "Pizza",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-431",
+    "answer": "Sushi",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-432",
+    "answer": "Pancakes",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-433",
+    "answer": "Taco",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-434",
+    "answer": "Noodles",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-435",
+    "answer": "Watermelon",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-436",
+    "answer": "Popcorn",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-437",
+    "answer": "Cupcake",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-438",
+    "answer": "Sandwich",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-439",
+    "answer": "Ice Cream",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-440",
+    "answer": "Pineapple",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-441",
+    "answer": "Cheeseburger",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-442",
+    "answer": "Spaghetti",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-443",
+    "answer": "Donut",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-444",
+    "answer": "Burrito",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-445",
+    "answer": "French Fries",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-446",
+    "answer": "Hot Dog",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-447",
+    "answer": "Apple Pie",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-448",
+    "answer": "Fried Egg",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-449",
+    "answer": "Birthday Cake",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-450",
+    "answer": "Croissant",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-451",
+    "answer": "Dumpling",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-452",
+    "answer": "Pretzel",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-453",
+    "answer": "Ramen",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-454",
+    "answer": "Paella",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-455",
+    "answer": "Falafel",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-456",
+    "answer": "Lasagna",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-457",
+    "answer": "Waffle",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-458",
+    "answer": "Nachos",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-459",
+    "answer": "Curry",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-460",
+    "answer": "Kebab",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-461",
+    "answer": "Macaron",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-462",
+    "answer": "Spring Roll",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-463",
+    "answer": "Risotto",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-464",
+    "answer": "Mochi",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-465",
+    "answer": "Fondue",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-466",
+    "answer": "Churros",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-467",
+    "answer": "Dim Sum",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-468",
+    "answer": "Tiramisu",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-469",
+    "answer": "Baklava",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-470",
+    "answer": "Gnocchi",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-471",
+    "answer": "Pierogi",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-food-472",
+    "answer": "Kaiseki",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-473",
+    "answer": "Mole Poblano",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-474",
+    "answer": "Khachapuri",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-475",
+    "answer": "Takoyaki",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-476",
+    "answer": "Peking Duck",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-477",
+    "answer": "Baba Ganoush",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-478",
+    "answer": "Dolma",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-479",
+    "answer": "Koshari",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-480",
+    "answer": "Feijoada",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-481",
+    "answer": "Jollof Rice",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-482",
+    "answer": "Lomo Saltado",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-483",
+    "answer": "Banh Xeo",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-484",
+    "answer": "Sauerbraten",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-485",
+    "answer": "Pastitsio",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-486",
+    "answer": "Canelé",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-487",
+    "answer": "Dacquoise",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-488",
+    "answer": "Okonomiyaki",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-489",
+    "answer": "Bibimbap",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-490",
+    "answer": "Bouillabaisse",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-491",
+    "answer": "Shakshuka",
+    "aliases": [],
+    "category": "Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-492",
+    "answer": "Eiffel Tower",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-493",
+    "answer": "Pyramid",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-494",
+    "answer": "Lighthouse",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-495",
+    "answer": "Castle",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-496",
+    "answer": "Waterfall",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-497",
+    "answer": "Airport",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-498",
+    "answer": "Library",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-499",
+    "answer": "Amusement Park",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-500",
+    "answer": "Volcano",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-501",
+    "answer": "Treehouse",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-502",
+    "answer": "Train Station",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-503",
+    "answer": "Museum",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-504",
+    "answer": "Beach",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-505",
+    "answer": "Skyscraper",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-506",
+    "answer": "Bridge",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-507",
+    "answer": "Igloo",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-508",
+    "answer": "Zoo",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-509",
+    "answer": "Hospital",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-510",
+    "answer": "School",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-511",
+    "answer": "Stadium",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-places-512",
+    "answer": "Colosseum",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-513",
+    "answer": "Big Ben",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-514",
+    "answer": "Taj Mahal",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-515",
+    "answer": "Stonehenge",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-516",
+    "answer": "Grand Canyon",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-517",
+    "answer": "Great Wall of China",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-518",
+    "answer": "Mount Rushmore",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-519",
+    "answer": "Sydney Opera House",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-520",
+    "answer": "Golden Gate Bridge",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-521",
+    "answer": "Leaning Tower of Pisa",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-522",
+    "answer": "Windmill",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-523",
+    "answer": "Observatory",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-524",
+    "answer": "Aquarium",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-525",
+    "answer": "Temple",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-526",
+    "answer": "Harbor",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-527",
+    "answer": "Cathedral",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-528",
+    "answer": "Space Needle",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-529",
+    "answer": "Arc de Triomphe",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-530",
+    "answer": "Empire State Building",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-531",
+    "answer": "Gateway of India",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-places-532",
+    "answer": "Jordan Petra",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-533",
+    "answer": "Peru Machu Picchu",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-534",
+    "answer": "Cambodia Angkor Wat",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-535",
+    "answer": "Dubai Burj Khalifa",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-536",
+    "answer": "Barcelona Sagrada Familia",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-537",
+    "answer": "Easter Island Moai",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-538",
+    "answer": "Mexico Chichen Itza",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-539",
+    "answer": "Germany Neuschwanstein Castle",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-540",
+    "answer": "France Mont Saint-Michel",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-541",
+    "answer": "Rio Christ the Redeemer",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-542",
+    "answer": "Australia Uluru",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-543",
+    "answer": "Spain Alhambra",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-544",
+    "answer": "Istanbul Hagia Sophia",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-545",
+    "answer": "China Terracotta Army",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-546",
+    "answer": "Cape Town Table Mountain",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-547",
+    "answer": "Brussels Atomium",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-548",
+    "answer": "Ethiopia Lalibela",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-549",
+    "answer": "Bolivia Salar de Uyuni",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-550",
+    "answer": "Myanmar Bagan",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-places-551",
+    "answer": "Mali Great Mosque of Djenne",
+    "aliases": [],
+    "category": "Places",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-552",
+    "answer": "Guitar",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-553",
+    "answer": "Piano",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-554",
+    "answer": "Drum Kit",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-555",
+    "answer": "Microphone",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-556",
+    "answer": "Headphones",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-557",
+    "answer": "Violin",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-558",
+    "answer": "Trumpet",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-559",
+    "answer": "Concert",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-560",
+    "answer": "Music Note",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-561",
+    "answer": "Singer",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-562",
+    "answer": "DJ",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-563",
+    "answer": "Harp",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-564",
+    "answer": "Choir",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-565",
+    "answer": "Karaoke",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-566",
+    "answer": "Record Player",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-567",
+    "answer": "Saxophone",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-568",
+    "answer": "Maracas",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-569",
+    "answer": "Banjo",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-570",
+    "answer": "Clarinet",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-571",
+    "answer": "Disco Ball",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-music-572",
+    "answer": "Accordion",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-573",
+    "answer": "Tambourine",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-574",
+    "answer": "Metronome",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-575",
+    "answer": "Cello",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-576",
+    "answer": "Trombone",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-577",
+    "answer": "Conductor",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-578",
+    "answer": "Sheet Music",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-579",
+    "answer": "Music Stand",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-580",
+    "answer": "Bass Guitar",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-581",
+    "answer": "Turntable",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-582",
+    "answer": "Flute",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-583",
+    "answer": "Ukulele",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-584",
+    "answer": "Orchestra",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-585",
+    "answer": "Headset Microphone",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-586",
+    "answer": "Cymbal",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-587",
+    "answer": "Xylophone",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-588",
+    "answer": "Treble Clef",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-589",
+    "answer": "Mouth Organ",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-590",
+    "answer": "Sitar",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-591",
+    "answer": "Mandolin",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-music-592",
+    "answer": "Oboe",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-593",
+    "answer": "Bassoon",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-594",
+    "answer": "Harpsichord",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-595",
+    "answer": "Theremin",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-596",
+    "answer": "Contrabass",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-597",
+    "answer": "Timpani",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-598",
+    "answer": "Crescendo",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-599",
+    "answer": "Arpeggio",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-600",
+    "answer": "Syncopation",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-601",
+    "answer": "Vibrato",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-602",
+    "answer": "Fermata",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-603",
+    "answer": "Glissando",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-604",
+    "answer": "Ostinato",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-605",
+    "answer": "Polyrhythm",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-606",
+    "answer": "Counterpoint",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-607",
+    "answer": "Tremolo",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-608",
+    "answer": "Aeolian Harp",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-609",
+    "answer": "Nyckelharpa",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-610",
+    "answer": "Clavichord",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-music-611",
+    "answer": "Tone Cluster",
+    "aliases": [],
+    "category": "Music",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-612",
+    "answer": "Taylor Swift",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-613",
+    "answer": "The Beatles",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-614",
+    "answer": "Beyoncé",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-615",
+    "answer": "Michael Jackson",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-616",
+    "answer": "Elvis Presley",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-617",
+    "answer": "Queen",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-618",
+    "answer": "Adele",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-619",
+    "answer": "Rihanna",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-620",
+    "answer": "Eminem",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-621",
+    "answer": "Lady Gaga",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-622",
+    "answer": "Bruno Mars",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-623",
+    "answer": "Ed Sheeran",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-624",
+    "answer": "Ariana Grande",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-625",
+    "answer": "Shakira",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-626",
+    "answer": "Coldplay",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-627",
+    "answer": "Justin Bieber",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-628",
+    "answer": "BTS",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-629",
+    "answer": "Madonna",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-630",
+    "answer": "Britney Spears",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-631",
+    "answer": "Bob Marley",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-singers-bands-632",
+    "answer": "Billie Eilish",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-633",
+    "answer": "Imagine Dragons",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-634",
+    "answer": "Maroon 5",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-635",
+    "answer": "Linkin Park",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-636",
+    "answer": "The Weeknd",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-637",
+    "answer": "Katy Perry",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-638",
+    "answer": "Snoop Dogg",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-639",
+    "answer": "Post Malone",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-640",
+    "answer": "Dua Lipa",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-641",
+    "answer": "Miley Cyrus",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-642",
+    "answer": "One Direction",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-643",
+    "answer": "Green Day",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-644",
+    "answer": "Metallica",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-645",
+    "answer": "ABBA",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-646",
+    "answer": "Drake",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-647",
+    "answer": "Selena Gomez",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-648",
+    "answer": "Foo Fighters",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-649",
+    "answer": "Red Hot Chili Peppers",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-650",
+    "answer": "Nicki Minaj",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-651",
+    "answer": "Kendrick Lamar",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-singers-bands-652",
+    "answer": "Fleetwood Mac",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-653",
+    "answer": "Daft Punk",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-654",
+    "answer": "Radiohead",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-655",
+    "answer": "Arctic Monkeys",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-656",
+    "answer": "The Cranberries",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-657",
+    "answer": "Depeche Mode",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-658",
+    "answer": "Florence and the Machine",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-659",
+    "answer": "Tame Impala",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-660",
+    "answer": "Gorillaz",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-661",
+    "answer": "Twenty One Pilots",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-662",
+    "answer": "The Strokes",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-663",
+    "answer": "Paramore",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-664",
+    "answer": "My Chemical Romance",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-665",
+    "answer": "Jamiroquai",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-666",
+    "answer": "The Smashing Pumpkins",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-667",
+    "answer": "Måneskin",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-668",
+    "answer": "Cocteau Twins",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-669",
+    "answer": "Sigur Rós",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-670",
+    "answer": "Portishead",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-singers-bands-671",
+    "answer": "King Gizzard and the Lizard Wizard",
+    "aliases": [],
+    "category": "Singers & Bands",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-672",
+    "answer": "Harry Potter",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-673",
+    "answer": "Cinderella",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-674",
+    "answer": "Sherlock Holmes",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-675",
+    "answer": "Peter Pan",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-676",
+    "answer": "Robin Hood",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-677",
+    "answer": "Pinocchio",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-678",
+    "answer": "The Hobbit",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-679",
+    "answer": "Dracula",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-680",
+    "answer": "Frankenstein",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-681",
+    "answer": "Alice in Wonderland",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-682",
+    "answer": "Little Red Riding Hood",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-683",
+    "answer": "The Jungle Book",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-684",
+    "answer": "Romeo and Juliet",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-685",
+    "answer": "Treasure Island",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-686",
+    "answer": "The Little Prince",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-687",
+    "answer": "Moby Dick",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-688",
+    "answer": "The Cat in the Hat",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-689",
+    "answer": "Charlie and the Chocolate Factory",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-690",
+    "answer": "Winnie the Pooh",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-691",
+    "answer": "The Gruffalo",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-books-stories-692",
+    "answer": "The Great Gatsby",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-693",
+    "answer": "The Hunger Games",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-694",
+    "answer": "Percy Jackson",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-695",
+    "answer": "Don Quixote",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-696",
+    "answer": "Jane Eyre",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-697",
+    "answer": "The Wizard of Oz",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-698",
+    "answer": "Anne of Green Gables",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-699",
+    "answer": "The Chronicles of Narnia",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-700",
+    "answer": "The Secret Garden",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-701",
+    "answer": "The Three Musketeers",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-702",
+    "answer": "Gulliver's Travels",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-703",
+    "answer": "The Count of Monte Cristo",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-704",
+    "answer": "The Wind in the Willows",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-705",
+    "answer": "Around the World in Eighty Days",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-706",
+    "answer": "The Giving Tree",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-707",
+    "answer": "Matilda",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-708",
+    "answer": "Life of Pi",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-709",
+    "answer": "Coraline",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-710",
+    "answer": "The Princess Bride",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-711",
+    "answer": "The Neverending Story",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-books-stories-712",
+    "answer": "Atticus Finch",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-713",
+    "answer": "Captain Ahab",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-714",
+    "answer": "Dorian Gray",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-715",
+    "answer": "Holden Caulfield",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-716",
+    "answer": "Gregor Samsa",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-717",
+    "answer": "Hester Prynne",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-718",
+    "answer": "Raskolnikov",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-719",
+    "answer": "Sancho Panza",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-720",
+    "answer": "Miss Havisham",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-721",
+    "answer": "The Yellow Wallpaper",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-722",
+    "answer": "Invisible Man",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-723",
+    "answer": "The Bell Jar",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-724",
+    "answer": "One Hundred Years of Solitude",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-725",
+    "answer": "The Name of the Rose",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-726",
+    "answer": "The Master and Margarita",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-727",
+    "answer": "Waiting for Godot",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-728",
+    "answer": "Slaughterhouse-Five",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-729",
+    "answer": "The Left Hand of Darkness",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-730",
+    "answer": "The Unbearable Lightness of Being",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-books-stories-731",
+    "answer": "If on a winter's night a traveler",
+    "aliases": [],
+    "category": "Books & Stories",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-732",
+    "answer": "Spider-Man",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-733",
+    "answer": "Batman",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-734",
+    "answer": "Frozen",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-735",
+    "answer": "Toy Story",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-736",
+    "answer": "Jurassic Park",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-737",
+    "answer": "Star Wars",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-738",
+    "answer": "The Lion King",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-739",
+    "answer": "Shrek",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-740",
+    "answer": "Titanic",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-741",
+    "answer": "Barbie",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-742",
+    "answer": "The Avengers",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-743",
+    "answer": "Finding Nemo",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-744",
+    "answer": "Home Alone",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-745",
+    "answer": "Minions",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-746",
+    "answer": "Superman",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-747",
+    "answer": "The Simpsons",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-748",
+    "answer": "Iron Man",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-749",
+    "answer": "SpongeBob SquarePants",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-750",
+    "answer": "Cars",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-751",
+    "answer": "Kung Fu Panda",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-movies-tv-752",
+    "answer": "Back to the Future",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-753",
+    "answer": "Ghostbusters",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-754",
+    "answer": "Stranger Things",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-755",
+    "answer": "The Matrix",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-756",
+    "answer": "Jaws",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-757",
+    "answer": "Wednesday",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-758",
+    "answer": "Squid Game",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-759",
+    "answer": "Avatar",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-760",
+    "answer": "The Addams Family",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-761",
+    "answer": "Doctor Who",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-762",
+    "answer": "Friends",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-763",
+    "answer": "King Kong",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-764",
+    "answer": "Rocky",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-765",
+    "answer": "Indiana Jones",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-766",
+    "answer": "Pirates of the Caribbean",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-767",
+    "answer": "Mission Impossible",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-768",
+    "answer": "DeLorean",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-769",
+    "answer": "Proton Pack",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-770",
+    "answer": "Red Pill",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-771",
+    "answer": "Infinity Gauntlet",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-772",
+    "answer": "The One Ring",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-773",
+    "answer": "TARDIS",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-774",
+    "answer": "Bat-Signal",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-775",
+    "answer": "Death Star",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-movies-tv-776",
+    "answer": "Maltese Falcon",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-777",
+    "answer": "Neuralyzer",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-778",
+    "answer": "Wilson Volleyball",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-779",
+    "answer": "Golden Snitch",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-780",
+    "answer": "Leg Lamp",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-781",
+    "answer": "Spinning Top",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-782",
+    "answer": "Lament Configuration",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-783",
+    "answer": "Sankara Stones",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-784",
+    "answer": "Rabbit Foot",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-785",
+    "answer": "Green Destiny",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-786",
+    "answer": "Rosebud",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-787",
+    "answer": "Flux Capacitor",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-788",
+    "answer": "Red Stapler",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-789",
+    "answer": "Burn Book",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-790",
+    "answer": "Hand of the King",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-791",
+    "answer": "Zorg ZF-1",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-792",
+    "answer": "Kessel Run",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-793",
+    "answer": "Brawndo",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-794",
+    "answer": "Redrum",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-movies-tv-795",
+    "answer": "Kobayashi Maru",
+    "aliases": [],
+    "category": "Movies & TV",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-796",
+    "answer": "Football",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-797",
+    "answer": "Basketball",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-798",
+    "answer": "Cricket Bat",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-799",
+    "answer": "Tennis Racket",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-800",
+    "answer": "Goalkeeper",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-801",
+    "answer": "Skateboard",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-802",
+    "answer": "Boxing Gloves",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-803",
+    "answer": "Swimming",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-804",
+    "answer": "Golf",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-805",
+    "answer": "Volleyball",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-806",
+    "answer": "Surfboard",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-807",
+    "answer": "Hockey Stick",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-808",
+    "answer": "Trophy",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-809",
+    "answer": "Scoreboard",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-810",
+    "answer": "Badminton",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-811",
+    "answer": "Table Tennis",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-812",
+    "answer": "Baseball Glove",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-813",
+    "answer": "Bowling Ball",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-814",
+    "answer": "Racing Car",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-815",
+    "answer": "Skiing",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-sports-816",
+    "answer": "Penalty Kick",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-817",
+    "answer": "Slam Dunk",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-818",
+    "answer": "Home Run",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-819",
+    "answer": "Relay Race",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-820",
+    "answer": "High Jump",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-821",
+    "answer": "Pole Vault",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-822",
+    "answer": "Archery",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-823",
+    "answer": "Fencing",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-824",
+    "answer": "Javelin",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-825",
+    "answer": "Gymnastics",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-826",
+    "answer": "Rugby Scrum",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-827",
+    "answer": "Corner Kick",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-828",
+    "answer": "Wicketkeeper",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-829",
+    "answer": "Knockout",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-830",
+    "answer": "Pit Stop",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-831",
+    "answer": "Photo Finish",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-832",
+    "answer": "Tie Break",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-833",
+    "answer": "Hat Trick",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-834",
+    "answer": "Bicycle Kick",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-835",
+    "answer": "Puck Drop",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-836",
+    "answer": "False Start",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-837",
+    "answer": "Safety Car",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-838",
+    "answer": "Grand Slam",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-sports-839",
+    "answer": "Offside Trap",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-840",
+    "answer": "Pick and Roll",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-841",
+    "answer": "Leg Before Wicket",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-842",
+    "answer": "Triple Axel",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-843",
+    "answer": "Fosbury Flop",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-844",
+    "answer": "Duckworth Lewis",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-845",
+    "answer": "Technical Foul",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-846",
+    "answer": "Steeplechase",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-847",
+    "answer": "Panenka",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-848",
+    "answer": "Rabona",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-849",
+    "answer": "Googly",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-850",
+    "answer": "Yorker",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-851",
+    "answer": "Doosra",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-852",
+    "answer": "Ippon",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-853",
+    "answer": "Omnium",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-854",
+    "answer": "Libero",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-855",
+    "answer": "Dink Shot",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-856",
+    "answer": "Puck Icing",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-857",
+    "answer": "Silly Point",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-sports-858",
+    "answer": "Keirin",
+    "aliases": [],
+    "category": "Sports",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-859",
+    "answer": "Astronaut",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-860",
+    "answer": "Rocket",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-861",
+    "answer": "Saturn",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-862",
+    "answer": "Moon",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-863",
+    "answer": "Alien",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-864",
+    "answer": "Telescope",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-865",
+    "answer": "Comet",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-866",
+    "answer": "Space Station",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-867",
+    "answer": "Galaxy",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-868",
+    "answer": "Mars",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-869",
+    "answer": "Satellite",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-870",
+    "answer": "UFO",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-871",
+    "answer": "Crater",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-872",
+    "answer": "Spacesuit",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-873",
+    "answer": "Solar Eclipse",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-874",
+    "answer": "Meteor",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-875",
+    "answer": "Earth",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-876",
+    "answer": "Sun",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-877",
+    "answer": "Jupiter",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-878",
+    "answer": "Space Helmet",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-space-879",
+    "answer": "Black Hole",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-880",
+    "answer": "Moon Rover",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-881",
+    "answer": "Meteor Shower",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-882",
+    "answer": "Constellation",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-883",
+    "answer": "Asteroid Belt",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-884",
+    "answer": "Solar Flare",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-885",
+    "answer": "Nebula",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-886",
+    "answer": "Space Shuttle",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-887",
+    "answer": "Lunar Module",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-888",
+    "answer": "Milky Way",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-889",
+    "answer": "Supernova",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-890",
+    "answer": "Space Probe",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-891",
+    "answer": "Orbit",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-892",
+    "answer": "Zero Gravity",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-893",
+    "answer": "Mars Rover",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-894",
+    "answer": "International Space Station",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-895",
+    "answer": "Rocket Booster",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-896",
+    "answer": "Space Capsule",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-897",
+    "answer": "Moon Base",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-898",
+    "answer": "Satellite Dish",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-space-899",
+    "answer": "Event Horizon",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-900",
+    "answer": "Pulsar",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-901",
+    "answer": "Quasar",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-902",
+    "answer": "Red Giant",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-903",
+    "answer": "White Dwarf",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-904",
+    "answer": "Neutron Star",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-905",
+    "answer": "Kuiper Belt",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-906",
+    "answer": "Oort Cloud",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-907",
+    "answer": "Lagrange Point",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-908",
+    "answer": "Accretion Disk",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-909",
+    "answer": "Exoplanet",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-910",
+    "answer": "Magnetar",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-911",
+    "answer": "Gravitational Lens",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-912",
+    "answer": "Cosmic Microwave Background",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-913",
+    "answer": "Roche Limit",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-914",
+    "answer": "Solar Prominence",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-915",
+    "answer": "Circumstellar Disk",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-916",
+    "answer": "Trojan Asteroid",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-917",
+    "answer": "Tidal Locking",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-space-918",
+    "answer": "Heliosphere",
+    "aliases": [],
+    "category": "Space",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-919",
+    "answer": "Rainbow",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-920",
+    "answer": "Thunderstorm",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-921",
+    "answer": "Sunflower",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-922",
+    "answer": "Mountain",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-923",
+    "answer": "Tornado",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-924",
+    "answer": "Cactus",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-925",
+    "answer": "Snowflake",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-926",
+    "answer": "Palm Tree",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-927",
+    "answer": "Mushroom",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-928",
+    "answer": "River",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-929",
+    "answer": "Lightning",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-930",
+    "answer": "Forest",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-931",
+    "answer": "Cave",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-932",
+    "answer": "Waterfall",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-933",
+    "answer": "Volcano",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-934",
+    "answer": "Desert",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-935",
+    "answer": "Leaf",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-936",
+    "answer": "Flower",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-937",
+    "answer": "Ocean",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-938",
+    "answer": "Cloud",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-nature-939",
+    "answer": "Northern Lights",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-940",
+    "answer": "Dandelion",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-941",
+    "answer": "Bamboo",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-942",
+    "answer": "Water Lily",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-943",
+    "answer": "Mangrove",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-944",
+    "answer": "Geyser",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-945",
+    "answer": "Sand Dune",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-946",
+    "answer": "Canyon",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-947",
+    "answer": "Glacier",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-948",
+    "answer": "Coral Reef",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-949",
+    "answer": "Tidal Wave",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-950",
+    "answer": "Hailstorm",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-951",
+    "answer": "Redwood Tree",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-952",
+    "answer": "Venus Flytrap",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-953",
+    "answer": "Hot Spring",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-954",
+    "answer": "Monsoon",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-955",
+    "answer": "Sinkhole",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-956",
+    "answer": "Waterspout",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-957",
+    "answer": "Fire Rainbow",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-958",
+    "answer": "Supercell",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-959",
+    "answer": "Petrified Forest",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-nature-960",
+    "answer": "Bioluminescence",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-961",
+    "answer": "Fumarole",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-962",
+    "answer": "Permafrost",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-963",
+    "answer": "Stalactite",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-964",
+    "answer": "Stalagmite",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-965",
+    "answer": "Cirrus Cloud",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-966",
+    "answer": "Cumulonimbus",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-967",
+    "answer": "Lenticular Cloud",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-968",
+    "answer": "Brinicle",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-969",
+    "answer": "Fairy Circle",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-970",
+    "answer": "Crown Shyness",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-971",
+    "answer": "Mammatus Cloud",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-972",
+    "answer": "Parhelion",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-973",
+    "answer": "Penitentes",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-974",
+    "answer": "Virga",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-975",
+    "answer": "Katabatic Wind",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-976",
+    "answer": "Pyrocumulonimbus",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-977",
+    "answer": "Frost Flower",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-978",
+    "answer": "Moonbow",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-nature-979",
+    "answer": "Catatumbo Lightning",
+    "aliases": [],
+    "category": "Nature",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-980",
+    "answer": "Firefighter",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-981",
+    "answer": "Astronaut",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-982",
+    "answer": "Chef",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-983",
+    "answer": "Photographer",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-984",
+    "answer": "Detective",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-985",
+    "answer": "Dentist",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-986",
+    "answer": "Pilot",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-987",
+    "answer": "Lifeguard",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-988",
+    "answer": "Mechanic",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-989",
+    "answer": "Magician",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-990",
+    "answer": "Scientist",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-991",
+    "answer": "Farmer",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-992",
+    "answer": "Teacher",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-993",
+    "answer": "Veterinarian",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-994",
+    "answer": "Carpenter",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-995",
+    "answer": "News Reporter",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-996",
+    "answer": "Doctor",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-997",
+    "answer": "Police Officer",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-998",
+    "answer": "Engineer",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-999",
+    "answer": "Musician",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-jobs-1000",
+    "answer": "Architect",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1001",
+    "answer": "Paramedic",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1002",
+    "answer": "Electrician",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1003",
+    "answer": "Plumber",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1004",
+    "answer": "Archaeologist",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1005",
+    "answer": "Film Director",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1006",
+    "answer": "Flight Attendant",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1007",
+    "answer": "Zookeeper",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1008",
+    "answer": "Blacksmith",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1009",
+    "answer": "Librarian",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1010",
+    "answer": "Meteorologist",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1011",
+    "answer": "Tattoo Artist",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1012",
+    "answer": "Park Ranger",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1013",
+    "answer": "Civil Engineer",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1014",
+    "answer": "Courtroom Judge",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1015",
+    "answer": "Forensic Scientist",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1016",
+    "answer": "Stunt Performer",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1017",
+    "answer": "Sound Engineer",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1018",
+    "answer": "Wildlife Photographer",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1019",
+    "answer": "Crane Operator",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-jobs-1020",
+    "answer": "Cartographer",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-1021",
+    "answer": "Horologist",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-1022",
+    "answer": "Entomologist",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-1023",
+    "answer": "Volcanologist",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-1024",
+    "answer": "Sommelier",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-1025",
+    "answer": "Luthier",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-1026",
+    "answer": "Foley Artist",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-1027",
+    "answer": "Actuary",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-1028",
+    "answer": "Cryptographer",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-1029",
+    "answer": "Ornithologist",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-1030",
+    "answer": "Oceanographer",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-1031",
+    "answer": "Paleontologist",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-1032",
+    "answer": "Gemologist",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-1033",
+    "answer": "Air Traffic Controller",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-1034",
+    "answer": "Prosthetist",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-1035",
+    "answer": "Conservator",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-1036",
+    "answer": "Mycologist",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-1037",
+    "answer": "Numismatist",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-1038",
+    "answer": "Arborist",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-jobs-1039",
+    "answer": "Epidemiologist",
+    "aliases": [],
+    "category": "Jobs",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1040",
+    "answer": "Robot",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1041",
+    "answer": "Smartphone",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1042",
+    "answer": "Keyboard",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1043",
+    "answer": "Drone",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1044",
+    "answer": "Computer Mouse",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1045",
+    "answer": "Printer",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1046",
+    "answer": "Video Call",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1047",
+    "answer": "Game Controller",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1048",
+    "answer": "Smartwatch",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1049",
+    "answer": "Laptop",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1050",
+    "answer": "Touchscreen",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1051",
+    "answer": "Webcam",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1052",
+    "answer": "Headphones",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1053",
+    "answer": "USB Drive",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1054",
+    "answer": "Wi-Fi Router",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1055",
+    "answer": "Tablet",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1056",
+    "answer": "Television",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1057",
+    "answer": "Camera",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1058",
+    "answer": "Calculator",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1059",
+    "answer": "Earbuds",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-technology-1060",
+    "answer": "Virtual Reality",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1061",
+    "answer": "3D Printer",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1062",
+    "answer": "Password",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1063",
+    "answer": "QR Code",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1064",
+    "answer": "Fingerprint Scanner",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1065",
+    "answer": "Cloud Storage",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1066",
+    "answer": "Graphics Card",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1067",
+    "answer": "Circuit Board",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1068",
+    "answer": "Microchip",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1069",
+    "answer": "Hard Drive",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1070",
+    "answer": "Power Bank",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1071",
+    "answer": "Smart Speaker",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1072",
+    "answer": "Face Recognition",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1073",
+    "answer": "Streaming",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1074",
+    "answer": "Bluetooth",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1075",
+    "answer": "Solar Panel",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1076",
+    "answer": "Motherboard",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1077",
+    "answer": "Server Rack",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1078",
+    "answer": "Augmented Reality",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1079",
+    "answer": "Machine Learning",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1080",
+    "answer": "Heat Sink",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1081",
+    "answer": "Optical Fiber",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-technology-1082",
+    "answer": "Quantum Entanglement",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1083",
+    "answer": "Neural Processing Unit",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1084",
+    "answer": "Photolithography",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1085",
+    "answer": "Logic Gate",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1086",
+    "answer": "Binary Tree",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1087",
+    "answer": "Containerization",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1088",
+    "answer": "Load Balancer",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1089",
+    "answer": "Public Key Encryption",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1090",
+    "answer": "Packet Switching",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1091",
+    "answer": "RAID Array",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1092",
+    "answer": "CMOS Battery",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1093",
+    "answer": "Kernel Panic",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1094",
+    "answer": "Rasterization",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1095",
+    "answer": "Ray Tracing",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1096",
+    "answer": "DNS Resolver",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1097",
+    "answer": "FPGA",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1098",
+    "answer": "Branch Prediction",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1099",
+    "answer": "Shader Compilation",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1100",
+    "answer": "Differential Privacy",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-technology-1101",
+    "answer": "Homomorphic Encryption",
+    "aliases": [],
+    "category": "Technology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1102",
+    "answer": "Dragon",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1103",
+    "answer": "Phoenix",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1104",
+    "answer": "Mermaid",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1105",
+    "answer": "Minotaur",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1106",
+    "answer": "Pegasus",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1107",
+    "answer": "Medusa",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1108",
+    "answer": "Cyclops",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1109",
+    "answer": "Centaur",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1110",
+    "answer": "Kraken",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1111",
+    "answer": "Unicorn",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1112",
+    "answer": "Thor",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1113",
+    "answer": "Poseidon",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1114",
+    "answer": "Sphinx",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1115",
+    "answer": "Hydra",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1116",
+    "answer": "Griffin",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1117",
+    "answer": "Valkyrie",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1118",
+    "answer": "Fairy",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1119",
+    "answer": "Genie",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1120",
+    "answer": "Giant",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1121",
+    "answer": "Elf",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-mythology-1122",
+    "answer": "Anubis",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1123",
+    "answer": "Cerberus",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1124",
+    "answer": "Hades",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1125",
+    "answer": "Zeus",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1126",
+    "answer": "Odin",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1127",
+    "answer": "Loki",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1128",
+    "answer": "Achilles",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1129",
+    "answer": "Hercules",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1130",
+    "answer": "Icarus",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1131",
+    "answer": "Midas",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1132",
+    "answer": "Banshee",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1133",
+    "answer": "Gorgon",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1134",
+    "answer": "Chimera",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1135",
+    "answer": "Satyr",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1136",
+    "answer": "Yeti",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1137",
+    "answer": "Werewolf",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1138",
+    "answer": "Pandora's Box",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1139",
+    "answer": "Golden Fleece",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1140",
+    "answer": "Labyrinth",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1141",
+    "answer": "River Styx",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1142",
+    "answer": "Valhalla",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1143",
+    "answer": "Excalibur",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1144",
+    "answer": "Fountain of Youth",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1145",
+    "answer": "Trojan Horse",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-mythology-1146",
+    "answer": "Mjölnir",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1147",
+    "answer": "Aegis",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1148",
+    "answer": "Gungnir",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1149",
+    "answer": "Yggdrasil",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1150",
+    "answer": "Ragnarök",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1151",
+    "answer": "Bifrost",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1152",
+    "answer": "Nemean Lion",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1153",
+    "answer": "Ouroboros",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1154",
+    "answer": "Gjallarhorn",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1155",
+    "answer": "Draupnir",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1156",
+    "answer": "Caduceus",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1157",
+    "answer": "Helm of Darkness",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1158",
+    "answer": "Thread of Ariadne",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1159",
+    "answer": "Apples of Idunn",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1160",
+    "answer": "Gleipnir",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1161",
+    "answer": "Brisingamen",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1162",
+    "answer": "Huldra",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1163",
+    "answer": "Simurgh",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1164",
+    "answer": "Quetzalcoatl",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-mythology-1165",
+    "answer": "Aegir",
+    "aliases": [],
+    "category": "Mythology",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1166",
+    "answer": "Umbrella",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1167",
+    "answer": "Alarm Clock",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1168",
+    "answer": "Backpack",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1169",
+    "answer": "Toothbrush",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1170",
+    "answer": "Flashlight",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1171",
+    "answer": "Coffee Mug",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1172",
+    "answer": "Scissors",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1173",
+    "answer": "Shopping Cart",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1174",
+    "answer": "Sunglasses",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1175",
+    "answer": "Suitcase",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1176",
+    "answer": "Water Bottle",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1177",
+    "answer": "Remote Control",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1178",
+    "answer": "Desk Lamp",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1179",
+    "answer": "Key",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1180",
+    "answer": "Chair",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1181",
+    "answer": "Spoon",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1182",
+    "answer": "Plate",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1183",
+    "answer": "Fork",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1184",
+    "answer": "Pillow",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1185",
+    "answer": "Mirror",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-everyday-objects-1186",
+    "answer": "Rolling Pin",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1187",
+    "answer": "Clothes Hanger",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1188",
+    "answer": "Doorbell",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1189",
+    "answer": "Vacuum Cleaner",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1190",
+    "answer": "Stapler",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1191",
+    "answer": "Tape Measure",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1192",
+    "answer": "Corkscrew",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1193",
+    "answer": "Whisk",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1194",
+    "answer": "Plunger",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1195",
+    "answer": "Toolbox",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1196",
+    "answer": "Luggage Tag",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1197",
+    "answer": "Extension Cord",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1198",
+    "answer": "Clothes Peg",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1199",
+    "answer": "Can Opener",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1200",
+    "answer": "Funnel",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1201",
+    "answer": "Fly Swatter",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1202",
+    "answer": "Spirit Level",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1203",
+    "answer": "Allen Key",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1204",
+    "answer": "Squeegee",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1205",
+    "answer": "Nutcracker",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1206",
+    "answer": "Tuning Fork",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "medium"
+  },
+  {
+    "id": "artist-everyday-objects-1207",
+    "answer": "Caliper",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1208",
+    "answer": "Carabiner",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1209",
+    "answer": "Mortar and Pestle",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1210",
+    "answer": "Awl",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1211",
+    "answer": "Plumb Bob",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1212",
+    "answer": "Grommet",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1213",
+    "answer": "Ratchet Strap",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1214",
+    "answer": "Palette Knife",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1215",
+    "answer": "Soldering Iron",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1216",
+    "answer": "Bulldog Clip",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1217",
+    "answer": "Seam Ripper",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1218",
+    "answer": "Torque Wrench",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1219",
+    "answer": "Wire Stripper",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1220",
+    "answer": "Countersink Bit",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1221",
+    "answer": "Rivet Gun",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1222",
+    "answer": "Coping Saw",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1223",
+    "answer": "Feeler Gauge",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1224",
+    "answer": "Center Punch",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1225",
+    "answer": "Deburring Tool",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-everyday-objects-1226",
+    "answer": "Combination Square",
+    "aliases": [],
+    "category": "Everyday Objects",
+    "difficulty": "hard"
+  }
+]

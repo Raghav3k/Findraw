@@ -1,0 +1,2110 @@
+{
+  "abilityObjects": [
+    {
+      "id": "deadlock-ability-objects-calico-cat-statue-png",
+      "answer": "calico cat statue",
+      "aliases": [],
+      "file": "calico-cat-statue.png"
+    },
+    {
+      "id": "deadlock-ability-objects-calico-cat-png",
+      "answer": "calico cat",
+      "aliases": [],
+      "file": "calico-cat.png"
+    },
+    {
+      "id": "deadlock-ability-objects-celeste-star-dagger-png",
+      "answer": "celeste star dagger",
+      "aliases": [],
+      "file": "celeste-star-dagger.png"
+    },
+    {
+      "id": "deadlock-ability-objects-doorman-key-png",
+      "answer": "doorman key",
+      "aliases": [],
+      "file": "doorman-key.png"
+    },
+    {
+      "id": "deadlock-ability-objects-graves-ghoul-png",
+      "answer": "graves ghoul",
+      "aliases": [],
+      "file": "graves-ghoul.png"
+    },
+    {
+      "id": "deadlock-ability-objects-graves-jar-png",
+      "answer": "graves jar",
+      "aliases": [],
+      "file": "graves-jar.png"
+    },
+    {
+      "id": "deadlock-ability-objects-haze-dagger-png",
+      "answer": "haze dagger",
+      "aliases": [],
+      "file": "haze-dagger.png"
+    },
+    {
+      "id": "deadlock-ability-objects-holliday-explosive-png",
+      "answer": "holliday explosive",
+      "aliases": [],
+      "file": "holliday-explosive.png"
+    },
+    {
+      "id": "deadlock-ability-objects-ivy-thorn-bomb-png",
+      "answer": "ivy thorn bomb",
+      "aliases": [],
+      "file": "ivy-thorn-bomb.png"
+    },
+    {
+      "id": "deadlock-ability-objects-kelvin-ice-dome-png",
+      "answer": "kelvin ice dome",
+      "aliases": [],
+      "file": "kelvin-ice-dome.png"
+    },
+    {
+      "id": "deadlock-ability-objects-mcginnis-turret-png",
+      "answer": "mcginnis turret",
+      "aliases": [],
+      "file": "mcginnis-turret.png"
+    },
+    {
+      "id": "deadlock-ability-objects-mcginnis-wall-png",
+      "answer": "mcginnis wall",
+      "aliases": [],
+      "file": "mcginnis-wall.png"
+    },
+    {
+      "id": "deadlock-ability-objects-paige-butterfly-png",
+      "answer": "paige butterfly",
+      "aliases": [],
+      "file": "paige-butterfly.png"
+    },
+    {
+      "id": "deadlock-ability-objects-paige-dragon-png",
+      "answer": "paige dragon",
+      "aliases": [],
+      "file": "paige-dragon.png"
+    },
+    {
+      "id": "deadlock-ability-objects-pocket-briefcase-png",
+      "answer": "pocket briefcase",
+      "aliases": [],
+      "file": "pocket-briefcase.png"
+    },
+    {
+      "id": "deadlock-ability-objects-pocket-frog-png",
+      "answer": "pocket frog",
+      "aliases": [],
+      "file": "pocket-frog.png"
+    },
+    {
+      "id": "deadlock-ability-objects-rem-familiar-png",
+      "answer": "rem familiar",
+      "aliases": [],
+      "file": "rem-familiar.png"
+    },
+    {
+      "id": "deadlock-ability-objects-sinclair-rabbit-png",
+      "answer": "sinclair rabbit",
+      "aliases": [],
+      "file": "sinclair-rabbit.png"
+    },
+    {
+      "id": "deadlock-ability-objects-viscous-ball-png",
+      "answer": "viscous ball",
+      "aliases": [],
+      "file": "viscous-ball.png"
+    },
+    {
+      "id": "deadlock-ability-objects-viscous-cube-png",
+      "answer": "viscous cube",
+      "aliases": [],
+      "file": "viscous-cube.png"
+    },
+    {
+      "id": "deadlock-ability-objects-viscous-fist-png",
+      "answer": "viscous fist",
+      "aliases": [],
+      "file": "viscous-fist.png"
+    }
+  ],
+  "full-portraits": [
+    {
+      "id": "deadlock-full-portraits-abrams-render",
+      "answer": "abrams",
+      "aliases": [
+        "abrams render"
+      ],
+      "file": "Abrams_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-apollo-render",
+      "answer": "apollo",
+      "aliases": [
+        "apollo render"
+      ],
+      "file": "Apollo_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-bebop-render",
+      "answer": "bebop",
+      "aliases": [
+        "bebop render"
+      ],
+      "file": "Bebop_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-billy-render",
+      "answer": "billy",
+      "aliases": [
+        "billy render"
+      ],
+      "file": "Billy_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-calico-render",
+      "answer": "calico",
+      "aliases": [
+        "calico render"
+      ],
+      "file": "Calico_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-celeste-render",
+      "answer": "celeste",
+      "aliases": [
+        "celeste render"
+      ],
+      "file": "Celeste_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-drifter-render",
+      "answer": "drifter",
+      "aliases": [
+        "drifter render"
+      ],
+      "file": "Drifter_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-dynamo-render",
+      "answer": "dynamo",
+      "aliases": [
+        "dynamo render"
+      ],
+      "file": "Dynamo_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-graves-render",
+      "answer": "graves",
+      "aliases": [
+        "graves render"
+      ],
+      "file": "Graves_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-grey-talon-render",
+      "answer": "grey talon",
+      "aliases": [
+        "grey talon render"
+      ],
+      "file": "Grey_Talon_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-haze-render",
+      "answer": "haze",
+      "aliases": [
+        "haze render"
+      ],
+      "file": "Haze_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-holliday-render",
+      "answer": "holliday",
+      "aliases": [
+        "holliday render"
+      ],
+      "file": "Holliday_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-infernus-render",
+      "answer": "infernus",
+      "aliases": [
+        "infernus render"
+      ],
+      "file": "Infernus_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-ivy-render",
+      "answer": "ivy",
+      "aliases": [
+        "ivy render"
+      ],
+      "file": "Ivy_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-kelvin-render",
+      "answer": "kelvin",
+      "aliases": [
+        "kelvin render"
+      ],
+      "file": "Kelvin_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-lady-geist-render",
+      "answer": "lady geist",
+      "aliases": [
+        "lady geist render"
+      ],
+      "file": "Lady_Geist_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-lash-render",
+      "answer": "lash",
+      "aliases": [
+        "lash render"
+      ],
+      "file": "Lash_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-mcginnis-render",
+      "answer": "mc ginnis",
+      "aliases": [
+        "mcginnis render"
+      ],
+      "file": "McGinnis_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-mina-render",
+      "answer": "mina",
+      "aliases": [
+        "mina render"
+      ],
+      "file": "Mina_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-mirage-render",
+      "answer": "mirage",
+      "aliases": [
+        "mirage render"
+      ],
+      "file": "Mirage_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-mo-krill-render",
+      "answer": "mo & krill",
+      "aliases": [
+        "mo & krill render"
+      ],
+      "file": "Mo_&_Krill_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-paige-render",
+      "answer": "paige",
+      "aliases": [
+        "paige render"
+      ],
+      "file": "Paige_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-paradox-render",
+      "answer": "paradox",
+      "aliases": [
+        "paradox render"
+      ],
+      "file": "Paradox_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-pocket-render",
+      "answer": "pocket",
+      "aliases": [
+        "pocket render"
+      ],
+      "file": "Pocket_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-rem-render",
+      "answer": "rem",
+      "aliases": [
+        "rem render"
+      ],
+      "file": "Rem_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-seven-render",
+      "answer": "seven",
+      "aliases": [
+        "seven render"
+      ],
+      "file": "Seven_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-shiv-render",
+      "answer": "shiv",
+      "aliases": [
+        "shiv render"
+      ],
+      "file": "Shiv_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-silver-render",
+      "answer": "silver",
+      "aliases": [
+        "silver render"
+      ],
+      "file": "Silver_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-sinclair-render",
+      "answer": "sinclair",
+      "aliases": [
+        "sinclair render"
+      ],
+      "file": "Sinclair_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-the-doorman-render",
+      "answer": "the doorman",
+      "aliases": [
+        "the doorman render"
+      ],
+      "file": "The_Doorman_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-venator-render",
+      "answer": "venator",
+      "aliases": [
+        "venator render"
+      ],
+      "file": "Venator_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-victor-render",
+      "answer": "victor",
+      "aliases": [
+        "victor render"
+      ],
+      "file": "Victor_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-vindicta-render",
+      "answer": "vindicta",
+      "aliases": [
+        "vindicta render"
+      ],
+      "file": "Vindicta_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-viscous-render",
+      "answer": "viscous",
+      "aliases": [
+        "viscous render"
+      ],
+      "file": "Viscous_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-vyper-render",
+      "answer": "vyper",
+      "aliases": [
+        "vyper render"
+      ],
+      "file": "Vyper_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-warden-render",
+      "answer": "warden",
+      "aliases": [
+        "warden render"
+      ],
+      "file": "Warden_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-wraith-render",
+      "answer": "wraith",
+      "aliases": [
+        "wraith render"
+      ],
+      "file": "Wraith_Render.png"
+    },
+    {
+      "id": "deadlock-full-portraits-yamato-render",
+      "answer": "yamato",
+      "aliases": [
+        "yamato render"
+      ],
+      "file": "Yamato_Render.png"
+    }
+  ],
+  "gameplayObjects": [
+    {
+      "id": "deadlock-gameplay-breakable-crate-png",
+      "answer": "breakable crate",
+      "aliases": [
+        "crate"
+      ],
+      "file": "breakable-crate.png"
+    },
+    {
+      "id": "deadlock-gameplay-golden-idol-png",
+      "answer": "golden idol",
+      "aliases": [],
+      "file": "golden-idol.png"
+    },
+    {
+      "id": "deadlock-gameplay-rejuvenator-png",
+      "answer": "rejuvenator",
+      "aliases": [
+        "rejuv"
+      ],
+      "file": "rejuvenator.png"
+    },
+    {
+      "id": "deadlock-gameplay-spirit-urn-png",
+      "answer": "spirit urn",
+      "aliases": [
+        "urn"
+      ],
+      "file": "spirit-urn.png"
+    },
+    {
+      "id": "deadlock-gameplay-teleporter-png",
+      "answer": "teleporter",
+      "aliases": [],
+      "file": "teleporter.png"
+    }
+  ],
+  "items": [
+    {
+      "id": "deadlock-brawl-item-aerial-mastery-png",
+      "answer": "aerial supremacy",
+      "aliases": [
+        "aerial mastery"
+      ],
+      "file": "brawl/aerial_mastery.png"
+    },
+    {
+      "id": "deadlock-brawl-item-ancient-shielding-png",
+      "answer": "ancient shield",
+      "aliases": [
+        "ancient shielding"
+      ],
+      "file": "brawl/ancient_shielding.png"
+    },
+    {
+      "id": "deadlock-brawl-item-apex-combat-png",
+      "answer": "apex combat",
+      "aliases": [],
+      "file": "brawl/apex_combat.png"
+    },
+    {
+      "id": "deadlock-brawl-item-celestial-guidance-png",
+      "answer": "celestial blessing",
+      "aliases": [
+        "celestial guidance"
+      ],
+      "file": "brawl/celestial_guidance.png"
+    },
+    {
+      "id": "deadlock-brawl-item-cloak-of-opportunity-png",
+      "answer": "cloak of opportunity",
+      "aliases": [],
+      "file": "brawl/cloak_of_opportunity.png"
+    },
+    {
+      "id": "deadlock-brawl-item-eldritch-shot-png",
+      "answer": "haunting shot",
+      "aliases": [
+        "eldritch shot"
+      ],
+      "file": "brawl/eldritch_shot.png"
+    },
+    {
+      "id": "deadlock-brawl-item-electric-slippers-png",
+      "answer": "electric slippers",
+      "aliases": [],
+      "file": "brawl/electric_slippers.png"
+    },
+    {
+      "id": "deadlock-brawl-item-eternal-gift-png",
+      "answer": "eternal gift",
+      "aliases": [],
+      "file": "brawl/eternal_gift.png"
+    },
+    {
+      "id": "deadlock-brawl-item-frostbite-png",
+      "answer": "frostbite",
+      "aliases": [],
+      "file": "brawl/frostbite.png"
+    },
+    {
+      "id": "deadlock-brawl-item-haunting-scream-png",
+      "answer": "haunting scream",
+      "aliases": [],
+      "file": "brawl/haunting_scream.png"
+    },
+    {
+      "id": "deadlock-brawl-item-icarus-wings-png",
+      "answer": "seraphim wings",
+      "aliases": [
+        "icarus wings"
+      ],
+      "file": "brawl/icarus_wings.png"
+    },
+    {
+      "id": "deadlock-brawl-item-infinite-rounds-png",
+      "answer": "infinite rounds",
+      "aliases": [],
+      "file": "brawl/infinite_rounds.png"
+    },
+    {
+      "id": "deadlock-brawl-item-mystical-piano-png",
+      "answer": "mystical piano",
+      "aliases": [],
+      "file": "brawl/mystical_piano.png"
+    },
+    {
+      "id": "deadlock-brawl-item-nullification-aura-png",
+      "answer": "nullification aura",
+      "aliases": [],
+      "file": "brawl/nullification_aura.png"
+    },
+    {
+      "id": "deadlock-brawl-item-omnicharge-pendant-png",
+      "answer": "omnicharge signet",
+      "aliases": [
+        "omnicharge pendant"
+      ],
+      "file": "brawl/omnicharge_pendant.png"
+    },
+    {
+      "id": "deadlock-brawl-item-patrons-blessing-png",
+      "answer": "patrons blessing",
+      "aliases": [],
+      "file": "brawl/patrons_blessing.png"
+    },
+    {
+      "id": "deadlock-brawl-item-prism-blast-png",
+      "answer": "prism blast",
+      "aliases": [],
+      "file": "brawl/prism_blast.png"
+    },
+    {
+      "id": "deadlock-brawl-item-runed-gauntlets-png",
+      "answer": "runed gauntlets",
+      "aliases": [],
+      "file": "brawl/runed_gauntlets.png"
+    },
+    {
+      "id": "deadlock-brawl-item-shadow-step-png",
+      "answer": "shadow step",
+      "aliases": [],
+      "file": "brawl/shadow_step.png"
+    },
+    {
+      "id": "deadlock-brawl-item-shadow-strike-png",
+      "answer": "shadow strike",
+      "aliases": [],
+      "file": "brawl/shadow_strike.png"
+    },
+    {
+      "id": "deadlock-brawl-item-shrink-ray-png",
+      "answer": "shrink ray",
+      "aliases": [],
+      "file": "brawl/shrink_ray.png"
+    },
+    {
+      "id": "deadlock-brawl-item-timeless-emblem-png",
+      "answer": "timeless emblem",
+      "aliases": [],
+      "file": "brawl/timeless_emblem.png"
+    },
+    {
+      "id": "deadlock-brawl-item-unstable-concoction-png",
+      "answer": "unstable concoction",
+      "aliases": [],
+      "file": "brawl/unstable_concoction.png"
+    },
+    {
+      "id": "deadlock-spirit-item-arcane-surge-png",
+      "answer": "arcane surge",
+      "aliases": [],
+      "file": "spirit/arcane_surge.png"
+    },
+    {
+      "id": "deadlock-spirit-item-arctic-blast-png",
+      "answer": "arctic blast",
+      "aliases": [],
+      "file": "spirit/arctic_blast.png"
+    },
+    {
+      "id": "deadlock-spirit-item-boundless-spirit-png",
+      "answer": "boundless spirit",
+      "aliases": [],
+      "file": "spirit/boundless_spirit.png"
+    },
+    {
+      "id": "deadlock-spirit-item-bullet-resist-shredder-png",
+      "answer": "bullet resist shredder",
+      "aliases": [],
+      "file": "spirit/bullet_resist_shredder.png"
+    },
+    {
+      "id": "deadlock-spirit-item-cold-front-png",
+      "answer": "cold front",
+      "aliases": [],
+      "file": "spirit/cold_front.png"
+    },
+    {
+      "id": "deadlock-spirit-item-curse-png",
+      "answer": "curse",
+      "aliases": [],
+      "file": "spirit/curse.png"
+    },
+    {
+      "id": "deadlock-spirit-item-decay-png",
+      "answer": "decay",
+      "aliases": [],
+      "file": "spirit/decay.png"
+    },
+    {
+      "id": "deadlock-spirit-item-disarming-hex-png",
+      "answer": "disarming hex",
+      "aliases": [],
+      "file": "spirit/disarming_hex.png"
+    },
+    {
+      "id": "deadlock-spirit-item-duration-extender-png",
+      "answer": "duration extender",
+      "aliases": [],
+      "file": "spirit/duration_extender.png"
+    },
+    {
+      "id": "deadlock-spirit-item-echo-shard-png",
+      "answer": "echo shard",
+      "aliases": [],
+      "file": "spirit/echo_shard.png"
+    },
+    {
+      "id": "deadlock-spirit-item-escalating-exposure-png",
+      "answer": "escalating exposure",
+      "aliases": [],
+      "file": "spirit/escalating_exposure.png"
+    },
+    {
+      "id": "deadlock-spirit-item-ethereal-shift-png",
+      "answer": "ethereal shift",
+      "aliases": [],
+      "file": "spirit/ethereal_shift.png"
+    },
+    {
+      "id": "deadlock-spirit-item-extra-charge-png",
+      "answer": "extra charge",
+      "aliases": [],
+      "file": "spirit/extra_charge.png"
+    },
+    {
+      "id": "deadlock-spirit-item-extra-spirit-png",
+      "answer": "extra spirit",
+      "aliases": [],
+      "file": "spirit/extra_spirit.png"
+    },
+    {
+      "id": "deadlock-spirit-item-focus-lens-png",
+      "answer": "focus lens",
+      "aliases": [],
+      "file": "spirit/focus_lens.png"
+    },
+    {
+      "id": "deadlock-spirit-item-goose-egg-png",
+      "answer": "golden goose egg",
+      "aliases": [
+        "goose egg"
+      ],
+      "file": "spirit/goose_egg.png"
+    },
+    {
+      "id": "deadlock-spirit-item-greater-expansion-png",
+      "answer": "greater expansion",
+      "aliases": [],
+      "file": "spirit/greater_expansion.png"
+    },
+    {
+      "id": "deadlock-spirit-item-improved-cooldown-png",
+      "answer": "compress cooldown",
+      "aliases": [
+        "improved cooldown"
+      ],
+      "file": "spirit/improved_cooldown.png"
+    },
+    {
+      "id": "deadlock-spirit-item-improved-spirit-png",
+      "answer": "improved spirit",
+      "aliases": [],
+      "file": "spirit/improved_spirit.png"
+    },
+    {
+      "id": "deadlock-spirit-item-knockdown-png",
+      "answer": "knockdown",
+      "aliases": [],
+      "file": "spirit/knockdown.png"
+    },
+    {
+      "id": "deadlock-spirit-item-lightning-scroll-png",
+      "answer": "lightning scroll",
+      "aliases": [],
+      "file": "spirit/lightning_scroll.png"
+    },
+    {
+      "id": "deadlock-spirit-item-magic-carpet-png",
+      "answer": "magic carpet",
+      "aliases": [],
+      "file": "spirit/magic_carpet.png"
+    },
+    {
+      "id": "deadlock-spirit-item-mercurial-magnum-png",
+      "answer": "mercurial magnum",
+      "aliases": [],
+      "file": "spirit/mercurial_magnum.png"
+    },
+    {
+      "id": "deadlock-spirit-item-mystic-burst-png",
+      "answer": "mystic burst",
+      "aliases": [],
+      "file": "spirit/mystic_burst.png"
+    },
+    {
+      "id": "deadlock-spirit-item-mystic-reach-png",
+      "answer": "mystic expansion",
+      "aliases": [
+        "mystic reach"
+      ],
+      "file": "spirit/mystic_reach.png"
+    },
+    {
+      "id": "deadlock-spirit-item-mystic-regen-png",
+      "answer": "mystic regen",
+      "aliases": [],
+      "file": "spirit/mystic_regen.png"
+    },
+    {
+      "id": "deadlock-spirit-item-mystic-reverb-png",
+      "answer": "mystic reverb",
+      "aliases": [],
+      "file": "spirit/mystic_reverb.png"
+    },
+    {
+      "id": "deadlock-spirit-item-mystic-slow-png",
+      "answer": "mystic slow",
+      "aliases": [],
+      "file": "spirit/mystic_slow.png"
+    },
+    {
+      "id": "deadlock-spirit-item-mystic-vulnerability-png",
+      "answer": "mystic vulnerability",
+      "aliases": [],
+      "file": "spirit/mystic_vulnerability.png"
+    },
+    {
+      "id": "deadlock-spirit-item-quicksilver-reload-png",
+      "answer": "quicksilver reload",
+      "aliases": [],
+      "file": "spirit/quicksilver_reload.png"
+    },
+    {
+      "id": "deadlock-spirit-item-radiant-regeneration-png",
+      "answer": "radiant regeneration",
+      "aliases": [],
+      "file": "spirit/radiant_regeneration.png"
+    },
+    {
+      "id": "deadlock-spirit-item-rapid-recharge-png",
+      "answer": "rapid recharge",
+      "aliases": [],
+      "file": "spirit/rapid_recharge.png"
+    },
+    {
+      "id": "deadlock-spirit-item-refresher-png",
+      "answer": "refresher",
+      "aliases": [],
+      "file": "spirit/refresher.png"
+    },
+    {
+      "id": "deadlock-spirit-item-rusted-barrel-png",
+      "answer": "rusted barrel",
+      "aliases": [],
+      "file": "spirit/rusted_barrel.png"
+    },
+    {
+      "id": "deadlock-spirit-item-scourge-png",
+      "answer": "scourge",
+      "aliases": [],
+      "file": "spirit/scourge.png"
+    },
+    {
+      "id": "deadlock-spirit-item-silence-glyph-png",
+      "answer": "silence glyph",
+      "aliases": [],
+      "file": "spirit/silence_glyph.png"
+    },
+    {
+      "id": "deadlock-spirit-item-slowing-hex-png",
+      "answer": "slowing hex",
+      "aliases": [],
+      "file": "spirit/slowing_hex.png"
+    },
+    {
+      "id": "deadlock-spirit-item-spirit-burn-png",
+      "answer": "spirit burn",
+      "aliases": [],
+      "file": "spirit/spirit_burn.png"
+    },
+    {
+      "id": "deadlock-spirit-item-spirit-sap-png",
+      "answer": "spirit sap",
+      "aliases": [],
+      "file": "spirit/spirit_sap.png"
+    },
+    {
+      "id": "deadlock-spirit-item-spirit-snatch-png",
+      "answer": "spirit snatch",
+      "aliases": [],
+      "file": "spirit/spirit_snatch.png"
+    },
+    {
+      "id": "deadlock-spirit-item-spirit-strike-png",
+      "answer": "spirit strike",
+      "aliases": [],
+      "file": "spirit/spirit_strike.png"
+    },
+    {
+      "id": "deadlock-spirit-item-superior-cooldown-png",
+      "answer": "superior cooldown",
+      "aliases": [],
+      "file": "spirit/superior_cooldown.png"
+    },
+    {
+      "id": "deadlock-spirit-item-superior-duration-png",
+      "answer": "superior duration",
+      "aliases": [],
+      "file": "spirit/superior_duration.png"
+    },
+    {
+      "id": "deadlock-spirit-item-suppressor-png",
+      "answer": "suppressor",
+      "aliases": [],
+      "file": "spirit/suppressor.png"
+    },
+    {
+      "id": "deadlock-spirit-item-surge-of-power-png",
+      "answer": "surge of power",
+      "aliases": [],
+      "file": "spirit/surge_of_power.png"
+    },
+    {
+      "id": "deadlock-spirit-item-tankbuster-png",
+      "answer": "tankbuster",
+      "aliases": [],
+      "file": "spirit/tankbuster.png"
+    },
+    {
+      "id": "deadlock-spirit-item-torment-pulse-png",
+      "answer": "torment pulse",
+      "aliases": [],
+      "file": "spirit/torment_pulse.png"
+    },
+    {
+      "id": "deadlock-spirit-item-transcendent-cooldown-png",
+      "answer": "transcendent cooldown",
+      "aliases": [],
+      "file": "spirit/transcendent_cooldown.png"
+    },
+    {
+      "id": "deadlock-spirit-item-vortex-web-png",
+      "answer": "vortex web",
+      "aliases": [],
+      "file": "spirit/vortex_web.png"
+    },
+    {
+      "id": "deadlock-vitality-item-battle-vest-png",
+      "answer": "battle vest",
+      "aliases": [],
+      "file": "vitality/battle_vest.png"
+    },
+    {
+      "id": "deadlock-vitality-item-bullet-lifesteal-png",
+      "answer": "bullet lifesteal",
+      "aliases": [],
+      "file": "vitality/bullet_lifesteal.png"
+    },
+    {
+      "id": "deadlock-vitality-item-bullet-resilience-png",
+      "answer": "bullet resilience",
+      "aliases": [],
+      "file": "vitality/bullet_resilience.png"
+    },
+    {
+      "id": "deadlock-vitality-item-cheat-death-png",
+      "answer": "cheat death",
+      "aliases": [],
+      "file": "vitality/cheat_death.png"
+    },
+    {
+      "id": "deadlock-vitality-item-colossus-png",
+      "answer": "colossus",
+      "aliases": [],
+      "file": "vitality/colossus.png"
+    },
+    {
+      "id": "deadlock-vitality-item-counterspell-png",
+      "answer": "counterspell",
+      "aliases": [],
+      "file": "vitality/counterspell.png"
+    },
+    {
+      "id": "deadlock-vitality-item-debuff-reducer-png",
+      "answer": "debuff reducer",
+      "aliases": [],
+      "file": "vitality/debuff_reducer.png"
+    },
+    {
+      "id": "deadlock-vitality-item-debuff-remover-png",
+      "answer": "debuff remover",
+      "aliases": [],
+      "file": "vitality/debuff_remover.png"
+    },
+    {
+      "id": "deadlock-vitality-item-diviners-kevlar-png",
+      "answer": "diviners kevlar",
+      "aliases": [],
+      "file": "vitality/diviners_kevlar.png"
+    },
+    {
+      "id": "deadlock-vitality-item-divine-barrier-png",
+      "answer": "divine barrier",
+      "aliases": [],
+      "file": "vitality/divine_barrier.png"
+    },
+    {
+      "id": "deadlock-vitality-item-enchanters-emblem-png",
+      "answer": "enchanter's emblem",
+      "aliases": [
+        "enchanters emblem"
+      ],
+      "file": "vitality/enchanters_emblem.png"
+    },
+    {
+      "id": "deadlock-vitality-item-enduring-speed-png",
+      "answer": "enduring speed",
+      "aliases": [],
+      "file": "vitality/enduring_speed.png"
+    },
+    {
+      "id": "deadlock-vitality-item-extra-health-png",
+      "answer": "extra health",
+      "aliases": [],
+      "file": "vitality/extra_health.png"
+    },
+    {
+      "id": "deadlock-vitality-item-extra-regen-png",
+      "answer": "extra regen",
+      "aliases": [],
+      "file": "vitality/extra_regen.png"
+    },
+    {
+      "id": "deadlock-vitality-item-extra-stamina-png",
+      "answer": "extra stamina",
+      "aliases": [],
+      "file": "vitality/extra_stamina.png"
+    },
+    {
+      "id": "deadlock-vitality-item-fortitude-png",
+      "answer": "fortitude",
+      "aliases": [],
+      "file": "vitality/fortitude.png"
+    },
+    {
+      "id": "deadlock-vitality-item-fury-trance-png",
+      "answer": "fury trance",
+      "aliases": [],
+      "file": "vitality/fury_trance.png"
+    },
+    {
+      "id": "deadlock-vitality-item-grit-png",
+      "answer": "grit",
+      "aliases": [],
+      "file": "vitality/grit.png"
+    },
+    {
+      "id": "deadlock-vitality-item-guardian-ward-png",
+      "answer": "guardian ward",
+      "aliases": [],
+      "file": "vitality/guardian_ward.png"
+    },
+    {
+      "id": "deadlock-vitality-item-healbane-png",
+      "answer": "healbane",
+      "aliases": [],
+      "file": "vitality/healbane.png"
+    },
+    {
+      "id": "deadlock-vitality-item-healing-booster-png",
+      "answer": "healing booster",
+      "aliases": [],
+      "file": "vitality/healing_booster.png"
+    },
+    {
+      "id": "deadlock-vitality-item-healing-nova-png",
+      "answer": "healing nova",
+      "aliases": [],
+      "file": "vitality/healing_nova.png"
+    },
+    {
+      "id": "deadlock-vitality-item-healing-rite-png",
+      "answer": "healing rite",
+      "aliases": [],
+      "file": "vitality/healing_rite.png"
+    },
+    {
+      "id": "deadlock-vitality-item-healing-tempo-png",
+      "answer": "healing tempo",
+      "aliases": [],
+      "file": "vitality/healing_tempo.png"
+    },
+    {
+      "id": "deadlock-vitality-item-indomitable-png",
+      "answer": "indomitable",
+      "aliases": [],
+      "file": "vitality/indomitable.png"
+    },
+    {
+      "id": "deadlock-vitality-item-infuser-png",
+      "answer": "infuser",
+      "aliases": [],
+      "file": "vitality/infuser.png"
+    },
+    {
+      "id": "deadlock-vitality-item-inhibitor-png",
+      "answer": "inhibitor",
+      "aliases": [],
+      "file": "vitality/inhibitor.png"
+    },
+    {
+      "id": "deadlock-vitality-item-juggernaut-png",
+      "answer": "juggernaut",
+      "aliases": [],
+      "file": "vitality/juggernaut.png"
+    },
+    {
+      "id": "deadlock-vitality-item-leech-png",
+      "answer": "leech",
+      "aliases": [],
+      "file": "vitality/leech.png"
+    },
+    {
+      "id": "deadlock-vitality-item-lifestrike-png",
+      "answer": "lifestrike",
+      "aliases": [],
+      "file": "vitality/lifestrike.png"
+    },
+    {
+      "id": "deadlock-vitality-item-majestic-leap-png",
+      "answer": "majestic leap",
+      "aliases": [],
+      "file": "vitality/majestic_leap.png"
+    },
+    {
+      "id": "deadlock-vitality-item-melee-lifesteal-png",
+      "answer": "melee lifesteal",
+      "aliases": [],
+      "file": "vitality/melee_lifesteal.png"
+    },
+    {
+      "id": "deadlock-vitality-item-metal-skin-png",
+      "answer": "metal skin",
+      "aliases": [],
+      "file": "vitality/metal_skin.png"
+    },
+    {
+      "id": "deadlock-vitality-item-phantom-strike-png",
+      "answer": "phantom strike",
+      "aliases": [],
+      "file": "vitality/phantom_strike.png"
+    },
+    {
+      "id": "deadlock-vitality-item-plated-armor-png",
+      "answer": "plated armor",
+      "aliases": [],
+      "file": "vitality/plated_armor.png"
+    },
+    {
+      "id": "deadlock-vitality-item-reactive-barrier-png",
+      "answer": "reactive barrier",
+      "aliases": [],
+      "file": "vitality/reactive_barrier.png"
+    },
+    {
+      "id": "deadlock-vitality-item-rebuttal-png",
+      "answer": "rebuttal",
+      "aliases": [],
+      "file": "vitality/rebuttal.png"
+    },
+    {
+      "id": "deadlock-vitality-item-rescue-beam-png",
+      "answer": "rescue beam",
+      "aliases": [],
+      "file": "vitality/rescue_beam.png"
+    },
+    {
+      "id": "deadlock-vitality-item-restorative-locket-png",
+      "answer": "restorative locket",
+      "aliases": [],
+      "file": "vitality/restorative_locket.png"
+    },
+    {
+      "id": "deadlock-vitality-item-return-fire-png",
+      "answer": "return fire",
+      "aliases": [],
+      "file": "vitality/return_fire.png"
+    },
+    {
+      "id": "deadlock-vitality-item-siphon-bullets-png",
+      "answer": "siphon bullets",
+      "aliases": [],
+      "file": "vitality/siphon_bullets.png"
+    },
+    {
+      "id": "deadlock-vitality-item-spellbreaker-png",
+      "answer": "spellbreaker",
+      "aliases": [],
+      "file": "vitality/spellbreaker.png"
+    },
+    {
+      "id": "deadlock-vitality-item-spirit-lifesteal-png",
+      "answer": "spirit lifesteal",
+      "aliases": [],
+      "file": "vitality/spirit_lifesteal.png"
+    },
+    {
+      "id": "deadlock-vitality-item-spirit-resilience-png",
+      "answer": "spirit resilience",
+      "aliases": [],
+      "file": "vitality/spirit_resilience.png"
+    },
+    {
+      "id": "deadlock-vitality-item-spirit-shielding-png",
+      "answer": "spirit shielding",
+      "aliases": [],
+      "file": "vitality/spirit_shielding.png"
+    },
+    {
+      "id": "deadlock-vitality-item-sprint-boots-png",
+      "answer": "sprint boots",
+      "aliases": [],
+      "file": "vitality/sprint_boots.png"
+    },
+    {
+      "id": "deadlock-vitality-item-stamina-mastery-png",
+      "answer": "stamina mastery",
+      "aliases": [],
+      "file": "vitality/stamina_mastery.png"
+    },
+    {
+      "id": "deadlock-vitality-item-trophy-collector-png",
+      "answer": "trophy collector",
+      "aliases": [],
+      "file": "vitality/trophy_collector.png"
+    },
+    {
+      "id": "deadlock-vitality-item-unstoppable-png",
+      "answer": "unstoppable",
+      "aliases": [],
+      "file": "vitality/unstoppable.png"
+    },
+    {
+      "id": "deadlock-vitality-item-vampiric-burst-png",
+      "answer": "vampiric burst",
+      "aliases": [],
+      "file": "vitality/vampiric_burst.png"
+    },
+    {
+      "id": "deadlock-vitality-item-veil-walker-png",
+      "answer": "veil walker",
+      "aliases": [],
+      "file": "vitality/veil_walker.png"
+    },
+    {
+      "id": "deadlock-vitality-item-warp-stone-png",
+      "answer": "warp stone",
+      "aliases": [],
+      "file": "vitality/warp_stone.png"
+    },
+    {
+      "id": "deadlock-vitality-item-weapon-shielding-png",
+      "answer": "weapon shielding",
+      "aliases": [],
+      "file": "vitality/weapon_shielding.png"
+    },
+    {
+      "id": "deadlock-vitality-item-witchmail-png",
+      "answer": "witchmail",
+      "aliases": [],
+      "file": "vitality/witchmail.png"
+    },
+    {
+      "id": "deadlock-weapon-item-active-reload-png",
+      "answer": "active reload",
+      "aliases": [],
+      "file": "weapon/active_reload.png"
+    },
+    {
+      "id": "deadlock-weapon-item-alchemical-fire-png",
+      "answer": "alchemical fire",
+      "aliases": [],
+      "file": "weapon/alchemical_fire.png"
+    },
+    {
+      "id": "deadlock-weapon-item-alchemical-seal-png",
+      "answer": "ballistic enchantment",
+      "aliases": [
+        "alchemical seal"
+      ],
+      "file": "weapon/alchemical_seal.png"
+    },
+    {
+      "id": "deadlock-weapon-item-armor-piercing-rounds-png",
+      "answer": "armor piercing rounds",
+      "aliases": [],
+      "file": "weapon/armor_piercing_rounds.png"
+    },
+    {
+      "id": "deadlock-weapon-item-backstabber-png",
+      "answer": "backstabber",
+      "aliases": [],
+      "file": "weapon/backstabber.png"
+    },
+    {
+      "id": "deadlock-weapon-item-basic-magazine-png",
+      "answer": "basic magazine",
+      "aliases": [],
+      "file": "weapon/basic_magazine.png"
+    },
+    {
+      "id": "deadlock-weapon-item-berserker-png",
+      "answer": "berserker",
+      "aliases": [],
+      "file": "weapon/berserker.png"
+    },
+    {
+      "id": "deadlock-weapon-item-blood-tribute-png",
+      "answer": "blood tribute",
+      "aliases": [],
+      "file": "weapon/blood_tribute.png"
+    },
+    {
+      "id": "deadlock-weapon-item-burst-fire-png",
+      "answer": "burst fire",
+      "aliases": [],
+      "file": "weapon/burst_fire.png"
+    },
+    {
+      "id": "deadlock-weapon-item-capacitor-png",
+      "answer": "capacitor",
+      "aliases": [],
+      "file": "weapon/capacitor.png"
+    },
+    {
+      "id": "deadlock-weapon-item-close-quarters-png",
+      "answer": "close quarters",
+      "aliases": [],
+      "file": "weapon/close_quarters.png"
+    },
+    {
+      "id": "deadlock-weapon-item-crippling-headshot-png",
+      "answer": "crippling headshot",
+      "aliases": [],
+      "file": "weapon/crippling_headshot.png"
+    },
+    {
+      "id": "deadlock-weapon-item-crushing-fists-png",
+      "answer": "crushing fists",
+      "aliases": [],
+      "file": "weapon/crushing_fists.png"
+    },
+    {
+      "id": "deadlock-weapon-item-cultist-sacrifice-png",
+      "answer": "cultist sacrifice",
+      "aliases": [],
+      "file": "weapon/cultist_sacrifice.png"
+    },
+    {
+      "id": "deadlock-weapon-item-escalating-resilience-png",
+      "answer": "escalating resilience",
+      "aliases": [],
+      "file": "weapon/escalating_resilience.png"
+    },
+    {
+      "id": "deadlock-weapon-item-express-shot-png",
+      "answer": "express shot",
+      "aliases": [],
+      "file": "weapon/express_shot.png"
+    },
+    {
+      "id": "deadlock-weapon-item-fleetfoot-png",
+      "answer": "fleetfoot",
+      "aliases": [],
+      "file": "weapon/fleetfoot.png"
+    },
+    {
+      "id": "deadlock-weapon-item-frenzy-png",
+      "answer": "frenzy",
+      "aliases": [],
+      "file": "weapon/frenzy.png"
+    },
+    {
+      "id": "deadlock-weapon-item-glass-cannon-png",
+      "answer": "glass cannon",
+      "aliases": [],
+      "file": "weapon/glass_cannon.png"
+    },
+    {
+      "id": "deadlock-weapon-item-headhunter-png",
+      "answer": "headhunter",
+      "aliases": [],
+      "file": "weapon/headhunter.png"
+    },
+    {
+      "id": "deadlock-weapon-item-headshot-booster-png",
+      "answer": "headshot booster",
+      "aliases": [],
+      "file": "weapon/headshot_booster.png"
+    },
+    {
+      "id": "deadlock-weapon-item-heroic-aura-png",
+      "answer": "heroic aura",
+      "aliases": [],
+      "file": "weapon/heroic_aura.png"
+    },
+    {
+      "id": "deadlock-weapon-item-high-velocity-rounds-png",
+      "answer": "high-velocity rounds",
+      "aliases": [
+        "high velocity rounds"
+      ],
+      "file": "weapon/high_velocity_rounds.png"
+    },
+    {
+      "id": "deadlock-weapon-item-hollow-point-png",
+      "answer": "hollow point",
+      "aliases": [],
+      "file": "weapon/hollow_point.png"
+    },
+    {
+      "id": "deadlock-weapon-item-hunters-aura-png",
+      "answer": "hunters aura",
+      "aliases": [],
+      "file": "weapon/hunters_aura.png"
+    },
+    {
+      "id": "deadlock-weapon-item-intensifying-magazine-png",
+      "answer": "intensifying magazine",
+      "aliases": [],
+      "file": "weapon/intensifying_magazine.png"
+    },
+    {
+      "id": "deadlock-weapon-item-kinetic-dash-png",
+      "answer": "kinetic dash",
+      "aliases": [],
+      "file": "weapon/kinetic_dash.png"
+    },
+    {
+      "id": "deadlock-weapon-item-long-range-png",
+      "answer": "long range",
+      "aliases": [],
+      "file": "weapon/long_range.png"
+    },
+    {
+      "id": "deadlock-weapon-item-lucky-shot-png",
+      "answer": "lucky shot",
+      "aliases": [],
+      "file": "weapon/lucky_shot.png"
+    },
+    {
+      "id": "deadlock-weapon-item-melee-charge-png",
+      "answer": "melee charge",
+      "aliases": [],
+      "file": "weapon/melee_charge.png"
+    },
+    {
+      "id": "deadlock-weapon-item-monster-rounds-png",
+      "answer": "monster rounds",
+      "aliases": [],
+      "file": "weapon/monster_rounds.png"
+    },
+    {
+      "id": "deadlock-weapon-item-mystic-shot-png",
+      "answer": "mystic shot",
+      "aliases": [],
+      "file": "weapon/mystic_shot.png"
+    },
+    {
+      "id": "deadlock-weapon-item-opening-rounds-png",
+      "answer": "opening rounds",
+      "aliases": [],
+      "file": "weapon/opening_rounds.png"
+    },
+    {
+      "id": "deadlock-weapon-item-point-blank-png",
+      "answer": "point blank",
+      "aliases": [],
+      "file": "weapon/point_blank.png"
+    },
+    {
+      "id": "deadlock-weapon-item-rapid-rounds-png",
+      "answer": "rapid rounds",
+      "aliases": [],
+      "file": "weapon/rapid_rounds.png"
+    },
+    {
+      "id": "deadlock-weapon-item-recharging-rounds-png",
+      "answer": "recharging rounds",
+      "aliases": [],
+      "file": "weapon/recharging_rounds.png"
+    },
+    {
+      "id": "deadlock-weapon-item-restorative-shot-png",
+      "answer": "restorative shot",
+      "aliases": [],
+      "file": "weapon/restorative_shot.png"
+    },
+    {
+      "id": "deadlock-weapon-item-ricochet-png",
+      "answer": "ricochet",
+      "aliases": [],
+      "file": "weapon/ricochet.png"
+    },
+    {
+      "id": "deadlock-weapon-item-shadow-weave-png",
+      "answer": "shadow weave",
+      "aliases": [],
+      "file": "weapon/shadow_weave.png"
+    },
+    {
+      "id": "deadlock-weapon-item-sharp-shooter-png",
+      "answer": "sharp shooter",
+      "aliases": [],
+      "file": "weapon/sharp_shooter.png"
+    },
+    {
+      "id": "deadlock-weapon-item-silencer-png",
+      "answer": "silencer",
+      "aliases": [],
+      "file": "weapon/silencer.png"
+    },
+    {
+      "id": "deadlock-weapon-item-slowing-bullets-png",
+      "answer": "slowing bullets",
+      "aliases": [],
+      "file": "weapon/slowing_bullets.png"
+    },
+    {
+      "id": "deadlock-weapon-item-spellslinger-headshots-png",
+      "answer": "spellslinger headshots",
+      "aliases": [],
+      "file": "weapon/spellslinger_headshots.png"
+    },
+    {
+      "id": "deadlock-weapon-item-spell-slinger-png",
+      "answer": "spellslinger",
+      "aliases": [
+        "spell slinger"
+      ],
+      "file": "weapon/spell_slinger.png"
+    },
+    {
+      "id": "deadlock-weapon-item-spiritual-overflow-png",
+      "answer": "spiritual overflow",
+      "aliases": [],
+      "file": "weapon/spiritual_overflow.png"
+    },
+    {
+      "id": "deadlock-weapon-item-spirit-shredder-bullets-png",
+      "answer": "spirit shredder bullets",
+      "aliases": [],
+      "file": "weapon/spirit_shredder_bullets.png"
+    },
+    {
+      "id": "deadlock-weapon-item-split-shot-png",
+      "answer": "split shot",
+      "aliases": [],
+      "file": "weapon/split_shot.png"
+    },
+    {
+      "id": "deadlock-weapon-item-swift-striker-png",
+      "answer": "swift striker",
+      "aliases": [],
+      "file": "weapon/swift_striker.png"
+    },
+    {
+      "id": "deadlock-weapon-item-tesla-bullets-png",
+      "answer": "tesla bullets",
+      "aliases": [],
+      "file": "weapon/tesla_bullets.png"
+    },
+    {
+      "id": "deadlock-weapon-item-titanic-magazine-png",
+      "answer": "titanic magazine",
+      "aliases": [],
+      "file": "weapon/titanic_magazine.png"
+    },
+    {
+      "id": "deadlock-weapon-item-toxic-bullets-png",
+      "answer": "toxic bullets",
+      "aliases": [],
+      "file": "weapon/toxic_bullets.png"
+    },
+    {
+      "id": "deadlock-weapon-item-weakening-headshot-png",
+      "answer": "weakening headshot",
+      "aliases": [],
+      "file": "weapon/weakening_headshot.png"
+    },
+    {
+      "id": "deadlock-weapon-item-weighted-shots-png",
+      "answer": "weighted shots",
+      "aliases": [],
+      "file": "weapon/weighted_shots.png"
+    }
+  ],
+  "objectives": [
+    {
+      "id": "deadlock-objective-archmother-png",
+      "answer": "the archmother",
+      "aliases": [
+        "archmother"
+      ],
+      "file": "archmother.png"
+    },
+    {
+      "id": "deadlock-objective-core-png",
+      "answer": "core",
+      "aliases": [],
+      "file": "core.png"
+    },
+    {
+      "id": "deadlock-objective-guardian-png",
+      "answer": "guardian",
+      "aliases": [],
+      "file": "guardian.png"
+    },
+    {
+      "id": "deadlock-objective-hidden-king-png",
+      "answer": "the hidden king",
+      "aliases": [
+        "hidden king"
+      ],
+      "file": "hidden-king.png"
+    },
+    {
+      "id": "deadlock-objective-neutral-creep-png",
+      "answer": "neutral creep",
+      "aliases": [],
+      "file": "neutral-creep.png"
+    },
+    {
+      "id": "deadlock-objective-patron-png",
+      "answer": "patron",
+      "aliases": [],
+      "file": "patron.png"
+    },
+    {
+      "id": "deadlock-objective-shield-generator-png",
+      "answer": "shield generator",
+      "aliases": [],
+      "file": "shield-generator.png"
+    },
+    {
+      "id": "deadlock-objective-tier-3-boss-png",
+      "answer": "tier 3 boss",
+      "aliases": [],
+      "file": "tier-3-boss.png"
+    },
+    {
+      "id": "deadlock-objective-trooper-png",
+      "answer": "trooper",
+      "aliases": [],
+      "file": "trooper.png"
+    },
+    {
+      "id": "deadlock-objective-turret-png",
+      "answer": "turret",
+      "aliases": [],
+      "file": "turret.png"
+    },
+    {
+      "id": "deadlock-objective-walker-png",
+      "answer": "walker",
+      "aliases": [],
+      "file": "walker.png"
+    }
+  ],
+  "portraits": [
+    {
+      "id": "deadlock-portraits-abrams-vertical",
+      "answer": "abrams vertical",
+      "aliases": [],
+      "file": "Abrams_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-apollo-vertical",
+      "answer": "apollo vertical",
+      "aliases": [],
+      "file": "Apollo_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-bebop-vertical",
+      "answer": "bebop vertical",
+      "aliases": [],
+      "file": "Bebop_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-billy-vertical",
+      "answer": "billy vertical",
+      "aliases": [],
+      "file": "Billy_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-calico-vertical",
+      "answer": "calico vertical",
+      "aliases": [],
+      "file": "Calico_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-celeste-vertical",
+      "answer": "celeste vertical",
+      "aliases": [],
+      "file": "Celeste_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-drifter-vertical",
+      "answer": "drifter vertical",
+      "aliases": [],
+      "file": "Drifter_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-dynamo-vertical",
+      "answer": "dynamo vertical",
+      "aliases": [],
+      "file": "Dynamo_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-graves-vertical",
+      "answer": "graves vertical",
+      "aliases": [],
+      "file": "Graves_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-grey-talon-vertical",
+      "answer": "grey talon vertical",
+      "aliases": [],
+      "file": "Grey_Talon_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-haze-vertical",
+      "answer": "haze vertical",
+      "aliases": [],
+      "file": "Haze_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-holliday-vertical",
+      "answer": "holliday vertical",
+      "aliases": [],
+      "file": "Holliday_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-infernus-vertical",
+      "answer": "infernus vertical",
+      "aliases": [],
+      "file": "Infernus_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-ivy-vertical",
+      "answer": "ivy vertical",
+      "aliases": [],
+      "file": "Ivy_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-kelvin-vertical",
+      "answer": "kelvin vertical",
+      "aliases": [],
+      "file": "Kelvin_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-lady-geist-vertical",
+      "answer": "lady geist vertical",
+      "aliases": [],
+      "file": "Lady_Geist_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-lash-vertical",
+      "answer": "lash vertical",
+      "aliases": [],
+      "file": "Lash_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-mcginnis-vertical",
+      "answer": "mc ginnis vertical",
+      "aliases": [
+        "mcginnis vertical"
+      ],
+      "file": "McGinnis_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-mina-vertical",
+      "answer": "mina vertical",
+      "aliases": [],
+      "file": "Mina_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-mirage-vertical",
+      "answer": "mirage vertical",
+      "aliases": [],
+      "file": "Mirage_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-mo-krill-vertical",
+      "answer": "mo & krill vertical",
+      "aliases": [],
+      "file": "Mo_&_Krill_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-paige-vertical",
+      "answer": "paige vertical",
+      "aliases": [],
+      "file": "Paige_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-paradox-vertical",
+      "answer": "paradox vertical",
+      "aliases": [],
+      "file": "Paradox_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-pocket-vertical",
+      "answer": "pocket vertical",
+      "aliases": [],
+      "file": "Pocket_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-rem-vertical",
+      "answer": "rem vertical",
+      "aliases": [],
+      "file": "Rem_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-seven-vertical",
+      "answer": "seven vertical",
+      "aliases": [],
+      "file": "Seven_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-shiv-vertical",
+      "answer": "shiv vertical",
+      "aliases": [],
+      "file": "Shiv_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-silver-vertical",
+      "answer": "silver vertical",
+      "aliases": [],
+      "file": "Silver_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-sinclair-vertical",
+      "answer": "sinclair vertical",
+      "aliases": [],
+      "file": "Sinclair_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-the-doorman-vertical",
+      "answer": "the doorman vertical",
+      "aliases": [],
+      "file": "The_Doorman_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-venator-vertical",
+      "answer": "venator vertical",
+      "aliases": [],
+      "file": "Venator_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-victor-vertical",
+      "answer": "victor vertical",
+      "aliases": [],
+      "file": "Victor_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-vindicta-vertical",
+      "answer": "vindicta vertical",
+      "aliases": [],
+      "file": "Vindicta_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-viscous-vertical",
+      "answer": "viscous vertical",
+      "aliases": [],
+      "file": "Viscous_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-vyper-vertical",
+      "answer": "vyper vertical",
+      "aliases": [],
+      "file": "Vyper_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-warden-vertical",
+      "answer": "warden vertical",
+      "aliases": [],
+      "file": "Warden_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-wraith-vertical",
+      "answer": "wraith vertical",
+      "aliases": [],
+      "file": "Wraith_vertical.png"
+    },
+    {
+      "id": "deadlock-portraits-yamato-vertical",
+      "answer": "yamato vertical",
+      "aliases": [],
+      "file": "Yamato_vertical.png"
+    }
+  ],
+  "weapons": [
+    {
+      "id": "deadlock-hero-weapons-abrams-png",
+      "answer": "abrams",
+      "aliases": [],
+      "file": "Abrams.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-apollo-png",
+      "answer": "apollo",
+      "aliases": [],
+      "file": "Apollo.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-bebop-png",
+      "answer": "bebop",
+      "aliases": [],
+      "file": "Bebop.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-billy-png",
+      "answer": "billy",
+      "aliases": [],
+      "file": "Billy.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-calico-png",
+      "answer": "calico",
+      "aliases": [],
+      "file": "Calico.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-celeste-png",
+      "answer": "celeste",
+      "aliases": [],
+      "file": "Celeste.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-drifter-png",
+      "answer": "drifter",
+      "aliases": [],
+      "file": "Drifter.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-dynamo-png",
+      "answer": "dynamo",
+      "aliases": [],
+      "file": "Dynamo.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-graves-png",
+      "answer": "graves",
+      "aliases": [],
+      "file": "Graves.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-grey-talon-png",
+      "answer": "grey talon",
+      "aliases": [],
+      "file": "Grey_Talon.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-haze-png",
+      "answer": "haze",
+      "aliases": [],
+      "file": "Haze.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-holliday-png",
+      "answer": "holliday",
+      "aliases": [],
+      "file": "Holliday.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-infernus-png",
+      "answer": "infernus",
+      "aliases": [],
+      "file": "Infernus.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-ivy-png",
+      "answer": "ivy",
+      "aliases": [],
+      "file": "Ivy.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-kelvin-png",
+      "answer": "kelvin",
+      "aliases": [],
+      "file": "Kelvin.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-lady-geist-png",
+      "answer": "lady geist",
+      "aliases": [],
+      "file": "Lady_Geist.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-lash-png",
+      "answer": "lash",
+      "aliases": [],
+      "file": "Lash.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-mcginnis-png",
+      "answer": "mcginnis",
+      "aliases": [],
+      "file": "McGinnis.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-mina-png",
+      "answer": "mina",
+      "aliases": [],
+      "file": "Mina.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-mirage-png",
+      "answer": "mirage",
+      "aliases": [],
+      "file": "Mirage.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-mo-krill-png",
+      "answer": "mo & krill",
+      "aliases": [],
+      "file": "Mo_&_Krill.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-paige-png",
+      "answer": "paige",
+      "aliases": [],
+      "file": "Paige.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-paradox-png",
+      "answer": "paradox",
+      "aliases": [],
+      "file": "Paradox.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-pocket-png",
+      "answer": "pocket",
+      "aliases": [],
+      "file": "Pocket.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-rem-png",
+      "answer": "rem",
+      "aliases": [],
+      "file": "Rem.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-seven-png",
+      "answer": "seven",
+      "aliases": [],
+      "file": "Seven.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-shiv-png",
+      "answer": "shiv",
+      "aliases": [],
+      "file": "Shiv.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-silver-png",
+      "answer": "silver",
+      "aliases": [],
+      "file": "Silver.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-sinclair-png",
+      "answer": "sinclair",
+      "aliases": [],
+      "file": "Sinclair.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-the-doorman-png",
+      "answer": "the doorman",
+      "aliases": [],
+      "file": "The_Doorman.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-venator-png",
+      "answer": "venator",
+      "aliases": [],
+      "file": "Venator.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-victor-png",
+      "answer": "victor",
+      "aliases": [],
+      "file": "Victor.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-vindicta-png",
+      "answer": "vindicta",
+      "aliases": [],
+      "file": "Vindicta.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-viscous-png",
+      "answer": "viscous",
+      "aliases": [],
+      "file": "Viscous.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-vyper-png",
+      "answer": "vyper",
+      "aliases": [],
+      "file": "Vyper.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-warden-png",
+      "answer": "warden",
+      "aliases": [],
+      "file": "Warden.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-wraith-png",
+      "answer": "wraith",
+      "aliases": [],
+      "file": "Wraith.png"
+    },
+    {
+      "id": "deadlock-hero-weapons-yamato-png",
+      "answer": "yamato",
+      "aliases": [],
+      "file": "Yamato.png"
+    }
+  ]
+}

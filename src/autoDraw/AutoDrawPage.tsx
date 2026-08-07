@@ -1,0 +1,542 @@
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import {
+  endServerRound,
+  fetchTwitchSession,
+  startServerRound,
+  type LiveChatMessage,
+  type LiveEvent,
+  type SolvedViewer,
+  type TwitchSession,
+} from "../twitch/twitchApi";
+import { usePersistentState } from "../ui/usePersistentState";
+import { WorkspaceIdentity } from "../ui/WorkspaceIdentity";
+import { CategoryPickerWindow, type CategoryPickerGroup } from "../ui/CategoryPickerWindow";
+import { AutoDrawCanvas } from "./AutoDrawCanvas";
+import { AUTO_DRAW_ASSETS } from "./autoDrawAssets";
+import { GAME_TITLES, UNIFIED_DOMAINS, matchesCategorySelection as matchesCategory, getCategory } from "../dashboard/gameData";
+
+type Props = { onNavigate: (path: string) => void };
+type Status = "idle" | "playing" | "paused" | "complete";
+type GuessFeedback = "idle" | "wrong" | "correct";
+type CategoryFamily = "games" | "animals" | "sports" | "other";
+type ResizeState = { panel: "source" | "side"; startX: number; startWidth: number };
+
+const TRANSITION_MS = 900;
+const EMPTY_TWITCH_SESSION: TwitchSession = { authenticated: false, configured: false, eventSubStatus: "disconnected", user: null };
+const normalize = (value: string) => value.trim().toLowerCase().replace(/[^a-z0-9]+/g, "");
+const categories = [...new Set(AUTO_DRAW_ASSETS.map(({ category }) => category))];
+
+const categoryArtwork = (selection: string) => {
+  const value = selection.toLowerCase();
+  if (value.includes("valorant")) return "/category-art/valorant-sketch.webp";
+  if (value.includes("deadlock")) return "/category-art/deadlock-sketch.webp";
+  if (value.includes("rainbow")) return "/category-art/rainbow-six-siege-sketch.webp";
+  if (value.includes("clash of clans")) return "/category-art/clash-of-clans-sketch.webp";
+  if (value.includes("clash royale")) return "/category-art/clash-royale-sketch.webp";
+  if (value.includes("fortnite")) return "/category-art/fortnite-sketch.webp";
+  if (value.includes("minecraft")) return "/category-art/minecraft-sketch.webp";
+  return "/category-art/random.jpg";
+};
+
+export function AutoDrawPage({ onNavigate }: Props) {
+  const [sourceRailWidth, setSourceRailWidth] = usePersistentState("autoDraw.layout.leftRailWidth.artistAligned", 380);
+  const [sidePanelWidth, setSidePanelWidth] = usePersistentState("autoDraw.layout.rightRailWidth.artistAligned", 280);
+  const [selectedCategory, setSelectedCategory] = usePersistentState("autoDraw.category", "all");
+  const availableIndexes = useMemo(() => {
+    const indexes = AUTO_DRAW_ASSETS.flatMap((item, index) => matchesCategory(item.category, selectedCategory) ? [index] : []);
+    if (indexes.length === 0) return AUTO_DRAW_ASSETS.map((_, index) => index);
+    
+    // Fisher-Yates shuffle
+    for (let i = indexes.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [indexes[i], indexes[j]] = [indexes[j], indexes[i]];
+    }
+    return indexes;
+  }, [selectedCategory]);
+  
+  const [assetIndex, setAssetIndex] = useState(() => availableIndexes[0] ?? 0);
+
+  // If selectedCategory changes, we might want to pick a new asset
+  useEffect(() => {
+    setAssetIndex(availableIndexes[0] ?? 0);
+  }, [availableIndexes]);
+
+  const [stageIndex, setStageIndex] = useState(0);
+  const [transitionProgress, setTransitionProgress] = useState(1);
+  const [status, setStatus] = useState<Status>("idle");
+  const [guess, setGuess] = useState("");
+  const [guessFocused, setGuessFocused] = useState(false);
+  const [guessFeedback, setGuessFeedback] = useState<GuessFeedback>("idle");
+  const [notice, setNotice] = useState("Press start when everyone is ready.");
+  const [canvasResetToken, setCanvasResetToken] = useState(0);
+  const [twitchSession, setTwitchSession] = useState<TwitchSession>(EMPTY_TWITCH_SESSION);
+  const [chatMessages, setChatMessages] = useState<LiveChatMessage[]>([]);
+  const [solvers, setSolvers] = useState<SolvedViewer[]>([]);
+  const frame = useRef<number | null>(null);
+  const previous = useRef<number | null>(null);
+  const transitionProgressRef = useRef(1);
+  const activeRoundId = useRef<string | null>(null);
+  const resizeStateRef = useRef<ResizeState | null>(null);
+  const guessInputRef = useRef<HTMLInputElement>(null);
+  const asset = AUTO_DRAW_ASSETS[assetIndex] ?? AUTO_DRAW_ASSETS[0];
+  const maximumGuessStage = asset ? asset.stages.length - 2 : 0;
+  const assetRef = useRef(asset);
+  assetRef.current = asset;
+  const aliases = useMemo(() => asset ? [asset.answer, ...(asset.aliases ?? [])].map(normalize) : [], [asset]);
+  const twitchLive = twitchSession.authenticated && twitchSession.eventSubStatus === "connected";
+
+  const closeLiveRound = async () => {
+    if (!activeRoundId.current) return;
+    activeRoundId.current = null;
+    try { await endServerRound(); } catch { /* Local play remains available. */ }
+  };
+
+  useEffect(() => {
+    let mounted = true;
+    fetchTwitchSession().then((session) => { if (mounted) setTwitchSession(session); }).catch(() => undefined);
+    const events = new EventSource("/api/events");
+    events.onmessage = (message) => {
+      const event = JSON.parse(message.data) as LiveEvent;
+      if (event.type === "twitch-session") setTwitchSession(event.payload);
+      if (event.type === "chat-message") setChatMessages((current) => [...current.slice(-20), event.payload]);
+      if (event.type === "correct-guess" && event.payload.roundId === activeRoundId.current) {
+        activeRoundId.current = null;
+        setSolvers((current) => [...current, event.payload.solver]);
+        setGuess(assetRef.current.answer);
+        setGuessFeedback("correct");
+        transitionProgressRef.current = 1;
+        setTransitionProgress(1);
+        setStatus("complete");
+        setNotice(`${event.payload.solver.name} solved it in chat.`);
+      }
+    };
+    events.onerror = () => setTwitchSession((current) => current.authenticated ? { ...current, eventSubStatus: "reconnecting" } : current);
+    return () => { mounted = false; events.close(); if (activeRoundId.current) void closeLiveRound(); };
+  }, []);
+
+  useEffect(() => {
+    if (status !== "playing" || transitionProgressRef.current >= 1) { previous.current = null; return; }
+    const tick = (time: number) => {
+      const delta = Math.min(100, time - (previous.current ?? time));
+      previous.current = time;
+      const next = Math.min(1, transitionProgressRef.current + delta / TRANSITION_MS);
+      transitionProgressRef.current = next;
+      setTransitionProgress(next);
+      if (next < 1) frame.current = requestAnimationFrame(tick);
+    };
+    frame.current = requestAnimationFrame(tick);
+    return () => { if (frame.current !== null) cancelAnimationFrame(frame.current); };
+  }, [stageIndex, status]);
+
+  useEffect(() => {
+    const handlePointerMove = (event: PointerEvent) => {
+      const resize = resizeStateRef.current;
+      if (!resize) return;
+      const delta = event.clientX - resize.startX;
+      if (resize.panel === "source") setSourceRailWidth(Math.max(280, Math.min(520, resize.startWidth + delta)));
+      else setSidePanelWidth(Math.max(230, Math.min(420, resize.startWidth - delta)));
+    };
+    const stopResize = () => { resizeStateRef.current = null; document.body.classList.remove("resizing-panels"); };
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", stopResize);
+    window.addEventListener("pointercancel", stopResize);
+    return () => {
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", stopResize);
+      window.removeEventListener("pointercancel", stopResize);
+    };
+  }, [setSidePanelWidth, setSourceRailWidth]);
+
+  const reset = (next: Status = "idle") => {
+    void closeLiveRound();
+    setStageIndex(0);
+    transitionProgressRef.current = 1;
+    setTransitionProgress(1);
+    setGuess("");
+    setGuessFocused(false);
+    setGuessFeedback("idle");
+    setSolvers([]);
+    setChatMessages([]);
+    setCanvasResetToken((value) => value + 1);
+    setStatus(next);
+    setNotice(next === "playing" ? "The first clue is being drawn." : "Press start when everyone is ready.");
+  };
+
+  const startDrawing = async () => {
+    await closeLiveRound();
+    reset("playing");
+    if (!twitchLive) return;
+    try {
+      const result = await startServerRound(asset.answer, 1, asset.aliases);
+      activeRoundId.current = result.roundId;
+      setNotice("Drawing live. Twitch chat can guess now.");
+    } catch { setNotice("Drawing locally. Live chat could not start."); }
+  };
+
+  const nextDrawing = async () => {
+    const queue = availableIndexes.length ? availableIndexes : AUTO_DRAW_ASSETS.map((_, index) => index);
+    const position = queue.indexOf(assetIndex);
+    const nextIdx = queue[(position + 1 + queue.length) % queue.length];
+    const nextAsset = AUTO_DRAW_ASSETS[nextIdx];
+    
+    setAssetIndex(nextIdx);
+    await closeLiveRound();
+    reset("playing");
+    
+    if (!twitchLive) return;
+    try {
+      const result = await startServerRound(nextAsset.answer, 1, nextAsset.aliases);
+      activeRoundId.current = result.roundId;
+      setNotice("Drawing live. Twitch chat can guess now.");
+    } catch { setNotice("Drawing locally. Live chat could not start."); }
+  };
+
+  const revealAnswer = () => {
+    setStatus("complete");
+    setGuessFeedback("idle");
+    setNotice("The answer was revealed.");
+    void closeLiveRound();
+  };
+
+  const getGameSubcategories = (gameId: string) => {
+    return categories.filter((c) => c.toLowerCase().startsWith(gameId.toLowerCase()));
+  };
+
+  const isCategoryOptionActive = (optionId: string): boolean => {
+    if (!selectedCategory || selectedCategory === "empty") return false;
+
+    const selectedTokens = selectedCategory.split(",").filter(Boolean);
+
+    if (optionId === "all") {
+      return selectedTokens.includes("all");
+    }
+
+    if (selectedTokens.includes("all")) {
+      return false;
+    }
+
+    if (optionId.startsWith("game:")) {
+      const gameId = optionId.slice(5).toLowerCase();
+      if (selectedTokens.includes(optionId)) return true;
+      const subCats = getGameSubcategories(gameId);
+      if (subCats.length > 0 && subCats.every((sc) => selectedTokens.includes(sc))) {
+        return true;
+      }
+      return false;
+    }
+
+    if (selectedTokens.includes(optionId)) return true;
+    const matchingGame = GAME_TITLES.find((g) => optionId.toLowerCase().startsWith(g.id));
+    if (matchingGame && selectedTokens.includes(`game:${matchingGame.id}`)) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const chooseCategory = (toggledId: string) => {
+    if (toggledId === "all") {
+      setSelectedCategory("all");
+      const first = AUTO_DRAW_ASSETS.findIndex((item) => matchesCategory(item.category, "all"));
+      if (first >= 0) setAssetIndex(first);
+      reset();
+      return;
+    }
+
+    let selectedTokens = selectedCategory === "all" || selectedCategory === "empty" ? [] : selectedCategory.split(",").filter(Boolean);
+
+    if (toggledId.startsWith("game:")) {
+      const gameId = toggledId.slice(5).toLowerCase();
+      const subCats = getGameSubcategories(gameId);
+      const currentlyActive = isCategoryOptionActive(toggledId);
+
+      if (currentlyActive) {
+        selectedTokens = selectedTokens.filter((t) => t !== toggledId && !subCats.includes(t));
+      } else {
+        selectedTokens = selectedTokens.filter((t) => !subCats.includes(t));
+        selectedTokens.push(toggledId);
+      }
+    } else {
+      const matchingGame = GAME_TITLES.find((g) => toggledId.toLowerCase().startsWith(g.id));
+      const currentlyActive = isCategoryOptionActive(toggledId);
+
+      if (matchingGame) {
+        const gameId = matchingGame.id;
+        const gameToken = `game:${gameId}`;
+        const subCats = getGameSubcategories(gameId);
+
+        if (selectedTokens.includes(gameToken)) {
+          selectedTokens = selectedTokens.filter((t) => t !== gameToken);
+          for (const sc of subCats) {
+            if (!selectedTokens.includes(sc)) selectedTokens.push(sc);
+          }
+        }
+
+        if (currentlyActive) {
+          selectedTokens = selectedTokens.filter((t) => t !== toggledId);
+        } else {
+          if (!selectedTokens.includes(toggledId)) selectedTokens.push(toggledId);
+          if (subCats.length > 0 && subCats.every((sc) => selectedTokens.includes(sc))) {
+            selectedTokens = selectedTokens.filter((t) => !subCats.includes(t));
+            selectedTokens.push(gameToken);
+          }
+        }
+      } else {
+        if (currentlyActive) {
+          selectedTokens = selectedTokens.filter((t) => t !== toggledId);
+        } else {
+          selectedTokens.push(toggledId);
+        }
+      }
+    }
+
+    selectedTokens = selectedTokens.filter((t) => t !== "all");
+    const nextSelection = selectedTokens.length > 0 ? selectedTokens.join(",") : "empty";
+
+    setSelectedCategory(nextSelection);
+    const first = AUTO_DRAW_ASSETS.findIndex((item) => matchesCategory(item.category, nextSelection));
+    if (first >= 0) setAssetIndex(first);
+    reset();
+  };
+
+  const selectAllCategories = () => {
+    const allGameTokens = GAME_TITLES.map((g) => `game:${g.id}`).join(",");
+    setSelectedCategory(allGameTokens);
+    const first = AUTO_DRAW_ASSETS.findIndex((item) => matchesCategory(item.category, allGameTokens));
+    if (first >= 0) setAssetIndex(first);
+    reset();
+  };
+
+  const resetMixCategories = () => {
+    setSelectedCategory("");
+    reset();
+  };
+
+  const nextClue = () => {
+    if (status === "idle") { void startDrawing(); return; }
+    if (stageIndex < maximumGuessStage) {
+      transitionProgressRef.current = 0;
+      setTransitionProgress(0);
+      setStageIndex((index) => index + 1);
+      setStatus("playing");
+      setNotice("A stronger clue is being added.");
+    } else {
+      void closeLiveRound();
+      transitionProgressRef.current = 1;
+      setTransitionProgress(1);
+      setStatus("complete");
+      setNotice(`The answer was ${asset.answer}.`);
+    }
+  };
+
+  const submitGuess = () => {
+    if (status !== "playing" && status !== "paused") return;
+    if (aliases.includes(normalize(guess))) {
+      void closeLiveRound();
+      setGuess(asset.answer);
+      setGuessFeedback("correct");
+      transitionProgressRef.current = 1;
+      setTransitionProgress(1);
+      setStatus("complete");
+      setNotice(`Correct. The answer is ${asset.answer}.`);
+    } else {
+      setGuessFeedback("idle");
+      requestAnimationFrame(() => setGuessFeedback("wrong"));
+      if (stageIndex < maximumGuessStage) {
+        transitionProgressRef.current = 0;
+        setTransitionProgress(0);
+        setStageIndex((index) => Math.min(maximumGuessStage, index + 1));
+        setStatus("playing");
+      }
+      setNotice(`${guess.trim() || "That"} is not the answer.`);
+    }
+  };
+
+  const startResize = (panel: ResizeState["panel"], event: ReactPointerEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    resizeStateRef.current = { panel, startX: event.clientX, startWidth: panel === "source" ? sourceRailWidth : sidePanelWidth };
+    document.body.classList.add("resizing-panels");
+  };
+
+  const currentStage = asset.stages[Math.min(stageIndex, maximumGuessStage)];
+  const previousStageReveal = stageIndex === 0 ? 0 : asset.stages[Math.min(stageIndex - 1, maximumGuessStage)].reveal;
+  const revealProgress = status === "complete"
+    ? 1
+    : status === "idle"
+      ? 0
+      : previousStageReveal + (currentStage.reveal - previousStageReveal) * transitionProgress;
+  const revealPercent = Math.round(revealProgress * 100);
+  const obscurity = Math.max(0, 100 - revealPercent);
+  const typedCharacters = guess.replace(/\s/g, "").split("");
+  const answerSlots = asset.answer.replace(/\s/g, "").length;
+  const overflowCharacters = typedCharacters.slice(answerSlots);
+  const selectedTokens = selectedCategory === "all" ? ["all"] : selectedCategory === "empty" ? [] : selectedCategory.split(",").filter(Boolean);
+  const selectedLabels = useMemo(() => {
+    if (selectedCategory === "all") return ["Random Mix"];
+    if (selectedCategory === "empty") return ["No Decks Selected"];
+    const tokens = selectedCategory.split(",").filter(Boolean);
+    return tokens.map((token) => {
+      if (token.startsWith("game:")) {
+        const g = GAME_TITLES.find((gt) => gt.id === token.slice(5));
+        return `All ${g?.label ?? token.slice(5)}`;
+      }
+      return token;
+    });
+  }, [selectedCategory]);
+
+  const selectedLabel = selectedCategory === "all"
+    ? "All Games Shuffled"
+    : selectedCategory === ""
+      ? "No Decks Selected"
+      : selectedTokens.length === 1
+        ? selectedTokens[0].startsWith("game:")
+          ? `All ${GAME_TITLES.find((g) => g.id === selectedTokens[0].slice(5))?.label ?? selectedTokens[0].slice(5)}`
+          : selectedTokens[0]
+        : `${selectedTokens.length} Decks Selected`;
+
+  const selectedIcon = selectedCategory === "" ? "warning" : selectedCategory === "all" ? "casino" : selectedTokens.length > 1 ? "style" : "sports_esports";
+  const selectedArtwork = categoryArtwork(selectedCategory);
+
+  const selectedCategoryOption = {
+    id: selectedCategory === "" ? "empty" : selectedCategory,
+    label: selectedLabel,
+    description: selectedCategory === ""
+      ? "Please select at least one deck."
+      : selectedCategory === "all"
+      ? "A shuffled mix from every Auto Draw deck."
+      : `${selectedTokens.length} deck${selectedTokens.length === 1 ? "" : "s"} selected.`,
+    icon: selectedIcon,
+    accent: selectedCategory === "" ? "#e6a283" : (selectedTokens[0]?.startsWith("game:")
+      ? GAME_TITLES.find((g) => g.id === selectedTokens[0].slice(5))?.accent ?? "#83c5e6"
+      : "#83c5e6"),
+  };
+
+  const selectedKickerText = selectedCategory === "all"
+    ? "Random Mix"
+    : selectedTokens.length === 1
+      ? "Active Deck"
+      : `${selectedTokens.length} Decks Active`;
+
+
+
+  return (
+    <div className="dashboard-layout auto-draw-page auto-workspace" style={{ "--source-rail-width": `${sourceRailWidth}px`, "--side-panel-width": `${sidePanelWidth}px` } as CSSProperties}>
+      <aside className="stream-sidebar auto-stream-sidebar" aria-label="Stream sources">
+        <WorkspaceIdentity connected={twitchSession.authenticated} configured={twitchSession.configured} displayName={twitchSession.user?.displayName ?? null} modeName="Auto Draw" onModes={() => onNavigate("/")} returnTo="/auto-draw" subtitle="Auto Draw sketchbook" />
+        <section className="source-card camera-source-card">
+          <header className="source-card-header"><div><span className="source-eyebrow">Camera frame</span><h2>Streamer camera</h2></div><span className="source-status ready"><i/>OBS</span></header>
+          <div className="camera-preview auto-camera-preview"><span className="material-symbols-outlined">videocam</span><strong>Camera window</strong><small>Place your camera source over this frame in OBS.</small></div>
+        </section>
+        <section className="source-card chat-source-card auto-chat-source-card">
+          <header className="source-card-header"><div><span className="source-eyebrow">Audience notes</span><h2>Twitch live chat</h2></div><span className={`source-status ${twitchLive ? "ready" : ""}`}><i/>{twitchLive ? "Live" : "Offline"}</span></header>
+          <div className="source-chat-list" aria-live="polite">
+            {chatMessages.length ? chatMessages.map((message) => <div className="source-chat-message" key={message.id}><span>{message.name.slice(0, 1)}</span><p><strong>{message.name}</strong>{message.message}</p></div>) : <div className="source-empty-state"><span className="material-symbols-outlined">forum</span><strong>Chat appears here</strong><small>{twitchLive ? "Start a drawing and audience guesses will arrive live." : "Connect Twitch from your profile to receive chat."}</small></div>}
+            {solvers.map((solver) => <div className="auto-chat-solver" key={solver.userId}><span className="material-symbols-outlined">workspace_premium</span>{solver.name} solved it first</div>)}
+          </div>
+        </section>
+      </aside>
+
+      <div aria-label="Resize camera and chat panels" aria-orientation="vertical" aria-valuemax={520} aria-valuemin={280} aria-valuenow={sourceRailWidth} className="layout-resizer source-rail-resizer" onPointerDown={(event) => startResize("source", event)} role="separator"/>
+
+      <main className="dashboard-shell auto-dashboard-shell">
+        <section className="dashboard-grid auto-dashboard-grid">
+          <div className="main-column auto-main-column">
+            <div className={`prompt-board auto-guess-bar ${guessFeedback}${guessFocused ? " selected" : ""}${status === "idle" ? " disabled" : ""}`} onClick={() => { if (status === "playing" || status === "paused") guessInputRef.current?.focus(); }}>
+              <div aria-hidden="true" className="auto-guess-letters" style={{ fontSize: `clamp(14px, ${45 / Math.max(1, status === "idle" ? 5 : asset.answer.length)}vw, 34px)` }}>
+                {status === "idle" ? (
+                  "     ".split("").map((_, index) => <span key={index}>_</span>)
+                ) : (
+                  <>
+                    {asset.answer.split("").map((letter, index) => {
+                      if (letter === " ") return <span className="auto-guess-space" key={`space-${index}`}/>;
+                      const slotIndex = asset.answer.slice(0, index).replace(/\s/g, "").length;
+                      const typed = status === "complete" ? letter : typedCharacters[slotIndex];
+                      return <span className={typed ? "filled" : ""} key={index}>{typed ? typed.toUpperCase() : "_"}</span>;
+                    })}
+                    {status !== "complete" && overflowCharacters.map((letter, index) => <span className="auto-guess-overflow" key={`extra-${index}`}>{letter.toUpperCase()}</span>)}
+                  </>
+                )}
+              </div>
+              <input aria-label="Type your AutoDraw answer" autoComplete="off" disabled={status === "idle" || status === "complete"} maxLength={80} onBlur={() => setGuessFocused(false)} onChange={(event) => { setGuess(event.target.value); if (guessFeedback === "wrong") setGuessFeedback("idle"); }} onFocus={() => setGuessFocused(true)} onKeyDown={(event) => { if (event.key === "Enter") { event.preventDefault(); submitGuess(); } }} ref={guessInputRef} value={guess}/>
+            </div>
+            <span aria-live="polite" className="auto-guess-announcement">{notice}</span>
+
+            <section className="auto-canvas-card"><span className="auto-canvas-tape tape-left"/><span className="auto-canvas-tape tape-right"/>
+              <div className="auto-stage-timer"><span>{obscurity}% obscured</span><strong>{status === "playing" ? `${obscurity}%` : status === "paused" ? "Paused" : status === "complete" ? "Revealed" : "Ready"}</strong></div>
+              <div className="auto-canvas-wrap"><AutoDrawCanvas active={status !== "idle"} asset={asset} paused={status === "paused"} resetToken={canvasResetToken} stageIndex={status === "complete" ? asset.stages.length - 1 : stageIndex} stageProgress={status === "complete" ? 1 : transitionProgress}/>{status === "idle" && <div className="auto-canvas-empty"><span className="material-symbols-outlined">edit_note</span><strong>The page is waiting</strong><small>Start the round to cover the sketch in clouds.</small></div>}</div>
+              <div aria-label={`${revealPercent} percent of the full reveal`} aria-valuemax={100} aria-valuemin={0} aria-valuenow={revealPercent} className="auto-stage-progress" role="progressbar"><span style={{ width: `${revealPercent}%` }}/></div>
+            </section>
+
+            <section className="auto-controls" aria-label="AutoDraw controls">
+              <button className="primary" onClick={() => status === "idle" ? void startDrawing() : void nextDrawing()} type="button">
+                <span className="material-symbols-outlined">{status === "idle" ? "play_arrow" : "skip_next"}</span>
+                {status === "idle" ? "Start round" : "Next round"}
+              </button>
+              
+              <button disabled={status === "idle" || status === "complete"} onClick={revealAnswer} type="button">
+                <span className="material-symbols-outlined">visibility</span>Reveal answer
+              </button>
+              
+              <button disabled={status === "complete"} onClick={nextClue} type="button">
+                <span className="material-symbols-outlined">fast_forward</span>Next clue
+              </button>
+              
+              <button onClick={() => reset("idle")} type="button">
+                <span className="material-symbols-outlined">stop</span>End round
+              </button>
+            </section>
+          </div>
+
+          <div aria-label="Resize right panels" aria-orientation="vertical" aria-valuemax={420} aria-valuemin={230} aria-valuenow={sidePanelWidth} className="layout-resizer side-panel-resizer" onPointerDown={(event) => startResize("side", event)} role="separator"/>
+
+          <aside className="side-column auto-right-rail" aria-label="Round setup">
+            <section className="feed-card support-card auto-category-card artist-category-copy">
+              <div className="support-tabs" role="tablist" aria-label="AutoDraw categories"><button aria-selected="true" className="active" role="tab" type="button"><span className="material-symbols-outlined">category</span>Categories</button></div>
+              <div className="support-panel-content category-panel" role="tabpanel">
+                <div className="active-categories-panel">
+                  <CategoryPickerWindow
+                    disabled={status === "playing" || status === "paused"}
+                    domains={UNIFIED_DOMAINS}
+                    isOptionActive={isCategoryOptionActive}
+                    label="All categories"
+                    lockedNote="Finish or reset the current drawing to change decks."
+                    onChange={chooseCategory}
+                    onReset={resetMixCategories}
+                    onSelectAll={selectAllCategories}
+                    selectedArtwork="/category-art/random.jpg"
+                    selectedId={selectedCategory}
+                    selectedKicker={selectedKickerText}
+                    selectedLabels={selectedLabels}
+                    selectedOption={selectedCategoryOption}
+                  />
+                  
+                  <div className="category-preview-selection">
+                    <span className="selection-title">Active Selection</span>
+                    <div className="selection-chips scrollable" style={{ maxHeight: "150px", overflowY: "auto" }}>
+                      {selectedTokens.length > 0 ? (
+                        selectedTokens.map((token, idx) => {
+                          let lbl = token;
+                          if (token === "all") lbl = "🎲 All Decks Shuffled";
+                          else if (token.startsWith("game:")) {
+                            const game = GAME_TITLES.find(g => g.id === token.slice(5));
+                            lbl = game ? `All ${game.label}` : token;
+                          } else {
+                            lbl = getCategory(token)?.name ?? token;
+                          }
+                          return <span className="chip" key={idx}>{lbl}</span>;
+                        })
+                      ) : (
+                        <span className="chip empty" style={{ background: "#f2bcae", borderColor: "rgba(186, 75, 50, 0.4)" }}>No decks selected</span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section aria-label="Reserved panel" className="feed-card auto-blank-panel"/>
+          </aside>
+        </section>
+      </main>
+    </div>
+  );
+}

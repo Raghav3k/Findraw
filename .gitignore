@@ -1,0 +1,10 @@
+node_modules
+dist
+public
+.pnpm-store
+.DS_Store
+.env
+.findraw-data
+.tmp
+_edit_work
+*.log

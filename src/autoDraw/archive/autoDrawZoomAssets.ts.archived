@@ -1,0 +1,63 @@
+﻿export type AutoDrawStage = {
+  label: string;
+  recenter: number;
+  revealHeight: number;
+  revealWidth: number;
+};
+
+export type AutoDrawAsset = {
+  aliases?: string[];
+  answer: string;
+  category: string;
+  detailFocus: { x: number; y: number };
+  difficulty: "Easy" | "Medium" | "Hard";
+  id: string;
+  imageUrl: string;
+  subjectBounds: { x: number; y: number; width: number; height: number };
+  stages: AutoDrawStage[];
+};
+
+const CHARACTER_ZOOM_STAGES: AutoDrawStage[] = [
+  { label: "Signature detail", recenter: 0, revealHeight: 0.075, revealWidth: 0.17 },
+  { label: "Nearby shapes", recenter: 0.07, revealHeight: 0.17, revealWidth: 0.34 },
+  { label: "Partial subject", recenter: 0.17, revealHeight: 0.30, revealWidth: 0.52 },
+  { label: "Larger form", recenter: 0.34, revealHeight: 0.48, revealWidth: 0.73 },
+  { label: "Almost complete", recenter: 0.62, revealHeight: 0.72, revealWidth: 0.94 },
+  { label: "Full sketch", recenter: 1, revealHeight: 1.08, revealWidth: 1.14 },
+];
+
+export const AUTO_DRAW_ASSETS: AutoDrawAsset[] = [
+  {
+    aliases: ["valorant cypher"],
+    answer: "cypher",
+    category: "Valorant agents",
+    detailFocus: { x: 0.44, y: 0.235 },
+    difficulty: "Medium",
+    id: "valorant-cypher-sketch-01",
+    imageUrl: "/auto-draw/valorant/agents/sketches/cypher-sketch.webp",
+    subjectBounds: { x: 0.224, y: 0.0284, width: 0.4838, height: 0.956 },
+    stages: CHARACTER_ZOOM_STAGES,
+  },
+  {
+    aliases: ["valorant jett"],
+    answer: "jett",
+    category: "Valorant agents",
+    detailFocus: { x: 0.665, y: 0.18 },
+    difficulty: "Medium",
+    id: "valorant-jett-sketch-01",
+    imageUrl: "/auto-draw/valorant/agents/sketches/jett-sketch.webp",
+    subjectBounds: { x: 0.3155, y: 0.0383, width: 0.4507, height: 0.911 },
+    stages: CHARACTER_ZOOM_STAGES,
+  },
+  {
+    aliases: ["valorant sage"],
+    answer: "sage",
+    category: "Valorant agents",
+    detailFocus: { x: 0.398, y: 0.17 },
+    difficulty: "Medium",
+    id: "valorant-sage-sketch-01",
+    imageUrl: "/auto-draw/valorant/agents/sketches/sage-sketch.webp",
+    subjectBounds: { x: 0.2888, y: 0.0335, width: 0.3723, height: 0.9322 },
+    stages: CHARACTER_ZOOM_STAGES,
+  },
+];

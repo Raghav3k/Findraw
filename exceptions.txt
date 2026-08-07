@@ -1,0 +1,223 @@
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\worldnodes\n0.vwnod_c
+Exception: System.UnauthorizedAccessException: Access to the path 'C:\tmp\deadlock-abrams\maps\ui\hero_prefabs\abrams\worldnodes' is denied.
+   at System.IO.FileSystem.CreateDirectory(String fullPath, Byte[] securityDescriptor)
+   at System.IO.Directory.CreateDirectory(String path)
+   at CLI.Decompiler.DumpFile(String path, ReadOnlySpan`1 data) in /_/CLI/Decompiler.cs:line 1452
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1429
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\world_visibility.vvis_c
+Exception: System.UnauthorizedAccessException: Access to the path 'C:\tmp\deadlock-abrams\maps\ui\hero_prefabs\abrams' is denied.
+   at System.IO.FileSystem.CreateDirectory(String fullPath, Byte[] securityDescriptor)
+   at System.IO.Directory.CreateDirectory(String path)
+   at CLI.Decompiler.DumpFile(String path, ReadOnlySpan`1 data) in /_/CLI/Decompiler.cs:line 1452
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1429
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\world.vwrld_c
+Exception: System.UnauthorizedAccessException: Access to the path 'C:\tmp\deadlock-abrams\maps\ui\hero_prefabs\abrams' is denied.
+   at System.IO.FileSystem.CreateDirectory(String fullPath, Byte[] securityDescriptor)
+   at System.IO.Directory.CreateDirectory(String path)
+   at CLI.Decompiler.DumpFile(String path, ReadOnlySpan`1 data) in /_/CLI/Decompiler.cs:line 1452
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1429
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\worldnodes\n0.vrman_c
+Exception: System.UnauthorizedAccessException: Access to the path 'C:\tmp\deadlock-abrams\maps\ui\hero_prefabs\abrams\worldnodes' is denied.
+   at System.IO.FileSystem.CreateDirectory(String fullPath, Byte[] securityDescriptor)
+   at System.IO.Directory.CreateDirectory(String path)
+   at CLI.Decompiler.DumpFile(String path, ReadOnlySpan`1 data) in /_/CLI/Decompiler.cs:line 1452
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1429
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\world.vrman_c
+Exception: System.UnauthorizedAccessException: Access to the path 'C:\tmp\deadlock-abrams\maps\ui\hero_prefabs\abrams' is denied.
+   at System.IO.FileSystem.CreateDirectory(String fullPath, Byte[] securityDescriptor)
+   at System.IO.Directory.CreateDirectory(String path)
+   at CLI.Decompiler.DumpFile(String path, ReadOnlySpan`1 data) in /_/CLI/Decompiler.cs:line 1452
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1429
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\lightmaps\env_light_probe_volume_1823032396_octree.dat
+Exception: System.UnauthorizedAccessException: Access to the path 'C:\tmp\deadlock-abrams\maps\ui\hero_prefabs\abrams\lightmaps' is denied.
+   at System.IO.FileSystem.CreateDirectory(String fullPath, Byte[] securityDescriptor)
+   at System.IO.Directory.CreateDirectory(String path)
+   at CLI.Decompiler.DumpFile(String path, ReadOnlySpan`1 data) in /_/CLI/Decompiler.cs:line 1452
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1295
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\worldnodes\n0_lr0_c2_s_cb_mesh.vmdl_c
+Exception: System.UnauthorizedAccessException: Access to the path 'C:\tmp\deadlock-abrams\maps\ui\hero_prefabs\abrams\worldnodes' is denied.
+   at System.IO.FileSystem.CreateDirectory(String fullPath, Byte[] securityDescriptor)
+   at System.IO.Directory.CreateDirectory(String path)
+   at CLI.Decompiler.DumpFile(String path, ReadOnlySpan`1 data) in /_/CLI/Decompiler.cs:line 1452
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1429
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\worldnodes\n0_lr0_c0_s_cb_nomerge0_hero_picker_shadow.vmdl_c
+Exception: System.UnauthorizedAccessException: Access to the path 'C:\tmp\deadlock-abrams\maps\ui\hero_prefabs\abrams\worldnodes' is denied.
+   at System.IO.FileSystem.CreateDirectory(String fullPath, Byte[] securityDescriptor)
+   at System.IO.Directory.CreateDirectory(String path)
+   at CLI.Decompiler.DumpFile(String path, ReadOnlySpan`1 data) in /_/CLI/Decompiler.cs:line 1452
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1429
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\entities\unnamed_9.vmdl_c
+Exception: System.UnauthorizedAccessException: Access to the path 'C:\tmp\deadlock-abrams\maps\ui\hero_prefabs\abrams\entities' is denied.
+   at System.IO.FileSystem.CreateDirectory(String fullPath, Byte[] securityDescriptor)
+   at System.IO.Directory.CreateDirectory(String path)
+   at CLI.Decompiler.DumpFile(String path, ReadOnlySpan`1 data) in /_/CLI/Decompiler.cs:line 1452
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1429
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\entities\default_ents.vents_c
+Exception: System.UnauthorizedAccessException: Access to the path 'C:\tmp\deadlock-abrams\maps\ui\hero_prefabs\abrams\entities' is denied.
+   at System.IO.FileSystem.CreateDirectory(String fullPath, Byte[] securityDescriptor)
+   at System.IO.Directory.CreateDirectory(String path)
+   at CLI.Decompiler.DumpFile(String path, ReadOnlySpan`1 data) in /_/CLI/Decompiler.cs:line 1452
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1429
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\lightmaps\env_light_probe_volume_atlas_dlshd.vtex_c
+Exception: System.NullReferenceException: Object reference not set to an instance of an object.
+   at ValveResourceFormat.ResourceTypes.Texture.GenerateBitmap(UInt32 depth, CubemapFace face, UInt32 mipLevel, TextureCodec decodeFlags) in /_/ValveResourceFormat/Resource/ResourceTypes/Texture.cs:line 649
+   at ValveResourceFormat.IO.TextureExtract.<>c__DisplayClass23_1.<ToContentFile>b__1() in /_/ValveResourceFormat/IO/TextureExtract.cs:line 169
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1441
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\lightmaps\env_light_probe_volume_atlas.vtex_c
+Exception: System.NullReferenceException: Object reference not set to an instance of an object.
+   at ValveResourceFormat.ResourceTypes.Texture.GenerateBitmap(UInt32 depth, CubemapFace face, UInt32 mipLevel, TextureCodec decodeFlags) in /_/ValveResourceFormat/Resource/ResourceTypes/Texture.cs:line 649
+   at ValveResourceFormat.IO.TextureExtract.<>c__DisplayClass23_1.<ToContentFile>b__1() in /_/ValveResourceFormat/IO/TextureExtract.cs:line 169
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1441
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\lightmaps\directional_irradiance_sh2_r.vtex_c
+Exception: System.UnauthorizedAccessException: Access to the path 'C:\tmp\deadlock-abrams\maps\ui\hero_prefabs\abrams\lightmaps' is denied.
+   at System.IO.FileSystem.CreateDirectory(String fullPath, Byte[] securityDescriptor)
+   at System.IO.Directory.CreateDirectory(String path)
+   at CLI.Decompiler.DumpFile(String path, ReadOnlySpan`1 data) in /_/CLI/Decompiler.cs:line 1452
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1444
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\lightmaps\directional_irradiance_sh2_g.vtex_c
+Exception: System.UnauthorizedAccessException: Access to the path 'C:\tmp\deadlock-abrams\maps\ui\hero_prefabs\abrams\lightmaps' is denied.
+   at System.IO.FileSystem.CreateDirectory(String fullPath, Byte[] securityDescriptor)
+   at System.IO.Directory.CreateDirectory(String path)
+   at CLI.Decompiler.DumpFile(String path, ReadOnlySpan`1 data) in /_/CLI/Decompiler.cs:line 1452
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1444
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\lightmaps\directional_irradiance_sh2_dc.vtex_c
+Exception: System.UnauthorizedAccessException: Access to the path 'C:\tmp\deadlock-abrams\maps\ui\hero_prefabs\abrams\lightmaps' is denied.
+   at System.IO.FileSystem.CreateDirectory(String fullPath, Byte[] securityDescriptor)
+   at System.IO.Directory.CreateDirectory(String path)
+   at CLI.Decompiler.DumpFile(String path, ReadOnlySpan`1 data) in /_/CLI/Decompiler.cs:line 1452
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1444
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\lightmaps\directional_irradiance_sh2_b.vtex_c
+Exception: System.UnauthorizedAccessException: Access to the path 'C:\tmp\deadlock-abrams\maps\ui\hero_prefabs\abrams\lightmaps' is denied.
+   at System.IO.FileSystem.CreateDirectory(String fullPath, Byte[] securityDescriptor)
+   at System.IO.Directory.CreateDirectory(String path)
+   at CLI.Decompiler.DumpFile(String path, ReadOnlySpan`1 data) in /_/CLI/Decompiler.cs:line 1452
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1444
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\lightmaps\direct_light_shadows.vtex_c
+Exception: System.UnauthorizedAccessException: Access to the path 'C:\tmp\deadlock-abrams\maps\ui\hero_prefabs\abrams\lightmaps' is denied.
+   at System.IO.FileSystem.CreateDirectory(String fullPath, Byte[] securityDescriptor)
+   at System.IO.Directory.CreateDirectory(String path)
+   at CLI.Decompiler.DumpFile(String path, ReadOnlySpan`1 data) in /_/CLI/Decompiler.cs:line 1452
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1444
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\lightmaps\debug_chart_color.vtex_c
+Exception: System.UnauthorizedAccessException: Access to the path 'C:\tmp\deadlock-abrams\maps\ui\hero_prefabs\abrams\lightmaps' is denied.
+   at System.IO.FileSystem.CreateDirectory(String fullPath, Byte[] securityDescriptor)
+   at System.IO.Directory.CreateDirectory(String path)
+   at CLI.Decompiler.DumpFile(String path, ReadOnlySpan`1 data) in /_/CLI/Decompiler.cs:line 1452
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1444
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\cubemaps\env_cubemap_array.vtex_c
+Exception: System.NullReferenceException: Object reference not set to an instance of an object.
+   at ValveResourceFormat.ResourceTypes.Texture.GenerateBitmap(UInt32 depth, CubemapFace face, UInt32 mipLevel, TextureCodec decodeFlags) in /_/ValveResourceFormat/Resource/ResourceTypes/Texture.cs:line 649
+   at ValveResourceFormat.IO.TextureExtract.<>c__DisplayClass23_2.<ToContentFile>b__2() in /_/ValveResourceFormat/IO/TextureExtract.cs:line 184
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1441
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams.vmap_c
+Exception: System.UnauthorizedAccessException: Access to the path 'C:\tmp\deadlock-abrams\maps\ui\hero_prefabs' is denied.
+   at System.IO.FileSystem.CreateDirectory(String fullPath, Byte[] securityDescriptor)
+   at System.IO.Directory.CreateDirectory(String path)
+   at CLI.Decompiler.DumpFile(String path, ReadOnlySpan`1 data) in /_/CLI/Decompiler.cs:line 1452
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1429
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\lightmaps\env_light_probe_volume_atlas_dlshd.vtex_c
+Exception: System.NullReferenceException: Object reference not set to an instance of an object.
+   at ValveResourceFormat.ResourceTypes.Texture.GenerateBitmap(UInt32 depth, CubemapFace face, UInt32 mipLevel, TextureCodec decodeFlags) in /_/ValveResourceFormat/Resource/ResourceTypes/Texture.cs:line 649
+   at ValveResourceFormat.IO.TextureExtract.<>c__DisplayClass23_1.<ToContentFile>b__1() in /_/ValveResourceFormat/IO/TextureExtract.cs:line 169
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1441
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\lightmaps\env_light_probe_volume_atlas.vtex_c
+Exception: System.NullReferenceException: Object reference not set to an instance of an object.
+   at ValveResourceFormat.ResourceTypes.Texture.GenerateBitmap(UInt32 depth, CubemapFace face, UInt32 mipLevel, TextureCodec decodeFlags) in /_/ValveResourceFormat/Resource/ResourceTypes/Texture.cs:line 649
+   at ValveResourceFormat.IO.TextureExtract.<>c__DisplayClass23_1.<ToContentFile>b__1() in /_/ValveResourceFormat/IO/TextureExtract.cs:line 169
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1441
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
+---------------
+Parent file: C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\maps\ui\hero_prefabs\abrams.vpk
+File: maps\ui\hero_prefabs\abrams\cubemaps\env_cubemap_array.vtex_c
+Exception: System.NullReferenceException: Object reference not set to an instance of an object.
+   at ValveResourceFormat.ResourceTypes.Texture.GenerateBitmap(UInt32 depth, CubemapFace face, UInt32 mipLevel, TextureCodec decodeFlags) in /_/ValveResourceFormat/Resource/ResourceTypes/Texture.cs:line 649
+   at ValveResourceFormat.IO.TextureExtract.<>c__DisplayClass23_2.<ToContentFile>b__2() in /_/ValveResourceFormat/IO/TextureExtract.cs:line 184
+   at CLI.Decompiler.DumpContentFile(String path, ContentFile contentFile, Boolean dumpSubFiles) in /_/CLI/Decompiler.cs:line 1441
+   at CLI.Decompiler.ProcessVPKEntries(String parentPath, Package package, IFileLoader fileLoader, String type, Dictionary`2 manifestData) in /_/CLI/Decompiler.cs:line 1365
+
