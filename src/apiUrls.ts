@@ -1,4 +1,8 @@
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").trim().replace(/\/+$/, "");
+const configuredApiBaseUrl = (import.meta.env.VITE_API_BASE_URL || "").trim().replace(/\/+$/, "");
+const productionApiBaseUrl = typeof window !== "undefined" && window.location.hostname === "findraw.pages.dev"
+  ? "https://findraw-backend.bonsaii.workers.dev"
+  : "";
+const API_BASE_URL = configuredApiBaseUrl || productionApiBaseUrl;
 
 export const hasApiBaseUrl = Boolean(API_BASE_URL);
 

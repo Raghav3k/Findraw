@@ -12070,3 +12070,11 @@ body.resizing-panels .layout-resizer::after {
 .workspace-profile-menu {
   z-index: 2000;
 }
+
+@media (min-width: 901px) {
+  .workspace-profile-menu {
+    left: 168px;
+    position: fixed;
+    top: 72px;
+  }
+}
