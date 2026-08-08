@@ -357,7 +357,6 @@ export class FindrawSession {
     const state = randomToken();
     const requestedReturnTo = String(url.searchParams.get("returnTo") || "");
     const returnTo = ["/auto-draw", "/draw"].includes(requestedReturnTo) ? requestedReturnTo : "/draw";
-    const forceVerify = url.searchParams.get("forceVerify") === "1" || url.searchParams.get("forceVerify") === "true";
     const states = await this.state.storage.get("oauthStates") || {};
     const now = Date.now();
     for (const [key, entry] of Object.entries(states)) {
@@ -373,7 +372,6 @@ export class FindrawSession {
       redirect_uri: this.env.TWITCH_REDIRECT_URI,
       scope: TWITCH_SCOPES.join(" "),
       state,
-      ...(forceVerify ? { force_verify: "true" } : {}),
     });
     return Response.redirect(authUrl.toString(), 302);
   }

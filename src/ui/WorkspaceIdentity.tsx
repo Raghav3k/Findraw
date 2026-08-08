@@ -63,7 +63,7 @@ export function WorkspaceIdentity({ connected, configured, displayName, onModes,
               </div>
               <p>{connected ? "Your Twitch display name and live chat are ready in this workspace." : "Connect Twitch to show your account name and receive live chat."}</p>
               <div className="workspace-profile-menu-actions">
-                <button onClick={() => window.location.assign(twitchAuthStartUrl(returnTo, { forceVerify: connected }))} type="button">
+                <button onClick={() => window.location.assign(twitchAuthStartUrl(returnTo))} type="button">
                   <span className="material-symbols-outlined">link</span>
                   {connected ? "Switch Twitch Account" : "Connect Twitch"}
                 </button>
