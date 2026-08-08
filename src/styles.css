@@ -12055,3 +12055,18 @@ body.resizing-panels .layout-resizer::after {
 .auto-draw-canvas.scan-enabled {
   cursor: crosshair;
 }
+
+/* Keep the profile menu above canvas, prompt, and toolbar layers. */
+.workspace-identity {
+  isolation: isolate;
+  position: relative;
+  z-index: 1200;
+}
+
+.workspace-profile-menu-wrap {
+  z-index: 1201;
+}
+
+.workspace-profile-menu {
+  z-index: 2000;
+}
