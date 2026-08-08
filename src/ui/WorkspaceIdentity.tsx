@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { twitchAuthStartUrl } from "../apiUrls";
+import { hasApiBaseUrl, twitchAuthStartUrl } from "../apiUrls";
 
 type WorkspaceIdentityProps = {
   connected: boolean;
@@ -15,6 +15,7 @@ export function WorkspaceIdentity({ connected, configured, displayName, modeName
   const profileName = displayName?.trim() || "Streamer";
   const [open, setOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
+  const canConnectTwitch = configured || hasApiBaseUrl;
 
   useEffect(() => {
     if (!open) return;
@@ -60,13 +61,13 @@ export function WorkspaceIdentity({ connected, configured, displayName, modeName
               </header>
               <div className="workspace-profile-details">
                 <div><span>Current workspace</span><strong>{modeName}</strong></div>
-                <div><span>Twitch account</span><strong className={connected ? "connected" : ""}>{connected ? "Connected" : configured ? "Not connected" : "Setup needed"}</strong></div>
+                <div><span>Twitch account</span><strong className={connected ? "connected" : ""}>{connected ? "Connected" : canConnectTwitch ? "Not connected" : "Setup needed"}</strong></div>
               </div>
-              <p>{connected ? "Your Twitch display name and live chat are ready in this workspace." : configured ? "Connect Twitch to show your account name and receive live chat." : "Twitch setup is not available yet. You can keep using the local profile."}</p>
+              <p>{connected ? "Your Twitch display name and live chat are ready in this workspace." : canConnectTwitch ? "Connect Twitch to show your account name and receive live chat." : "Twitch setup is not available yet. You can keep using the local profile."}</p>
               <div className="workspace-profile-menu-actions">
-                <button disabled={!configured} onClick={() => window.location.assign(twitchAuthStartUrl(returnTo))} type="button">
+                <button disabled={!canConnectTwitch} onClick={() => window.location.assign(twitchAuthStartUrl(returnTo))} type="button">
                   <span className="material-symbols-outlined">link</span>
-                  {connected ? "Reconnect Twitch" : configured ? "Connect Twitch" : "Twitch setup needed"}
+                  {connected ? "Reconnect Twitch" : canConnectTwitch ? "Connect Twitch" : "Twitch setup needed"}
                 </button>
                 <button onClick={onModes} type="button">
                   <span className="material-symbols-outlined">apps</span>

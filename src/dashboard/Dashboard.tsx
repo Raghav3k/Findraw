@@ -278,18 +278,21 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   };
 
   const beginPrompt = async (prompt: CategoryPrompt) => {
+    activeRoundIdRef.current = null;
+    preparePrompt(prompt);
+    setRoundStatus("playing");
     if (!twitchSession.authenticated || twitchSession.eventSubStatus !== "connected") {
-      setConnectionNotice("Connect Twitch and wait for Chat live before starting a word.");
+      setConnectionNotice(twitchSession.configured
+        ? "Started locally. Connect Twitch when you want live chat guesses."
+        : "Started locally. Twitch backend setup is unavailable.");
       return;
     }
     try {
       const { roundId } = await startServerRound(prompt.answer, Math.max(1, Number(correctGuessTarget) || 1), prompt.aliases, testBotsEnabled);
       activeRoundIdRef.current = roundId;
-      preparePrompt(prompt);
-      setRoundStatus("playing");
       setConnectionNotice("");
     } catch (error) {
-      setConnectionNotice(error instanceof Error ? error.message : "Could not start the round.");
+      setConnectionNotice(error instanceof Error ? `Started locally. Live chat could not start: ${error.message}` : "Started locally. Live chat could not start.");
     }
   };
 

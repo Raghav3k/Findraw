@@ -15,6 +15,7 @@ import { usePersistentState } from "../ui/usePersistentState";
 import type { TwitchSession } from "../twitch/twitchApi";
 import { CategoryPickerWindow } from "../ui/CategoryPickerWindow";
 import { assetUrl } from "../assetUrls";
+import { hasApiBaseUrl } from "../apiUrls";
 
 type SupportTab = "categories" | "settings";
 
@@ -76,6 +77,7 @@ export function SupportPanel({
   const [chatSounds, setChatSounds] = usePersistentState("settings.chatSounds", false);
   const [confirmEnd, setConfirmEnd] = usePersistentState("settings.confirmEnd", true);
   const shortcutActions = Object.keys(shortcuts) as ShortcutAction[];
+  const canConnectTwitch = twitchSession.configured || hasApiBaseUrl;
 
   const selectedTokens = selectedCategoryId.split(",").filter(Boolean);
   const isCategoryOptionActive = (optionId: string) => {
@@ -156,7 +158,7 @@ export function SupportPanel({
           <div className="setting-row twitch-setting-row">
             <div className="twitch-setting-copy">
               <strong>Twitch chat</strong>
-              <p>{!twitchSession.configured
+              <p>{!canConnectTwitch
                 ? "Add your Twitch Client ID and Secret to the local .env file."
                 : twitchSession.authenticated
                   ? `Connected as ${twitchSession.user?.displayName ?? "streamer"}. Chat is ${twitchSession.eventSubStatus}.`
@@ -164,7 +166,7 @@ export function SupportPanel({
             </div>
             <button
               className={`twitch-connect-button ${twitchSession.authenticated ? "disconnect" : ""}`}
-              disabled={!twitchSession.configured}
+              disabled={!canConnectTwitch}
               onClick={twitchSession.authenticated ? onDisconnectTwitch : onConnectTwitch}
               type="button"
             >
