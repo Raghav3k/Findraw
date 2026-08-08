@@ -15,6 +15,7 @@ type StreamSourceSidebarProps = {
   displayName: string | null;
   messages: ChatMessage[];
   onModes: () => void;
+  onDisconnectTwitch?: () => void;
   roundActive: boolean;
   word: string;
   chatStatus: EventSubStatus;
@@ -22,7 +23,7 @@ type StreamSourceSidebarProps = {
   preparedCustomWord: string | null;
 };
 
-export function StreamSourceSidebar({ configured, connected, displayName, messages, onModes, roundActive, word, chatStatus, onUseCustomWord, preparedCustomWord }: StreamSourceSidebarProps) {
+export function StreamSourceSidebar({ configured, connected, displayName, messages, onModes, onDisconnectTwitch, roundActive, word, chatStatus, onUseCustomWord, preparedCustomWord }: StreamSourceSidebarProps) {
   const [customWord, setCustomWord] = useState("");
   const [customWordError, setCustomWordError] = useState("");
   const [showAssetImage, setShowAssetImage] = useState(false);
@@ -57,7 +58,7 @@ export function StreamSourceSidebar({ configured, connected, displayName, messag
 
   return (
     <aside className="stream-sidebar" aria-label="Stream sources">
-      <WorkspaceIdentity connected={connected} configured={configured} displayName={displayName} modeName="Artist Mode" onModes={onModes} returnTo="/draw" subtitle="Artist sketchbook" />
+      <WorkspaceIdentity connected={connected} configured={configured} displayName={displayName} onDisconnectTwitch={onDisconnectTwitch} onModes={onModes} returnTo="/draw" subtitle="Artist sketchbook" />
 
       <section className="source-card camera-source-card">
         <header className="source-card-header">

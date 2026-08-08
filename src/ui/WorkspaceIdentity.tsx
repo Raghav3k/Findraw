@@ -5,13 +5,13 @@ type WorkspaceIdentityProps = {
   connected: boolean;
   configured: boolean;
   displayName: string | null;
-  modeName: string;
   onModes: () => void;
+  onDisconnectTwitch?: () => void;
   returnTo: string;
   subtitle: string;
 };
 
-export function WorkspaceIdentity({ connected, configured, displayName, modeName, onModes, returnTo, subtitle }: WorkspaceIdentityProps) {
+export function WorkspaceIdentity({ connected, configured, displayName, onModes, onDisconnectTwitch, returnTo, subtitle }: WorkspaceIdentityProps) {
   const profileName = displayName?.trim() || "Streamer";
   const [open, setOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
@@ -59,19 +59,20 @@ export function WorkspaceIdentity({ connected, configured, displayName, modeName
                 </button>
               </header>
               <div className="workspace-profile-details">
-                <div><span>Current workspace</span><strong>{modeName}</strong></div>
                 <div><span>Twitch account</span><strong className={connected ? "connected" : ""}>{connected ? "Connected" : configured ? "Not connected" : "Setup unknown"}</strong></div>
               </div>
               <p>{connected ? "Your Twitch display name and live chat are ready in this workspace." : "Connect Twitch to show your account name and receive live chat."}</p>
               <div className="workspace-profile-menu-actions">
                 <button onClick={() => window.location.assign(twitchAuthStartUrl(returnTo))} type="button">
                   <span className="material-symbols-outlined">link</span>
-                  {connected ? "Reconnect Twitch" : "Connect Twitch"}
+                  {connected ? "Switch Twitch Account" : "Connect Twitch"}
                 </button>
-                <button onClick={onModes} type="button">
-                  <span className="material-symbols-outlined">apps</span>
-                  Browse game modes
-                </button>
+                {connected && onDisconnectTwitch ? (
+                  <button className="disconnect" onClick={onDisconnectTwitch} type="button">
+                    <span className="material-symbols-outlined">link_off</span>
+                    Log Out Twitch
+                  </button>
+                ) : null}
               </div>
             </section>
           ) : null}

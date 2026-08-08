@@ -12068,13 +12068,19 @@ body.resizing-panels .layout-resizer::after {
 }
 
 .workspace-profile-menu {
-  z-index: 2000;
+  background: #fff2cf;
+  z-index: 5000;
 }
 
 @media (min-width: 901px) {
   .workspace-profile-menu {
-    left: 168px;
+    left: 28px;
     position: fixed;
     top: 72px;
+    width: min(330px, calc(var(--source-rail-width, 380px) - 56px));
   }
+}
+
+.workspace-profile-menu-actions button.disconnect {
+  background: #f2d98b;
 }

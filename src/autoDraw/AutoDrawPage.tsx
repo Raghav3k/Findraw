@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import {
+  disconnectTwitch,
   endServerRound,
   fetchTwitchSession,
   twitchEventsUrl,
@@ -91,6 +92,19 @@ export function AutoDrawPage({ onNavigate }: Props) {
     if (!activeRoundId.current) return;
     activeRoundId.current = null;
     try { await endServerRound(); } catch { /* Local play remains available. */ }
+  };
+
+  const disconnectFromTwitch = async () => {
+    await closeLiveRound();
+    try {
+      await disconnectTwitch();
+      setTwitchSession(await fetchTwitchSession());
+      setChatMessages([]);
+      setSolvers([]);
+      setNotice("Twitch disconnected. Drawing locally is still available.");
+    } catch {
+      setNotice("Could not disconnect Twitch.");
+    }
   };
 
   useEffect(() => {
@@ -424,7 +438,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
   return (
     <div className="dashboard-layout auto-draw-page auto-workspace" style={{ "--source-rail-width": `${sourceRailWidth}px`, "--side-panel-width": `${sidePanelWidth}px` } as CSSProperties}>
       <aside className="stream-sidebar auto-stream-sidebar" aria-label="Stream sources">
-        <WorkspaceIdentity connected={twitchSession.authenticated} configured={twitchSession.configured} displayName={twitchSession.user?.displayName ?? null} modeName="Auto Draw" onModes={() => onNavigate("/")} returnTo="/auto-draw" subtitle="Auto Draw sketchbook" />
+        <WorkspaceIdentity connected={twitchSession.authenticated} configured={twitchSession.configured} displayName={twitchSession.user?.displayName ?? null} onDisconnectTwitch={() => void disconnectFromTwitch()} onModes={() => onNavigate("/")} returnTo="/auto-draw" subtitle="Auto Draw sketchbook" />
         <section className="source-card camera-source-card">
           <header className="source-card-header"><div><span className="source-eyebrow">Camera frame</span><h2>Streamer camera</h2></div><span className="source-status ready"><i/>OBS</span></header>
           <div className="camera-preview auto-camera-preview"><span className="material-symbols-outlined">videocam</span><strong>Camera window</strong><small>Place your camera source over this frame in OBS.</small></div>

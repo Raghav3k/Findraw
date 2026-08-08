@@ -430,7 +430,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         </div>
       </header>
 
-      <StreamSourceSidebar chatStatus={twitchSession.eventSubStatus} configured={twitchSession.configured} connected={twitchSession.authenticated} displayName={twitchSession.user?.displayName ?? null} messages={chatMessages} onModes={() => onNavigate("/")} onUseCustomWord={useCustomWord} preparedCustomWord={currentPrompt.categoryId === "custom" ? currentPrompt.answer : null} roundActive={roundActive} word={currentPrompt.answer} />
+      <StreamSourceSidebar chatStatus={twitchSession.eventSubStatus} configured={twitchSession.configured} connected={twitchSession.authenticated} displayName={twitchSession.user?.displayName ?? null} messages={chatMessages} onDisconnectTwitch={() => void disconnectFromTwitch()} onModes={() => onNavigate("/")} onUseCustomWord={useCustomWord} preparedCustomWord={currentPrompt.categoryId === "custom" ? currentPrompt.answer : null} roundActive={roundActive} word={currentPrompt.answer} />
       <div aria-label="Resize source panel" className="layout-resizer source-rail-resizer" onPointerDown={(event) => startResize("source", event)} role="separator" />
 
       <main className="dashboard-shell">
