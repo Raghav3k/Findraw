@@ -281,6 +281,7 @@ app.get("/auth/twitch/start", (request, response) => {
   const state = crypto.randomBytes(24).toString("hex");
   const requestedReturnTo = String(request.query.returnTo || "");
   const returnTo = ["/auto-draw", "/draw"].includes(requestedReturnTo) ? requestedReturnTo : "/draw";
+  const forceVerify = request.query.forceVerify === "1" || request.query.forceVerify === "true";
   oauthStates.set(state, { expiresAt: Date.now() + 10 * 60 * 1000, returnTo });
   for (const [key, entry] of oauthStates) {
     if (entry.expiresAt < Date.now()) oauthStates.delete(key);
@@ -293,6 +294,7 @@ app.get("/auth/twitch/start", (request, response) => {
     redirect_uri: twitchRedirectUri,
     scope: twitchScopes.join(" "),
     state,
+    ...(forceVerify ? { force_verify: "true" } : {}),
   });
   response.redirect(url.toString());
 });

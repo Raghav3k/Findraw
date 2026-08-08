@@ -11,7 +11,10 @@ export function apiUrl(path: string): string {
   return `${API_BASE_URL}/${path.replace(/^\/+/, "")}`;
 }
 
-export function twitchAuthStartUrl(returnTo?: string): string {
-  const query = returnTo ? `?returnTo=${encodeURIComponent(returnTo)}` : "";
+export function twitchAuthStartUrl(returnTo?: string, options: { forceVerify?: boolean } = {}): string {
+  const params = new URLSearchParams();
+  if (returnTo) params.set("returnTo", returnTo);
+  if (options.forceVerify) params.set("forceVerify", "1");
+  const query = params.toString() ? `?${params.toString()}` : "";
   return apiUrl(`/auth/twitch/start${query}`);
 }
