@@ -1,5 +1,17 @@
 import { spawnSync } from "node:child_process";
 
+const assetBaseUrl = (process.env.VITE_ASSET_BASE_URL || "").trim();
+
+if (!assetBaseUrl) {
+  console.error("Missing VITE_ASSET_BASE_URL. Cloudflare Pages builds skip the local public/ assets, so production needs the R2 Public Development URL.");
+  process.exit(1);
+}
+
+if (assetBaseUrl.includes("cloudflarestorage.com")) {
+  console.error("VITE_ASSET_BASE_URL must be the R2 Public Development URL, not the S3 API cloudflarestorage.com URL.");
+  process.exit(1);
+}
+
 const run = (command, args, options = {}) => {
   const result = spawnSync(command, args, {
     stdio: "inherit",

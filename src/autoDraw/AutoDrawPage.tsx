@@ -30,12 +30,12 @@ const normalize = (value: string) => value.trim().toLowerCase().replace(/[^a-z0-
 const categories = [...new Set(AUTO_DRAW_ASSETS.map(({ category }) => category))];
 
 const categoryArtwork = (selection: string) => {
-  const value = selection.toLowerCase();
+  const value = selection.toLowerCase().replace(/^game:/, "");
   if (value.includes("valorant")) return assetUrl("/category-art/valorant-sketch.webp");
   if (value.includes("deadlock")) return assetUrl("/category-art/deadlock-sketch.webp");
-  if (value.includes("rainbow")) return assetUrl("/category-art/rainbow-six-siege-sketch.webp");
-  if (value.includes("clash of clans")) return assetUrl("/category-art/clash-of-clans-sketch.webp");
-  if (value.includes("clash royale")) return assetUrl("/category-art/clash-royale-sketch.webp");
+  if (value.includes("rainbow-six-siege") || value.includes("rainbow six")) return assetUrl("/category-art/rainbow-six-siege-sketch.webp");
+  if (value.includes("clash-of-clans") || value.includes("clash of clans")) return assetUrl("/category-art/clash-of-clans-sketch.webp");
+  if (value.includes("clash-royale") || value.includes("clash royale")) return assetUrl("/category-art/clash-royale-sketch.webp");
   if (value.includes("fortnite")) return assetUrl("/category-art/fortnite-sketch.webp");
   if (value.includes("minecraft")) return assetUrl("/category-art/minecraft-sketch.webp");
   return assetUrl("/category-art/random.jpg");
@@ -516,7 +516,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
                     onChange={chooseCategory}
                     onReset={resetMixCategories}
                     onSelectAll={selectAllCategories}
-                    selectedArtwork={assetUrl("/category-art/random.jpg")}
+                    selectedArtwork={selectedArtwork}
                     selectedId={selectedCategory}
                     selectedKicker={selectedKickerText}
                     selectedLabels={selectedLabels}

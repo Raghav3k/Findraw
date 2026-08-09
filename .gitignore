@@ -6,5 +6,6 @@ public
 .env
 .findraw-data
 .tmp
+.wrangler
 _edit_work
 *.log

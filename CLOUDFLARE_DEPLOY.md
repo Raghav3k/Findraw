@@ -17,11 +17,13 @@ Cloudflare Pages injects `CF_PAGES=1`; the Vite config also respects `FINDRAW_SK
 
 ## Assets
 
-The app supports an optional external asset origin:
+The app requires an external asset origin for Cloudflare Pages because the build skips the large local `public/` folder:
 
-- `VITE_ASSET_BASE_URL=https://your-asset-host.example.com`
+- `VITE_ASSET_BASE_URL=https://pub-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.r2.dev`
 
-If this value is empty, asset URLs stay relative, which is best for local development. For production without committing `public/`, upload the `public/auto-draw` and `public/category-art` contents to Cloudflare R2, a CDN bucket, or another static asset host, then set `VITE_ASSET_BASE_URL` to that origin.
+Use the R2 bucket **Public Development URL** or a custom public domain. Do not use the S3 API URL ending in `r2.cloudflarestorage.com/findraw-assets`; browsers cannot load public images from that private API endpoint.
+
+If this value is empty locally, asset URLs stay relative, which is best for local development. For production without committing `public/`, upload the `public/auto-draw` and `public/category-art` contents to Cloudflare R2, a CDN bucket, or another static asset host, then set `VITE_ASSET_BASE_URL` to that public origin.
 
 ## Twitch backend
 
