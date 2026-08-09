@@ -11,6 +11,13 @@ export function apiUrl(path: string): string {
   return `${API_BASE_URL}/${path.replace(/^\/+/, "")}`;
 }
 
+export function apiWebSocketUrl(path: string): string | null {
+  if (!API_BASE_URL) return null;
+  const url = new URL(apiUrl(path));
+  url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
+  return url.toString();
+}
+
 export function twitchAuthStartUrl(returnTo?: string): string {
   const query = returnTo ? `?returnTo=${encodeURIComponent(returnTo)}` : "";
   return apiUrl(`/auth/twitch/start${query}`);

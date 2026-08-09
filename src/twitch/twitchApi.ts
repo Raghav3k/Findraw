@@ -1,4 +1,4 @@
-import { apiUrl } from "../apiUrls";
+import { apiUrl, apiWebSocketUrl } from "../apiUrls";
 
 export type EventSubStatus = "disconnected" | "connecting" | "connected" | "reconnecting" | "revoked";
 
@@ -39,7 +39,42 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
 }
 
 export const twitchEventsUrl = () => apiUrl("/api/events");
+export function connectLiveEvents(
+  onEvent: (event: LiveEvent) => void,
+  onDisconnect?: () => void
+): () => void {
+  const webSocketUrl = apiWebSocketUrl("/api/live");
+  if (!webSocketUrl) {
+    const events = new EventSource(twitchEventsUrl());
+    events.onmessage = (message) => onEvent(JSON.parse(message.data) as LiveEvent);
+    events.onerror = () => onDisconnect?.();
+    return () => events.close();
+  }
+
+  let stopped = false;
+  let socket: WebSocket | null = null;
+  let reconnectTimer: number | null = null;
+
+  const connect = () => {
+    socket = new WebSocket(webSocketUrl);
+    socket.onmessage = (message) => onEvent(JSON.parse(String(message.data)) as LiveEvent);
+    socket.onerror = () => socket?.close();
+    socket.onclose = () => {
+      if (stopped) return;
+      onDisconnect?.();
+      reconnectTimer = window.setTimeout(connect, 2000);
+    };
+  };
+
+  connect();
+  return () => {
+    stopped = true;
+    if (reconnectTimer !== null) window.clearTimeout(reconnectTimer);
+    socket?.close();
+  };
+}
 export const fetchTwitchSession = () => request<TwitchSession>("/api/twitch/session");
+export const reconnectTwitchChat = () => request<TwitchSession>("/api/twitch/reconnect", { method: "POST" });
 export const fetchLeaderboard = async () => {
   const result = await request<LeaderboardEntry[]>("/api/leaderboard");
   return Array.isArray(result) ? result : [];

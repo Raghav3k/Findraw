@@ -3,7 +3,7 @@ import {
   disconnectTwitch,
   endServerRound,
   fetchTwitchSession,
-  twitchEventsUrl,
+  connectLiveEvents,
   startServerRound,
   type LiveChatMessage,
   type LiveEvent,
@@ -110,9 +110,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
   useEffect(() => {
     let mounted = true;
     fetchTwitchSession().then((session) => { if (mounted) setTwitchSession(session); }).catch(() => undefined);
-    const events = new EventSource(twitchEventsUrl());
-    events.onmessage = (message) => {
-      const event = JSON.parse(message.data) as LiveEvent;
+    const disconnectLiveEvents = connectLiveEvents((event) => {
       if (event.type === "twitch-session") setTwitchSession(event.payload);
       if (event.type === "chat-message") setChatMessages((current) => [...current.slice(-20), event.payload]);
       if (event.type === "correct-guess" && event.payload.roundId === activeRoundId.current) {
@@ -125,9 +123,8 @@ export function AutoDrawPage({ onNavigate }: Props) {
         setStatus("complete");
         setNotice(`${event.payload.solver.name} solved it in chat.`);
       }
-    };
-    events.onerror = () => setTwitchSession((current) => current.authenticated ? { ...current, eventSubStatus: "reconnecting" } : current);
-    return () => { mounted = false; events.close(); if (activeRoundId.current) void closeLiveRound(); };
+    }, () => setTwitchSession((current) => current.authenticated ? { ...current, eventSubStatus: "reconnecting" } : current));
+    return () => { mounted = false; disconnectLiveEvents(); if (activeRoundId.current) void closeLiveRound(); };
   }, []);
 
   useEffect(() => {

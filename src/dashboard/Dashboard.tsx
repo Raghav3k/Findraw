@@ -21,7 +21,7 @@ import {
   endServerRound,
   fetchLeaderboard,
   fetchTwitchSession,
-  twitchEventsUrl,
+  connectLiveEvents,
   startServerRound,
   type LeaderboardEntry,
   type LiveEvent,
@@ -231,9 +231,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         if (active) setConnectionNotice(`Local server unavailable: ${error.message}`);
       });
 
-    const events = new EventSource(twitchEventsUrl());
-    events.onmessage = (message) => {
-      const event = JSON.parse(message.data) as LiveEvent;
+    const disconnectLiveEvents = connectLiveEvents((event) => {
       if (event.type === "twitch-session") setTwitchSession(event.payload);
       if (event.type === "chat-message") {
         setChatMessages((current) => [...current.slice(-49), event.payload]);
@@ -248,15 +246,14 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       if (event.type === "round-ended" && event.payload.roundId === activeRoundIdRef.current) {
         setRoundStatus("ended");
       }
-    };
-    events.onerror = () => {
+    }, () => {
       setTwitchSession((current) => current.authenticated
         ? { ...current, eventSubStatus: "reconnecting" }
         : current);
-    };
+    });
     return () => {
       active = false;
-      events.close();
+      disconnectLiveEvents();
     };
   }, []);
 

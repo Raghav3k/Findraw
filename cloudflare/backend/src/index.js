@@ -77,8 +77,14 @@ export class FindrawSession {
     this.state = state;
     this.env = env;
     this.sseClients = new Set();
+    this.wsClients = new Set();
     this.eventSubSocket = null;
     this.eventSubStatus = "disconnected";
+    this.eventSubSessionId = null;
+    this.lastEventSubMessageAt = null;
+    this.lastChatMessageAt = null;
+    this.lastEventSubClose = null;
+    this.lastError = null;
     this.keepaliveTimer = null;
     this.reconnectTimer = null;
     this.processedMessageIds = new Set();
@@ -118,6 +124,9 @@ export class FindrawSession {
       if (url.pathname === "/auth/twitch/callback") return this.finishTwitchAuth(request, url);
       if (url.pathname === "/api/twitch/session") return json(this.sessionSummary(), { request });
       if (url.pathname === "/api/twitch/disconnect" && request.method === "POST") return this.disconnectTwitch(request);
+      if (url.pathname === "/api/twitch/reconnect" && request.method === "POST") return this.reconnectTwitch(request);
+      if (url.pathname === "/api/twitch/debug") return json(this.debugSummary(), { request });
+      if (url.pathname === "/api/live") return this.liveSocket(request);
       if (url.pathname === "/api/events") return this.events(request);
       if (url.pathname === "/api/leaderboard") return json(await this.getLeaderboard(), { request });
       if (url.pathname === "/api/round/start" && request.method === "POST") return this.startRound(request);
@@ -148,6 +157,14 @@ export class FindrawSession {
     for (const writer of [...this.sseClients]) {
       writer.write(chunk).catch(() => this.sseClients.delete(writer));
     }
+    const payload = JSON.stringify(event);
+    for (const socket of [...this.wsClients]) {
+      try {
+        socket.send(payload);
+      } catch {
+        this.wsClients.delete(socket);
+      }
+    }
   }
 
   publishSession() {
@@ -157,6 +174,41 @@ export class FindrawSession {
   setEventSubStatus(status) {
     this.eventSubStatus = status;
     this.publishSession();
+  }
+
+  rememberError(error) {
+    this.lastError = {
+      message: error?.message || String(error),
+      at: new Date().toISOString(),
+    };
+  }
+
+  debugSummary() {
+    return {
+      configured: this.configured(),
+      authenticated: Boolean(this.twitchSession),
+      eventSubStatus: this.eventSubStatus,
+      eventSubSessionId: this.eventSubSessionId,
+      lastEventSubMessageAt: this.lastEventSubMessageAt,
+      lastChatMessageAt: this.lastChatMessageAt,
+      lastEventSubClose: this.lastEventSubClose,
+      lastError: this.lastError,
+      currentRound: this.currentRound ? {
+        id: this.currentRound.id,
+        status: this.currentRound.status,
+        answer: this.currentRound.answer,
+        target: this.currentRound.target,
+        solvers: this.currentRound.solvers.length,
+      } : null,
+      liveClients: this.sseClients.size + this.wsClients.size,
+      sseClients: this.sseClients.size,
+      webSocketClients: this.wsClients.size,
+      user: this.twitchSession ? {
+        id: this.twitchSession.userId,
+        login: this.twitchSession.login,
+        displayName: this.twitchSession.displayName,
+      } : null,
+    };
   }
 
   clearEventSubTimers() {
@@ -233,7 +285,7 @@ export class FindrawSession {
 
   async subscribeToChat(sessionId) {
     const session = await this.validSession();
-    await twitchFetch("https://api.twitch.tv/helix/eventsub/subscriptions", {
+    return twitchFetch("https://api.twitch.tv/helix/eventsub/subscriptions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${session.accessToken}`,
@@ -256,6 +308,7 @@ export class FindrawSession {
     if (!this.twitchSession) return;
     this.clearEventSubTimers();
     try { this.eventSubSocket?.close(); } catch {}
+    this.eventSubSessionId = null;
     this.setEventSubStatus("connecting");
 
     const socket = new WebSocket(url);
@@ -263,23 +316,33 @@ export class FindrawSession {
     socket.addEventListener("message", (event) => {
       this.handleEventSubMessage(event.data, shouldSubscribe).catch((error) => {
         console.error("EventSub message failed", error.message);
+        this.rememberError(error);
       });
     });
-    socket.addEventListener("close", () => {
+    socket.addEventListener("close", (event) => {
       if (this.eventSubSocket !== socket || !this.twitchSession) return;
+      this.lastEventSubClose = {
+        code: event.code,
+        reason: event.reason || "",
+        wasClean: event.wasClean,
+        at: new Date().toISOString(),
+      };
       this.setEventSubStatus("reconnecting");
       this.reconnectTimer = setTimeout(() => this.connectEventSub().catch(console.error), 3000);
     });
-    socket.addEventListener("error", () => {
+    socket.addEventListener("error", (event) => {
       console.error("EventSub socket error");
+      this.rememberError({ message: `EventSub socket error (${event.type})` });
     });
   }
 
   async handleEventSubMessage(data, shouldSubscribe) {
     const raw = typeof data === "string" ? data : await new Response(data).text();
     const envelope = JSON.parse(raw);
+    this.lastEventSubMessageAt = new Date().toISOString();
     const messageType = envelope.metadata?.message_type;
     if (messageType === "session_welcome") {
+      this.eventSubSessionId = envelope.payload.session.id;
       this.scheduleKeepaliveDeadline(envelope.payload.session.keepalive_timeout_seconds);
       if (shouldSubscribe) await this.subscribeToChat(envelope.payload.session.id);
       this.setEventSubStatus("connected");
@@ -301,6 +364,7 @@ export class FindrawSession {
       this.scheduleKeepaliveDeadline();
       if (!this.rememberMessage(envelope.metadata.message_id)) return;
       if (envelope.payload.subscription.type === "channel.chat.message") {
+        this.lastChatMessageAt = new Date().toISOString();
         await this.processChatMessage(envelope.payload.event);
       }
     }
@@ -429,6 +493,33 @@ export class FindrawSession {
     await this.state.storage.delete("currentRound");
     this.setEventSubStatus("disconnected");
     return json({ ok: true }, { request });
+  }
+
+  async reconnectTwitch(request) {
+    if (!this.twitchSession) return json(this.sessionSummary(), { request });
+    try {
+      await this.validSession();
+      await this.connectEventSub();
+      return json(this.sessionSummary(), { request });
+    } catch (error) {
+      this.rememberError(error);
+      this.setEventSubStatus("disconnected");
+      return json({ error: error.message || "Could not reconnect Twitch chat." }, { status: 500, request });
+    }
+  }
+
+  liveSocket(request) {
+    if (request.headers.get("Upgrade") !== "websocket") {
+      return json({ error: "Expected websocket upgrade." }, { status: 426, request });
+    }
+    const pair = new WebSocketPair();
+    const [client, server] = Object.values(pair);
+    server.accept();
+    this.wsClients.add(server);
+    server.send(JSON.stringify({ type: "twitch-session", payload: this.sessionSummary() }));
+    server.addEventListener("close", () => this.wsClients.delete(server));
+    server.addEventListener("error", () => this.wsClients.delete(server));
+    return new Response(null, { status: 101, webSocket: client });
   }
 
   events(request) {
