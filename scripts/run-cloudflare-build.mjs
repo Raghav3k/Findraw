@@ -1,4 +1,7 @@
 import { spawnSync } from "node:child_process";
+import { config } from "dotenv";
+
+config({ path: ".env.production" });
 
 const assetBaseUrl = (process.env.VITE_ASSET_BASE_URL || "").trim();
 

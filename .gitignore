@@ -4,6 +4,8 @@ public
 .pnpm-store
 .DS_Store
 .env
+.env.local
+.env.*.local
 .findraw-data
 .tmp
 .wrangler
