@@ -24,7 +24,6 @@ import {
   connectLiveEvents,
   startServerRound,
   type LeaderboardEntry,
-  type LiveEvent,
   type SolvedViewer,
   type TwitchSession,
 } from "../twitch/twitchApi";
@@ -34,6 +33,8 @@ import {
   RANDOM_CATEGORY,
   getPromptKey,
   pickNextPrompt,
+  removeCategorySelectionChip,
+  toggleCategorySelectionOption,
   type CategoryPrompt,
   type CategorySelection,
 } from "./gameData";
@@ -312,15 +313,27 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       return;
     }
     
-    const currentTokens = selectedCategoryId === "random" ? [] : selectedCategoryId.split(",").filter(Boolean);
-    const newTokens = currentTokens.includes(categoryId)
-      ? currentTokens.filter((id) => id !== categoryId)
-      : [...currentTokens, categoryId];
-      
-    const nextSelection = newTokens.length > 0 ? newTokens.join(",") : "random";
+    const nextSelection = toggleCategorySelectionOption(selectedCategoryId, categoryId, "artist", "random");
     setSelectedCategoryId(nextSelection);
     if (!roundActive) {
       preparePrompt(chooseNextPrompt(nextSelection));
+      setRoundStatus("idle");
+    }
+  };
+
+  const removeCategoryChip = (chipId: string) => {
+    const nextSelection = removeCategorySelectionChip(selectedCategoryId, chipId, "artist", "random");
+    setSelectedCategoryId(nextSelection);
+    if (!roundActive) {
+      preparePrompt(chooseNextPrompt(nextSelection));
+      setRoundStatus("idle");
+    }
+  };
+
+  const applyCategorySelection = (selectionId: CategorySelection) => {
+    setSelectedCategoryId(selectionId);
+    if (!roundActive) {
+      preparePrompt(chooseNextPrompt(selectionId || "all"));
       setRoundStatus("idle");
     }
   };
@@ -521,8 +534,9 @@ export function Dashboard({ onNavigate }: DashboardProps) {
 
           <aside className="side-column" aria-label="Live game data">
             <SupportPanel
-              currentCategoryId={currentPrompt.categoryId}
               onCategoryChange={selectCategory}
+              onCategoryChipRemove={removeCategoryChip}
+              onCategorySelectionApply={applyCategorySelection}
               onSelectAll={selectAllCategories}
               onResetCategories={resetMixCategories}
               randomCategory={RANDOM_CATEGORY}

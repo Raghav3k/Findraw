@@ -7,9 +7,17 @@ compatibility_flags = ["nodejs_compat"]
 name = "FINDRAW_SESSION"
 class_name = "FindrawSession"
 
+[[durable_objects.bindings]]
+name = "FINDRAW_ROOM"
+class_name = "FindrawRoom"
+
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["FindrawSession"]
+
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["FindrawRoom"]
 
 [vars]
 FRONTEND_URL = "https://findraw.pages.dev"

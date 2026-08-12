@@ -5,37 +5,28 @@ import {
   type ShortcutAction,
 } from "./keyboardShortcuts";
 import {
+  getActiveSelectionChips,
   getCategory,
-  UNIFIED_DOMAINS,
-  GAME_TITLES,
+  getCategoryDomains,
+  getSelectionTokens,
+  isCategorySelectionOptionActive,
   type CategorySelection,
   type WordCategory,
 } from "./gameData";
 import { usePersistentState } from "../ui/usePersistentState";
 import type { TwitchSession } from "../twitch/twitchApi";
 import { CategoryPickerWindow } from "../ui/CategoryPickerWindow";
-import { assetUrl } from "../assetUrls";
+import { CategorySelectionTools } from "./CategorySelectionTools";
 
 type SupportTab = "categories" | "settings";
 
-const SKETCHED_GAME_CATEGORIES = new Set([
-  "clash-of-clans",
-  "clash-royale",
-  "deadlock",
-  "fortnite",
-  "minecraft",
-  "rainbow-six-siege",
-  "valorant",
-]);
-
-
-
 type SupportPanelProps = {
-  currentCategoryId: string;
   selectedCategoryId: CategorySelection;
   randomCategory: WordCategory;
   roundActive: boolean;
   onCategoryChange: (categoryId: string) => void;
+  onCategoryChipRemove: (chipId: string) => void;
+  onCategorySelectionApply: (selectionId: CategorySelection) => void;
   onSelectAll: () => void;
   onResetCategories: () => void;
   hoverMenuDelay: number;
@@ -52,11 +43,12 @@ type SupportPanelProps = {
 };
 
 export function SupportPanel({
-  currentCategoryId,
   selectedCategoryId,
   randomCategory,
   roundActive,
   onCategoryChange,
+  onCategoryChipRemove,
+  onCategorySelectionApply,
   onSelectAll,
   onResetCategories,
   hoverMenuDelay,
@@ -77,22 +69,14 @@ export function SupportPanel({
   const [confirmEnd, setConfirmEnd] = usePersistentState("settings.confirmEnd", true);
   const shortcutActions = Object.keys(shortcuts) as ShortcutAction[];
 
-  const selectedTokens = selectedCategoryId.split(",").filter(Boolean);
-  const isCategoryOptionActive = (optionId: string) => {
-    if (selectedCategoryId === "random") return optionId === "random";
-    if (selectedTokens.includes(optionId)) return true;
-    if (optionId === "all" && selectedTokens.includes("all")) return true;
-    if (optionId.startsWith("game:") && selectedTokens.includes(optionId)) return true;
-    return false;
-  };
-
+  const selectedTokens = getSelectionTokens(selectedCategoryId);
+  const isCategoryOptionActive = (optionId: string) => (
+    isCategorySelectionOptionActive(selectedCategoryId, optionId, "artist")
+  );
   const selectedCategory = selectedCategoryId === "random" || selectedTokens.length > 1
     ? randomCategory
     : getCategory(selectedCategoryId) ?? randomCategory;
-  const currentCategory = getCategory(currentCategoryId);
-  const selectedCategoryArtwork = selectedCategory.id === "random" || selectedTokens.length > 1
-    ? assetUrl("/category-art/random.jpg")
-    : assetUrl(`/category-art/${selectedCategory.id.replace("game:", "")}.jpg`);
+  const activeSelectionChips = getActiveSelectionChips(selectedCategoryId, "artist");
 
   return (
     <section className="feed-card support-card">
@@ -109,17 +93,19 @@ export function SupportPanel({
         <div className="support-panel-content category-panel" role="tabpanel">
           <div className="active-categories-panel">
             <CategoryPickerWindow
+              currentSelection={selectedCategoryId}
               disabled={roundActive}
-              domains={UNIFIED_DOMAINS}
+              domains={getCategoryDomains("artist")}
               isOptionActive={isCategoryOptionActive}
-              label="All categories"
               lockedNote="Finish or end the current word to change decks."
+              onApplySelection={(selectionId) => onCategorySelectionApply(selectionId as CategorySelection)}
               onChange={(categoryId) => onCategoryChange(categoryId as CategorySelection)}
+              onRemoveChip={onCategoryChipRemove}
               onReset={onResetCategories}
               onSelectAll={onSelectAll}
+              profileStorageKey="artist"
               selectedId={selectedTokens.length === 1 ? selectedTokens[0] : selectedTokens.length === 0 ? "empty" : ""}
-              selectedArtwork={selectedCategoryArtwork}
-              selectedKicker={`Round deck`}
+              selectedChips={activeSelectionChips}
               selectedOption={{
                 id: selectedTokens.length === 0 ? "empty" : (selectedCategory?.id ?? "custom"),
                 label: selectedTokens.length === 0 ? "No Decks Selected" : selectedTokens.length > 1 ? `${selectedTokens.length} Decks Selected` : (selectedCategory?.name ?? "Custom Mix"),
@@ -128,27 +114,12 @@ export function SupportPanel({
                 accent: selectedTokens.length === 0 ? "#e6a283" : (selectedCategory?.accent ?? "#83c5e6"),
               }}
             />
-            
-            <div className="category-preview-selection">
-              <span className="selection-title">Active Selection</span>
-              <div className="selection-chips scrollable" style={{ maxHeight: "150px", overflowY: "auto" }}>
-                {selectedTokens.length > 0 ? (
-                  selectedTokens.map((token, idx) => {
-                    let lbl = token;
-                    if (token === "all") lbl = "🎲 All Decks Shuffled";
-                    else if (token.startsWith("game:")) {
-                      const game = GAME_TITLES.find(g => g.id === token.slice(5));
-                      lbl = game ? `All ${game.label}` : token;
-                    } else {
-                      lbl = getCategory(token)?.name ?? token;
-                    }
-                    return <span className="chip" key={idx}>{lbl}</span>;
-                  })
-                ) : (
-                  <span className="chip empty" style={{ background: "#f2bcae", borderColor: "rgba(186, 75, 50, 0.4)" }}>No decks selected</span>
-                )}
-              </div>
-            </div>
+            <CategorySelectionTools
+              chips={activeSelectionChips}
+              disabled={roundActive}
+              mode="artist"
+              onRemoveChip={onCategoryChipRemove}
+            />
           </div>
         </div>
       ) : (
@@ -157,8 +128,8 @@ export function SupportPanel({
             <div className="twitch-setting-copy">
               <strong>Twitch chat</strong>
               <p>{twitchSession.authenticated
-                  ? `Connected as ${twitchSession.user?.displayName ?? "streamer"}. Chat is ${twitchSession.eventSubStatus}.`
-                  : "Connect the streamer's account to receive live guesses."}</p>
+                ? `Connected as ${twitchSession.user?.displayName ?? "streamer"}. Chat is ${twitchSession.eventSubStatus}.`
+                : "Connect the streamer's account to receive live guesses."}</p>
             </div>
             <button
               className={`twitch-connect-button ${twitchSession.authenticated ? "disconnect" : ""}`}

@@ -2,6 +2,7 @@
 import { AutoDrawPage } from "../autoDraw/AutoDrawPage";
 import { Dashboard } from "../dashboard/Dashboard";
 import { ModeHome } from "../home/ModeHome";
+import { RoomModePage } from "../room/RoomModePage";
 
 export function App() {
   const [path, setPath] = useState(() => window.location.pathname);
@@ -16,5 +17,6 @@ export function App() {
   const navigate = useCallback((next: string) => { window.history.pushState({}, "", next); setPath(next); window.scrollTo({ top: 0 }); }, []);
   if (path === "/draw") return <Dashboard onNavigate={navigate}/>;
   if (path === "/auto-draw") return <AutoDrawPage onNavigate={navigate}/>;
+  if (path === "/room") return <RoomModePage onNavigate={navigate}/>;
   return <ModeHome onNavigate={navigate}/>;
 }

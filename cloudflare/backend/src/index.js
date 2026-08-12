@@ -37,6 +37,315 @@ const pointsForPosition = (position) => {
   return 50;
 };
 
+const normalizeRoomCode = (value) => String(value || "").trim().toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6);
+const roomPromptKey = (prompt) => `${prompt.categoryId || "custom"}:${String(prompt.answer || "").toLowerCase()}`;
+const publicRoomState = (room) => ({
+  ...room,
+  answer: room.answer ? { ...room.answer, answer: null, aliases: [] } : null,
+});
+
+const sanitizePrompt = (prompt) => ({
+  answer: String(prompt?.answer || "").trim().slice(0, 80),
+  aliases: Array.isArray(prompt?.aliases) ? prompt.aliases.map((item) => String(item).trim().slice(0, 80)).filter(Boolean).slice(0, 8) : [],
+  categoryId: String(prompt?.categoryId || "custom").trim().slice(0, 80) || "custom",
+});
+
+const getNextRoomTurn = (room) => {
+  const playerCount = Math.max(1, room.players.length);
+  const totalTurns = playerCount * room.roundsPerPlayer;
+  const nextTurnIndex = room.turnIndex + 1;
+  if (nextTurnIndex >= totalTurns) return null;
+  return {
+    turnIndex: nextTurnIndex,
+    roundIndex: Math.floor(nextTurnIndex / playerCount),
+    drawerId: room.players[nextTurnIndex % playerCount]?.id || room.players[0]?.id || null,
+  };
+};
+
+const createEmptyRoomState = (code, host) => ({
+  code,
+  hostId: host.id,
+  players: [host],
+  phase: "lobby",
+  categorySelection: "all",
+  roundSeconds: 90,
+  choices: [],
+  answer: null,
+  drawerId: null,
+  turnIndex: 0,
+  roundIndex: 0,
+  roundsPerPlayer: 3,
+  endAt: null,
+  guesses: [],
+  solved: [],
+  recentPromptKeys: [],
+  drawingOperations: [],
+  updatedAt: Date.now(),
+});
+
+export class FindrawRoom {
+  constructor(state, env) {
+    this.state = state;
+    this.env = env;
+    this.clients = new Map();
+    this.room = null;
+    this.ready = this.restore();
+  }
+
+  async restore() {
+    this.room = await this.state.storage.get("room") || null;
+  }
+
+  async fetch(request) {
+    await this.ready;
+    if (request.method === "OPTIONS") return new Response(null, { headers: corsHeaders(request) });
+    const url = new URL(request.url);
+    if (url.pathname.endsWith("/live")) return this.liveSocket(request);
+    if (url.pathname.endsWith("/state")) return json({ room: this.room ? publicRoomState(this.room) : null }, { request });
+    return json({ error: "Room route not found" }, { status: 404, request });
+  }
+
+  liveSocket(request) {
+    if (request.headers.get("Upgrade") !== "websocket") {
+      return json({ error: "Expected websocket upgrade." }, { status: 426, request });
+    }
+    const pair = new WebSocketPair();
+    const [client, server] = Object.values(pair);
+    server.accept();
+    server.addEventListener("message", (event) => this.handleSocketMessage(server, event.data).catch((error) => {
+      try { server.send(JSON.stringify({ type: "error", error: error.message || "Room request failed" })); } catch {}
+    }));
+    server.addEventListener("close", () => this.disconnect(server));
+    server.addEventListener("error", () => this.disconnect(server));
+    server.send(JSON.stringify({ type: "hello", payload: { connected: true } }));
+    return new Response(null, { status: 101, webSocket: client });
+  }
+
+  async handleSocketMessage(socket, data) {
+    const message = JSON.parse(typeof data === "string" ? data : await new Response(data).text());
+    if (message.type === "join") return this.join(socket, message.payload || {});
+    const client = this.clients.get(socket);
+    if (!client || !this.room) return;
+    if (message.type === "select-categories") return this.hostOnly(client, () => this.updateSelection(message.payload));
+    if (message.type === "start-game") return this.hostOnly(client, () => this.startGame(message.payload));
+    if (message.type === "set-choices") return this.hostOnly(client, () => this.setChoices(message.payload));
+    if (message.type === "choose-word") return this.drawerOnly(client, () => this.chooseWord(message.payload));
+    if (message.type === "guess") return this.submitGuess(client, message.payload);
+    if (message.type === "drawing-sync") return this.drawerOnly(client, () => this.syncDrawing(message.payload));
+  }
+
+  async join(socket, payload) {
+    const code = normalizeRoomCode(payload.code);
+    const player = {
+      id: String(payload.clientId || "").slice(0, 80),
+      name: String(payload.name || "Player").trim().slice(0, 20) || "Player",
+      score: 0,
+      connectedAt: Date.now(),
+    };
+    if (!code || !player.id) throw new Error("Room code and player id are required.");
+    this.clients.set(socket, { id: player.id, name: player.name });
+    if (!this.room) this.room = createEmptyRoomState(code, player);
+    else {
+      this.room.players = this.room.players.some((item) => item.id === player.id)
+        ? this.room.players.map((item) => item.id === player.id ? { ...item, name: player.name } : item)
+        : [...this.room.players, player];
+      this.room.updatedAt = Date.now();
+    }
+    await this.save();
+    this.broadcastState();
+  }
+
+  disconnect(socket) {
+    this.clients.delete(socket);
+  }
+
+  async save() {
+    await this.state.storage.put("room", this.room);
+  }
+
+  hostOnly(client, action) {
+    if (client.id !== this.room.hostId) throw new Error("Only the party leader can do that.");
+    return action();
+  }
+
+  drawerOnly(client, action) {
+    if (client.id !== this.room.drawerId) throw new Error("Only the drawer can do that.");
+    return action();
+  }
+
+  async updateSelection(payload) {
+    if (this.room.phase !== "lobby") return;
+    this.room.categorySelection = String(payload?.selection || "all").slice(0, 600);
+    this.room.updatedAt = Date.now();
+    await this.save();
+    this.broadcastState();
+  }
+
+  async startGame(payload) {
+    if (!this.room || this.room.players.length < 2) return;
+    const drawerId = this.room.players[0]?.id || null;
+    this.room = {
+      ...this.room,
+      phase: "choosing",
+      drawerId,
+      turnIndex: 0,
+      roundIndex: 0,
+      roundsPerPlayer: 3,
+      answer: null,
+      choices: this.sanitizeChoices(payload?.choices),
+      guesses: [],
+      solved: [],
+      endAt: null,
+      drawingOperations: [],
+      players: this.room.players.map((player) => ({ ...player, score: 0 })),
+      updatedAt: Date.now(),
+    };
+    await this.state.storage.deleteAlarm();
+    await this.save();
+    this.broadcastState();
+  }
+
+  async setChoices(payload) {
+    if (!this.room || this.room.phase !== "choosing") return;
+    this.room.choices = this.sanitizeChoices(payload?.choices);
+    this.room.updatedAt = Date.now();
+    await this.save();
+    this.broadcastState();
+  }
+
+  sanitizeChoices(choices) {
+    return Array.isArray(choices) ? choices.map(sanitizePrompt).filter((item) => item.answer).slice(0, 3) : [];
+  }
+
+  async chooseWord(payload) {
+    if (this.room.phase !== "choosing") return;
+    const answer = sanitizePrompt(payload?.answer);
+    if (!answer.answer) return;
+    this.room = {
+      ...this.room,
+      phase: "drawing",
+      answer,
+      guesses: [],
+      solved: [],
+      endAt: Date.now() + this.room.roundSeconds * 1000,
+      drawingOperations: [],
+      recentPromptKeys: [...this.room.recentPromptKeys, roomPromptKey(answer)].slice(-32),
+      updatedAt: Date.now(),
+    };
+    await this.save();
+    await this.state.storage.setAlarm(this.room.endAt);
+    this.broadcastState();
+  }
+
+  async submitGuess(client, payload) {
+    if (this.room.phase !== "drawing" || !this.room.answer || client.id === this.room.drawerId) return;
+    const text = String(payload?.text || "").trim().slice(0, 80);
+    if (!text) return;
+    const aliases = [this.room.answer.answer, ...(this.room.answer.aliases || [])].map(normalizeGuess);
+    const correct = aliases.includes(normalizeGuess(text));
+    const alreadySolved = this.room.solved.some((item) => item.playerId === client.id);
+    const remainingRatio = this.room.endAt ? Math.max(0, this.room.endAt - Date.now()) / (this.room.roundSeconds * 1000) : 0;
+    const points = correct && !alreadySolved ? Math.round(100 + remainingRatio * 300) : 0;
+    const entry = {
+      id: crypto.randomUUID(),
+      playerId: client.id,
+      playerName: client.name,
+      text,
+      correct: correct && !alreadySolved,
+      createdAt: Date.now(),
+    };
+    const drawerBonus = correct && !alreadySolved ? 50 : 0;
+    this.room.guesses = [...this.room.guesses.slice(-30), entry];
+    if (correct && !alreadySolved) {
+      this.room.solved = [...this.room.solved, { playerId: client.id, playerName: client.name, points, solvedAt: Date.now() }];
+      this.room.players = this.room.players.map((player) => {
+        if (player.id === client.id) return { ...player, score: player.score + points };
+        if (player.id === this.room.drawerId) return { ...player, score: player.score + drawerBonus };
+        return player;
+      });
+    }
+    const guessers = this.room.players.filter((player) => player.id !== this.room.drawerId);
+    if (guessers.length > 0 && this.room.solved.length >= guessers.length) await this.finishTurn();
+    else {
+      this.room.updatedAt = Date.now();
+      await this.save();
+      this.broadcastState();
+    }
+  }
+
+  async syncDrawing(payload) {
+    if (this.room.phase !== "drawing") return;
+    const operations = Array.isArray(payload?.operations) ? payload.operations.slice(-600) : [];
+    this.room.drawingOperations = operations;
+    this.room.updatedAt = Date.now();
+    await this.save();
+    this.broadcastState();
+  }
+
+  async finishTurn() {
+    if (!this.room || this.room.phase !== "drawing") return;
+    this.room.phase = "results";
+    this.room.endAt = null;
+    this.room.updatedAt = Date.now();
+    await this.save();
+    await this.state.storage.setAlarm(Date.now() + 2500);
+    this.broadcastState();
+  }
+
+  async advanceTurn() {
+    if (!this.room) return;
+    const next = getNextRoomTurn(this.room);
+    if (!next) {
+      this.room = { ...this.room, phase: "finished", answer: null, choices: [], drawerId: null, endAt: null, drawingOperations: [], updatedAt: Date.now() };
+      await this.state.storage.deleteAlarm();
+      await this.save();
+      this.broadcastState();
+      return;
+    }
+    this.room = {
+      ...this.room,
+      phase: "choosing",
+      ...next,
+      answer: null,
+      choices: [],
+      guesses: [],
+      solved: [],
+      endAt: null,
+      drawingOperations: [],
+      updatedAt: Date.now(),
+    };
+    await this.state.storage.deleteAlarm();
+    await this.save();
+    this.broadcastState();
+  }
+
+  async alarm() {
+    await this.ready;
+    if (!this.room) return;
+    if (this.room.phase === "drawing") await this.finishTurn();
+    else if (this.room.phase === "results") await this.advanceTurn();
+  }
+
+  stateForClient(client) {
+    if (!this.room) return null;
+    const state = client?.id === this.room.drawerId ? this.room : publicRoomState(this.room);
+    return {
+      ...state,
+      drawingOperations: this.room.drawingOperations || [],
+    };
+  }
+
+  broadcastState() {
+    for (const [socket, client] of [...this.clients.entries()]) {
+      try {
+        socket.send(JSON.stringify({ type: "room-state", payload: this.stateForClient(client) }));
+      } catch {
+        this.clients.delete(socket);
+      }
+    }
+  }
+}
+
 const base64Url = (bytes) => btoa(String.fromCharCode(...bytes)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 const randomToken = (bytes = 24) => {
   const data = new Uint8Array(bytes);
@@ -630,6 +939,12 @@ export class FindrawSession {
 
 export default {
   async fetch(request, env) {
+    const url = new URL(request.url);
+    const roomMatch = url.pathname.match(/^\/api\/room\/([A-Za-z0-9]{1,6})\/(live|state)$/);
+    if (roomMatch) {
+      const id = env.FINDRAW_ROOM.idFromName(normalizeRoomCode(roomMatch[1]));
+      return env.FINDRAW_ROOM.get(id).fetch(request);
+    }
     const id = env.FINDRAW_SESSION.idFromName("main");
     return env.FINDRAW_SESSION.get(id).fetch(request);
   },

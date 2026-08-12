@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, type CSSProperties } from "react";
 import { DrawingToolbar } from "./DrawingToolbar";
 import { DEFAULT_QUICK_COLORS, type BrushStyle, type CanvasTool, type ShapeTool } from "./drawingTypes";
+import type { DrawingOperation } from "./drawingTypes";
 import { useDrawingCanvas } from "./useDrawingCanvas";
 import type { KeyboardShortcuts, ShortcutAction } from "../dashboard/keyboardShortcuts";
 import { usePersistentState } from "../ui/usePersistentState";
@@ -13,6 +14,9 @@ type ExcalidrawStageProps = {
   onCanvasColorChange: (color: string) => void;
   onGridSizeChange: (size: number) => void;
   shortcuts: KeyboardShortcuts;
+  externalOperations?: DrawingOperation[];
+  onOperationsChange?: (operations: DrawingOperation[]) => void;
+  readOnly?: boolean;
 };
 
 const isEditableTarget = (target: EventTarget | null) => {
@@ -50,7 +54,7 @@ const resolveGridColor = (canvasColor: string, preferredColor: string) => {
   const white = [255, 255, 255] as const;
   return contrastRatio(canvas, black) >= contrastRatio(canvas, white) ? "#11131c" : "#ffffff";
 };
-export function ExcalidrawStage({ canvasColor, gridSize, hoverMenuDelay, hoverMenusEnabled, onCanvasColorChange, onGridSizeChange, shortcuts }: ExcalidrawStageProps) {
+export function ExcalidrawStage({ canvasColor, gridSize, hoverMenuDelay, hoverMenusEnabled, onCanvasColorChange, onGridSizeChange, shortcuts, externalOperations, onOperationsChange, readOnly = false }: ExcalidrawStageProps) {
   const [activeTool, setActiveTool] = useState<CanvasTool>("freedraw");
   const [brushStyle, setBrushStyle] = usePersistentState<BrushStyle>("brush.style", "marker");
   const [activeColor, setActiveColor] = usePersistentState("drawing.activeColor", "#11131c");
@@ -93,6 +97,8 @@ export function ExcalidrawStage({ canvasColor, gridSize, hoverMenuDelay, hoverMe
     opacity,
     strokeWidth,
     eraserSize,
+    externalOperations,
+    onOperationsChange,
   });
 
   const assignQuickColor = useCallback((index: number, color: string) => {
@@ -105,7 +111,7 @@ export function ExcalidrawStage({ canvasColor, gridSize, hoverMenuDelay, hoverMe
 
   useEffect(() => {
     const handleShortcut = (event: KeyboardEvent) => {
-      if (isEditableTarget(event.target)) return;
+    if (readOnly || isEditableTarget(event.target)) return;
       const key = event.key.toLowerCase();
       const action = (Object.entries(shortcuts) as [ShortcutAction, string][])
         .find(([, assignedKey]) => assignedKey.toLowerCase() === key)?.[0];
@@ -124,7 +130,7 @@ export function ExcalidrawStage({ canvasColor, gridSize, hoverMenuDelay, hoverMe
     };
     window.addEventListener("keydown", handleShortcut);
     return () => window.removeEventListener("keydown", handleShortcut);
-  }, [quickColors, redo, shortcuts, undo]);
+  }, [quickColors, readOnly, redo, shortcuts, undo]);
 
   return (
     <div
@@ -136,7 +142,7 @@ export function ExcalidrawStage({ canvasColor, gridSize, hoverMenuDelay, hoverMe
         "--grid-size": `${gridSize}px`,
       } as CSSProperties}
     >
-      <DrawingToolbar
+      {!readOnly ? <DrawingToolbar
         activeTool={activeTool}
         brushStyle={brushStyle}
         activeColor={activeColor}
@@ -168,21 +174,21 @@ export function ExcalidrawStage({ canvasColor, gridSize, hoverMenuDelay, hoverMe
         onRedo={redo}
         onStrokeWidthChange={setStrokeWidth}
         onUndo={undo}
-      />
+      /> : null}
 
       <div
         aria-label="Drawing canvas"
         className={`drawing-surface raster-drawing-surface ${gridActive ? "canvas-grid-active" : ""} ${activeTool === "eraser" ? "partial-eraser-active" : ""} ${activeTool === "fill" ? "fill-tool-active" : ""}`}
         onContextMenu={(event) => event.preventDefault()}
-        onPointerCancel={(event) => finishGesture(event, true)}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={(event) => finishGesture(event)}
+        onPointerCancel={(event) => !readOnly && finishGesture(event, true)}
+        onPointerDown={(event) => !readOnly && handlePointerDown(event)}
+        onPointerMove={(event) => !readOnly && handlePointerMove(event)}
+        onPointerUp={(event) => !readOnly && finishGesture(event)}
         ref={drawingSurfaceRef}
         role="application"
         tabIndex={0}
       >
-        <button
+        {!readOnly ? <button
           aria-label="Clear canvas"
           className="canvas-clear-button"
           disabled={clearingCanvas}
@@ -192,8 +198,8 @@ export function ExcalidrawStage({ canvasColor, gridSize, hoverMenuDelay, hoverMe
           type="button"
         >
           <span className="material-symbols-outlined">delete_sweep</span>
-        </button>
-        <div className="canvas-shape-tools" aria-label="Shape tools" role="toolbar" onPointerDown={(event) => event.stopPropagation()}>
+        </button> : null}
+        {!readOnly ? <div className="canvas-shape-tools" aria-label="Shape tools" role="toolbar" onPointerDown={(event) => event.stopPropagation()}>
           {([
             ["line", "horizontal_rule", "Line"],
             ["dotted-line", "more_horiz", "Dotted line"],
@@ -205,7 +211,7 @@ export function ExcalidrawStage({ canvasColor, gridSize, hoverMenuDelay, hoverMe
               <span className="material-symbols-outlined">{icon}</span>
             </button>
           ))}
-        </div>
+        </div> : null}
         <canvas className="raster-drawing-canvas" ref={canvasRef} />
         {clearingCanvas && (
           <div aria-hidden="true" className="canvas-clear-animation">

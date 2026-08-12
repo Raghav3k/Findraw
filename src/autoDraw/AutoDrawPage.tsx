@@ -6,41 +6,25 @@ import {
   connectLiveEvents,
   startServerRound,
   type LiveChatMessage,
-  type LiveEvent,
   type SolvedViewer,
   type TwitchSession,
 } from "../twitch/twitchApi";
 import { usePersistentState } from "../ui/usePersistentState";
 import { WorkspaceIdentity } from "../ui/WorkspaceIdentity";
-import { CategoryPickerWindow, type CategoryPickerGroup } from "../ui/CategoryPickerWindow";
+import { CategoryPickerWindow } from "../ui/CategoryPickerWindow";
 import { AutoDrawCanvas } from "./AutoDrawCanvas";
 import { AUTO_DRAW_ASSETS } from "./autoDrawAssets";
-import { GAME_TITLES, UNIFIED_DOMAINS, matchesCategorySelection as matchesCategory, getCategory } from "../dashboard/gameData";
-import { assetUrl } from "../assetUrls";
+import { GAME_TITLES, getActiveSelectionChips, getCategoryDomains, getSelectionTokens, isCategorySelectionOptionActive, matchesCategorySelection as matchesCategory, removeCategorySelectionChip, toggleCategorySelectionOption } from "../dashboard/gameData";
+import { CategorySelectionTools } from "../dashboard/CategorySelectionTools";
 
 type Props = { onNavigate: (path: string) => void };
 type Status = "idle" | "playing" | "paused" | "complete";
 type GuessFeedback = "idle" | "wrong" | "correct";
-type CategoryFamily = "games" | "animals" | "sports" | "other";
 type ResizeState = { panel: "source" | "side"; startX: number; startWidth: number };
 
 const TRANSITION_MS = 900;
 const EMPTY_TWITCH_SESSION: TwitchSession = { authenticated: false, configured: false, eventSubStatus: "disconnected", user: null };
 const normalize = (value: string) => value.trim().toLowerCase().replace(/[^a-z0-9]+/g, "");
-const categories = [...new Set(AUTO_DRAW_ASSETS.map(({ category }) => category))];
-
-const categoryArtwork = (selection: string) => {
-  const value = selection.toLowerCase().replace(/^game:/, "");
-  if (value.includes("valorant")) return assetUrl("/category-art/valorant-sketch.webp");
-  if (value.includes("deadlock")) return assetUrl("/category-art/deadlock-sketch.webp");
-  if (value.includes("rainbow-six-siege") || value.includes("rainbow six")) return assetUrl("/category-art/rainbow-six-siege-sketch.webp");
-  if (value.includes("clash-of-clans") || value.includes("clash of clans")) return assetUrl("/category-art/clash-of-clans-sketch.webp");
-  if (value.includes("clash-royale") || value.includes("clash royale")) return assetUrl("/category-art/clash-royale-sketch.webp");
-  if (value.includes("fortnite")) return assetUrl("/category-art/fortnite-sketch.webp");
-  if (value.includes("minecraft")) return assetUrl("/category-art/minecraft-sketch.webp");
-  return assetUrl("/category-art/random.jpg");
-};
-
 export function AutoDrawPage({ onNavigate }: Props) {
   const [sourceRailWidth, setSourceRailWidth] = usePersistentState("autoDraw.layout.leftRailWidth.artistAligned", 380);
   const [sidePanelWidth, setSidePanelWidth] = usePersistentState("autoDraw.layout.rightRailWidth.artistAligned", 280);
@@ -211,40 +195,8 @@ export function AutoDrawPage({ onNavigate }: Props) {
     void closeLiveRound();
   };
 
-  const getGameSubcategories = (gameId: string) => {
-    return categories.filter((c) => c.toLowerCase().startsWith(gameId.toLowerCase()));
-  };
-
   const isCategoryOptionActive = (optionId: string): boolean => {
-    if (!selectedCategory || selectedCategory === "empty") return false;
-
-    const selectedTokens = selectedCategory.split(",").filter(Boolean);
-
-    if (optionId === "all") {
-      return selectedTokens.includes("all");
-    }
-
-    if (selectedTokens.includes("all")) {
-      return false;
-    }
-
-    if (optionId.startsWith("game:")) {
-      const gameId = optionId.slice(5).toLowerCase();
-      if (selectedTokens.includes(optionId)) return true;
-      const subCats = getGameSubcategories(gameId);
-      if (subCats.length > 0 && subCats.every((sc) => selectedTokens.includes(sc))) {
-        return true;
-      }
-      return false;
-    }
-
-    if (selectedTokens.includes(optionId)) return true;
-    const matchingGame = GAME_TITLES.find((g) => optionId.toLowerCase().startsWith(g.id));
-    if (matchingGame && selectedTokens.includes(`game:${matchingGame.id}`)) {
-      return true;
-    }
-
-    return false;
+    return isCategorySelectionOptionActive(selectedCategory, optionId, "autoDraw");
   };
 
   const chooseCategory = (toggledId: string) => {
@@ -256,55 +208,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
       return;
     }
 
-    let selectedTokens = selectedCategory === "all" || selectedCategory === "empty" ? [] : selectedCategory.split(",").filter(Boolean);
-
-    if (toggledId.startsWith("game:")) {
-      const gameId = toggledId.slice(5).toLowerCase();
-      const subCats = getGameSubcategories(gameId);
-      const currentlyActive = isCategoryOptionActive(toggledId);
-
-      if (currentlyActive) {
-        selectedTokens = selectedTokens.filter((t) => t !== toggledId && !subCats.includes(t));
-      } else {
-        selectedTokens = selectedTokens.filter((t) => !subCats.includes(t));
-        selectedTokens.push(toggledId);
-      }
-    } else {
-      const matchingGame = GAME_TITLES.find((g) => toggledId.toLowerCase().startsWith(g.id));
-      const currentlyActive = isCategoryOptionActive(toggledId);
-
-      if (matchingGame) {
-        const gameId = matchingGame.id;
-        const gameToken = `game:${gameId}`;
-        const subCats = getGameSubcategories(gameId);
-
-        if (selectedTokens.includes(gameToken)) {
-          selectedTokens = selectedTokens.filter((t) => t !== gameToken);
-          for (const sc of subCats) {
-            if (!selectedTokens.includes(sc)) selectedTokens.push(sc);
-          }
-        }
-
-        if (currentlyActive) {
-          selectedTokens = selectedTokens.filter((t) => t !== toggledId);
-        } else {
-          if (!selectedTokens.includes(toggledId)) selectedTokens.push(toggledId);
-          if (subCats.length > 0 && subCats.every((sc) => selectedTokens.includes(sc))) {
-            selectedTokens = selectedTokens.filter((t) => !subCats.includes(t));
-            selectedTokens.push(gameToken);
-          }
-        }
-      } else {
-        if (currentlyActive) {
-          selectedTokens = selectedTokens.filter((t) => t !== toggledId);
-        } else {
-          selectedTokens.push(toggledId);
-        }
-      }
-    }
-
-    selectedTokens = selectedTokens.filter((t) => t !== "all");
-    const nextSelection = selectedTokens.length > 0 ? selectedTokens.join(",") : "empty";
+    const nextSelection = toggleCategorySelectionOption(selectedCategory, toggledId, "autoDraw", "empty");
 
     setSelectedCategory(nextSelection);
     const first = AUTO_DRAW_ASSETS.findIndex((item) => matchesCategory(item.category, nextSelection));
@@ -322,6 +226,21 @@ export function AutoDrawPage({ onNavigate }: Props) {
 
   const resetMixCategories = () => {
     setSelectedCategory("");
+    reset();
+  };
+
+  const removeCategoryChip = (chipId: string) => {
+    const nextSelection = removeCategorySelectionChip(selectedCategory, chipId, "autoDraw", "empty");
+    setSelectedCategory(nextSelection);
+    const first = AUTO_DRAW_ASSETS.findIndex((item) => matchesCategory(item.category, nextSelection));
+    if (first >= 0) setAssetIndex(first);
+    reset();
+  };
+
+  const applyCategorySelection = (selectionId: string) => {
+    setSelectedCategory(selectionId);
+    const first = AUTO_DRAW_ASSETS.findIndex((item) => matchesCategory(item.category, selectionId));
+    if (first >= 0) setAssetIndex(first);
     reset();
   };
 
@@ -384,18 +303,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
   const answerSlots = asset.answer.replace(/\s/g, "").length;
   const overflowCharacters = typedCharacters.slice(answerSlots);
   const selectedTokens = selectedCategory === "all" ? ["all"] : selectedCategory === "empty" ? [] : selectedCategory.split(",").filter(Boolean);
-  const selectedLabels = useMemo(() => {
-    if (selectedCategory === "all") return ["Random Mix"];
-    if (selectedCategory === "empty") return ["No Decks Selected"];
-    const tokens = selectedCategory.split(",").filter(Boolean);
-    return tokens.map((token) => {
-      if (token.startsWith("game:")) {
-        const g = GAME_TITLES.find((gt) => gt.id === token.slice(5));
-        return `All ${g?.label ?? token.slice(5)}`;
-      }
-      return token;
-    });
-  }, [selectedCategory]);
+  const activeSelectionChips = useMemo(() => getActiveSelectionChips(selectedCategory, "autoDraw"), [selectedCategory]);
 
   const selectedLabel = selectedCategory === "all"
     ? "All Games Shuffled"
@@ -408,8 +316,6 @@ export function AutoDrawPage({ onNavigate }: Props) {
         : `${selectedTokens.length} Decks Selected`;
 
   const selectedIcon = selectedCategory === "" ? "warning" : selectedCategory === "all" ? "casino" : selectedTokens.length > 1 ? "style" : "sports_esports";
-  const selectedArtwork = categoryArtwork(selectedCategory);
-
   const selectedCategoryOption = {
     id: selectedCategory === "" ? "empty" : selectedCategory,
     label: selectedLabel,
@@ -423,14 +329,6 @@ export function AutoDrawPage({ onNavigate }: Props) {
       ? GAME_TITLES.find((g) => g.id === selectedTokens[0].slice(5))?.accent ?? "#83c5e6"
       : "#83c5e6"),
   };
-
-  const selectedKickerText = selectedCategory === "all"
-    ? "Random Mix"
-    : selectedTokens.length === 1
-      ? "Active Deck"
-      : `${selectedTokens.length} Decks Active`;
-
-
 
   return (
     <div className="dashboard-layout auto-draw-page auto-workspace" style={{ "--source-rail-width": `${sourceRailWidth}px`, "--side-panel-width": `${sidePanelWidth}px` } as CSSProperties}>
@@ -508,41 +406,28 @@ export function AutoDrawPage({ onNavigate }: Props) {
               <div className="support-panel-content category-panel" role="tabpanel">
                 <div className="active-categories-panel">
                   <CategoryPickerWindow
+                    currentSelection={selectedCategory}
                     disabled={status === "playing" || status === "paused"}
-                    domains={UNIFIED_DOMAINS}
+                    domains={getCategoryDomains("autoDraw")}
                     isOptionActive={isCategoryOptionActive}
-                    label="All categories"
                     lockedNote="Finish or reset the current drawing to change decks."
+                    onApplySelection={applyCategorySelection}
                     onChange={chooseCategory}
+                    onRemoveChip={removeCategoryChip}
                     onReset={resetMixCategories}
                     onSelectAll={selectAllCategories}
-                    selectedArtwork={selectedArtwork}
+                    profileStorageKey="autoDraw"
+                    selectedChips={activeSelectionChips}
                     selectedId={selectedCategory}
-                    selectedKicker={selectedKickerText}
-                    selectedLabels={selectedLabels}
                     selectedOption={selectedCategoryOption}
                   />
+                  <CategorySelectionTools
+                    chips={activeSelectionChips}
+                    disabled={status === "playing" || status === "paused"}
+                    mode="autoDraw"
+                    onRemoveChip={removeCategoryChip}
+                  />
                   
-                  <div className="category-preview-selection">
-                    <span className="selection-title">Active Selection</span>
-                    <div className="selection-chips scrollable" style={{ maxHeight: "150px", overflowY: "auto" }}>
-                      {selectedTokens.length > 0 ? (
-                        selectedTokens.map((token, idx) => {
-                          let lbl = token;
-                          if (token === "all") lbl = "🎲 All Decks Shuffled";
-                          else if (token.startsWith("game:")) {
-                            const game = GAME_TITLES.find(g => g.id === token.slice(5));
-                            lbl = game ? `All ${game.label}` : token;
-                          } else {
-                            lbl = getCategory(token)?.name ?? token;
-                          }
-                          return <span className="chip" key={idx}>{lbl}</span>;
-                        })
-                      ) : (
-                        <span className="chip empty" style={{ background: "#f2bcae", borderColor: "rgba(186, 75, 50, 0.4)" }}>No decks selected</span>
-                      )}
-                    </div>
-                  </div>
                 </div>
               </div>
             </section>

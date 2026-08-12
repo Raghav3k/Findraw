@@ -24,6 +24,8 @@ type DrawingCanvasOptions = {
   opacity: number;
   strokeWidth: number;
   eraserSize: number;
+  externalOperations?: DrawingOperation[];
+  onOperationsChange?: (operations: DrawingOperation[]) => void;
 };
 
 const isShapeTool = (tool: CanvasTool): tool is ShapeTool => (["line", "dotted-line", "arrow", "rectangle", "ellipse"] as CanvasTool[]).includes(tool);
@@ -76,6 +78,8 @@ export const useDrawingCanvas = ({
   opacity,
   strokeWidth,
   eraserSize,
+  externalOperations,
+  onOperationsChange,
 }: DrawingCanvasOptions) => {
   const [eraserTrailPath, setEraserTrailPath] = useState("");
   const drawingSurfaceRef = useRef<HTMLDivElement | null>(null);
@@ -105,6 +109,17 @@ export const useDrawingCanvas = ({
     if (!layers) return;
     renderOperationHistory(layers, operations, devicePixelRatioRef.current);
   }, [getLayerContexts]);
+
+  useEffect(() => {
+    if (!externalOperations) return;
+    operationsRef.current = externalOperations;
+    redoOperationsRef.current = [];
+    renderOperations(externalOperations);
+  }, [externalOperations, renderOperations]);
+
+  const publishOperations = useCallback(() => {
+    onOperationsChange?.([...operationsRef.current]);
+  }, [onOperationsChange]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -234,6 +249,7 @@ export const useDrawingCanvas = ({
         composeLayers(layers);
         operationsRef.current.push(operation);
         redoOperationsRef.current = [];
+        publishOperations();
       }
       return;
     }
@@ -260,7 +276,7 @@ export const useDrawingCanvas = ({
       eraserTrailRef.current = trail;
     }
     renderCurrentGesture();
-  }, [activeColor, activeTool, getLayerContexts, getPoint, opacity, renderCurrentGesture]);
+  }, [activeColor, activeTool, getLayerContexts, getPoint, opacity, publishOperations, renderCurrentGesture]);
 
   const handlePointerMove = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
     if (!drawingRef.current || activePointerRef.current !== event.pointerId) return;
@@ -301,6 +317,7 @@ export const useDrawingCanvas = ({
         composeLayers(layers);
         operationsRef.current.push(operation);
         redoOperationsRef.current = [];
+        publishOperations();
       }
     }
 
@@ -326,28 +343,31 @@ export const useDrawingCanvas = ({
     }
 
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
-  }, [activeTool, createCurrentOperation, getLayerContexts, getPoint, restoreGestureSnapshot, updateEraserTrailPath]);
+  }, [activeTool, createCurrentOperation, getLayerContexts, getPoint, publishOperations, restoreGestureSnapshot, updateEraserTrailPath]);
 
   const undo = useCallback(() => {
     if (drawingRef.current || !operationsRef.current.length) return;
     const operation = operationsRef.current.pop();
     if (operation) redoOperationsRef.current.push(operation);
     renderOperations();
-  }, [renderOperations]);
+    publishOperations();
+  }, [publishOperations, renderOperations]);
 
   const redo = useCallback(() => {
     if (drawingRef.current || !redoOperationsRef.current.length) return;
     const operation = redoOperationsRef.current.pop();
     if (operation) operationsRef.current.push(operation);
     renderOperations();
-  }, [renderOperations]);
+    publishOperations();
+  }, [publishOperations, renderOperations]);
 
   const clearCanvas = useCallback(() => {
     if (drawingRef.current) return;
     operationsRef.current = [];
     redoOperationsRef.current = [];
     renderOperations();
-  }, [renderOperations]);
+    publishOperations();
+  }, [publishOperations, renderOperations]);
 
 
   useEffect(() => {

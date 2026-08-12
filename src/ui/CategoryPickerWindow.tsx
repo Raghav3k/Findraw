@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
+import type { CategorySelectionChip } from "../dashboard/gameData";
+import { usePersistentState } from "./usePersistentState";
 
 export type CategoryPickerOption = {
   id: string;
@@ -23,40 +25,54 @@ export type CategoryPickerDomain = {
 };
 
 type CategoryPickerWindowProps = {
+  currentSelection?: string;
   disabled?: boolean;
   domains: CategoryPickerDomain[];
   isOptionActive?: (optionId: string) => boolean;
-  label: string;
   lockedNote?: string;
+  onApplySelection?: (selectionId: string) => void;
   onChange: (categoryId: string) => void;
+  onRemoveChip?: (chipId: string) => void;
   onReset?: () => void;
   onSelectAll?: () => void;
+  profileStorageKey?: string;
   selectedId: string;
-  selectedArtwork: string;
-  selectedKicker: string;
   selectedOption: CategoryPickerOption;
-  selectedLabels?: string[];
+  selectedChips?: CategorySelectionChip[];
+};
+
+type CategorySelectionProfile = {
+  id: string;
+  name: string;
+  selection: string;
 };
 
 export function CategoryPickerWindow({
+  currentSelection,
   disabled = false,
   domains,
   isOptionActive,
-  label,
   lockedNote,
+  onApplySelection,
   onChange,
+  onRemoveChip,
   onReset,
   onSelectAll,
+  profileStorageKey,
   selectedId,
-  selectedArtwork,
-  selectedKicker,
   selectedOption,
-  selectedLabels = [],
+  selectedChips,
 }: CategoryPickerWindowProps) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const [activeDomainId, setActiveDomainId] = useState<string>(domains[0]?.id);
+  const [profileName, setProfileName] = useState("");
+  const [profilesOpen, setProfilesOpen] = useState(false);
+  const [profiles, setProfiles] = usePersistentState<CategorySelectionProfile[]>(
+    profileStorageKey ? `categoryProfiles.${profileStorageKey}` : "categoryProfiles.disabled",
+    [],
+  );
 
   useEffect(() => {
     if (domains.length > 0 && !domains.find(d => d.id === activeDomainId)) {
@@ -92,6 +108,9 @@ export function CategoryPickerWindow({
   }, [domains, activeDomainId, query]);
 
   const [shakeError, setShakeError] = useState(false);
+  const activeSelection = currentSelection ?? selectedId;
+  const canUseProfiles = Boolean(profileStorageKey && onApplySelection);
+  const canSaveProfile = canUseProfiles && !disabled && activeSelection !== "" && activeSelection !== "empty";
 
   const handleClose = () => {
     if (selectedOption.id === "empty") {
@@ -115,6 +134,23 @@ export function CategoryPickerWindow({
   const toggleOption = (optionId: string) => {
     if (disabled) return;
     onChange(optionId);
+  };
+
+  const saveProfile = () => {
+    if (!canSaveProfile) return;
+    const name = profileName.trim().slice(0, 32) || selectedChips?.find((chip) => chip.kind !== "empty")?.label || "Saved pool";
+    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    setProfiles((current) => [
+      { id, name, selection: activeSelection },
+      ...current.filter((profile) => profile.name.toLowerCase() !== name.toLowerCase()),
+    ].slice(0, 12));
+    setProfileName("");
+    setProfilesOpen(true);
+  };
+
+  const applyProfile = (selection: string) => {
+    if (disabled || !onApplySelection) return;
+    onApplySelection(selection);
   };
 
   const toggleGroupCollapse = (groupId: string) => {
@@ -174,10 +210,6 @@ export function CategoryPickerWindow({
 
             <div className="category-window-body">
               <aside className="category-window-sidebar">
-                <span className="category-art" data-category={selectedOption.id}>
-                  <img alt={`${selectedOption.label} category artwork`} src={selectedArtwork} />
-                </span>
-
                 <div className="category-preview-meta">
                   <div className="category-preview-actions">
                     {onSelectAll ? (
@@ -197,16 +229,31 @@ export function CategoryPickerWindow({
                   <div className="category-preview-selection">
                     <span className="selection-title">Active Selection</span>
                     <div className="selection-chips scrollable">
+                      {selectedChips?.length ? (
+                        selectedChips.map((chip) => (
+                          <span
+                            className={`chip ${chip.kind === "all" ? "active-all" : ""} ${chip.kind === "empty" ? "empty" : ""}`}
+                            key={chip.id}
+                            style={{ "--chip-accent": chip.accent } as CSSProperties}
+                          >
+                            {chip.label}
+                            {onRemoveChip && chip.kind !== "empty" ? (
+                              <button aria-label={`Remove ${chip.label}`} onClick={() => onRemoveChip(chip.id)} type="button">
+                                <span className="material-symbols-outlined">close</span>
+                              </button>
+                            ) : null}
+                          </span>
+                        ))
+                      ) : (
+                        <>
                       {selectedId === "all" ? (
                         <span className="chip active-all">🎲 All Decks Shuffled</span>
-                      ) : selectedLabels.length > 0 ? (
-                        selectedLabels.map((lbl, idx) => (
-                          <span className="chip" key={idx}>{lbl}</span>
-                        ))
                       ) : (
                         <span className="chip" style={selectedOption.id === "empty" ? { background: "#f2bcae", borderColor: "rgba(186, 75, 50, 0.4)" } : {}}>
                           {selectedOption.label}
                         </span>
+                      )}
+                        </>
                       )}
                     </div>
                     {selectedOption.id === "empty" ? (
@@ -215,6 +262,56 @@ export function CategoryPickerWindow({
                       </div>
                     ) : null}
                   </div>
+
+                  {canUseProfiles ? (
+                    <div className={`category-profile-panel compact ${profilesOpen ? "open" : ""}`}>
+                      <button className="category-profile-toggle" onClick={() => setProfilesOpen((current) => !current)} type="button">
+                        <span className="material-symbols-outlined">folder_special</span>
+                        Saved pools
+                        <b>{profiles.length}</b>
+                        <span className="material-symbols-outlined">{profilesOpen ? "expand_less" : "expand_more"}</span>
+                      </button>
+                      {profilesOpen ? (
+                        <div className="category-profile-dropdown">
+                          <div className="category-profile-save">
+                            <input
+                              aria-label="Saved pool name"
+                              disabled={disabled}
+                              maxLength={32}
+                              onChange={(event) => setProfileName(event.target.value)}
+                              onKeyDown={(event) => {
+                                if (event.key === "Enter") {
+                                  event.preventDefault();
+                                  saveProfile();
+                                }
+                              }}
+                              placeholder="Pool name..."
+                              type="text"
+                              value={profileName}
+                            />
+                            <button aria-label="Save active pool" disabled={!canSaveProfile} onClick={saveProfile} type="button">
+                              <span className="material-symbols-outlined">bookmark_add</span>
+                            </button>
+                          </div>
+                          <div className="category-profile-list scrollable">
+                            {profiles.length ? profiles.map((profile) => (
+                              <div className="category-profile-item" key={profile.id}>
+                                <button disabled={disabled} onClick={() => applyProfile(profile.selection)} type="button">
+                                  <span className="material-symbols-outlined">folder_special</span>
+                                  <strong>{profile.name}</strong>
+                                </button>
+                                <button aria-label={`Delete ${profile.name}`} onClick={() => setProfiles((current) => current.filter((item) => item.id !== profile.id))} type="button">
+                                  <span className="material-symbols-outlined">delete</span>
+                                </button>
+                              </div>
+                            )) : (
+                              <p>No saved pools yet.</p>
+                            )}
+                          </div>
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : null}
                 </div>
 
                 <div className="domain-tabs">
