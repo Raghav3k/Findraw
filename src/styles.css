@@ -13080,6 +13080,110 @@ body.resizing-panels .layout-resizer::after {
   background: #f2d98b;
 }
 
+.room-entry-toggle {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.room-entry-toggle button {
+  min-width: 0;
+  padding: 9px 8px;
+  background: rgba(255, 250, 240, .72);
+}
+
+.room-entry-toggle button.active {
+  color: #17364a;
+  border-color: rgba(43, 92, 116, .52);
+  background: #83c5e6;
+}
+
+.room-entry-toggle .material-symbols-outlined {
+  font-size: 17px;
+}
+
+.room-code-preview {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 9px;
+  align-items: center;
+  padding: 10px;
+  border: 1px dashed rgba(76, 64, 45, .32);
+  border-radius: 7px;
+  background: rgba(255, 250, 240, .54);
+}
+
+.room-code-preview > .material-symbols-outlined {
+  color: #467d97;
+  font-size: 24px;
+}
+
+.room-code-preview p {
+  margin: 0;
+}
+
+.room-code-preview strong,
+.room-code-preview small {
+  display: block;
+}
+
+.room-code-preview strong {
+  color: #302e29;
+  font-size: 12px;
+}
+
+.room-code-preview small {
+  color: #706b62;
+  font-size: 10px;
+  line-height: 1.35;
+}
+
+.room-details-toggle {
+  z-index: 4;
+}
+
+.room-details-card > strong {
+  color: #202622;
+  font-size: clamp(30px, 4vw, 54px);
+  letter-spacing: .08em;
+}
+
+.room-details-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+  width: 100%;
+}
+
+.room-details-list span {
+  min-width: 0;
+  padding: 7px 8px;
+  border: 1px solid rgba(76, 64, 45, .22);
+  border-radius: 6px;
+  background: rgba(255, 250, 240, .62);
+}
+
+.room-details-list b,
+.room-details-list strong {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.room-details-list b {
+  color: #7a6255;
+  font: 800 8px/1.2 "Inter", sans-serif;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.room-details-list strong {
+  margin-top: 2px;
+  color: #302e29;
+  font-size: 13px;
+}
+
 @media (max-width: 1180px) {
   .mode-card-preview,
   .artist-mode-card .mode-card-preview {

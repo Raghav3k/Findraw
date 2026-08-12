@@ -46,6 +46,7 @@ type ResizeState = {
 };
 
 const DEFAULT_ROOM_CODE = "ROOM";
+type RoomEntryMode = "create" | "join";
 
 const createPlayer = (id: string, name: string): RoomPlayer => ({
   id,
@@ -74,10 +75,12 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const [sidePanelWidth, setSidePanelWidth] = usePersistentState("room.layout.rightRailWidth", 300);
   const [playerName, setPlayerName] = usePersistentState("room.playerName", "Streamer");
   const [roomCodeInput, setRoomCodeInput] = usePersistentState("room.lastCode", DEFAULT_ROOM_CODE);
+  const [entryMode, setEntryMode] = useState<RoomEntryMode>("create");
   const [joinedCode, setJoinedCode] = useState("");
   const [room, setRoom] = useState<RoomState | null>(null);
   const [roomTransport, setRoomTransport] = useState<"none" | "online" | "local">("none");
   const [roomConnectionStatus, setRoomConnectionStatus] = useState<"connecting" | "connected" | "offline">("offline");
+  const [showRoomDetails, setShowRoomDetails] = useState(false);
   const [guess, setGuess] = useState("");
   const [customWord, setCustomWord] = useState("");
   const [customWordError, setCustomWordError] = useState("");
@@ -115,7 +118,11 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
 
   const joinRoom = (event?: FormEvent) => {
     event?.preventDefault();
-    const code = normalizeRoomCode(roomCodeInput) || createRoomCode();
+    const code = entryMode === "create" ? createRoomCode() : normalizeRoomCode(roomCodeInput);
+    if (!code) {
+      setNotice("Enter a room code to join.");
+      return;
+    }
     const player = createPlayer(clientId, playerName);
     onlineRoomRef.current?.close();
     onlineRoomRef.current = null;
@@ -123,7 +130,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       setRoomCodeInput(code);
       setJoinedCode(code);
       setRoomTransport("online");
-      setNotice(`Joining online room ${code}.`);
+      setNotice(entryMode === "create" ? `Created online room ${code}.` : `Joining online room ${code}.`);
       onlineRoomRef.current = connectOnlineRoom(code, player.id, player.name, {
         onState: (nextRoom) => {
           setRoom(nextRoom);
@@ -148,7 +155,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     setJoinedCode(code);
     setRoomTransport("local");
     saveRoom(nextRoom);
-    setNotice(existing ? `Joined room ${code}.` : `Created room ${code}.`);
+    setNotice(entryMode === "create" ? `Created room ${code}.` : existing ? `Joined room ${code}.` : `Created room ${code}.`);
   };
 
   useEffect(() => () => onlineRoomRef.current?.close(), []);
@@ -419,11 +426,26 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
 
         {!room ? (
           <section className="source-card room-join-card">
-            <header className="source-card-header"><div><span className="source-eyebrow">Local room</span><h2>Join desk</h2></div><span className="source-status ready"><i />Local</span></header>
+            <header className="source-card-header"><div><span className="source-eyebrow">Room desk</span><h2>{entryMode === "create" ? "Create a room" : "Join a room"}</h2></div><span className="source-status ready"><i />{hasApiBaseUrl ? "Online" : "Local"}</span></header>
             <form className="room-join-form" onSubmit={joinRoom}>
+              <div className="room-entry-toggle" role="group" aria-label="Create or join a room">
+                <button className={entryMode === "create" ? "active" : ""} onClick={() => setEntryMode("create")} type="button">
+                  <span className="material-symbols-outlined">add_circle</span>Create room
+                </button>
+                <button className={entryMode === "join" ? "active" : ""} onClick={() => setEntryMode("join")} type="button">
+                  <span className="material-symbols-outlined">login</span>Join room
+                </button>
+              </div>
               <label><span>Name</span><input maxLength={20} onChange={(event) => setPlayerName(event.target.value)} value={playerName} /></label>
-              <label><span>Room code</span><input maxLength={6} onChange={(event) => setRoomCodeInput(normalizeRoomCode(event.target.value))} value={roomCodeInput} /></label>
-              <button type="submit"><span className="material-symbols-outlined">login</span>Create / Join</button>
+              {entryMode === "join" ? (
+                <label><span>Room code</span><input autoComplete="off" maxLength={6} onChange={(event) => setRoomCodeInput(normalizeRoomCode(event.target.value))} placeholder="ENTER CODE" value={roomCodeInput} /></label>
+              ) : (
+                <div className="room-code-preview">
+                  <span className="material-symbols-outlined">tag</span>
+                  <p><strong>Code generated after create</strong><small>Share it from Room details once you are inside.</small></p>
+                </div>
+              )}
+              <button type="submit"><span className="material-symbols-outlined">{entryMode === "create" ? "add_circle" : "login"}</span>{entryMode === "create" ? "Create room" : "Join room"}</button>
             </form>
             <p className="room-note">{notice}</p>
           </section>
@@ -432,12 +454,32 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
             <header className="source-card-header">
               <div>
                 <span className="source-eyebrow">Camera frame</span>
-                <h2>{isDrawer ? "Your secret word" : "Drawer on camera"}</h2>
+                <h2>{showRoomDetails ? "Room details" : isDrawer ? "Your secret word" : "Drawer on camera"}</h2>
               </div>
               <span className={`source-status ${room.phase === "drawing" ? "ready" : ""}`}><i />{room.phase === "drawing" ? "Round live" : room.phase}</span>
             </header>
             <div className={`camera-preview ${room.phase === "drawing" && isDrawer ? "source-selected round-prompt-visible" : "custom-word-position"}`}>
-              {room.phase === "drawing" && isDrawer && room.answer ? (
+              <button
+                className="asset-image-toggle room-details-toggle"
+                onClick={() => setShowRoomDetails((current) => !current)}
+                title={showRoomDetails ? "Show word panel" : "Show room details"}
+                type="button"
+              >
+                <span className="material-symbols-outlined">{showRoomDetails ? "visibility" : "meeting_room"}</span>
+              </button>
+              {showRoomDetails ? (
+                <div className="custom-word-card room-word-card room-details-card">
+                  <small className="camera-instruction">Share this code with friends</small>
+                  <strong>{room.code}</strong>
+                  <span className="room-note">{hasApiBaseUrl ? "Online room" : "Local fallback"} - {roomConnectionStatus}</span>
+                  <div className="room-details-list">
+                    <span><b>Players</b><strong>{room.players.length}</strong></span>
+                    <span><b>Round</b><strong>{Math.min(3, room.roundIndex + 1)}/3</strong></span>
+                    <span><b>Turn</b><strong>{currentTurnNumber}/{totalTurns || "?"}</strong></span>
+                    <span><b>Leader</b><strong>{room.players.find((player) => player.id === room.hostId)?.name ?? "Host"}</strong></span>
+                  </div>
+                </div>
+              ) : room.phase === "drawing" && isDrawer && room.answer ? (
                 <div className="camera-prompt-copy">
                   <strong style={{ fontSize: Math.max(26, Math.min(60, 440 / Math.max(1, room.answer.answer.length))) + "px", lineHeight: 1.15 }}>{room.answer.answer}</strong>
                 </div>
@@ -471,7 +513,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                 <div className="custom-word-card room-word-card">
                   <small className="camera-instruction">Keep this area covered by your camera in OBS</small>
                   <strong>{room.phase === "finished" && winner ? `${winner.name} wins` : room.phase === "choosing" ? `${drawer?.name ?? "Drawer"} is choosing` : "Waiting for the round"}</strong>
-                  <span className="room-note">{room.phase === "finished" && winner ? `${winner.score} points after 3 rounds.` : `Round ${room.roundIndex + 1}/3 · Turn ${currentTurnNumber}/${totalTurns || "?"}`}</span>
+                  <span className="room-note">{room.phase === "finished" && winner ? `${winner.score} points after 3 rounds.` : `Round ${room.roundIndex + 1}/3 - Turn ${currentTurnNumber}/${totalTurns || "?"}`}</span>
                 </div>
               )}
             </div>
