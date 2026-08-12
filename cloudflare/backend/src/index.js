@@ -37,7 +37,7 @@ const pointsForPosition = (position) => {
   return 50;
 };
 
-const normalizeRoomCode = (value) => String(value || "").trim().toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6);
+const normalizeRoomCode = (value) => String(value || "").trim().replace(/\D/g, "").slice(0, 4);
 const roomPromptKey = (prompt) => `${prompt.categoryId || "custom"}:${String(prompt.answer || "").toLowerCase()}`;
 const publicRoomState = (room) => ({
   ...room,
@@ -69,6 +69,7 @@ const createEmptyRoomState = (code, host) => ({
   phase: "lobby",
   categorySelection: "all",
   roundSeconds: 90,
+  maxPlayers: 8,
   choices: [],
   answer: null,
   drawerId: null,
@@ -127,6 +128,8 @@ export class FindrawRoom {
     const client = this.clients.get(socket);
     if (!client || !this.room) return;
     if (message.type === "select-categories") return this.hostOnly(client, () => this.updateSelection(message.payload));
+    if (message.type === "room-settings") return this.hostOnly(client, () => this.updateSettings(message.payload));
+    if (message.type === "transfer-leader") return this.hostOnly(client, () => this.transferLeader(message.payload));
     if (message.type === "start-game") return this.hostOnly(client, () => this.startGame(message.payload));
     if (message.type === "set-choices") return this.hostOnly(client, () => this.setChoices(message.payload));
     if (message.type === "choose-word") return this.drawerOnly(client, () => this.chooseWord(message.payload));
@@ -146,6 +149,8 @@ export class FindrawRoom {
     this.clients.set(socket, { id: player.id, name: player.name });
     if (!this.room) this.room = createEmptyRoomState(code, player);
     else {
+      const alreadyInRoom = this.room.players.some((item) => item.id === player.id);
+      if (!alreadyInRoom && this.room.players.length >= (this.room.maxPlayers || 8)) throw new Error("That room is full.");
       this.room.players = this.room.players.some((item) => item.id === player.id)
         ? this.room.players.map((item) => item.id === player.id ? { ...item, name: player.name } : item)
         : [...this.room.players, player];
@@ -181,6 +186,27 @@ export class FindrawRoom {
     this.broadcastState();
   }
 
+  async updateSettings(payload) {
+    if (!["lobby", "finished"].includes(this.room.phase)) return;
+    const maxPlayers = Math.max(this.room.players.length, Math.min(16, Math.max(2, Number(payload?.maxPlayers || this.room.maxPlayers || 8))));
+    const roundsPerPlayer = Math.min(10, Math.max(1, Number(payload?.roundsPerPlayer || this.room.roundsPerPlayer || 3)));
+    this.room.maxPlayers = maxPlayers;
+    this.room.roundsPerPlayer = roundsPerPlayer;
+    this.room.updatedAt = Date.now();
+    await this.save();
+    this.broadcastState();
+  }
+
+  async transferLeader(payload) {
+    if (!["lobby", "finished"].includes(this.room.phase)) return;
+    const hostId = String(payload?.hostId || "");
+    if (!this.room.players.some((player) => player.id === hostId)) return;
+    this.room.hostId = hostId;
+    this.room.updatedAt = Date.now();
+    await this.save();
+    this.broadcastState();
+  }
+
   async startGame(payload) {
     if (!this.room || this.room.players.length < 2) return;
     const drawerId = this.room.players[0]?.id || null;
@@ -190,7 +216,7 @@ export class FindrawRoom {
       drawerId,
       turnIndex: 0,
       roundIndex: 0,
-      roundsPerPlayer: 3,
+      roundsPerPlayer: this.room.roundsPerPlayer || 3,
       answer: null,
       choices: this.sanitizeChoices(payload?.choices),
       guesses: [],

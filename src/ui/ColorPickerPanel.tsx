@@ -20,9 +20,9 @@ type HsvColor = {
 };
 
 const ARTIST_SWATCHES = [
-  "#11131c", "#ffffff", "#d94b45", "#f2ce59",
-  "#e9905f", "#8f5d3b", "#4f8f5b", "#2f9a95",
-  "#4d9dcc", "#286c99", "#7a64b0", "#c2578c",
+  "#302e29", "#fffaf0", "#fff2cf", "#f2d98b",
+  "#f0ccd3", "#ffe4a8", "#d7e8c9", "#cfe5ef",
+  "#83c5e6", "#b7d3c2", "#d8c7e8", "#eeb7a6",
 ];
 
 

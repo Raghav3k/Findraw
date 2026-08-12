@@ -38,6 +38,7 @@ export type RoomState = {
   phase: RoomPhase;
   categorySelection: CategorySelection;
   roundSeconds: number;
+  maxPlayers: number;
   choices: CategoryPrompt[];
   answer: CategoryPrompt | null;
   drawerId: string | null;
@@ -63,14 +64,13 @@ export const createClientId = () => {
 };
 
 export const normalizeRoomCode = (value: string) => (
-  value.trim().toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6)
+  value.trim().replace(/\D/g, "").slice(0, 4)
 );
 
 export const createRoomCode = () => {
-  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   let code = "";
   for (let index = 0; index < 4; index += 1) {
-    code += alphabet[Math.floor(Math.random() * alphabet.length)];
+    code += Math.floor(Math.random() * 10).toString();
   }
   return code;
 };
@@ -84,6 +84,7 @@ export const createEmptyRoom = (code: string, host: RoomPlayer): RoomState => ({
   phase: "lobby",
   categorySelection: "all",
   roundSeconds: 90,
+  maxPlayers: 8,
   choices: [],
   answer: null,
   drawerId: null,
