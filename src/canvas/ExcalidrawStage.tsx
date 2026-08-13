@@ -15,7 +15,9 @@ type ExcalidrawStageProps = {
   onGridSizeChange: (size: number) => void;
   shortcuts: KeyboardShortcuts;
   externalOperations?: DrawingOperation[];
+  liveOperation?: DrawingOperation | null;
   onOperationsChange?: (operations: DrawingOperation[]) => void;
+  onLiveOperation?: (operation: DrawingOperation | null) => void;
   readOnly?: boolean;
 };
 
@@ -54,7 +56,7 @@ const resolveGridColor = (canvasColor: string, preferredColor: string) => {
   const white = [255, 255, 255] as const;
   return contrastRatio(canvas, black) >= contrastRatio(canvas, white) ? "#11131c" : "#ffffff";
 };
-export function ExcalidrawStage({ canvasColor, gridSize, hoverMenuDelay, hoverMenusEnabled, onCanvasColorChange, onGridSizeChange, shortcuts, externalOperations, onOperationsChange, readOnly = false }: ExcalidrawStageProps) {
+export function ExcalidrawStage({ canvasColor, gridSize, hoverMenuDelay, hoverMenusEnabled, onCanvasColorChange, onGridSizeChange, shortcuts, externalOperations, liveOperation, onOperationsChange, onLiveOperation, readOnly = false }: ExcalidrawStageProps) {
   const [activeTool, setActiveTool] = useState<CanvasTool>("freedraw");
   const [brushStyle, setBrushStyle] = usePersistentState<BrushStyle>("brush.style", "marker");
   const [activeColor, setActiveColor] = usePersistentState("drawing.activeColor", "#11131c");
@@ -98,7 +100,9 @@ export function ExcalidrawStage({ canvasColor, gridSize, hoverMenuDelay, hoverMe
     strokeWidth,
     eraserSize,
     externalOperations,
+    liveOperation,
     onOperationsChange,
+    onLiveOperation,
   });
 
   const assignQuickColor = useCallback((index: number, color: string) => {

@@ -5,6 +5,7 @@ import type { RoomState } from "./localRoomState";
 
 type RoomClientHandlers = {
   onState: (state: RoomState) => void;
+  onDrawingPreview: (operation: DrawingOperation | null) => void;
   onStatus: (status: "connecting" | "connected" | "offline") => void;
   onError: (message: string) => void;
 };
@@ -18,6 +19,7 @@ export type OnlineRoomClient = {
   sendRoomSettings: (settings: { roundsPerPlayer?: number; maxPlayers?: number }) => void;
   sendRoomLeader: (hostId: string) => void;
   sendGuess: (text: string) => void;
+  sendDrawingPreview: (operation: DrawingOperation | null) => void;
   sendDrawingOperations: (operations: DrawingOperation[]) => void;
 };
 
@@ -44,6 +46,7 @@ export function connectOnlineRoom(
     try {
       const message = JSON.parse(String(event.data));
       if (message.type === "room-state") handlers.onState(message.payload as RoomState);
+      if (message.type === "drawing-preview") handlers.onDrawingPreview((message.payload?.operation ?? null) as DrawingOperation | null);
       if (message.type === "error") handlers.onError(String(message.error || "Room request failed."));
     } catch {
       handlers.onError("Room server sent an unreadable message.");
@@ -61,6 +64,7 @@ export function connectOnlineRoom(
     sendRoomSettings: (settings) => send(socket, "room-settings", settings),
     sendRoomLeader: (hostId) => send(socket, "transfer-leader", { hostId }),
     sendGuess: (text) => send(socket, "guess", { text }),
+    sendDrawingPreview: (operation) => send(socket, "drawing-preview", { operation }),
     sendDrawingOperations: (operations) => send(socket, "drawing-sync", { operations }),
   };
 }

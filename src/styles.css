@@ -12959,7 +12959,7 @@ body.resizing-panels .layout-resizer::after {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr) minmax(0, 1fr);
   align-items: center;
   gap: clamp(28px, 3vw, 54px);
-  margin-top: clamp(22px, 3.2vh, 42px);
+  margin-top: clamp(54px, 7vh, 86px);
 }
 
 .mode-card {
@@ -13006,7 +13006,7 @@ body.resizing-panels .layout-resizer::after {
   grid-template-columns: 52px minmax(0, 1fr);
   align-items: center;
   gap: 10px;
-  margin: clamp(14px, 2vh, 24px) auto 0;
+  margin: clamp(20px, 3vh, 34px) auto 0;
   padding: 8px 10px;
   border: 1px solid rgba(55, 51, 44, .42);
   border-radius: 7px 10px 6px 9px;

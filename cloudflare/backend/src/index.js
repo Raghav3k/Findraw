@@ -1,6 +1,18 @@
 const TWITCH_SCOPES = ["user:read:chat"];
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
+const ROOM_MESSAGE_BYTE_LIMIT = 256 * 1024;
+const ROOM_MAX_DRAWING_OPERATIONS = 500;
+const ROOM_MAX_DRAWING_POINTS = 8000;
+const ROOM_MAX_POINTS_PER_OPERATION = 900;
+const ROOM_COORDINATE_LIMIT = 10000;
+const ROOM_RATE_LIMITS = {
+  all: { limit: 260, windowMs: 10000 },
+  guess: { limit: 5, windowMs: 4000 },
+  "drawing-preview": { limit: 24, windowMs: 1000 },
+  "drawing-sync": { limit: 4, windowMs: 1000 },
+  control: { limit: 20, windowMs: 10000 },
+};
 
 const json = (body, init = {}) => new Response(JSON.stringify(body), {
   ...init,
@@ -39,6 +51,87 @@ const pointsForPosition = (position) => {
 
 const normalizeRoomCode = (value) => String(value || "").trim().replace(/\D/g, "").slice(0, 4);
 const roomPromptKey = (prompt) => `${prompt.categoryId || "custom"}:${String(prompt.answer || "").toLowerCase()}`;
+const getRoomMessageByteLength = (data) => {
+  if (typeof data === "string") return encoder.encode(data).byteLength;
+  if (data instanceof ArrayBuffer) return data.byteLength;
+  return data?.byteLength || data?.size || 0;
+};
+const clampNumber = (value, min, max, fallback = min) => {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return fallback;
+  return Math.min(max, Math.max(min, number));
+};
+const sanitizeColor = (value) => /^#[0-9a-f]{6}$/i.test(String(value || "")) ? String(value).toLowerCase() : "#11131c";
+const sanitizeDrawPoint = (point) => {
+  if (!Array.isArray(point) || point.length < 2) return null;
+  return [
+    clampNumber(point[0], -ROOM_COORDINATE_LIMIT, ROOM_COORDINATE_LIMIT, 0),
+    clampNumber(point[1], -ROOM_COORDINATE_LIMIT, ROOM_COORDINATE_LIMIT, 0),
+    clampNumber(point[2], 0, 1, 0.5),
+  ];
+};
+const sanitizeDrawingOperations = (operations) => {
+  if (!Array.isArray(operations)) return [];
+  const sanitized = [];
+  let remainingPoints = ROOM_MAX_DRAWING_POINTS;
+  for (const operation of operations.slice(-ROOM_MAX_DRAWING_OPERATIONS)) {
+    if (!operation || typeof operation !== "object") continue;
+    if (operation.type === "brush" || operation.type === "eraser") {
+      if (remainingPoints <= 0) continue;
+      const pointLimit = Math.min(ROOM_MAX_POINTS_PER_OPERATION, remainingPoints);
+      const points = Array.isArray(operation.points)
+        ? operation.points.slice(-pointLimit).map(sanitizeDrawPoint).filter(Boolean)
+        : [];
+      if (!points.length) continue;
+      remainingPoints -= points.length;
+      if (operation.type === "eraser") {
+        sanitized.push({
+          type: "eraser",
+          points,
+          size: clampNumber(operation.size, 1, 120, 18),
+        });
+      } else {
+        const style = ["marker", "pencil", "dotted"].includes(operation.style) ? operation.style : "marker";
+        sanitized.push({
+          type: "brush",
+          style,
+          points,
+          color: sanitizeColor(operation.color),
+          opacity: clampNumber(operation.opacity, 0.05, 1, 1),
+          strokeWidth: clampNumber(operation.strokeWidth, 1, 80, 8),
+          complete: Boolean(operation.complete),
+        });
+      }
+      continue;
+    }
+    if (operation.type === "fill") {
+      sanitized.push({
+        type: "fill",
+        x: clampNumber(operation.x, -ROOM_COORDINATE_LIMIT, ROOM_COORDINATE_LIMIT, 0),
+        y: clampNumber(operation.y, -ROOM_COORDINATE_LIMIT, ROOM_COORDINATE_LIMIT, 0),
+        color: sanitizeColor(operation.color),
+        opacity: clampNumber(operation.opacity, 0.05, 1, 1),
+      });
+      continue;
+    }
+    if (operation.type === "shape") {
+      const shape = ["line", "dotted-line", "arrow", "rectangle", "ellipse"].includes(operation.shape) ? operation.shape : "line";
+      const start = sanitizeDrawPoint(operation.start);
+      const end = sanitizeDrawPoint(operation.end);
+      if (!start || !end) continue;
+      sanitized.push({
+        type: "shape",
+        shape,
+        start: [start[0], start[1]],
+        end: [end[0], end[1]],
+        color: sanitizeColor(operation.color),
+        opacity: clampNumber(operation.opacity, 0.05, 1, 1),
+        strokeWidth: clampNumber(operation.strokeWidth, 1, 80, 8),
+      });
+    }
+  }
+  return sanitized;
+};
 const publicRoomState = (room) => ({
   ...room,
   answer: room.answer ? { ...room.answer, answer: null, aliases: [] } : null,
@@ -123,10 +216,20 @@ export class FindrawRoom {
   }
 
   async handleSocketMessage(socket, data) {
+    const messageSize = getRoomMessageByteLength(data);
+    if (messageSize > ROOM_MESSAGE_BYTE_LIMIT) {
+      try { socket.close(1009, "Room message is too large."); } catch {}
+      return;
+    }
     const message = JSON.parse(typeof data === "string" ? data : await new Response(data).text());
     if (message.type === "join") return this.join(socket, message.payload || {});
     const client = this.clients.get(socket);
     if (!client || !this.room) return;
+    if (!this.allowRoomMessage(client, "all")) throw new Error("Slow down a little.");
+    if (message.type === "guess" && !this.allowRoomMessage(client, "guess")) throw new Error("Guesses are coming in too fast.");
+    if (message.type === "drawing-preview" && !this.allowRoomMessage(client, "drawing-preview")) return;
+    if (message.type === "drawing-sync" && !this.allowRoomMessage(client, "drawing-sync")) return;
+    if (!["guess", "drawing-preview", "drawing-sync"].includes(message.type) && !this.allowRoomMessage(client, "control")) throw new Error("Room changes are coming in too fast.");
     if (message.type === "select-categories") return this.hostOnly(client, () => this.updateSelection(message.payload));
     if (message.type === "room-settings") return this.hostOnly(client, () => this.updateSettings(message.payload));
     if (message.type === "transfer-leader") return this.hostOnly(client, () => this.transferLeader(message.payload));
@@ -134,7 +237,23 @@ export class FindrawRoom {
     if (message.type === "set-choices") return this.hostOnly(client, () => this.setChoices(message.payload));
     if (message.type === "choose-word") return this.drawerOnly(client, () => this.chooseWord(message.payload));
     if (message.type === "guess") return this.submitGuess(client, message.payload);
+    if (message.type === "drawing-preview") return this.drawerOnly(client, () => this.previewDrawing(socket, message.payload));
     if (message.type === "drawing-sync") return this.drawerOnly(client, () => this.syncDrawing(message.payload));
+  }
+
+  allowRoomMessage(client, key) {
+    const rule = ROOM_RATE_LIMITS[key];
+    if (!rule) return true;
+    const now = Date.now();
+    client.rateLimits ||= {};
+    const bucket = client.rateLimits[key];
+    if (!bucket || bucket.resetAt <= now) {
+      client.rateLimits[key] = { count: 1, resetAt: now + rule.windowMs };
+      return true;
+    }
+    if (bucket.count >= rule.limit) return false;
+    bucket.count += 1;
+    return true;
   }
 
   async join(socket, payload) {
@@ -146,7 +265,7 @@ export class FindrawRoom {
       connectedAt: Date.now(),
     };
     if (!code || !player.id) throw new Error("Room code and player id are required.");
-    this.clients.set(socket, { id: player.id, name: player.name });
+    this.clients.set(socket, { id: player.id, name: player.name, rateLimits: {} });
     if (!this.room) this.room = createEmptyRoomState(code, player);
     else {
       const alreadyInRoom = this.room.players.some((item) => item.id === player.id);
@@ -301,11 +420,24 @@ export class FindrawRoom {
 
   async syncDrawing(payload) {
     if (this.room.phase !== "drawing") return;
-    const operations = Array.isArray(payload?.operations) ? payload.operations.slice(-600) : [];
+    const operations = sanitizeDrawingOperations(payload?.operations);
     this.room.drawingOperations = operations;
     this.room.updatedAt = Date.now();
     await this.save();
     this.broadcastState();
+  }
+
+  previewDrawing(senderSocket, payload) {
+    if (this.room.phase !== "drawing") return;
+    const operation = payload?.operation ? sanitizeDrawingOperations([payload.operation]).at(0) || null : null;
+    for (const [socket] of [...this.clients.entries()]) {
+      if (socket === senderSocket) continue;
+      try {
+        socket.send(JSON.stringify({ type: "drawing-preview", payload: { operation } }));
+      } catch {
+        this.clients.delete(socket);
+      }
+    }
   }
 
   async finishTurn() {

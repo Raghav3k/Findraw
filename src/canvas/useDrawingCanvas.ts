@@ -25,7 +25,9 @@ type DrawingCanvasOptions = {
   strokeWidth: number;
   eraserSize: number;
   externalOperations?: DrawingOperation[];
+  liveOperation?: DrawingOperation | null;
   onOperationsChange?: (operations: DrawingOperation[]) => void;
+  onLiveOperation?: (operation: DrawingOperation | null) => void;
 };
 
 const isShapeTool = (tool: CanvasTool): tool is ShapeTool => (["line", "dotted-line", "arrow", "rectangle", "ellipse"] as CanvasTool[]).includes(tool);
@@ -79,7 +81,9 @@ export const useDrawingCanvas = ({
   strokeWidth,
   eraserSize,
   externalOperations,
+  liveOperation,
   onOperationsChange,
+  onLiveOperation,
 }: DrawingCanvasOptions) => {
   const [eraserTrailPath, setEraserTrailPath] = useState("");
   const drawingSurfaceRef = useRef<HTMLDivElement | null>(null);
@@ -87,6 +91,7 @@ export const useDrawingCanvas = ({
   const inkCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const fillCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const operationsRef = useRef<DrawingOperation[]>([]);
+  const liveOperationRef = useRef<DrawingOperation | null>(null);
   const redoOperationsRef = useRef<DrawingOperation[]>([]);
   const currentPointsRef = useRef<DrawPoint[]>([]);
   const gestureSnapshotRef = useRef<GestureSnapshot | null>(null);
@@ -96,6 +101,7 @@ export const useDrawingCanvas = ({
   const devicePixelRatioRef = useRef(1);
   const eraserTrailRef = useRef<ReturnType<typeof createNativeEraserTrail> | null>(null);
   const eraserTrailAnimationRef = useRef<number | null>(null);
+  const lastLiveOperationAtRef = useRef(0);
 
   const getLayerContexts = useCallback((): LayerContexts | null => {
     const visible = canvasRef.current?.getContext("2d");
@@ -108,6 +114,10 @@ export const useDrawingCanvas = ({
     const layers = getLayerContexts();
     if (!layers) return;
     renderOperationHistory(layers, operations, devicePixelRatioRef.current);
+    if (liveOperationRef.current) {
+      applyOperation(layers, liveOperationRef.current);
+      composeLayers(layers);
+    }
   }, [getLayerContexts]);
 
   useEffect(() => {
@@ -117,9 +127,22 @@ export const useDrawingCanvas = ({
     renderOperations(externalOperations);
   }, [externalOperations, renderOperations]);
 
+  useEffect(() => {
+    liveOperationRef.current = liveOperation ?? null;
+    renderOperations();
+  }, [liveOperation, renderOperations]);
+
   const publishOperations = useCallback(() => {
     onOperationsChange?.([...operationsRef.current]);
   }, [onOperationsChange]);
+
+  const publishLiveOperation = useCallback((operation: DrawingOperation | null, force = false) => {
+    if (!onLiveOperation) return;
+    const now = performance.now();
+    if (!force && now - lastLiveOperationAtRef.current < 50) return;
+    lastLiveOperationAtRef.current = now;
+    onLiveOperation(operation);
+  }, [onLiveOperation]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -296,7 +319,8 @@ export const useDrawingCanvas = ({
     if (!addedPoint) return;
     if (activeTool === "eraser") updateEraserTrailPath();
     renderCurrentGesture();
-  }, [activeTool, getCoalescedPoints, renderCurrentGesture, updateEraserTrailPath]);
+    publishLiveOperation(createCurrentOperation([...currentPointsRef.current], false));
+  }, [activeTool, createCurrentOperation, getCoalescedPoints, publishLiveOperation, renderCurrentGesture, updateEraserTrailPath]);
 
   const finishGesture = useCallback((event: ReactPointerEvent<HTMLDivElement>, cancelled = false) => {
     if (!drawingRef.current || activePointerRef.current !== event.pointerId) return;
@@ -321,6 +345,7 @@ export const useDrawingCanvas = ({
       }
     }
 
+    publishLiveOperation(null, true);
     drawingRef.current = false;
     activePointerRef.current = null;
     currentPointsRef.current = [];

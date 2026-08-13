@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent, type PointerEvent as ReactPointerEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent, type PointerEvent as ReactPointerEvent } from "react";
 import { ExcalidrawStage } from "../canvas/ExcalidrawStage";
 import type { DrawingOperation } from "../canvas/drawingTypes";
 import { DEFAULT_KEYBOARD_SHORTCUTS } from "../dashboard/keyboardShortcuts";
@@ -83,6 +83,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const [roomCodeRevealed, setRoomCodeRevealed] = useState(false);
   const [leaderPickerOpen, setLeaderPickerOpen] = useState(false);
   const [guess, setGuess] = useState("");
+  const [liveDrawingOperation, setLiveDrawingOperation] = useState<DrawingOperation | null>(null);
   const [customWord, setCustomWord] = useState("");
   const [customWordError, setCustomWordError] = useState("");
   const [notice, setNotice] = useState("");
@@ -143,6 +144,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
           setRoom(nextRoom);
           setNotice(`Online room ${nextRoom.code} is synced.`);
         },
+        onDrawingPreview: setLiveDrawingOperation,
         onStatus: setRoomConnectionStatus,
         onError: setNotice,
       });
@@ -204,6 +206,10 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   };
 
   useEffect(() => () => onlineRoomRef.current?.close(), []);
+
+  useEffect(() => {
+    if (room?.phase !== "drawing" || isDrawer) setLiveDrawingOperation(null);
+  }, [isDrawer, room?.phase]);
 
   useEffect(() => {
     if (!joinedCode || roomTransport !== "local") return;
@@ -435,9 +441,13 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     });
   };
 
-  const syncDrawingOperations = (operations: DrawingOperation[]) => {
+  const syncDrawingOperations = useCallback((operations: DrawingOperation[]) => {
     if (roomTransport === "online" && isDrawer) onlineRoomRef.current?.sendDrawingOperations(operations);
-  };
+  }, [isDrawer, roomTransport]);
+
+  const syncLiveDrawingOperation = useCallback((operation: DrawingOperation | null) => {
+    if (roomTransport === "online" && isDrawer) onlineRoomRef.current?.sendDrawingPreview(operation);
+  }, [isDrawer, roomTransport]);
 
   const selectedOption = {
     id: selectedTokens.length === 0 ? "empty" : room?.categorySelection ?? "all",
@@ -607,6 +617,8 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                   onGridSizeChange={setGridSize}
                   shortcuts={DEFAULT_KEYBOARD_SHORTCUTS}
                   externalOperations={room?.drawingOperations}
+                  liveOperation={!isDrawer ? liveDrawingOperation : null}
+                  onLiveOperation={syncLiveDrawingOperation}
                   onOperationsChange={syncDrawingOperations}
                   readOnly={room?.phase === "drawing" && !isDrawer}
                 />
