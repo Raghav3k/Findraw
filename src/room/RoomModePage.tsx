@@ -198,6 +198,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       onlineRoomRef.current = connectOnlineRoom(code, player.id, player.name, {
         onState: (nextRoom) => {
           setRoom(nextRoom);
+          if ((nextRoom.drawingOperations?.length ?? 0) > 0) setLiveDrawingOperation(null);
           setNotice(`Online room ${nextRoom.code} is synced.`);
         },
         onDrawingPreview: setLiveDrawingOperation,

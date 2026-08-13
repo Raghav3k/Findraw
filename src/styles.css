@@ -13392,6 +13392,14 @@ body.resizing-panels .layout-resizer::after {
   min-height: 0;
 }
 
+.room-canvas-card .canvas-workbench[data-read-only="true"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.room-canvas-card .canvas-workbench[data-read-only="true"] .drawing-surface {
+  grid-column: 1;
+}
+
 .room-choice-board {
   flex: 1 1 auto;
 }

@@ -139,6 +139,7 @@ export function ExcalidrawStage({ canvasColor, gridSize, hoverMenuDelay, hoverMe
   return (
     <div
       className="canvas-workbench"
+      data-read-only={readOnly ? "true" : "false"}
       style={{
         "--canvas": canvasColor,
         "--grid-color": resolvedGridColor,
