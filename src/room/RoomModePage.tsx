@@ -609,6 +609,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                 </div>
               ) : (
                 <ExcalidrawStage
+                  key={`${room?.code ?? "offline"}-${room?.turnIndex ?? 0}-${room?.phase ?? "empty"}-${room?.drawerId ?? "none"}`}
                   canvasColor={canvasColor}
                   gridSize={gridSize}
                   hoverMenuDelay={500}
@@ -616,7 +617,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                   onCanvasColorChange={setCanvasColor}
                   onGridSizeChange={setGridSize}
                   shortcuts={DEFAULT_KEYBOARD_SHORTCUTS}
-                  externalOperations={room?.drawingOperations}
+                  externalOperations={isDrawer && room?.phase === "drawing" ? undefined : room?.drawingOperations}
                   liveOperation={!isDrawer ? liveDrawingOperation : null}
                   onLiveOperation={syncLiveDrawingOperation}
                   onOperationsChange={syncDrawingOperations}
