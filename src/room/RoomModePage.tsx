@@ -88,6 +88,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const [notice, setNotice] = useState("");
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [confirmExitOpen, setConfirmExitOpen] = useState(false);
+  const [timerNow, setTimerNow] = useState(() => Date.now());
   const [skipRoomExitConfirm, setSkipRoomExitConfirm] = usePersistentState("room.exit.skipConfirm", false);
   const [canvasColor, setCanvasColor] = usePersistentState("room.canvas.background", "#FFF2CF");
   const [gridSize, setGridSize] = usePersistentState("room.grid.size", 24);
@@ -104,7 +105,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const activeSelectionChips = useMemo(() => getActiveSelectionChips(room?.categorySelection ?? "all", "room"), [room?.categorySelection]);
   const selectedTokens = getSelectionTokens(room?.categorySelection ?? "all");
   const secondsRemaining = room?.phase === "drawing" && room.endAt
-    ? Math.max(0, Math.ceil((room.endAt - Date.now()) / 1000))
+    ? Math.max(0, Math.ceil((room.endAt - timerNow) / 1000))
     : room?.roundSeconds ?? 90;
   const totalTurns = room ? Math.max(1, room.players.length) * room.roundsPerPlayer : 0;
   const currentTurnNumber = room && room.turnIndex >= 0 ? Math.min(totalTurns, room.turnIndex + 1) : 0;
@@ -268,6 +269,13 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   };
 
   useEffect(() => () => onlineRoomRef.current?.close(), []);
+
+  useEffect(() => {
+    if (room?.phase !== "drawing" || !room.endAt) return;
+    setTimerNow(Date.now());
+    const timer = window.setInterval(() => setTimerNow(Date.now()), 500);
+    return () => window.clearInterval(timer);
+  }, [room?.endAt, room?.phase]);
 
   useEffect(() => {
     if (room?.phase !== "drawing" || isDrawer) setLiveDrawingOperation(null);
