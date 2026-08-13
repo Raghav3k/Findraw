@@ -271,11 +271,10 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   useEffect(() => () => onlineRoomRef.current?.close(), []);
 
   useEffect(() => {
-    if (room?.phase !== "drawing" || !room.endAt) return;
     setTimerNow(Date.now());
     const timer = window.setInterval(() => setTimerNow(Date.now()), 500);
     return () => window.clearInterval(timer);
-  }, [room?.endAt, room?.phase]);
+  }, [room?.code]);
 
   useEffect(() => {
     if (room?.phase !== "drawing" || isDrawer) setLiveDrawingOperation(null);
@@ -661,7 +660,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
           <div className="main-column room-main-column">
             <section className="prompt-board room-prompt-board">
               <div className="round-word-mask">
-                {room?.phase === "drawing" && isDrawer ? room.answer?.answer.toUpperCase() : maskedAnswer(room?.answer?.answer ?? null)}
+                {room?.phase === "drawing" && isDrawer ? room.answer?.answer.toUpperCase() : room?.answer?.mask ?? maskedAnswer(room?.answer?.answer ?? null)}
               </div>
               <span className="prompt-solve-count">{room?.phase ?? "offline"}</span>
             </section>

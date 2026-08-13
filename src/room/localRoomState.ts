@@ -31,6 +31,10 @@ export type RoomSolved = {
   solvedAt: number;
 };
 
+export type RoomAnswer = CategoryPrompt & {
+  mask?: string;
+};
+
 export type RoomState = {
   code: string;
   hostId: string;
@@ -41,7 +45,7 @@ export type RoomState = {
   maxPlayers: number;
   choices: CategoryPrompt[];
   choiceVotes: Record<string, number>;
-  answer: CategoryPrompt | null;
+  answer: RoomAnswer | null;
   drawerId: string | null;
   turnIndex: number;
   roundIndex: number;

@@ -132,9 +132,12 @@ const sanitizeDrawingOperations = (operations) => {
   }
   return sanitized;
 };
+const maskedRoomAnswer = (answer) => Array.from(String(answer || ""))
+  .map((character) => character === " " ? "  " : "_")
+  .join(" ");
 const publicRoomState = (room) => ({
   ...room,
-  answer: room.answer ? { ...room.answer, answer: null, aliases: [] } : null,
+  answer: room.answer ? { ...room.answer, answer: null, aliases: [], mask: maskedRoomAnswer(room.answer.answer) } : null,
   choices: (room.choices || []).map((choice, index) => ({
     categoryId: choice.categoryId || `slot-${index}`,
     answer: "",
