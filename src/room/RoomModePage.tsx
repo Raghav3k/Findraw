@@ -85,8 +85,6 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const [leaderPickerOpen, setLeaderPickerOpen] = useState(false);
   const [guess, setGuess] = useState("");
   const [liveDrawingOperation, setLiveDrawingOperation] = useState<DrawingOperation | null>(null);
-  const [customWord, setCustomWord] = useState("");
-  const [customWordError, setCustomWordError] = useState("");
   const [notice, setNotice] = useState("");
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [confirmExitOpen, setConfirmExitOpen] = useState(false);
@@ -114,6 +112,13 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const roomMaxPlayers = room?.maxPlayers ?? 8;
   const roomLeader = room?.players.find((player) => player.id === room.hostId) ?? null;
   const canEditRoomDetails = Boolean(room && isHost && (room.phase === "lobby" || room.phase === "finished"));
+  const roomChoiceVotes = room?.choiceVotes ?? {};
+  const eligibleChoiceVoters = room ? room.players.filter((player) => player.id !== room.drawerId) : [];
+  const localChoiceVote = localPlayer ? roomChoiceVotes[localPlayer.id] : undefined;
+  const choiceVoteCounts = room?.choices.map((_, index) => (
+    Object.values(roomChoiceVotes).filter((vote) => vote === index).length
+  )) ?? [];
+  const submittedChoiceVotes = Object.keys(roomChoiceVotes).filter((playerId) => eligibleChoiceVoters.some((player) => player.id === playerId)).length;
 
   const leaveLocalRoom = useCallback((roomToLeave: RoomState) => {
     const players = roomToLeave.players.filter((player) => player.id !== clientId);
@@ -132,6 +137,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       phase: shouldResetRound ? "lobby" : roomToLeave.phase,
       answer: shouldResetRound ? null : roomToLeave.answer,
       choices: shouldResetRound ? [] : roomToLeave.choices,
+      choiceVotes: shouldResetRound ? {} : roomToLeave.choiceVotes ?? {},
       guesses: shouldResetRound ? [] : roomToLeave.guesses,
       solved: shouldResetRound ? [] : roomToLeave.solved,
       endAt: shouldResetRound ? null : roomToLeave.endAt,
@@ -155,7 +161,6 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     setRoomCodeRevealed(false);
     setLiveDrawingOperation(null);
     setGuess("");
-    setCustomWord("");
     setNotice(roomToLeave ? `Left room ${roomToLeave.code}.` : "");
     if (navigateHome) onNavigate("/");
   }, [leaveLocalRoom, onNavigate, room, roomTransport]);
@@ -384,7 +389,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     const choices = pickRoomChoices(room.categorySelection, room.recentPromptKeys);
     if (roomTransport === "online") {
       onlineRoomRef.current?.sendStartGame(choices);
-      setNotice("Game started. The first drawer is choosing a word.");
+      setNotice("Game started. Players are voting on the word.");
       return;
     }
     saveRoom({
@@ -396,47 +401,45 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       roundsPerPlayer: room.roundsPerPlayer,
       answer: null,
       choices,
+      choiceVotes: {},
       guesses: [],
       solved: [],
       players: room.players.map((player) => ({ ...player, score: 0 })),
     });
-    setNotice("Game started. The first drawer is choosing a word.");
+    setNotice("Game started. Players are voting on the word.");
   };
 
-  const startDrawingWithAnswer = (answer: CategoryPrompt) => {
-    if (!room || !isDrawer || room.phase !== "choosing") return;
-    if (!answer) return;
+  const getWinningChoiceIndex = (votes: Record<string, number>) => {
+    if (!room?.choices.length) return -1;
+    const counts = room.choices.map((_, index) => Object.values(votes).filter((vote) => vote === index).length);
+    return counts.reduce((bestIndex, count, index) => count > counts[bestIndex] ? index : bestIndex, 0);
+  };
+
+  const voteForChoice = (choiceIndex: number) => {
+    if (!room || room.phase !== "choosing" || isDrawer || !localPlayer || !room.choices[choiceIndex]) return;
     if (roomTransport === "online") {
-      onlineRoomRef.current?.sendChosenWord(answer);
+      onlineRoomRef.current?.sendChoiceVote(choiceIndex);
       return;
     }
-    saveRoom({
-      ...room,
-      phase: "drawing",
-      answer,
-      guesses: [],
-      solved: [],
-      endAt: Date.now() + room.roundSeconds * 1000,
-      recentPromptKeys: [...room.recentPromptKeys, roomPromptKey(answer)].slice(-32),
-    });
-  };
-
-  const chooseWord = (choiceIndex: number) => {
-    const answer = room?.choices[choiceIndex];
-    if (answer) startDrawingWithAnswer(answer);
-  };
-
-  const submitCustomWord = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!room || !isDrawer || room.phase !== "choosing") return;
-    const answer = customWord.trim().slice(0, 60);
-    if (!answer) {
-      setCustomWordError("Enter a word or phrase first.");
+    const nextVotes = { ...(room.choiceVotes ?? {}), [localPlayer.id]: choiceIndex };
+    const eligibleVoters = room.players.filter((player) => player.id !== room.drawerId);
+    const votedCount = Object.keys(nextVotes).filter((playerId) => eligibleVoters.some((player) => player.id === playerId)).length;
+    const winningIndex = getWinningChoiceIndex(nextVotes);
+    const winningChoice = room.choices[winningIndex];
+    if (votedCount >= eligibleVoters.length && winningChoice) {
+      saveRoom({
+        ...room,
+        phase: "drawing",
+        answer: winningChoice,
+        choiceVotes: {},
+        guesses: [],
+        solved: [],
+        endAt: Date.now() + room.roundSeconds * 1000,
+        recentPromptKeys: [...room.recentPromptKeys, roomPromptKey(winningChoice)].slice(-32),
+      });
       return;
     }
-    setCustomWord("");
-    setCustomWordError("");
-    startDrawingWithAnswer({ answer, aliases: [], categoryId: "custom" });
+    saveRoom({ ...room, choiceVotes: nextVotes });
   };
 
   const submitGuess = (event: FormEvent) => {
@@ -483,7 +486,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     const room = roomToAdvance;
     const next = getNextTurn(room);
     if (!next) {
-      saveRoom({ ...room, phase: "finished", answer: null, choices: [], drawerId: null, endAt: null });
+      saveRoom({ ...room, phase: "finished", answer: null, choices: [], choiceVotes: {}, drawerId: null, endAt: null });
       return;
     }
     saveRoom({
@@ -492,6 +495,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       ...next,
       answer: null,
       choices: pickRoomChoices(room.categorySelection, room.recentPromptKeys),
+      choiceVotes: {},
       guesses: [],
       solved: [],
       endAt: null,
@@ -609,36 +613,10 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                 <div className="camera-prompt-copy">
                   <strong style={{ fontSize: Math.max(26, Math.min(60, 440 / Math.max(1, room.answer.answer.length))) + "px", lineHeight: 1.15 }}>{room.answer.answer}</strong>
                 </div>
-              ) : room.phase === "choosing" && isDrawer ? (
-                <div className="custom-word-card room-word-card">
-                  <small className="camera-instruction">Keep this area covered by your camera in OBS</small>
-                  <strong>Choose or use a custom word</strong>
-                  <div className="room-camera-choice-list">
-                    {room.choices.map((choice, index) => (
-                      <button key={`${choice.categoryId}-${choice.answer}`} onClick={() => chooseWord(index)} type="button">{choice.answer}</button>
-                    ))}
-                  </div>
-                  <form onSubmit={submitCustomWord}>
-                    <input
-                      aria-label="Custom room word or phrase"
-                      autoComplete="off"
-                      maxLength={60}
-                      onChange={(event) => {
-                        setCustomWord(event.target.value);
-                        if (customWordError) setCustomWordError("");
-                      }}
-                      placeholder="Type a secret word..."
-                      type="text"
-                      value={customWord}
-                    />
-                    <button type="submit">Use now</button>
-                  </form>
-                  {customWordError ? <span className="custom-word-error">{customWordError}</span> : null}
-                </div>
               ) : (
                 <div className="custom-word-card room-word-card">
                   <small className="camera-instruction">Keep this area covered by your camera in OBS</small>
-                  <strong>{room.phase === "finished" && winner ? `${winner.name} wins` : room.phase === "choosing" ? `${drawer?.name ?? "Drawer"} is choosing` : "Waiting for the round"}</strong>
+                  <strong>{room.phase === "finished" && winner ? `${winner.name} wins` : room.phase === "choosing" ? "Players are voting" : "Waiting for the round"}</strong>
                   {isHost && (room.phase === "lobby" || room.phase === "finished") ? (
                     <button className="room-start-button room-lobby-start-button" disabled={room.players.length < 2} onClick={startGame} type="button">
                       <span className="material-symbols-outlined">play_arrow</span>{room.phase === "finished" ? "Start New Game" : "Start Game"}
@@ -689,8 +667,29 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
               </header>
               {room?.phase === "choosing" ? (
                 <div className="room-choice-board">
-                  <span className="source-eyebrow">Word choice</span>
-                  <h2>{isDrawer ? "Pick from the camera panel" : `${drawer?.name ?? "Drawer"} is choosing`}</h2>
+                  <span className="source-eyebrow">Word vote</span>
+                  <h2>{isDrawer ? "Words on the table" : "Pick a mystery slot"}</h2>
+                  <p>{isDrawer ? "Players vote without seeing the words. The top slot becomes your drawing prompt." : `${drawer?.name ?? "Drawer"} can see the words. You only choose a slot.`}</p>
+                  <div className="room-choice-list" role="list">
+                    {room.choices.map((choice, index) => {
+                      const voteCount = choiceVoteCounts[index] ?? 0;
+                      const selected = localChoiceVote === index;
+                      return (
+                        <button
+                          className={selected ? "selected" : ""}
+                          disabled={isDrawer || !localPlayer}
+                          key={`${choice.categoryId}-${choice.answer}-${index}`}
+                          onClick={() => voteForChoice(index)}
+                          type="button"
+                        >
+                          <span className="room-choice-slot">Slot {index + 1}</span>
+                          <strong>{isDrawer ? choice.answer : "Hidden word"}</strong>
+                          <small>{voteCount} vote{voteCount === 1 ? "" : "s"}</small>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <span className="room-choice-progress">{submittedChoiceVotes}/{eligibleChoiceVoters.length} players voted</span>
                 </div>
               ) : (
                 <ExcalidrawStage

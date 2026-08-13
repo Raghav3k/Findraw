@@ -16,6 +16,7 @@ export type OnlineRoomClient = {
   sendStartGame: (choices: CategoryPrompt[]) => void;
   sendChoices: (choices: CategoryPrompt[]) => void;
   sendChosenWord: (answer: CategoryPrompt) => void;
+  sendChoiceVote: (choiceIndex: number) => void;
   sendRoomSettings: (settings: { roundsPerPlayer?: number; maxPlayers?: number }) => void;
   sendRoomLeader: (hostId: string) => void;
   sendGuess: (text: string) => void;
@@ -62,6 +63,7 @@ export function connectOnlineRoom(
     sendStartGame: (choices) => send(socket, "start-game", { choices }),
     sendChoices: (choices) => send(socket, "set-choices", { choices }),
     sendChosenWord: (answer) => send(socket, "choose-word", { answer }),
+    sendChoiceVote: (choiceIndex) => send(socket, "choice-vote", { choiceIndex }),
     sendRoomSettings: (settings) => send(socket, "room-settings", settings),
     sendRoomLeader: (hostId) => send(socket, "transfer-leader", { hostId }),
     sendGuess: (text) => send(socket, "guess", { text }),

@@ -135,6 +135,11 @@ const sanitizeDrawingOperations = (operations) => {
 const publicRoomState = (room) => ({
   ...room,
   answer: room.answer ? { ...room.answer, answer: null, aliases: [] } : null,
+  choices: (room.choices || []).map((choice, index) => ({
+    categoryId: choice.categoryId || `slot-${index}`,
+    answer: "",
+    aliases: [],
+  })),
 });
 
 const sanitizePrompt = (prompt) => ({
@@ -164,6 +169,7 @@ const createEmptyRoomState = (code, host) => ({
   roundSeconds: 90,
   maxPlayers: 8,
   choices: [],
+  choiceVotes: {},
   answer: null,
   drawerId: null,
   turnIndex: 0,
@@ -237,6 +243,7 @@ export class FindrawRoom {
     if (message.type === "start-game") return this.hostOnly(client, () => this.startGame(message.payload));
     if (message.type === "set-choices") return this.hostOnly(client, () => this.setChoices(message.payload));
     if (message.type === "choose-word") return this.drawerOnly(client, () => this.chooseWord(message.payload));
+    if (message.type === "choice-vote") return this.submitChoiceVote(client, message.payload);
     if (message.type === "guess") return this.submitGuess(client, message.payload);
     if (message.type === "drawing-preview") return this.drawerOnly(client, () => this.previewDrawing(socket, message.payload));
     if (message.type === "drawing-sync") return this.drawerOnly(client, () => this.syncDrawing(message.payload));
@@ -308,6 +315,7 @@ export class FindrawRoom {
       phase: shouldResetRound ? "lobby" : this.room.phase,
       answer: shouldResetRound ? null : this.room.answer,
       choices: shouldResetRound ? [] : this.room.choices,
+      choiceVotes: shouldResetRound ? {} : this.room.choiceVotes || {},
       guesses: shouldResetRound ? [] : this.room.guesses,
       solved: shouldResetRound ? [] : this.room.solved,
       endAt: shouldResetRound ? null : this.room.endAt,
@@ -374,6 +382,7 @@ export class FindrawRoom {
       roundsPerPlayer: this.room.roundsPerPlayer || 3,
       answer: null,
       choices: this.sanitizeChoices(payload?.choices),
+      choiceVotes: {},
       guesses: [],
       solved: [],
       endAt: null,
@@ -389,6 +398,7 @@ export class FindrawRoom {
   async setChoices(payload) {
     if (!this.room || this.room.phase !== "choosing") return;
     this.room.choices = this.sanitizeChoices(payload?.choices);
+    this.room.choiceVotes = {};
     this.room.updatedAt = Date.now();
     await this.save();
     this.broadcastState();
@@ -406,6 +416,7 @@ export class FindrawRoom {
       ...this.room,
       phase: "drawing",
       answer,
+      choiceVotes: {},
       guesses: [],
       solved: [],
       endAt: Date.now() + this.room.roundSeconds * 1000,
@@ -415,6 +426,28 @@ export class FindrawRoom {
     };
     await this.save();
     await this.state.storage.setAlarm(this.room.endAt);
+    this.broadcastState();
+  }
+
+  getWinningChoiceIndex(votes) {
+    const counts = (this.room.choices || []).map((_, index) => Object.values(votes || {}).filter((vote) => vote === index).length);
+    return counts.reduce((bestIndex, count, index) => count > counts[bestIndex] ? index : bestIndex, 0);
+  }
+
+  async submitChoiceVote(client, payload) {
+    if (!this.room || this.room.phase !== "choosing" || client.id === this.room.drawerId) return;
+    const choiceIndex = Math.trunc(Number(payload?.choiceIndex));
+    if (!Number.isFinite(choiceIndex) || choiceIndex < 0 || choiceIndex >= (this.room.choices || []).length) return;
+    const choiceVotes = { ...(this.room.choiceVotes || {}), [client.id]: choiceIndex };
+    const eligibleVoters = this.room.players.filter((player) => player.id !== this.room.drawerId);
+    const votedCount = Object.keys(choiceVotes).filter((playerId) => eligibleVoters.some((player) => player.id === playerId)).length;
+    if (votedCount >= eligibleVoters.length) {
+      const answer = this.room.choices[this.getWinningChoiceIndex(choiceVotes)];
+      if (answer) return this.chooseWord({ answer });
+    }
+    this.room.choiceVotes = choiceVotes;
+    this.room.updatedAt = Date.now();
+    await this.save();
     this.broadcastState();
   }
 
@@ -490,7 +523,7 @@ export class FindrawRoom {
     if (!this.room) return;
     const next = getNextRoomTurn(this.room);
     if (!next) {
-      this.room = { ...this.room, phase: "finished", answer: null, choices: [], drawerId: null, endAt: null, drawingOperations: [], updatedAt: Date.now() };
+      this.room = { ...this.room, phase: "finished", answer: null, choices: [], choiceVotes: {}, drawerId: null, endAt: null, drawingOperations: [], updatedAt: Date.now() };
       await this.state.storage.deleteAlarm();
       await this.save();
       this.broadcastState();
@@ -502,6 +535,7 @@ export class FindrawRoom {
       ...next,
       answer: null,
       choices: [],
+      choiceVotes: {},
       guesses: [],
       solved: [],
       endAt: null,

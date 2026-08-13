@@ -40,6 +40,7 @@ export type RoomState = {
   roundSeconds: number;
   maxPlayers: number;
   choices: CategoryPrompt[];
+  choiceVotes: Record<string, number>;
   answer: CategoryPrompt | null;
   drawerId: string | null;
   turnIndex: number;
@@ -86,6 +87,7 @@ export const createEmptyRoom = (code: string, host: RoomPlayer): RoomState => ({
   roundSeconds: 90,
   maxPlayers: 8,
   choices: [],
+  choiceVotes: {},
   answer: null,
   drawerId: null,
   turnIndex: 0,
