@@ -150,6 +150,7 @@ export const matchesSingleSelection = (category: string, token: string) => {
 
 export const matchesCategorySelection = (category: string, selection: string) => {
   if (!selection || selection === "all") return true;
+  if (selection === "random") return matchesSingleSelection(category, "domain:general");
   if (selection === "empty") return false;
   const tokens = selection.split(",").filter(Boolean);
   if (tokens.includes("all")) return true;
@@ -312,7 +313,8 @@ function getDomainByToken(mode: FindrawModePool, domainToken: string): { label: 
 }
 
 export function getSelectionTokens(selection: string): string[] {
-  if (!selection || selection === "empty" || selection === "random") return [];
+  if (!selection || selection === "empty") return [];
+  if (selection === "random") return ["domain:general"];
   return selection.split(",").map((token) => token.trim()).filter(Boolean);
 }
 
@@ -357,7 +359,7 @@ export function getDeckIdsForCollectionToken(mode: FindrawModePool, collectionTo
 }
 
 export function isCategorySelectionOptionActive(selection: string, optionId: string, mode: FindrawModePool): boolean {
-  if (selection === "random") return optionId === "random";
+  if (selection === "random") return optionId === "domain:general";
   const tokens = getSelectionTokens(selection);
   if (tokens.length === 0) return false;
   if (tokens.includes("all")) return true;
@@ -672,28 +674,71 @@ export const getCategoryWordCount = (category: WordCategory) => {
   return UNIFIED_ASSETS.filter((a) => matchesCategorySelection(a.category, category.id)).length;
 };
 
+const getAssetPromptKey = (asset: UnifiedAsset) => `${asset.category}:${asset.answer.toLocaleLowerCase("en")}`;
+
+function toCategoryPrompt(asset: UnifiedAsset): CategoryPrompt {
+  return {
+    answer: asset.answer,
+    aliases: asset.aliases,
+    categoryId: asset.category,
+    difficulty: asset.difficulty,
+  };
+}
+
+function pickWeightedDifficulty(pool: UnifiedAsset[], recentKeys: string[]): WordDifficulty {
+  const hasEasy = pool.some((asset) => asset.difficulty === "easy");
+  const hasHard = pool.some((asset) => asset.difficulty === "hard");
+  if (!hasEasy) return "hard";
+  if (!hasHard) return "easy";
+
+  const recent = new Set(recentKeys.slice(-6));
+  const recentPrompts = pool.filter((asset) => recent.has(getAssetPromptKey(asset)));
+  const recentHardCount = recentPrompts.filter((asset) => asset.difficulty === "hard").length;
+  const lastPrompt = pool.find((asset) => getAssetPromptKey(asset) === recentKeys.at(-1));
+
+  let hardChance = 0.28;
+  if (recentPrompts.length >= 3 && recentHardCount === 0) hardChance = 0.45;
+  if (recentPrompts.length >= 4 && recentHardCount >= 2) hardChance = 0.14;
+  if (lastPrompt?.difficulty === "hard") hardChance = Math.min(hardChance, 0.16);
+
+  return Math.random() < hardChance ? "hard" : "easy";
+}
+
+export function pickBalancedPrompts(pool: UnifiedAsset[], recentKeys: string[], count: number): CategoryPrompt[] {
+  const picked: CategoryPrompt[] = [];
+  const workingRecentKeys = [...recentKeys];
+
+  for (let index = 0; index < count; index += 1) {
+    const recent = new Set(workingRecentKeys.slice(-32));
+    const pickedKeys = new Set(picked.map(getPromptKey));
+    const available = pool.filter((asset) => !recent.has(getAssetPromptKey(asset)) && !pickedKeys.has(getAssetPromptKey(asset)));
+    const fallback = pool.filter((asset) => !pickedKeys.has(getAssetPromptKey(asset)));
+    const choices = available.length > 0 ? available : fallback.length > 0 ? fallback : pool;
+    if (choices.length === 0) break;
+
+    const preferredDifficulty = pickWeightedDifficulty(choices, workingRecentKeys);
+    const preferredChoices = choices.filter((asset) => asset.difficulty === preferredDifficulty);
+    const finalChoices = preferredChoices.length > 0 ? preferredChoices : choices;
+    const asset = finalChoices[Math.floor(Math.random() * finalChoices.length)];
+    const prompt = toCategoryPrompt(asset);
+
+    picked.push(prompt);
+    workingRecentKeys.push(getPromptKey(prompt));
+  }
+
+  return picked;
+}
+
 export function pickNextPrompt(
   selection: CategorySelection,
   recentKeys: string[],
 ): CategoryPrompt {
   const matchingAssets = UNIFIED_ASSETS.filter((a) => matchesCategorySelection(a.category, selection));
-  
-  const pool = matchingAssets.map((asset) => ({
-    answer: asset.answer,
-    aliases: asset.aliases,
-    categoryId: asset.category,
-    difficulty: asset.difficulty,
-  }));
-
-  const recent = new Set(recentKeys.slice(-24));
-  const available = pool.filter((prompt) => !recent.has(getPromptKey(prompt)));
-  const previousKey = recentKeys.at(-1);
-  const fallback = pool.filter((prompt) => getPromptKey(prompt) !== previousKey);
-  const choices = available.length > 0 ? available : fallback.length > 0 ? fallback : pool;
+  const choices = pickBalancedPrompts(matchingAssets, recentKeys, 1);
   
   if (choices.length === 0) {
     return { answer: "Error: No words found", categoryId: "random" };
   }
-  
-  return choices[Math.floor(Math.random() * choices.length)];
+
+  return choices[0];
 }

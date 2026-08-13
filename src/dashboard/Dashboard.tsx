@@ -77,7 +77,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   const [correctGuessTarget, setCorrectGuessTarget] = usePersistentState("round.correctGuessTarget", 10);
   const [revealAnswerOnTimeout, setRevealAnswerOnTimeout] = usePersistentState("round.revealOnTimeout", true);
   const [testBotsEnabled, setTestBotsEnabled] = usePersistentState("round.testBotsEnabled", true);
-  const [selectedCategoryId, setSelectedCategoryId] = usePersistentState<CategorySelection>("round.category", "random");
+  const [selectedCategoryId, setSelectedCategoryId] = usePersistentState<CategorySelection>("round.category", "domain:general");
   const [roundStatus, setRoundStatus] = useState<RoundStatus>("idle");
   const [currentPrompt, setCurrentPrompt] = useState<CategoryPrompt>(() => pickNextPrompt(selectedCategoryId, []));
   const recentPromptKeysRef = useRef<string[]>([getPromptKey(currentPrompt)]);

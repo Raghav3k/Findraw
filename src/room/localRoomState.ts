@@ -1,6 +1,7 @@
 import {
   getPromptsForMode,
   matchesCategorySelection,
+  pickBalancedPrompts,
   type CategoryPrompt,
   type CategorySelection,
 } from "../dashboard/gameData";
@@ -87,7 +88,7 @@ export const createEmptyRoom = (code: string, host: RoomPlayer): RoomState => ({
   hostId: host.id,
   players: [host],
   phase: "lobby",
-  categorySelection: "all",
+  categorySelection: "domain:general",
   roundSeconds: 90,
   maxPlayers: 8,
   choices: [],
@@ -123,32 +124,15 @@ export const deleteRoom = (code: string) => {
 export const roomPromptKey = (prompt: CategoryPrompt) => `${prompt.categoryId}:${prompt.answer.toLowerCase()}`;
 
 export const pickRoomChoices = (selection: CategorySelection, recentKeys: string[], count = 3): CategoryPrompt[] => {
-  const recent = new Set(recentKeys.slice(-32));
   const pool = getPromptsForMode("room")
-    .filter((prompt) => matchesCategorySelection(prompt.category, selection))
-    .map((prompt) => ({
-      answer: prompt.answer,
-      aliases: prompt.aliases,
-      categoryId: prompt.category,
-      difficulty: prompt.difficulty,
-    }))
-    .filter((prompt) => !recent.has(roomPromptKey(prompt)));
+    .filter((prompt) => matchesCategorySelection(prompt.category, selection));
 
-  const fallback = getPromptsForMode("room")
-    .filter((prompt) => matchesCategorySelection(prompt.category, selection))
-    .map((prompt) => ({
-      answer: prompt.answer,
-      aliases: prompt.aliases,
-      categoryId: prompt.category,
-      difficulty: prompt.difficulty,
-    }));
-
-  const choices = [...(pool.length ? pool : fallback)];
+  const choices = pickBalancedPrompts(pool, recentKeys, count);
   for (let index = choices.length - 1; index > 0; index -= 1) {
     const swapIndex = Math.floor(Math.random() * (index + 1));
     [choices[index], choices[swapIndex]] = [choices[swapIndex], choices[index]];
   }
-  return choices.slice(0, count);
+  return choices;
 };
 
 export const normalizeGuess = (value: string) => value.trim().toLowerCase().replace(/[^a-z0-9]+/g, "");
