@@ -82,7 +82,7 @@ export type CategorySelectionChip = {
   id: string;
   label: string;
   accent: string;
-  kind: "all" | "collection" | "deck" | "empty";
+  kind: "all" | "domain" | "collection" | "deck" | "empty";
 };
 
 export const UNIFIED_ASSETS: UnifiedAsset[] = [
@@ -111,6 +111,14 @@ const MODE_ASSET_POOLS: Record<FindrawModePool, UnifiedAsset[]> = {
 export const matchesSingleSelection = (category: string, token: string) => {
   if (token === "all") return true;
   if (token === category) return true;
+  if (token.startsWith("domain:")) {
+    const domainQuery = token.slice(7);
+    const deckInfo = getCategoryDeckInfo(category);
+    if (!deckInfo) return false;
+    if (domainQuery === "games") return deckInfo.domainId === "games";
+    if (domainQuery === "general") return deckInfo.domainId !== "games";
+    return deckInfo.domainId === domainQuery;
+  }
   if (token.startsWith("game:")) {
     const gameQuery = token.slice(5).toLowerCase();
     return category.toLowerCase().startsWith(gameQuery);
@@ -261,6 +269,26 @@ function getCollectionByToken(mode: FindrawModePool, collectionToken: string): F
   return collections.find((collection) => collection.id === collectionToken) ?? null;
 }
 
+function getDomainByToken(mode: FindrawModePool, domainToken: string): { label: string; accent: string } | null {
+  if (!domainToken.startsWith("domain:")) return null;
+  const domainId = domainToken.slice(7);
+  if (domainId === "games") {
+    const gamesDomain = getCategoryModel(mode).find((domain) => domain.id === "games");
+    if (!gamesDomain) return null;
+    return { label: "Games", accent: gamesDomain.collections[0]?.accent ?? "#83c5e6" };
+  }
+  if (domainId === "general") {
+    const generalCollections = getCategoryModel(mode)
+      .filter((domain) => domain.id !== "games")
+      .flatMap((domain) => domain.collections);
+    if (!generalCollections.length) return null;
+    return { label: "General", accent: "#83c5e6" };
+  }
+  const domain = getCategoryModel(mode).find((item) => item.id === domainId);
+  if (!domain) return null;
+  return { label: domain.label, accent: domain.collections[0]?.accent ?? "#83c5e6" };
+}
+
 export function getSelectionTokens(selection: string): string[] {
   if (!selection || selection === "empty" || selection === "random") return [];
   return selection.split(",").map((token) => token.trim()).filter(Boolean);
@@ -276,8 +304,23 @@ export function getCollectionTokenForDeck(mode: FindrawModePool, deckId: string)
   return null;
 }
 
+function getDomainTokenForDeck(mode: FindrawModePool, deckId: string): string | null {
+  for (const domain of getCategoryModel(mode)) {
+    if (!domain.collections.some((collection) => collection.decks.some((deck) => deck.id === deckId))) continue;
+    return domain.id === "games" ? "domain:games" : "domain:general";
+  }
+  return null;
+}
+
 export function getDeckIdsForCollectionToken(mode: FindrawModePool, collectionToken: string): string[] {
   const model = getCategoryModel(mode);
+  if (collectionToken.startsWith("domain:")) {
+    const domainId = collectionToken.slice(7);
+    const domains = domainId === "general"
+      ? model.filter((domain) => domain.id !== "games")
+      : model.filter((domain) => domain.id === domainId);
+    return domains.flatMap((domain) => domain.collections.flatMap((collection) => collection.decks.map((deck) => deck.id)));
+  }
   if (collectionToken.startsWith("game:")) {
     const collectionId = collectionToken.slice(5);
     return model
@@ -302,7 +345,10 @@ export function isCategorySelectionOptionActive(selection: string, optionId: str
   if (optionDeckIds.length > 0 && optionDeckIds.every((deckId) => tokens.includes(deckId))) return true;
 
   const parentToken = getCollectionTokenForDeck(mode, optionId);
-  return Boolean(parentToken && tokens.includes(parentToken));
+  if (parentToken && tokens.includes(parentToken)) return true;
+
+  const domainToken = getDomainTokenForDeck(mode, optionId);
+  return Boolean(domainToken && tokens.includes(domainToken));
 }
 
 export function toggleCategorySelectionOption(selection: string, optionId: string, mode: FindrawModePool, emptySelection = ""): string {
@@ -330,6 +376,15 @@ export function toggleCategorySelectionOption(selection: string, optionId: strin
     return tokens.length > 0 ? [...new Set(tokens)].join(",") : emptySelection;
   }
 
+  const domainToken = getDomainTokenForDeck(mode, optionId);
+  const domainDeckIds = domainToken ? getDeckIdsForCollectionToken(mode, domainToken) : [];
+
+  if (domainToken && tokens.includes(domainToken)) {
+    tokens = tokens.filter((token) => token !== domainToken);
+    tokens.push(...domainDeckIds.filter((deckId) => deckId !== optionId));
+    return tokens.length > 0 ? [...new Set(tokens)].join(",") : emptySelection;
+  }
+
   tokens = selected
     ? tokens.filter((token) => token !== optionId)
     : [...tokens, optionId];
@@ -337,6 +392,11 @@ export function toggleCategorySelectionOption(selection: string, optionId: strin
   if (parentToken && siblingDeckIds.length > 0 && siblingDeckIds.every((deckId) => tokens.includes(deckId))) {
     tokens = tokens.filter((token) => !siblingDeckIds.includes(token));
     tokens.push(parentToken);
+  }
+
+  if (domainToken && domainDeckIds.length > 0 && domainDeckIds.every((deckId) => tokens.includes(deckId))) {
+    tokens = tokens.filter((token) => !domainDeckIds.includes(token));
+    tokens.push(domainToken);
   }
 
   return tokens.length > 0 ? [...new Set(tokens)].join(",") : emptySelection;
@@ -361,6 +421,16 @@ export function getActiveSelectionChips(selection: string, mode: FindrawModePool
   }
 
   return tokens.map((token): CategorySelectionChip => {
+    const domain = getDomainByToken(mode, token);
+    if (domain) {
+      return {
+        id: token,
+        label: `All ${domain.label}`,
+        accent: domain.accent,
+        kind: "domain",
+      };
+    }
+
     const collection = getCollectionByToken(mode, token);
     if (collection) {
       return {
@@ -390,7 +460,23 @@ function buildCategoryDomains(pool: UnifiedAsset[]): CategoryPickerDomain[] {
   const gamesDomain: CategoryPickerDomain = {
     id: "games",
     label: "Games",
-    groups: GAME_TITLES.map((game) => {
+    groups: [
+      {
+        id: "games",
+        label: "Games",
+        options: [{
+          id: "domain:games",
+          label: "All Games",
+          description: "A mixed pool from every game deck",
+          icon: "sports_esports",
+          accent: "#83c5e6",
+          count: model
+            .find((domain) => domain.id === "games")
+            ?.collections.flatMap((collection) => collection.decks)
+            .reduce((total, deck) => total + deck.promptCount, 0) ?? 0,
+        }],
+      },
+      ...GAME_TITLES.map((game) => {
       const gameCollection = model
         .find((domain) => domain.id === "games")
         ?.collections.find((collection) => collection.id === game.id);
@@ -419,10 +505,11 @@ function buildCategoryDomains(pool: UnifiedAsset[]): CategoryPickerDomain[] {
           })),
         ],
       };
-    }).filter(Boolean) as CategoryPickerGroup[],
+      }).filter(Boolean) as CategoryPickerGroup[],
+    ],
   };
 
-  const generalDomains = (["world", "culture", "everyday"] as FindrawDomainId[]).flatMap((domainId) => {
+  const generalGroups = (["world", "culture", "everyday"] as FindrawDomainId[]).flatMap((domainId) => {
     const domain = model.find((item) => item.id === domainId);
     const options = domain?.collections.flatMap((collection) => collection.decks.map((deck) => ({
       id: deck.id,
@@ -436,11 +523,36 @@ function buildCategoryDomains(pool: UnifiedAsset[]): CategoryPickerDomain[] {
     return [{
       id: domainId,
       label: DOMAIN_LABELS[domainId],
-      groups: [{ id: DOMAIN_LABELS[domainId], label: `All ${DOMAIN_LABELS[domainId]}`, options }],
+      options,
     }];
   });
 
-  return [gamesDomain, ...generalDomains].filter((domain) => domain.groups.length > 0);
+  const generalCount = model
+    .filter((domain) => domain.id !== "games")
+    .flatMap((domain) => domain.collections.flatMap((collection) => collection.decks))
+    .reduce((total, deck) => total + deck.promptCount, 0);
+
+  const generalDomain: CategoryPickerDomain = {
+    id: "general",
+    label: "General",
+    groups: [
+      {
+        id: "general",
+        label: "General",
+        options: [{
+          id: "domain:general",
+          label: "All General",
+          description: "A mixed pool from everyday, world, and culture decks",
+          icon: "category",
+          accent: "#83c5e6",
+          count: generalCount,
+        }],
+      },
+      ...generalGroups,
+    ],
+  };
+
+  return [gamesDomain, generalDomain].filter((domain) => domain.groups.length > 0);
 }
 
 export function getCategoryDomains(mode: FindrawModePool): CategoryPickerDomain[] {
@@ -477,6 +589,30 @@ export const getCategory = (categoryId: string): WordCategory | undefined => {
       icon: "sports_esports",
       accent: game.accent,
     };
+  }
+
+  if (categoryId.startsWith("domain:")) {
+    const domainId = categoryId.slice(7);
+    if (domainId === "games") {
+      return {
+        id: categoryId,
+        name: "All Games",
+        group: "Games",
+        description: "A mixed pool from every game deck.",
+        icon: "sports_esports",
+        accent: "#83c5e6",
+      };
+    }
+    if (domainId === "general") {
+      return {
+        id: categoryId,
+        name: "All General",
+        group: "Everyday",
+        description: "A mixed pool from everyday, world, and culture decks.",
+        icon: "category",
+        accent: "#83c5e6",
+      };
+    }
   }
 
   const gameMatch = GAME_TITLES.find((g) => categoryId.toLowerCase().startsWith(g.id));
