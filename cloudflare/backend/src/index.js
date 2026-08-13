@@ -97,7 +97,7 @@ const sanitizeDrawingOperations = (operations) => {
           style,
           points,
           color: sanitizeColor(operation.color),
-          opacity: clampNumber(operation.opacity, 0.05, 1, 1),
+          opacity: clampNumber(operation.opacity, 1, 100, 100),
           strokeWidth: clampNumber(operation.strokeWidth, 1, 80, 8),
           complete: Boolean(operation.complete),
         });
@@ -110,7 +110,7 @@ const sanitizeDrawingOperations = (operations) => {
         x: clampNumber(operation.x, -ROOM_COORDINATE_LIMIT, ROOM_COORDINATE_LIMIT, 0),
         y: clampNumber(operation.y, -ROOM_COORDINATE_LIMIT, ROOM_COORDINATE_LIMIT, 0),
         color: sanitizeColor(operation.color),
-        opacity: clampNumber(operation.opacity, 0.05, 1, 1),
+        opacity: clampNumber(operation.opacity, 1, 100, 100),
       });
       continue;
     }
@@ -125,7 +125,7 @@ const sanitizeDrawingOperations = (operations) => {
         start: [start[0], start[1]],
         end: [end[0], end[1]],
         color: sanitizeColor(operation.color),
-        opacity: clampNumber(operation.opacity, 0.05, 1, 1),
+        opacity: clampNumber(operation.opacity, 1, 100, 100),
         strokeWidth: clampNumber(operation.strokeWidth, 1, 80, 8),
       });
     }
