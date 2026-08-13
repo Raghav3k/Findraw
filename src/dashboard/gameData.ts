@@ -50,7 +50,7 @@ export type UnifiedAsset = {
 };
 
 type RawWordAsset = Omit<UnifiedAsset, "difficulty"> & {
-  difficulty?: WordDifficulty | "Easy" | "Medium" | "Hard";
+  difficulty?: WordDifficulty | "medium" | "Easy" | "Medium" | "Hard";
 };
 
 export type FindrawDomainId = "games" | "world" | "culture" | "everyday";
@@ -126,7 +126,7 @@ const MODE_ASSET_POOLS: Record<FindrawModePool, UnifiedAsset[]> = {
 
 function normalizeDifficulty(difficulty: RawWordAsset["difficulty"]): WordDifficulty {
   if (difficulty === "easy" || difficulty === "Easy") return "easy";
-  if (difficulty === "hard" || difficulty === "Medium" || difficulty === "Hard") return "hard";
+  if (difficulty === "hard" || difficulty === "medium" || difficulty === "Medium" || difficulty === "Hard") return "hard";
   return "easy";
 }
 
