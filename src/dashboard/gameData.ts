@@ -7,8 +7,11 @@ export type RoundPrompt = {
   aliases?: string[];
 };
 
+export type WordDifficulty = "easy" | "hard";
+
 export type CategoryPrompt = RoundPrompt & {
   categoryId: string;
+  difficulty?: WordDifficulty;
 };
 
 export type WordCategory = {
@@ -43,6 +46,11 @@ export type UnifiedAsset = {
   answer: string;
   aliases: string[];
   category: string;
+  difficulty: WordDifficulty;
+};
+
+type RawWordAsset = Omit<UnifiedAsset, "difficulty"> & {
+  difficulty?: WordDifficulty | "Easy" | "Medium" | "Hard";
 };
 
 export type FindrawDomainId = "games" | "world" | "culture" | "everyday";
@@ -91,8 +99,15 @@ export const UNIFIED_ASSETS: UnifiedAsset[] = [
     answer: asset.answer,
     aliases: asset.aliases || [],
     category: asset.category,
+    difficulty: normalizeDifficulty(asset.difficulty),
   })),
-  ...(artistWordsRaw as UnifiedAsset[]),
+  ...(artistWordsRaw as RawWordAsset[]).map((asset) => ({
+    id: asset.id,
+    answer: asset.answer,
+    aliases: asset.aliases || [],
+    category: asset.category,
+    difficulty: normalizeDifficulty(asset.difficulty),
+  })),
 ];
 
 const MODE_ASSET_POOLS: Record<FindrawModePool, UnifiedAsset[]> = {
@@ -102,11 +117,18 @@ const MODE_ASSET_POOLS: Record<FindrawModePool, UnifiedAsset[]> = {
     answer: asset.answer,
     aliases: asset.aliases || [],
     category: asset.category,
+    difficulty: normalizeDifficulty(asset.difficulty),
   })),
   // Room mode is not implemented yet. Start from the artist-safe drawing pool so
   // existing category selections keep working when the mode gets its first UI.
   room: UNIFIED_ASSETS,
 };
+
+function normalizeDifficulty(difficulty: RawWordAsset["difficulty"]): WordDifficulty {
+  if (difficulty === "easy" || difficulty === "Easy") return "easy";
+  if (difficulty === "hard" || difficulty === "Medium" || difficulty === "Hard") return "hard";
+  return "easy";
+}
 
 export const matchesSingleSelection = (category: string, token: string) => {
   if (token === "all") return true;
@@ -660,6 +682,7 @@ export function pickNextPrompt(
     answer: asset.answer,
     aliases: asset.aliases,
     categoryId: asset.category,
+    difficulty: asset.difficulty,
   }));
 
   const recent = new Set(recentKeys.slice(-24));

@@ -130,6 +130,7 @@ export const pickRoomChoices = (selection: CategorySelection, recentKeys: string
       answer: prompt.answer,
       aliases: prompt.aliases,
       categoryId: prompt.category,
+      difficulty: prompt.difficulty,
     }))
     .filter((prompt) => !recent.has(roomPromptKey(prompt)));
 
@@ -139,6 +140,7 @@ export const pickRoomChoices = (selection: CategorySelection, recentKeys: string
       answer: prompt.answer,
       aliases: prompt.aliases,
       categoryId: prompt.category,
+      difficulty: prompt.difficulty,
     }));
 
   const choices = [...(pool.length ? pool : fallback)];
