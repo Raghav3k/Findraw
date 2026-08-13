@@ -394,28 +394,34 @@ export function CategoryPickerWindow({
                 </div>
 
                 <div className="domain-tabs">
-                  {domains.map((domain) => (
-                    <button
-                      key={domain.id}
-                      className={`domain-tab ${activeDomainId === domain.id ? "active" : ""}`}
-                      onClick={() => changeDomain(domain.id)}
-                      type="button"
-                    >
-                      {domain.label}
-                    </button>
-                  ))}
-                </div>
-                <div className="category-section-tabs" aria-label="Category sections">
-                  {getDomainSections(domains.find((domain) => domain.id === activeDomainId) ?? domains[0]).map((section) => (
-                    <button
-                      key={section.id}
-                      className={`category-section-tab ${activeSectionId === section.id ? "active" : ""}`}
-                      onClick={() => setActiveSectionId(section.id)}
-                      type="button"
-                    >
-                      {section.label}
-                    </button>
-                  ))}
+                  {domains.map((domain) => {
+                    const active = activeDomainId === domain.id;
+                    return (
+                      <div className={`category-domain-stack ${active ? "open" : ""}`} key={domain.id}>
+                        <button
+                          className={`domain-tab ${active ? "active" : ""}`}
+                          onClick={() => changeDomain(domain.id)}
+                          type="button"
+                        >
+                          {domain.label}
+                        </button>
+                        {active ? (
+                          <div className="category-section-tabs" aria-label={`${domain.label} sections`}>
+                            {getDomainSections(domain).map((section) => (
+                              <button
+                                key={section.id}
+                                className={`category-section-tab ${activeSectionId === section.id ? "active" : ""}`}
+                                onClick={() => setActiveSectionId(section.id)}
+                                type="button"
+                              >
+                                {section.label}
+                              </button>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
+                    );
+                  })}
                 </div>
               </aside>
 

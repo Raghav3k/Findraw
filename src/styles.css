@@ -10985,13 +10985,15 @@ body.resizing-panels .layout-resizer::after {
   margin-right: -15.5px;
   z-index: 10;
   position: relative;
-  flex: 0 0 auto;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-width: none;
+  padding-right: 4px;
 }
-.domain-tabs::-webkit-scrollbar { display: none; }
+.category-domain-stack { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
 .domain-tab {
+  width: 100%;
   text-align: left;
   padding: 12px 14px;
   font: 800 16px/1.2 "Shantell Sans", cursive;
@@ -11030,6 +11032,7 @@ body.resizing-panels .layout-resizer::after {
   overflow-x: hidden;
   overflow-y: auto;
   padding: 8px;
+  margin: 0 12px 8px 10px;
   border: 1px solid rgba(92, 75, 42, 0.32);
   border-radius: 8px;
   background: rgba(255, 250, 240, 0.38);

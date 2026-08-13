@@ -135,6 +135,7 @@ function normalizeDifficulty(difficulty: RawWordAsset["difficulty"]): WordDiffic
 export const matchesSingleSelection = (category: string, token: string) => {
   if (token === "all") return true;
   if (token === category) return true;
+  if (LEGACY_GENERAL_CATEGORIES.includes(token) && category.startsWith(`${token} `)) return true;
   if (token.startsWith("domain:")) {
     const domainQuery = token.slice(7);
     const deckInfo = getCategoryDeckInfo(category);
@@ -159,7 +160,15 @@ export const matchesCategorySelection = (category: string, selection: string) =>
   return tokens.some((token) => matchesSingleSelection(category, token));
 };
 
-const NON_GAME_METADATA: Record<string, { group: "Culture" | "World" | "Everyday", icon: string, accent: string, description: string }> = {
+type NonGameMetadata = {
+  group: "Culture" | "World" | "Everyday";
+  icon: string;
+  accent: string;
+  description: string;
+  label?: string;
+};
+
+const NON_GAME_METADATA: Record<string, NonGameMetadata> = {
   "Animals": { group: "World", icon: "pets", accent: "#df9a62", description: "Common wildlife through unusual species and adaptations." },
   "Ocean & Fish": { group: "World", icon: "water", accent: "#64b5cf", description: "Familiar sea life through rare deep-ocean species." },
   "Food": { group: "Everyday", icon: "restaurant", accent: "#ed8b67", description: "Iconic dishes through regional foods and culinary techniques." },
@@ -177,12 +186,56 @@ const NON_GAME_METADATA: Record<string, { group: "Culture" | "World" | "Everyday
   "Everyday Objects": { group: "Everyday", icon: "inventory_2", accent: "#a6a083", description: "Common household items through less-familiar tools and fittings." },
 };
 
+const NON_GAME_PREFIX_METADATA: Array<{ prefix: string } & NonGameMetadata> = [
+  { prefix: "Movies & TV", group: "Culture", icon: "movie", accent: "#7b9ac8", description: "Screen stories, franchises, and memorable props." },
+  { prefix: "Music", group: "Culture", icon: "music_note", accent: "#bb83c8", description: "Songs, performers, instruments, and music language." },
+  { prefix: "Books & Stories", group: "Culture", icon: "auto_stories", accent: "#b68b62", description: "Stories, book titles, characters, and literary ideas." },
+  { prefix: "Sports", group: "Culture", icon: "sports_soccer", accent: "#6ca2d1", description: "Sports, players, teams, gear, moves, and rules." },
+  { prefix: "Mythology", group: "Culture", icon: "castle", accent: "#c79069", description: "Mythical creatures, heroes, artifacts, and legendary places." },
+  { prefix: "Animals", group: "World", icon: "pets", accent: "#df9a62", description: "Common animals, wildlife, and rarer species." },
+  { prefix: "Ocean & Fish", group: "World", icon: "water", accent: "#64b5cf", description: "Sea animals, ocean life, and deep-sea oddities." },
+  { prefix: "Places", group: "World", icon: "travel_explore", accent: "#80b58c", description: "Places, landmarks, and recognizable destinations." },
+  { prefix: "Space", group: "World", icon: "rocket_launch", accent: "#777fbe", description: "Planets, spacecraft, astronomy, and deep-space ideas." },
+  { prefix: "Nature", group: "World", icon: "forest", accent: "#76ad76", description: "Landscapes, weather, plants, and natural phenomena." },
+  { prefix: "Food", group: "Everyday", icon: "restaurant", accent: "#ed8b67", description: "Foods by region, type, and familiarity." },
+  { prefix: "Jobs", group: "Everyday", icon: "badge", accent: "#d19a67", description: "Everyday jobs and specialist professions." },
+  { prefix: "Technology", group: "Everyday", icon: "devices", accent: "#79a9b8", description: "Daily tech, parts, concepts, and advanced computing terms." },
+  { prefix: "Everyday Objects", group: "Everyday", icon: "inventory_2", accent: "#a6a083", description: "Household objects, tools, and daily-use items." },
+];
+
+function getNonGameMetadata(category: string): NonGameMetadata | null {
+  const exact = NON_GAME_METADATA[category];
+  if (exact) return exact;
+  const prefix = NON_GAME_PREFIX_METADATA.find((item) => category === item.prefix || category.startsWith(`${item.prefix} `));
+  if (!prefix) return null;
+  const label = category === prefix.prefix ? category : category.slice(prefix.prefix.length).trim();
+  return { ...prefix, label };
+}
+
 const DOMAIN_LABELS: Record<FindrawDomainId, string> = {
   games: "Games",
   world: "World",
   culture: "Culture",
   everyday: "Everyday",
 };
+
+const LEGACY_GENERAL_CATEGORIES = [
+  "Animals",
+  "Ocean & Fish",
+  "Food",
+  "Places",
+  "Music",
+  "Singers & Bands",
+  "Books & Stories",
+  "Movies & TV",
+  "Sports",
+  "Space",
+  "Nature",
+  "Jobs",
+  "Technology",
+  "Mythology",
+  "Everyday Objects",
+];
 
 const GAME_SECTIONS = [
   { id: "shooters", label: "Shooters", games: ["valorant", "rainbow six siege", "arc raiders", "deadlock", "fortnite"] },
@@ -196,31 +249,31 @@ const GENERAL_SECTIONS = [
     id: "entertainment",
     label: "Entertainment",
     groups: [
-      { id: "movies-tv", label: "Movies & TV", categories: ["Movies & TV"] },
-      { id: "music", label: "Music", categories: ["Music", "Singers & Bands"] },
-      { id: "books-stories", label: "Books & Stories", categories: ["Books & Stories"] },
-      { id: "sports", label: "Sports", categories: ["Sports"] },
-      { id: "myths-legends", label: "Myths & Legends", categories: ["Mythology"] },
+      { id: "movies-tv", label: "Movies & TV", categories: ["Movies & TV Marvel", "Movies & TV DC", "Movies & TV Star Wars", "Movies & TV Animation", "Movies & TV Other", "Movies & TV Props"] },
+      { id: "music", label: "Music", categories: ["Music Songs", "Music Singers & Bands", "Music Instruments", "Music Performance", "Music Theory"] },
+      { id: "books-stories", label: "Books & Stories", categories: ["Books & Stories Fairy Tales", "Books & Stories Classic Books", "Books & Stories Characters", "Books & Stories Modern Stories"] },
+      { id: "sports", label: "Sports", categories: ["Sports Types", "Sports Equipment", "Sports Players", "Sports Teams", "Sports Moves & Rules"] },
+      { id: "myths-legends", label: "Myths & Legends", categories: ["Mythology Creatures", "Mythology Gods & Heroes", "Mythology Artifacts & Places"] },
     ],
   },
   {
     id: "world-nature",
     label: "World & Nature",
     groups: [
-      { id: "animals-life", label: "Animals & Sea Life", categories: ["Animals", "Ocean & Fish"] },
-      { id: "places-landmarks", label: "Places & Landmarks", categories: ["Places"] },
-      { id: "space", label: "Space", categories: ["Space"] },
-      { id: "nature", label: "Nature", categories: ["Nature"] },
+      { id: "animals-life", label: "Animals & Sea Life", categories: ["Animals Common", "Animals Wildlife", "Animals Rare", "Ocean & Fish Sea Animals", "Ocean & Fish Ocean Creatures", "Ocean & Fish Deep Sea"] },
+      { id: "places-landmarks", label: "Places & Landmarks", categories: ["Places Everyday", "Places Famous Landmarks", "Places World Landmarks"] },
+      { id: "space", label: "Space", categories: ["Space Basics", "Space Exploration", "Space Deep Space"] },
+      { id: "nature", label: "Nature", categories: ["Nature Landscapes & Plants", "Nature Weather & Sky", "Nature Rare Phenomena"] },
     ],
   },
   {
     id: "lifestyle",
     label: "Lifestyle",
     groups: [
-      { id: "food", label: "Food", categories: ["Food"] },
-      { id: "work", label: "Jobs", categories: ["Jobs"] },
-      { id: "tech", label: "Technology", categories: ["Technology"] },
-      { id: "objects", label: "Everyday Objects", categories: ["Everyday Objects"] },
+      { id: "food", label: "Food", categories: ["Food USA", "Food France", "Food India", "Food Japan", "Food Korea", "Food Middle East", "Food Europe", "Food Fruits & Sweets", "Food Other"] },
+      { id: "work", label: "Jobs", categories: ["Jobs Common", "Jobs Specialist"] },
+      { id: "tech", label: "Technology", categories: ["Technology Daily Tech", "Technology Parts & Concepts", "Technology Advanced Tech"] },
+      { id: "objects", label: "Everyday Objects", categories: ["Everyday Objects Household", "Everyday Objects Kitchen", "Everyday Objects Tools"] },
     ],
   },
 ];
@@ -247,15 +300,15 @@ function getCategoryDeckInfo(category: string): Omit<FindrawDeck, "promptCount">
     };
   }
 
-  const metadata = NON_GAME_METADATA[category];
+  const metadata = getNonGameMetadata(category);
   if (!metadata) return null;
   return {
     id: category,
-    label: category,
+    label: metadata.label ?? category,
     description: metadata.description,
     domainId: metadata.group.toLowerCase() as FindrawDomainId,
     collectionId: category,
-    collectionLabel: category,
+    collectionLabel: metadata.label ?? category,
     icon: metadata.icon,
     accent: metadata.accent,
   };
@@ -407,6 +460,7 @@ export function isCategorySelectionOptionActive(selection: string, optionId: str
   if (tokens.length === 0) return false;
   if (tokens.includes("all")) return true;
   if (tokens.includes(optionId)) return true;
+  if (tokens.some((token) => matchesSingleSelection(optionId, token))) return true;
 
   const optionDeckIds = getDeckIdsForCollectionToken(mode, optionId);
   if (optionDeckIds.length > 0 && optionDeckIds.every((deckId) => tokens.includes(deckId))) return true;
@@ -709,7 +763,7 @@ export const getCategory = (categoryId: string): WordCategory | undefined => {
         id: categoryId,
         name: "All General",
         group: "Everyday",
-        description: "A mixed pool from everyday, world, and culture decks.",
+        description: "A mixed pool from entertainment, world, and lifestyle decks.",
         icon: "category",
         accent: "#83c5e6",
       };
@@ -729,11 +783,11 @@ export const getCategory = (categoryId: string): WordCategory | undefined => {
     };
   }
 
-  const otherMeta = NON_GAME_METADATA[categoryId];
+  const otherMeta = getNonGameMetadata(categoryId);
   if (otherMeta) {
     return {
       id: categoryId,
-      name: categoryId,
+      name: otherMeta.label ?? categoryId,
       group: otherMeta.group,
       description: otherMeta.description,
       icon: otherMeta.icon,
