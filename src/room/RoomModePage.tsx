@@ -21,6 +21,7 @@ import {
   createClientId,
   createEmptyRoom,
   createRoomCode,
+  deleteRoom,
   maskedAnswer,
   normalizeGuess,
   normalizeRoomCode,
@@ -88,6 +89,8 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const [customWordError, setCustomWordError] = useState("");
   const [notice, setNotice] = useState("");
   const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const [confirmExitOpen, setConfirmExitOpen] = useState(false);
+  const [skipRoomExitConfirm, setSkipRoomExitConfirm] = usePersistentState("room.exit.skipConfirm", false);
   const [canvasColor, setCanvasColor] = usePersistentState("room.canvas.background", "#FFF2CF");
   const [gridSize, setGridSize] = usePersistentState("room.grid.size", 24);
   const resizeStateRef = useRef<ResizeState | null>(null);
@@ -111,6 +114,59 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const roomMaxPlayers = room?.maxPlayers ?? 8;
   const roomLeader = room?.players.find((player) => player.id === room.hostId) ?? null;
   const canEditRoomDetails = Boolean(room && isHost && (room.phase === "lobby" || room.phase === "finished"));
+
+  const leaveLocalRoom = useCallback((roomToLeave: RoomState) => {
+    const players = roomToLeave.players.filter((player) => player.id !== clientId);
+    if (!players.length) {
+      deleteRoom(roomToLeave.code);
+      return;
+    }
+    const wasHost = roomToLeave.hostId === clientId;
+    const wasDrawer = roomToLeave.drawerId === clientId;
+    const shouldResetRound = wasDrawer || (roomToLeave.phase !== "lobby" && players.length < 2);
+    writeRoom({
+      ...roomToLeave,
+      players,
+      hostId: wasHost ? players[0].id : roomToLeave.hostId,
+      drawerId: shouldResetRound ? null : roomToLeave.drawerId,
+      phase: shouldResetRound ? "lobby" : roomToLeave.phase,
+      answer: shouldResetRound ? null : roomToLeave.answer,
+      choices: shouldResetRound ? [] : roomToLeave.choices,
+      guesses: shouldResetRound ? [] : roomToLeave.guesses,
+      solved: shouldResetRound ? [] : roomToLeave.solved,
+      endAt: shouldResetRound ? null : roomToLeave.endAt,
+      drawingOperations: shouldResetRound ? [] : roomToLeave.drawingOperations,
+    });
+  }, [clientId]);
+
+  const leaveCurrentRoom = useCallback((navigateHome = false) => {
+    const roomToLeave = room;
+    if (roomToLeave) {
+      if (roomTransport === "online") onlineRoomRef.current?.sendLeaveRoom();
+      else leaveLocalRoom(roomToLeave);
+    }
+    onlineRoomRef.current?.close();
+    onlineRoomRef.current = null;
+    setRoom(null);
+    setJoinedCode("");
+    setRoomTransport("none");
+    setRoomConnectionStatus("offline");
+    setShowRoomDetails(false);
+    setRoomCodeRevealed(false);
+    setLiveDrawingOperation(null);
+    setGuess("");
+    setCustomWord("");
+    setNotice(roomToLeave ? `Left room ${roomToLeave.code}.` : "");
+    if (navigateHome) onNavigate("/");
+  }, [leaveLocalRoom, onNavigate, room, roomTransport]);
+
+  const requestExitToHome = useCallback(() => {
+    if (room && !skipRoomExitConfirm) {
+      setConfirmExitOpen(true);
+      return;
+    }
+    leaveCurrentRoom(true);
+  }, [leaveCurrentRoom, room, skipRoomExitConfirm]);
 
   const saveRoom = (nextRoom: RoomState) => {
     if (roomTransport === "online") {
@@ -460,10 +516,21 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   return (
     <div className="dashboard-layout room-mode-page" style={{ "--source-rail-width": `${sourceRailWidth}px`, "--side-panel-width": `${sidePanelWidth}px` } as CSSProperties}>
       <aside className="stream-sidebar room-sidebar" aria-label="Room setup">
-        <WorkspaceIdentity connected={roomConnectionStatus === "connected"} configured={hasApiBaseUrl} displayName={playerName} onModes={() => onNavigate("/")} returnTo="/room" subtitle={hasApiBaseUrl ? "Online room beta" : "Local room fallback"} />
+        <WorkspaceIdentity connected={roomConnectionStatus === "connected"} configured={hasApiBaseUrl} displayName={playerName} onModes={requestExitToHome} returnTo="/room" subtitle={hasApiBaseUrl ? "Online room beta" : "Local room fallback"} />
 
         <section className="source-card room-player-card">
-          <header className="source-card-header"><div><span className="source-eyebrow">Players</span><h2>{room ? "Room lobby" : "No room"}</h2></div><span className="source-status">{room?.players.length ?? 0}</span></header>
+          <header className="source-card-header">
+            <div><span className="source-eyebrow">Players</span><h2>{room ? "Room lobby" : "No room"}</h2></div>
+            <div className="room-player-header-actions">
+              {room ? (
+                <button className="room-panel-exit-button" onClick={() => leaveCurrentRoom(false)} title="Leave this room" type="button">
+                  <span className="material-symbols-outlined">logout</span>
+                  <span>Exit room</span>
+                </button>
+              ) : null}
+              <span className="source-status">{room?.players.length ?? 0}</span>
+            </div>
+          </header>
           <div className="room-player-list">
             {sortedPlayers.length ? sortedPlayers.map((player, index) => (
               <span className={player.id === room?.drawerId ? "drawer" : ""} key={player.id}>
@@ -582,6 +649,23 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
           </section>
         )}
       </aside>
+      {confirmExitOpen ? (
+        <div className="room-exit-backdrop" role="presentation">
+          <section aria-label="Exit room confirmation" aria-modal="true" className="room-exit-dialog" role="dialog">
+            <span className="material-symbols-outlined">logout</span>
+            <h2>Exit room?</h2>
+            <p>You will leave the current room and return to the mode page.</p>
+            <label className="room-exit-skip">
+              <input checked={skipRoomExitConfirm} onChange={(event) => setSkipRoomExitConfirm(event.target.checked)} type="checkbox" />
+              <span>Do not show this again</span>
+            </label>
+            <div className="room-exit-actions">
+              <button onClick={() => setConfirmExitOpen(false)} type="button">No</button>
+              <button className="danger" onClick={() => leaveCurrentRoom(true)} type="button">Yes</button>
+            </div>
+          </section>
+        </div>
+      ) : null}
 
       <div aria-label="Resize room setup panel" aria-orientation="vertical" aria-valuemax={520} aria-valuemin={260} aria-valuenow={sourceRailWidth} className="layout-resizer source-rail-resizer" onPointerDown={(event) => startResize("source", event)} role="separator" />
 

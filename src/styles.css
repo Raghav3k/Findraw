@@ -12085,6 +12085,15 @@ body.resizing-panels .layout-resizer::after {
   background: #f2d98b;
 }
 
+.workspace-identity .workspace-exit-button {
+  background: #f2c6bd;
+  border-color: rgba(172, 76, 67, 0.42);
+}
+
+.workspace-identity .workspace-exit-button:hover {
+  background: #f5d0c8;
+}
+
 /* Final category picker overrides. The file contains legacy repeated blocks. */
 .category-window-options button.active {
   border-color: rgba(92, 75, 42, 0.42);
@@ -12750,6 +12759,124 @@ body.resizing-panels .layout-resizer::after {
   border-radius: 50%;
   font-style: normal;
   font-size: 10px;
+}
+
+.room-player-header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.room-panel-exit-button {
+  min-height: 27px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 8px;
+  color: #302e29;
+  border: 1px solid rgba(172, 76, 67, .42);
+  border-radius: 6px 8px 6px 7px;
+  background: #f2c6bd;
+  box-shadow: 1px 2px 0 rgba(76, 64, 45, .12);
+  cursor: pointer;
+  font: 900 10px/1 var(--font-sketch, "Shantell Sans", cursive);
+}
+
+.room-panel-exit-button:hover {
+  background: #f5d0c8;
+  transform: translateY(-1px);
+}
+
+.room-panel-exit-button .material-symbols-outlined {
+  font-size: 16px;
+}
+
+.room-exit-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 6000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(48, 46, 41, .28);
+}
+
+.room-exit-dialog {
+  width: min(360px, calc(100vw - 40px));
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 22px;
+  color: #302e29;
+  border: 1px solid rgba(76, 64, 45, .46);
+  border-radius: 8px;
+  background: #fff2cf;
+  box-shadow: 4px 5px 0 rgba(76, 64, 45, .2);
+  text-align: center;
+}
+
+.room-exit-dialog > .material-symbols-outlined {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(172, 76, 67, .34);
+  border-radius: 50%;
+  background: #f2c6bd;
+  font-size: 24px;
+}
+
+.room-exit-dialog h2 {
+  margin: 0;
+  font: 900 28px/1 var(--font-sketch, "Shantell Sans", cursive);
+}
+
+.room-exit-dialog p {
+  margin: 0;
+  color: #665f55;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.room-exit-skip {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: #5f594f;
+  font: 800 11px/1.2 Inter, sans-serif;
+}
+
+.room-exit-skip input {
+  width: 15px;
+  height: 15px;
+  accent-color: #c96f69;
+}
+
+.room-exit-actions {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.room-exit-actions button {
+  min-height: 36px;
+  color: #302e29;
+  border: 1px solid rgba(76, 64, 45, .38);
+  border-radius: 6px 8px 6px 7px;
+  background: rgba(255, 250, 240, .78);
+  box-shadow: 1px 2px 0 rgba(76, 64, 45, .12);
+  cursor: pointer;
+  font: 900 13px/1 var(--font-sketch, "Shantell Sans", cursive);
+}
+
+.room-exit-actions button.danger {
+  background: #f2c6bd;
+  border-color: rgba(172, 76, 67, .44);
 }
 
 .room-side-column {

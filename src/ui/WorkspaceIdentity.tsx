@@ -77,9 +77,9 @@ export function WorkspaceIdentity({ connected, configured, displayName, onModes,
             </section>
           ) : null}
         </div>
-        <button aria-label="Back to game modes" className="workspace-mode-button" onClick={onModes} title="Game modes" type="button">
-          <span className="material-symbols-outlined">apps</span>
-          <span>Modes</span>
+        <button aria-label="Exit to game modes" className="workspace-mode-button workspace-exit-button" onClick={onModes} title="Exit" type="button">
+          <span className="material-symbols-outlined">logout</span>
+          <span>Exit</span>
         </button>
       </div>
     </div>

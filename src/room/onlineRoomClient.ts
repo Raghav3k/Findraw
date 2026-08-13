@@ -21,6 +21,7 @@ export type OnlineRoomClient = {
   sendGuess: (text: string) => void;
   sendDrawingPreview: (operation: DrawingOperation | null) => void;
   sendDrawingOperations: (operations: DrawingOperation[]) => void;
+  sendLeaveRoom: () => void;
 };
 
 const send = (socket: WebSocket | null, type: string, payload?: unknown) => {
@@ -66,5 +67,6 @@ export function connectOnlineRoom(
     sendGuess: (text) => send(socket, "guess", { text }),
     sendDrawingPreview: (operation) => send(socket, "drawing-preview", { operation }),
     sendDrawingOperations: (operations) => send(socket, "drawing-sync", { operations }),
+    sendLeaveRoom: () => send(socket, "leave-room"),
   };
 }

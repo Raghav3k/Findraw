@@ -209,8 +209,8 @@ export class FindrawRoom {
     server.addEventListener("message", (event) => this.handleSocketMessage(server, event.data).catch((error) => {
       try { server.send(JSON.stringify({ type: "error", error: error.message || "Room request failed" })); } catch {}
     }));
-    server.addEventListener("close", () => this.disconnect(server));
-    server.addEventListener("error", () => this.disconnect(server));
+    server.addEventListener("close", () => this.disconnect(server).catch(() => {}));
+    server.addEventListener("error", () => this.disconnect(server).catch(() => {}));
     server.send(JSON.stringify({ type: "hello", payload: { connected: true } }));
     return new Response(null, { status: 101, webSocket: client });
   }
@@ -233,6 +233,7 @@ export class FindrawRoom {
     if (message.type === "select-categories") return this.hostOnly(client, () => this.updateSelection(message.payload));
     if (message.type === "room-settings") return this.hostOnly(client, () => this.updateSettings(message.payload));
     if (message.type === "transfer-leader") return this.hostOnly(client, () => this.transferLeader(message.payload));
+    if (message.type === "leave-room") return this.leaveRoom(socket);
     if (message.type === "start-game") return this.hostOnly(client, () => this.startGame(message.payload));
     if (message.type === "set-choices") return this.hostOnly(client, () => this.setChoices(message.payload));
     if (message.type === "choose-word") return this.drawerOnly(client, () => this.chooseWord(message.payload));
@@ -279,8 +280,43 @@ export class FindrawRoom {
     this.broadcastState();
   }
 
-  disconnect(socket) {
+  async disconnect(socket) {
+    await this.leaveRoom(socket);
+  }
+
+  async leaveRoom(socket) {
+    const client = this.clients.get(socket);
     this.clients.delete(socket);
+    if (!client || !this.room) return;
+    const wasHost = this.room.hostId === client.id;
+    const wasDrawer = this.room.drawerId === client.id;
+    const players = this.room.players.filter((player) => player.id !== client.id);
+    if (!players.length) {
+      this.room = null;
+      await this.state.storage.delete("room");
+      await this.state.storage.deleteAlarm();
+      return;
+    }
+
+    const nextHostId = wasHost ? players[0].id : this.room.hostId;
+    const shouldResetRound = wasDrawer || (this.room.phase !== "lobby" && players.length < 2);
+    this.room = {
+      ...this.room,
+      players,
+      hostId: nextHostId,
+      drawerId: shouldResetRound ? null : this.room.drawerId,
+      phase: shouldResetRound ? "lobby" : this.room.phase,
+      answer: shouldResetRound ? null : this.room.answer,
+      choices: shouldResetRound ? [] : this.room.choices,
+      guesses: shouldResetRound ? [] : this.room.guesses,
+      solved: shouldResetRound ? [] : this.room.solved,
+      endAt: shouldResetRound ? null : this.room.endAt,
+      drawingOperations: shouldResetRound ? [] : this.room.drawingOperations,
+      updatedAt: Date.now(),
+    };
+    if (shouldResetRound) await this.state.storage.deleteAlarm();
+    await this.save();
+    this.broadcastState();
   }
 
   async save() {

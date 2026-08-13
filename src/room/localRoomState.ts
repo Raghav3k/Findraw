@@ -110,6 +110,10 @@ export const writeRoom = (room: RoomState) => {
   window.localStorage.setItem(roomStorageKey(room.code), JSON.stringify(room));
 };
 
+export const deleteRoom = (code: string) => {
+  window.localStorage.removeItem(roomStorageKey(code));
+};
+
 export const roomPromptKey = (prompt: CategoryPrompt) => `${prompt.categoryId}:${prompt.answer.toLowerCase()}`;
 
 export const pickRoomChoices = (selection: CategorySelection, recentKeys: string[], count = 3): CategoryPrompt[] => {
