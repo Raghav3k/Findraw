@@ -47,6 +47,23 @@ type CategorySelectionProfile = {
   selection: string;
 };
 
+function inferDomainId(selection: string | undefined, domains: CategoryPickerDomain[]): string | undefined {
+  const tokens = (selection ?? "").split(",").map((token) => token.trim()).filter(Boolean);
+  if (tokens.includes("domain:general")) return domains.find((domain) => domain.id === "general")?.id;
+  if (tokens.includes("domain:games") || tokens.some((token) => token.startsWith("game:"))) {
+    return domains.find((domain) => domain.id === "games")?.id;
+  }
+
+  for (const token of tokens) {
+    const domain = domains.find((domain) => (
+      domain.groups.some((group) => group.options.some((option) => option.id === token))
+    ));
+    if (domain) return domain.id;
+  }
+
+  return domains[0]?.id;
+}
+
 export function CategoryPickerWindow({
   currentSelection,
   disabled = false,
@@ -66,7 +83,7 @@ export function CategoryPickerWindow({
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
-  const [activeDomainId, setActiveDomainId] = useState<string>(domains[0]?.id);
+  const [activeDomainId, setActiveDomainId] = useState<string>(inferDomainId(currentSelection ?? selectedId, domains) ?? domains[0]?.id);
   const [profileName, setProfileName] = useState("");
   const [profilesOpen, setProfilesOpen] = useState(false);
   const [profiles, setProfiles] = usePersistentState<CategorySelectionProfile[]>(
@@ -121,6 +138,11 @@ export function CategoryPickerWindow({
     setOpen(false);
   };
 
+  const handleOpen = () => {
+    setActiveDomainId(inferDomainId(currentSelection ?? selectedId, domains) ?? domains[0]?.id);
+    setOpen(true);
+  };
+
   useEffect(() => {
     if (!open) return;
     setQuery("");
@@ -166,7 +188,7 @@ export function CategoryPickerWindow({
         aria-expanded={open}
         className="preview-action-btn"
         disabled={disabled}
-        onClick={() => setOpen(true)}
+        onClick={handleOpen}
         type="button"
         style={{ marginBottom: "12px", width: "100%", padding: "10px", fontSize: "14px", fontWeight: "bold" }}
       >

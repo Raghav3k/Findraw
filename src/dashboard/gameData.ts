@@ -486,8 +486,8 @@ function buildCategoryDomains(pool: UnifiedAsset[]): CategoryPickerDomain[] {
     label: "Games",
     groups: [
       {
-        id: "games",
-        label: "Games",
+        id: "featured",
+        label: "Quick Mix",
         options: [{
           id: "domain:games",
           label: "All Games",
@@ -561,8 +561,8 @@ function buildCategoryDomains(pool: UnifiedAsset[]): CategoryPickerDomain[] {
     label: "General",
     groups: [
       {
-        id: "general",
-        label: "General",
+        id: "featured",
+        label: "Quick Mix",
         options: [{
           id: "domain:general",
           label: "All General",
