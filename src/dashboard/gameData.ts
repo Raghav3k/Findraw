@@ -1,5 +1,5 @@
 import { AUTO_DRAW_ASSETS } from "../autoDraw/autoDrawAssets";
-import type { CategoryPickerDomain, CategoryPickerGroup } from "../ui/CategoryPickerWindow";
+import type { CategoryPickerDomain, CategoryPickerGroup, CategoryPickerSection } from "../ui/CategoryPickerWindow";
 import artistWordsRaw from "./artistWords.json";
 
 export type RoundPrompt = {
@@ -31,6 +31,8 @@ export const MAX_CORRECT_GUESSERS = 100;
 
 export const GAME_TITLES = [
   { id: "valorant", label: "Valorant", accent: "#e88f9a" },
+  { id: "fortnite", label: "Fortnite", accent: "#8fb7e8" },
+  { id: "minecraft", label: "Minecraft", accent: "#91bd74" },
   { id: "clash royale", label: "Clash Royale", accent: "#d9b66f" },
   { id: "genshin impact", label: "Genshin Impact", accent: "#8fc7dc" },
   { id: "dota 2", label: "Dota 2", accent: "#c98277" },
@@ -181,6 +183,47 @@ const DOMAIN_LABELS: Record<FindrawDomainId, string> = {
   culture: "Culture",
   everyday: "Everyday",
 };
+
+const GAME_SECTIONS = [
+  { id: "shooters", label: "Shooters", games: ["valorant", "rainbow six siege", "arc raiders", "deadlock", "fortnite"] },
+  { id: "strategy", label: "Strategy", games: ["league of legends", "dota 2", "clash royale", "clash of clans"] },
+  { id: "sandbox", label: "Sandbox", games: ["minecraft"] },
+  { id: "rpg", label: "RPG", games: ["genshin impact"] },
+];
+
+const GENERAL_SECTIONS = [
+  {
+    id: "entertainment",
+    label: "Entertainment",
+    groups: [
+      { id: "movies-tv", label: "Movies & TV", categories: ["Movies & TV"] },
+      { id: "music", label: "Music", categories: ["Music", "Singers & Bands"] },
+      { id: "books-stories", label: "Books & Stories", categories: ["Books & Stories"] },
+      { id: "sports", label: "Sports", categories: ["Sports"] },
+      { id: "myths-legends", label: "Myths & Legends", categories: ["Mythology"] },
+    ],
+  },
+  {
+    id: "world-nature",
+    label: "World & Nature",
+    groups: [
+      { id: "animals-life", label: "Animals & Sea Life", categories: ["Animals", "Ocean & Fish"] },
+      { id: "places-landmarks", label: "Places & Landmarks", categories: ["Places"] },
+      { id: "space", label: "Space", categories: ["Space"] },
+      { id: "nature", label: "Nature", categories: ["Nature"] },
+    ],
+  },
+  {
+    id: "lifestyle",
+    label: "Lifestyle",
+    groups: [
+      { id: "food", label: "Food", categories: ["Food"] },
+      { id: "work", label: "Jobs", categories: ["Jobs"] },
+      { id: "tech", label: "Technology", categories: ["Technology"] },
+      { id: "objects", label: "Everyday Objects", categories: ["Everyday Objects"] },
+    ],
+  },
+];
 
 const categoryModelCache = new Map<FindrawModePool, FindrawDomain[]>();
 const categoryDomainsCache = new Map<FindrawModePool, CategoryPickerDomain[]>();
@@ -481,99 +524,133 @@ export function getActiveSelectionChips(selection: string, mode: FindrawModePool
 
 function buildCategoryDomains(pool: UnifiedAsset[]): CategoryPickerDomain[] {
   const model = buildFindrawDomains(pool);
+  const gameGroups = GAME_TITLES.map((game) => {
+    const gameCollection = model
+      .find((domain) => domain.id === "games")
+      ?.collections.find((collection) => collection.id === game.id);
+    const gameCategories = gameCollection?.decks ?? [];
+    const allGameAssetsCount = pool.filter((item) => matchesSingleSelection(item.category, `game:${game.id}`)).length;
+    if (allGameAssetsCount === 0) return null;
+    return {
+      id: game.id,
+      label: game.label,
+      options: [
+        {
+          id: `game:${game.id}`,
+          label: `All ${game.label}`,
+          description: `Every ${game.label} deck`,
+          icon: "sports_esports",
+          accent: game.accent,
+          count: allGameAssetsCount,
+        },
+        ...gameCategories.map((deck) => ({
+          id: deck.id,
+          label: deck.label,
+          description: deck.description,
+          icon: deck.icon,
+          accent: deck.accent,
+          count: deck.promptCount,
+        })),
+      ],
+    };
+  }).filter(Boolean) as CategoryPickerGroup[];
+
+  const allGamesGroup: CategoryPickerGroup = {
+    id: "featured",
+    label: "Quick Mix",
+    options: [{
+      id: "domain:games",
+      label: "All Games",
+      description: "A mixed pool from every game deck",
+      icon: "sports_esports",
+      accent: "#83c5e6",
+      count: model
+        .find((domain) => domain.id === "games")
+        ?.collections.flatMap((collection) => collection.decks)
+        .reduce((total, deck) => total + deck.promptCount, 0) ?? 0,
+    }],
+  };
+
+  const gameSections: CategoryPickerSection[] = [
+    {
+      id: "all",
+      label: "All",
+      groups: [allGamesGroup],
+    },
+    ...GAME_SECTIONS.map((section) => ({
+      id: section.id,
+      label: section.label,
+      groups: gameGroups.filter((group) => section.games.includes(group.id)),
+    })).filter((section) => section.groups.length > 0),
+  ];
+
   const gamesDomain: CategoryPickerDomain = {
     id: "games",
     label: "Games",
-    groups: [
-      {
-        id: "featured",
-        label: "Quick Mix",
-        options: [{
-          id: "domain:games",
-          label: "All Games",
-          description: "A mixed pool from every game deck",
-          icon: "sports_esports",
-          accent: "#83c5e6",
-          count: model
-            .find((domain) => domain.id === "games")
-            ?.collections.flatMap((collection) => collection.decks)
-            .reduce((total, deck) => total + deck.promptCount, 0) ?? 0,
-        }],
-      },
-      ...GAME_TITLES.map((game) => {
-      const gameCollection = model
-        .find((domain) => domain.id === "games")
-        ?.collections.find((collection) => collection.id === game.id);
-      const gameCategories = gameCollection?.decks ?? [];
-      const allGameAssetsCount = pool.filter((item) => matchesSingleSelection(item.category, `game:${game.id}`)).length;
-      if (allGameAssetsCount === 0) return null;
-      return {
-        id: game.id,
-        label: game.label,
-        options: [
-          {
-            id: `game:${game.id}`,
-            label: `All ${game.label}`,
-            description: `Every ${game.label} deck`,
-            icon: "sports_esports",
-            accent: game.accent,
-            count: allGameAssetsCount,
-          },
-          ...gameCategories.map((deck) => ({
-            id: deck.id,
-            label: deck.label,
-            description: deck.description,
-            icon: deck.icon,
-            accent: deck.accent,
-            count: deck.promptCount,
-          })),
-        ],
-      };
-      }).filter(Boolean) as CategoryPickerGroup[],
-    ],
+    groups: gameSections.flatMap((section) => section.groups),
+    sections: gameSections,
   };
 
-  const generalGroups = (["world", "culture", "everyday"] as FindrawDomainId[]).flatMap((domainId) => {
-    const domain = model.find((item) => item.id === domainId);
-    const options = domain?.collections.flatMap((collection) => collection.decks.map((deck) => ({
-      id: deck.id,
-      label: deck.label,
-      description: deck.description,
-      icon: deck.icon,
-      accent: deck.accent,
-      count: deck.promptCount,
-    }))) ?? [];
-    if (options.length === 0) return [];
-    return [{
-      id: domainId,
-      label: DOMAIN_LABELS[domainId],
-      options,
-    }];
-  });
+  const generalDecks = model
+    .flatMap((domain) => domain.collections.flatMap((collection) => collection.decks));
+
+  const makeGeneralGroup = (group: typeof GENERAL_SECTIONS[number]["groups"][number]): CategoryPickerGroup | null => {
+    const decks = group.categories
+      .map((category) => generalDecks.find((deck) => deck.id === category))
+      .filter(Boolean) as FindrawDeck[];
+    if (!decks.length) return null;
+    return {
+      id: group.id,
+      label: group.label,
+      options: decks.map((deck) => ({
+        id: deck.id,
+        label: deck.label,
+        description: deck.description,
+        icon: deck.icon,
+        accent: deck.accent,
+        count: deck.promptCount,
+      })),
+    };
+  };
 
   const generalCount = model
     .filter((domain) => domain.id !== "games")
     .flatMap((domain) => domain.collections.flatMap((collection) => collection.decks))
     .reduce((total, deck) => total + deck.promptCount, 0);
 
+  const allGeneralGroup: CategoryPickerGroup = {
+    id: "featured",
+    label: "Quick Mix",
+    options: [{
+      id: "domain:general",
+      label: "All General",
+      description: "A mixed pool from entertainment, world, and lifestyle decks",
+      icon: "category",
+      accent: "#83c5e6",
+      count: generalCount,
+    }],
+  };
+
+  const generalSections: CategoryPickerSection[] = [
+    {
+      id: "all",
+      label: "All",
+      groups: [allGeneralGroup],
+    },
+    ...GENERAL_SECTIONS.map((section) => ({
+      id: section.id,
+      label: section.label,
+      groups: section.groups
+        .map(makeGeneralGroup)
+        .filter(Boolean) as CategoryPickerGroup[],
+    })).filter((section) => section.groups.length > 0),
+  ];
+
   const generalDomain: CategoryPickerDomain = {
     id: "general",
     label: "General",
-    groups: [
-      {
-        id: "featured",
-        label: "Quick Mix",
-        options: [{
-          id: "domain:general",
-          label: "All General",
-          description: "A mixed pool from everyday, world, and culture decks",
-          icon: "category",
-          accent: "#83c5e6",
-          count: generalCount,
-        }],
-      },
-      ...generalGroups,
-    ],
+    groups: generalSections.flatMap((section) => section.groups),
+    sections: generalSections,
   };
 
   return [gamesDomain, generalDomain].filter((domain) => domain.groups.length > 0);

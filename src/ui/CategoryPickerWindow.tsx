@@ -18,10 +18,17 @@ export type CategoryPickerGroup = {
   options: CategoryPickerOption[];
 };
 
+export type CategoryPickerSection = {
+  id: string;
+  label: string;
+  groups: CategoryPickerGroup[];
+};
+
 export type CategoryPickerDomain = {
   id: string;
   label: string;
   groups: CategoryPickerGroup[];
+  sections?: CategoryPickerSection[];
 };
 
 type CategoryPickerWindowProps = {
@@ -64,6 +71,33 @@ function inferDomainId(selection: string | undefined, domains: CategoryPickerDom
   return domains[0]?.id;
 }
 
+function getDomainGroups(domain: CategoryPickerDomain | undefined): CategoryPickerGroup[] {
+  if (!domain) return [];
+  return domain.sections?.flatMap((section) => section.groups) ?? domain.groups;
+}
+
+function getDomainSections(domain: CategoryPickerDomain | undefined): CategoryPickerSection[] {
+  if (!domain) return [];
+  return domain.sections ?? [{ id: "all", label: "All", groups: domain.groups }];
+}
+
+function inferSectionId(selection: string | undefined, domain: CategoryPickerDomain | undefined): string | undefined {
+  const sections = getDomainSections(domain);
+  if (!sections.length) return undefined;
+  const tokens = (selection ?? "").split(",").map((token) => token.trim()).filter(Boolean);
+  if (!tokens.length) return sections[0].id;
+  if (tokens.includes("domain:general") || tokens.includes("domain:games") || tokens.includes("all")) return sections[0].id;
+
+  for (const token of tokens) {
+    const section = sections.find((section) => (
+      section.groups.some((group) => group.options.some((option) => option.id === token))
+    ));
+    if (section) return section.id;
+  }
+
+  return sections[0].id;
+}
+
 export function CategoryPickerWindow({
   currentSelection,
   disabled = false,
@@ -84,6 +118,10 @@ export function CategoryPickerWindow({
   const [query, setQuery] = useState("");
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
   const [activeDomainId, setActiveDomainId] = useState<string>(inferDomainId(currentSelection ?? selectedId, domains) ?? domains[0]?.id);
+  const [activeSectionId, setActiveSectionId] = useState<string | undefined>(() => {
+    const domainId = inferDomainId(currentSelection ?? selectedId, domains) ?? domains[0]?.id;
+    return inferSectionId(currentSelection ?? selectedId, domains.find((domain) => domain.id === domainId) ?? domains[0]);
+  });
   const [profileName, setProfileName] = useState("");
   const [profilesOpen, setProfilesOpen] = useState(false);
   const [profiles, setProfiles] = usePersistentState<CategorySelectionProfile[]>(
@@ -92,10 +130,18 @@ export function CategoryPickerWindow({
   );
 
   useEffect(() => {
-    if (domains.length > 0 && !domains.find(d => d.id === activeDomainId)) {
+    if (domains.length === 0) return;
+    const activeDomain = domains.find(d => d.id === activeDomainId);
+    if (!activeDomain) {
       setActiveDomainId(domains[0].id);
+      setActiveSectionId(inferSectionId(currentSelection ?? selectedId, domains[0]));
+      return;
     }
-  }, [domains, activeDomainId]);
+    const sections = getDomainSections(activeDomain);
+    if (sections.length > 0 && !sections.some((section) => section.id === activeSectionId)) {
+      setActiveSectionId(sections[0].id);
+    }
+  }, [activeDomainId, activeSectionId, currentSelection, domains, selectedId]);
 
   const selectedList = useMemo(
     () => (selectedId === "all" || !selectedId ? ["all"] : selectedId.split(",").filter(Boolean)),
@@ -112,9 +158,11 @@ export function CategoryPickerWindow({
     const activeDomain = domains.find(d => d.id === activeDomainId) || domains[0];
     if (!activeDomain) return [];
     const q = query.trim().toLowerCase();
-    if (!q) return activeDomain.groups;
-    return activeDomain.groups
+    const section = getDomainSections(activeDomain).find((section) => section.id === activeSectionId);
+    const groups = q ? getDomainGroups(activeDomain) : section?.groups ?? activeDomain.groups;
+    return groups
       .map((group) => {
+        if (!q) return group;
         const matchingOptions = group.options.filter(
           (opt) => opt.label.toLowerCase().includes(q) || opt.description.toLowerCase().includes(q) || group.label.toLowerCase().includes(q)
         );
@@ -122,7 +170,7 @@ export function CategoryPickerWindow({
         return { ...group, options: matchingOptions };
       })
       .filter(Boolean) as CategoryPickerGroup[];
-  }, [domains, activeDomainId, query]);
+  }, [activeDomainId, activeSectionId, domains, query]);
 
   const [shakeError, setShakeError] = useState(false);
   const activeSelection = currentSelection ?? selectedId;
@@ -139,8 +187,17 @@ export function CategoryPickerWindow({
   };
 
   const handleOpen = () => {
-    setActiveDomainId(inferDomainId(currentSelection ?? selectedId, domains) ?? domains[0]?.id);
+    const domainId = inferDomainId(currentSelection ?? selectedId, domains) ?? domains[0]?.id;
+    const domain = domains.find((domain) => domain.id === domainId) ?? domains[0];
+    setActiveDomainId(domainId);
+    setActiveSectionId(inferSectionId(currentSelection ?? selectedId, domain));
     setOpen(true);
+  };
+
+  const changeDomain = (domainId: string) => {
+    const domain = domains.find((domain) => domain.id === domainId);
+    setActiveDomainId(domainId);
+    setActiveSectionId(getDomainSections(domain)[0]?.id);
   };
 
   useEffect(() => {
@@ -341,10 +398,22 @@ export function CategoryPickerWindow({
                     <button
                       key={domain.id}
                       className={`domain-tab ${activeDomainId === domain.id ? "active" : ""}`}
-                      onClick={() => setActiveDomainId(domain.id)}
+                      onClick={() => changeDomain(domain.id)}
                       type="button"
                     >
                       {domain.label}
+                    </button>
+                  ))}
+                </div>
+                <div className="category-section-tabs" aria-label="Category sections">
+                  {getDomainSections(domains.find((domain) => domain.id === activeDomainId) ?? domains[0]).map((section) => (
+                    <button
+                      key={section.id}
+                      className={`category-section-tab ${activeSectionId === section.id ? "active" : ""}`}
+                      onClick={() => setActiveSectionId(section.id)}
+                      type="button"
+                    >
+                      {section.label}
                     </button>
                   ))}
                 </div>
