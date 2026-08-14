@@ -93,6 +93,7 @@ export type CategorySelectionChip = {
   label: string;
   accent: string;
   kind: "all" | "domain" | "collection" | "deck" | "empty";
+  tooltip?: string;
 };
 
 export const UNIFIED_ASSETS: UnifiedAsset[] = [
@@ -302,6 +303,19 @@ const GENERAL_SECTIONS = [
     ],
   },
 ];
+
+function getDeckContextLabel(deckId: string): string | null {
+  const gameMatch = GAME_TITLES.find((game) => deckId.toLowerCase().startsWith(game.id));
+  if (gameMatch) return gameMatch.label;
+
+  for (const section of GENERAL_SECTIONS) {
+    for (const group of section.groups) {
+      if (group.categories.includes(deckId)) return `${section.label} / ${group.label}`;
+    }
+  }
+
+  return null;
+}
 
 const categoryModelCache = new Map<FindrawModePool, FindrawDomain[]>();
 const categoryDomainsCache = new Map<FindrawModePool, CategoryPickerDomain[]>();
@@ -576,10 +590,44 @@ export function getActiveSelectionChips(selection: string, mode: FindrawModePool
     return [{ id: "empty", label: "No decks selected", accent: "#e6a283", kind: "empty" }];
   }
   if (tokens.includes("all")) {
-    return [{ id: "all", label: "Decks shuffled", accent: "#83c5e6", kind: "all" }];
+    return [{ id: "all", label: "Decks shuffled", accent: "#83c5e6", kind: "all", tooltip: "Every available deck" }];
   }
 
-  return tokens.map((token): CategorySelectionChip => {
+  const tokenSet = new Set(tokens);
+  const compactChips: CategorySelectionChip[] = [];
+  const consumedTokens = new Set<string>();
+  const model = getCategoryModel(mode);
+
+  for (const domainToken of ["domain:games", "domain:general"]) {
+    const domainId = domainToken.slice(7);
+    const domainDeckIds = getDeckIdsForCollectionToken(mode, domainToken);
+    if (domainDeckIds.length === 0) continue;
+    const selectedDeckIds = domainDeckIds.filter((deckId) => tokenSet.has(deckId));
+    const coverage = selectedDeckIds.length / domainDeckIds.length;
+    if (coverage < 0.72 || selectedDeckIds.length < 8) continue;
+
+    const label = domainId === "games" ? "Games" : "General";
+    const excludedDecks = domainDeckIds
+      .filter((deckId) => !tokenSet.has(deckId))
+      .map((deckId) => getDeckById(mode, deckId)?.label ?? deckId);
+    const tooltip = excludedDecks.length
+      ? `${selectedDeckIds.length}/${domainDeckIds.length} decks selected. Excluded: ${excludedDecks.slice(0, 6).join(", ")}${excludedDecks.length > 6 ? `, +${excludedDecks.length - 6} more` : ""}`
+      : `${selectedDeckIds.length}/${domainDeckIds.length} decks selected`;
+
+    compactChips.push({
+      id: domainToken,
+      label,
+      accent: model
+        .find((domain) => domainToken === "domain:games" ? domain.id === "games" : domain.id !== "games")
+        ?.collections[0]?.accent ?? "#83c5e6",
+      kind: "domain",
+      tooltip,
+    });
+    selectedDeckIds.forEach((deckId) => consumedTokens.add(deckId));
+  }
+
+  const visibleTokens = tokens.filter((token) => !consumedTokens.has(token));
+  const tokenChips = visibleTokens.map((token): CategorySelectionChip => {
     const domain = getDomainByToken(mode, token);
     if (domain) {
       return {
@@ -587,6 +635,7 @@ export function getActiveSelectionChips(selection: string, mode: FindrawModePool
         label: domain.label,
         accent: domain.accent,
         kind: "domain",
+        tooltip: `Every ${domain.label} deck`,
       };
     }
 
@@ -597,6 +646,7 @@ export function getActiveSelectionChips(selection: string, mode: FindrawModePool
         label: collection.label,
         accent: collection.accent,
         kind: "collection",
+        tooltip: getDeckContextLabel(token) ?? `${collection.label} deck`,
       };
     }
 
@@ -607,11 +657,14 @@ export function getActiveSelectionChips(selection: string, mode: FindrawModePool
         label: deck.label,
         accent: deck.accent,
         kind: "deck",
+        tooltip: getDeckContextLabel(deck.id) ?? deck.collectionLabel,
       };
     }
 
     return { id: token, label: token, accent: "#83c5e6", kind: "deck" };
   });
+
+  return [...compactChips, ...tokenChips];
 }
 
 function buildCategoryDomains(pool: UnifiedAsset[]): CategoryPickerDomain[] {

@@ -12139,11 +12139,40 @@ body.resizing-panels .layout-resizer::after {
 }
 
 .chip {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 4px;
   background: color-mix(in srgb, var(--chip-accent, #83c5e6), white 64%);
   border-color: color-mix(in srgb, var(--chip-accent, #83c5e6), #4a3e2a 24%);
+}
+
+.chip-tooltip {
+  position: absolute;
+  z-index: 30;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  max-width: min(260px, 72vw);
+  width: max-content;
+  padding: 6px 8px;
+  color: #34312c;
+  border: 1px solid rgba(78, 67, 45, 0.24);
+  border-radius: 999px;
+  background: rgba(255, 250, 240, 0.96);
+  box-shadow: 2px 4px 0 rgba(54, 51, 44, 0.13);
+  font: 900 10px/1.15 Inter, sans-serif;
+  opacity: 0;
+  pointer-events: none;
+  text-align: center;
+  transform: translate(-50%, 4px) scale(0.98);
+  transition: opacity 140ms ease, transform 140ms ease;
+  white-space: normal;
+}
+
+.chip:hover .chip-tooltip,
+.chip:focus-within .chip-tooltip {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1);
 }
 
 .chip button {

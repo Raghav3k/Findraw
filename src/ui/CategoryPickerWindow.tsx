@@ -316,6 +316,7 @@ export function CategoryPickerWindow({
                             style={{ "--chip-accent": chip.accent } as CSSProperties}
                           >
                             {chip.label}
+                            {chip.tooltip ? <span className="chip-tooltip">{chip.tooltip}</span> : null}
                             {onRemoveChip && chip.kind !== "empty" ? (
                               <button aria-label={`Remove ${chip.label}`} onClick={() => onRemoveChip(chip.id)} type="button">
                                 <span className="material-symbols-outlined">close</span>
