@@ -3008,35 +3008,35 @@
     "id": "artist-food-430",
     "answer": "Pizza",
     "aliases": [],
-    "category": "Food Other",
+    "category": "Food Everyday Favorites",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-431",
     "answer": "Sushi",
     "aliases": [],
-    "category": "Food Japan",
+    "category": "Food Asia",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-432",
     "answer": "Pancakes",
     "aliases": [],
-    "category": "Food USA",
+    "category": "Food North America",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-433",
     "answer": "Taco",
     "aliases": [],
-    "category": "Food Other",
+    "category": "Food Everyday Favorites",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-434",
     "answer": "Noodles",
     "aliases": [],
-    "category": "Food Other",
+    "category": "Food Everyday Favorites",
     "difficulty": "easy"
   },
   {
@@ -3050,7 +3050,7 @@
     "id": "artist-food-436",
     "answer": "Popcorn",
     "aliases": [],
-    "category": "Food USA",
+    "category": "Food North America",
     "difficulty": "easy"
   },
   {
@@ -3064,7 +3064,7 @@
     "id": "artist-food-438",
     "answer": "Sandwich",
     "aliases": [],
-    "category": "Food USA",
+    "category": "Food North America",
     "difficulty": "easy"
   },
   {
@@ -3085,7 +3085,7 @@
     "id": "artist-food-441",
     "answer": "Cheeseburger",
     "aliases": [],
-    "category": "Food USA",
+    "category": "Food North America",
     "difficulty": "easy"
   },
   {
@@ -3106,70 +3106,70 @@
     "id": "artist-food-444",
     "answer": "Burrito",
     "aliases": [],
-    "category": "Food Other",
+    "category": "Food Everyday Favorites",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-445",
     "answer": "French Fries",
     "aliases": [],
-    "category": "Food USA",
+    "category": "Food North America",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-446",
     "answer": "Hot Dog",
     "aliases": [],
-    "category": "Food USA",
+    "category": "Food North America",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-447",
     "answer": "Apple Pie",
     "aliases": [],
-    "category": "Food USA",
+    "category": "Food North America",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-448",
     "answer": "Fried Egg",
     "aliases": [],
-    "category": "Food USA",
+    "category": "Food North America",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-449",
     "answer": "Birthday Cake",
     "aliases": [],
-    "category": "Food USA",
+    "category": "Food North America",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-450",
     "answer": "Croissant",
     "aliases": [],
-    "category": "Food France",
+    "category": "Food Europe",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-451",
     "answer": "Dumpling",
     "aliases": [],
-    "category": "Food Other",
+    "category": "Food Everyday Favorites",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-452",
     "answer": "Pretzel",
     "aliases": [],
-    "category": "Food Other",
+    "category": "Food Everyday Favorites",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-453",
     "answer": "Ramen",
     "aliases": [],
-    "category": "Food Japan",
+    "category": "Food Asia",
     "difficulty": "easy"
   },
   {
@@ -3204,14 +3204,14 @@
     "id": "artist-food-458",
     "answer": "Nachos",
     "aliases": [],
-    "category": "Food Other",
+    "category": "Food Everyday Favorites",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-459",
     "answer": "Curry",
     "aliases": [],
-    "category": "Food India",
+    "category": "Food Asia",
     "difficulty": "easy"
   },
   {
@@ -3225,14 +3225,14 @@
     "id": "artist-food-461",
     "answer": "Macaron",
     "aliases": [],
-    "category": "Food France",
+    "category": "Food Europe",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-462",
     "answer": "Spring Roll",
     "aliases": [],
-    "category": "Food Other",
+    "category": "Food Everyday Favorites",
     "difficulty": "easy"
   },
   {
@@ -3246,14 +3246,14 @@
     "id": "artist-food-464",
     "answer": "Mochi",
     "aliases": [],
-    "category": "Food Japan",
+    "category": "Food Asia",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-465",
     "answer": "Fondue",
     "aliases": [],
-    "category": "Food France",
+    "category": "Food Europe",
     "difficulty": "easy"
   },
   {
@@ -3267,7 +3267,7 @@
     "id": "artist-food-467",
     "answer": "Dim Sum",
     "aliases": [],
-    "category": "Food Other",
+    "category": "Food Everyday Favorites",
     "difficulty": "easy"
   },
   {
@@ -3302,35 +3302,35 @@
     "id": "artist-food-472",
     "answer": "Kaiseki",
     "aliases": [],
-    "category": "Food Japan",
+    "category": "Food Asia",
     "difficulty": "hard"
   },
   {
     "id": "artist-food-473",
     "answer": "Mole Poblano",
     "aliases": [],
-    "category": "Food Other",
+    "category": "Food Everyday Favorites",
     "difficulty": "hard"
   },
   {
     "id": "artist-food-474",
     "answer": "Khachapuri",
     "aliases": [],
-    "category": "Food Other",
+    "category": "Food Everyday Favorites",
     "difficulty": "hard"
   },
   {
     "id": "artist-food-475",
     "answer": "Takoyaki",
     "aliases": [],
-    "category": "Food Japan",
+    "category": "Food Asia",
     "difficulty": "hard"
   },
   {
     "id": "artist-food-476",
     "answer": "Peking Duck",
     "aliases": [],
-    "category": "Food Other",
+    "category": "Food Everyday Favorites",
     "difficulty": "hard"
   },
   {
@@ -3351,35 +3351,35 @@
     "id": "artist-food-479",
     "answer": "Koshari",
     "aliases": [],
-    "category": "Food Other",
+    "category": "Food Everyday Favorites",
     "difficulty": "hard"
   },
   {
     "id": "artist-food-480",
     "answer": "Feijoada",
     "aliases": [],
-    "category": "Food Other",
+    "category": "Food Everyday Favorites",
     "difficulty": "hard"
   },
   {
     "id": "artist-food-481",
     "answer": "Jollof Rice",
     "aliases": [],
-    "category": "Food Other",
+    "category": "Food Everyday Favorites",
     "difficulty": "hard"
   },
   {
     "id": "artist-food-482",
     "answer": "Lomo Saltado",
     "aliases": [],
-    "category": "Food Other",
+    "category": "Food Everyday Favorites",
     "difficulty": "hard"
   },
   {
     "id": "artist-food-483",
     "answer": "Banh Xeo",
     "aliases": [],
-    "category": "Food Other",
+    "category": "Food Everyday Favorites",
     "difficulty": "hard"
   },
   {
@@ -3400,28 +3400,28 @@
     "id": "artist-food-486",
     "answer": "Canelé",
     "aliases": [],
-    "category": "Food Other",
+    "category": "Food Everyday Favorites",
     "difficulty": "hard"
   },
   {
     "id": "artist-food-487",
     "answer": "Dacquoise",
     "aliases": [],
-    "category": "Food France",
+    "category": "Food Europe",
     "difficulty": "hard"
   },
   {
     "id": "artist-food-488",
     "answer": "Okonomiyaki",
     "aliases": [],
-    "category": "Food Japan",
+    "category": "Food Asia",
     "difficulty": "hard"
   },
   {
     "id": "artist-food-489",
     "answer": "Bibimbap",
     "aliases": [],
-    "category": "Food Korea",
+    "category": "Food Asia",
     "difficulty": "hard"
   },
   {
@@ -5150,7 +5150,7 @@
     "id": "artist-movies-tv-736",
     "answer": "Jurassic Park",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
@@ -5178,14 +5178,14 @@
     "id": "artist-movies-tv-740",
     "answer": "Titanic",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
     "id": "artist-movies-tv-741",
     "answer": "Barbie",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
@@ -5206,7 +5206,7 @@
     "id": "artist-movies-tv-744",
     "answer": "Home Alone",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
@@ -5227,7 +5227,7 @@
     "id": "artist-movies-tv-747",
     "answer": "The Simpsons",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
@@ -5262,112 +5262,112 @@
     "id": "artist-movies-tv-752",
     "answer": "Back to the Future",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
     "id": "artist-movies-tv-753",
     "answer": "Ghostbusters",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
     "id": "artist-movies-tv-754",
     "answer": "Stranger Things",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
     "id": "artist-movies-tv-755",
     "answer": "The Matrix",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
     "id": "artist-movies-tv-756",
     "answer": "Jaws",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
     "id": "artist-movies-tv-757",
     "answer": "Wednesday",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
     "id": "artist-movies-tv-758",
     "answer": "Squid Game",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
     "id": "artist-movies-tv-759",
     "answer": "Avatar",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
     "id": "artist-movies-tv-760",
     "answer": "The Addams Family",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
     "id": "artist-movies-tv-761",
     "answer": "Doctor Who",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
     "id": "artist-movies-tv-762",
     "answer": "Friends",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
     "id": "artist-movies-tv-763",
     "answer": "King Kong",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
     "id": "artist-movies-tv-764",
     "answer": "Rocky",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
     "id": "artist-movies-tv-765",
     "answer": "Indiana Jones",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
     "id": "artist-movies-tv-766",
     "answer": "Pirates of the Caribbean",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
     "id": "artist-movies-tv-767",
     "answer": "Mission Impossible",
     "aliases": [],
-    "category": "Movies & TV Other",
+    "category": "Movies & TV Popular Picks",
     "difficulty": "easy"
   },
   {
@@ -6431,287 +6431,287 @@
     "id": "artist-nature-919",
     "answer": "Rainbow",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-920",
     "answer": "Thunderstorm",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-921",
     "answer": "Sunflower",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Plants Common",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-922",
     "answer": "Mountain",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Nature Landscapes",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-923",
     "answer": "Tornado",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-924",
     "answer": "Cactus",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Plants Common",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-925",
     "answer": "Snowflake",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-926",
     "answer": "Palm Tree",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Plants Common",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-927",
     "answer": "Mushroom",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Plants Common",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-928",
     "answer": "River",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Nature Landscapes",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-929",
     "answer": "Lightning",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-930",
     "answer": "Forest",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Nature Landscapes",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-931",
     "answer": "Cave",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Nature Landscapes",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-932",
     "answer": "Waterfall",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Nature Landscapes",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-933",
     "answer": "Volcano",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Nature Landscapes",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-934",
     "answer": "Desert",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Nature Landscapes",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-935",
     "answer": "Leaf",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Plants Common",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-936",
     "answer": "Flower",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Plants Common",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-937",
     "answer": "Ocean",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Nature Landscapes",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-938",
     "answer": "Cloud",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-939",
     "answer": "Northern Lights",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-940",
     "answer": "Dandelion",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Plants Common",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-941",
     "answer": "Bamboo",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Plants Common",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-942",
     "answer": "Water Lily",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Nature Landscapes",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-943",
     "answer": "Mangrove",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Nature Landscapes",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-944",
     "answer": "Geyser",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-945",
     "answer": "Sand Dune",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Nature Landscapes",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-946",
     "answer": "Canyon",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Nature Landscapes",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-947",
     "answer": "Glacier",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Nature Landscapes",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-948",
     "answer": "Coral Reef",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Nature Landscapes",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-949",
     "answer": "Tidal Wave",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-950",
     "answer": "Hailstorm",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-951",
     "answer": "Redwood Tree",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Plants Common",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-952",
     "answer": "Venus Flytrap",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Plants Unusual",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-953",
     "answer": "Hot Spring",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Nature Landscapes",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-954",
     "answer": "Monsoon",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-955",
     "answer": "Sinkhole",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Nature Landscapes",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-956",
     "answer": "Waterspout",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-957",
     "answer": "Fire Rainbow",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-958",
     "answer": "Supercell",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "easy"
   },
   {
     "id": "artist-nature-959",
     "answer": "Petrified Forest",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Nature Landscapes",
     "difficulty": "easy"
   },
   {
@@ -6739,35 +6739,35 @@
     "id": "artist-nature-963",
     "answer": "Stalactite",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Nature Landscapes",
     "difficulty": "hard"
   },
   {
     "id": "artist-nature-964",
     "answer": "Stalagmite",
     "aliases": [],
-    "category": "Nature Landscapes & Plants",
+    "category": "Nature Landscapes",
     "difficulty": "hard"
   },
   {
     "id": "artist-nature-965",
     "answer": "Cirrus Cloud",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "hard"
   },
   {
     "id": "artist-nature-966",
     "answer": "Cumulonimbus",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "hard"
   },
   {
     "id": "artist-nature-967",
     "answer": "Lenticular Cloud",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "hard"
   },
   {
@@ -6795,14 +6795,14 @@
     "id": "artist-nature-971",
     "answer": "Mammatus Cloud",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "hard"
   },
   {
     "id": "artist-nature-972",
     "answer": "Parhelion",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "hard"
   },
   {
@@ -6816,21 +6816,21 @@
     "id": "artist-nature-974",
     "answer": "Virga",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "hard"
   },
   {
     "id": "artist-nature-975",
     "answer": "Katabatic Wind",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "hard"
   },
   {
     "id": "artist-nature-976",
     "answer": "Pyrocumulonimbus",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "hard"
   },
   {
@@ -6844,868 +6844,868 @@
     "id": "artist-nature-978",
     "answer": "Moonbow",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "hard"
   },
   {
     "id": "artist-nature-979",
     "answer": "Catatumbo Lightning",
     "aliases": [],
-    "category": "Nature Weather & Sky",
+    "category": "Weather & Sky",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-980",
     "answer": "Firefighter",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-981",
     "answer": "Astronaut",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-982",
     "answer": "Chef",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-983",
     "answer": "Photographer",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-984",
     "answer": "Detective",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-985",
     "answer": "Dentist",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-986",
     "answer": "Pilot",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-987",
     "answer": "Lifeguard",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-988",
     "answer": "Mechanic",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-989",
     "answer": "Magician",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-990",
     "answer": "Scientist",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-991",
     "answer": "Farmer",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-992",
     "answer": "Teacher",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-993",
     "answer": "Veterinarian",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-994",
     "answer": "Carpenter",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-995",
     "answer": "News Reporter",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-996",
     "answer": "Doctor",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-997",
     "answer": "Police Officer",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-998",
     "answer": "Engineer",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-999",
     "answer": "Musician",
     "aliases": [],
-    "category": "Jobs Common",
+    "category": "Work & Tech Everyday Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1000",
     "answer": "Architect",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1001",
     "answer": "Paramedic",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1002",
     "answer": "Electrician",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1003",
     "answer": "Plumber",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1004",
     "answer": "Archaeologist",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1005",
     "answer": "Film Director",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1006",
     "answer": "Flight Attendant",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1007",
     "answer": "Zookeeper",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1008",
     "answer": "Blacksmith",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1009",
     "answer": "Librarian",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1010",
     "answer": "Meteorologist",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1011",
     "answer": "Tattoo Artist",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1012",
     "answer": "Park Ranger",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1013",
     "answer": "Civil Engineer",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1014",
     "answer": "Courtroom Judge",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1015",
     "answer": "Forensic Scientist",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1016",
     "answer": "Stunt Performer",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1017",
     "answer": "Sound Engineer",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1018",
     "answer": "Wildlife Photographer",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1019",
     "answer": "Crane Operator",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "easy"
   },
   {
     "id": "artist-jobs-1020",
     "answer": "Cartographer",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-1021",
     "answer": "Horologist",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-1022",
     "answer": "Entomologist",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-1023",
     "answer": "Volcanologist",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-1024",
     "answer": "Sommelier",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-1025",
     "answer": "Luthier",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-1026",
     "answer": "Foley Artist",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-1027",
     "answer": "Actuary",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-1028",
     "answer": "Cryptographer",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-1029",
     "answer": "Ornithologist",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-1030",
     "answer": "Oceanographer",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-1031",
     "answer": "Paleontologist",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-1032",
     "answer": "Gemologist",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-1033",
     "answer": "Air Traffic Controller",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-1034",
     "answer": "Prosthetist",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-1035",
     "answer": "Conservator",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-1036",
     "answer": "Mycologist",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-1037",
     "answer": "Numismatist",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-1038",
     "answer": "Arborist",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-jobs-1039",
     "answer": "Epidemiologist",
     "aliases": [],
-    "category": "Jobs Specialist",
+    "category": "Work & Tech Specialist Jobs",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1040",
     "answer": "Robot",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1041",
     "answer": "Smartphone",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1042",
     "answer": "Keyboard",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1043",
     "answer": "Drone",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1044",
     "answer": "Computer Mouse",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1045",
     "answer": "Printer",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1046",
     "answer": "Video Call",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1047",
     "answer": "Game Controller",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1048",
     "answer": "Smartwatch",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1049",
     "answer": "Laptop",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1050",
     "answer": "Touchscreen",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1051",
     "answer": "Webcam",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1052",
     "answer": "Headphones",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1053",
     "answer": "USB Drive",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1054",
     "answer": "Wi-Fi Router",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1055",
     "answer": "Tablet",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1056",
     "answer": "Television",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1057",
     "answer": "Camera",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1058",
     "answer": "Calculator",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1059",
     "answer": "Earbuds",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1060",
     "answer": "Virtual Reality",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1061",
     "answer": "3D Printer",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1062",
     "answer": "Password",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1063",
     "answer": "QR Code",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1064",
     "answer": "Fingerprint Scanner",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1065",
     "answer": "Cloud Storage",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1066",
     "answer": "Graphics Card",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1067",
     "answer": "Circuit Board",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1068",
     "answer": "Microchip",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1069",
     "answer": "Hard Drive",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1070",
     "answer": "Power Bank",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1071",
     "answer": "Smart Speaker",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1072",
     "answer": "Face Recognition",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1073",
     "answer": "Streaming",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1074",
     "answer": "Bluetooth",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1075",
     "answer": "Solar Panel",
     "aliases": [],
-    "category": "Technology Daily Tech",
+    "category": "Work & Tech Everyday Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1076",
     "answer": "Motherboard",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1077",
     "answer": "Server Rack",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1078",
     "answer": "Augmented Reality",
     "aliases": [],
-    "category": "Technology Advanced Tech",
+    "category": "Work & Tech Advanced Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1079",
     "answer": "Machine Learning",
     "aliases": [],
-    "category": "Technology Advanced Tech",
+    "category": "Work & Tech Advanced Tech",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1080",
     "answer": "Heat Sink",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1081",
     "answer": "Optical Fiber",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "easy"
   },
   {
     "id": "artist-technology-1082",
     "answer": "Quantum Entanglement",
     "aliases": [],
-    "category": "Technology Advanced Tech",
+    "category": "Work & Tech Advanced Tech",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1083",
     "answer": "Neural Processing Unit",
     "aliases": [],
-    "category": "Technology Advanced Tech",
+    "category": "Work & Tech Advanced Tech",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1084",
     "answer": "Photolithography",
     "aliases": [],
-    "category": "Technology Advanced Tech",
+    "category": "Work & Tech Advanced Tech",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1085",
     "answer": "Logic Gate",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1086",
     "answer": "Binary Tree",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1087",
     "answer": "Containerization",
     "aliases": [],
-    "category": "Technology Advanced Tech",
+    "category": "Work & Tech Advanced Tech",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1088",
     "answer": "Load Balancer",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1089",
     "answer": "Public Key Encryption",
     "aliases": [],
-    "category": "Technology Advanced Tech",
+    "category": "Work & Tech Advanced Tech",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1090",
     "answer": "Packet Switching",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1091",
     "answer": "RAID Array",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1092",
     "answer": "CMOS Battery",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1093",
     "answer": "Kernel Panic",
     "aliases": [],
-    "category": "Technology Advanced Tech",
+    "category": "Work & Tech Advanced Tech",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1094",
     "answer": "Rasterization",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1095",
     "answer": "Ray Tracing",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1096",
     "answer": "DNS Resolver",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1097",
     "answer": "FPGA",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1098",
     "answer": "Branch Prediction",
     "aliases": [],
-    "category": "Technology Advanced Tech",
+    "category": "Work & Tech Advanced Tech",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1099",
     "answer": "Shader Compilation",
     "aliases": [],
-    "category": "Technology Parts & Concepts",
+    "category": "Work & Tech Tech Parts",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1100",
     "answer": "Differential Privacy",
     "aliases": [],
-    "category": "Technology Advanced Tech",
+    "category": "Work & Tech Advanced Tech",
     "difficulty": "hard"
   },
   {
     "id": "artist-technology-1101",
     "answer": "Homomorphic Encryption",
     "aliases": [],
-    "category": "Technology Advanced Tech",
+    "category": "Work & Tech Advanced Tech",
     "difficulty": "hard"
   },
   {
@@ -9007,91 +9007,91 @@
     "id": "artist-food-india-1287",
     "answer": "Biryani",
     "aliases": [],
-    "category": "Food India",
+    "category": "Food Asia",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-india-1288",
     "answer": "Samosa",
     "aliases": [],
-    "category": "Food India",
+    "category": "Food Asia",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-india-1289",
     "answer": "Dosa",
     "aliases": [],
-    "category": "Food India",
+    "category": "Food Asia",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-india-1290",
     "answer": "Butter Chicken",
     "aliases": [],
-    "category": "Food India",
+    "category": "Food Asia",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-india-1291",
     "answer": "Naan",
     "aliases": [],
-    "category": "Food India",
+    "category": "Food Asia",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-korea-1292",
     "answer": "Kimchi",
     "aliases": [],
-    "category": "Food Korea",
+    "category": "Food Asia",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-korea-1293",
     "answer": "Korean BBQ",
     "aliases": [],
-    "category": "Food Korea",
+    "category": "Food Asia",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-korea-1294",
     "answer": "Tteokbokki",
     "aliases": [],
-    "category": "Food Korea",
+    "category": "Food Asia",
     "difficulty": "hard"
   },
   {
     "id": "artist-food-korea-1295",
     "answer": "Bulgogi",
     "aliases": [],
-    "category": "Food Korea",
+    "category": "Food Asia",
     "difficulty": "hard"
   },
   {
     "id": "artist-food-usa-1296",
     "answer": "Mac and Cheese",
     "aliases": [],
-    "category": "Food USA",
+    "category": "Food North America",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-usa-1297",
     "answer": "BBQ Ribs",
     "aliases": [],
-    "category": "Food USA",
+    "category": "Food North America",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-japan-1298",
     "answer": "Tempura",
     "aliases": [],
-    "category": "Food Japan",
+    "category": "Food Asia",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-japan-1299",
     "answer": "Onigiri",
     "aliases": [],
-    "category": "Food Japan",
+    "category": "Food Asia",
     "difficulty": "easy"
   },
   {
@@ -9112,14 +9112,14 @@
     "id": "artist-food-france-1302",
     "answer": "Baguette",
     "aliases": [],
-    "category": "Food France",
+    "category": "Food Europe",
     "difficulty": "easy"
   },
   {
     "id": "artist-food-france-1303",
-    "answer": "Cr?pe",
+    "answer": "Crepe",
     "aliases": [],
-    "category": "Food France",
+    "category": "Food Europe",
     "difficulty": "easy"
   },
   {
@@ -9156,5 +9156,1337 @@
     "aliases": [],
     "category": "Food Fruits & Sweets",
     "difficulty": "easy"
+  },
+  {
+    "id": "artist-anime-and-manga-1309",
+    "answer": "Naruto",
+    "aliases": [],
+    "category": "Anime & Manga",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-anime-and-manga-1310",
+    "answer": "Pikachu",
+    "aliases": [],
+    "category": "Anime & Manga",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-anime-and-manga-1311",
+    "answer": "Goku",
+    "aliases": [],
+    "category": "Anime & Manga",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-anime-and-manga-1312",
+    "answer": "One Piece",
+    "aliases": [],
+    "category": "Anime & Manga",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-anime-and-manga-1313",
+    "answer": "Totoro",
+    "aliases": [],
+    "category": "Anime & Manga",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-anime-and-manga-1314",
+    "answer": "Sailor Moon",
+    "aliases": [],
+    "category": "Anime & Manga",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-anime-and-manga-1315",
+    "answer": "Death Note",
+    "aliases": [],
+    "category": "Anime & Manga",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-anime-and-manga-1316",
+    "answer": "Attack on Titan",
+    "aliases": [],
+    "category": "Anime & Manga",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-anime-and-manga-1317",
+    "answer": "Evangelion",
+    "aliases": [],
+    "category": "Anime & Manga",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-anime-and-manga-1318",
+    "answer": "Demon Slayer",
+    "aliases": [],
+    "category": "Anime & Manga",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-anime-and-manga-1319",
+    "answer": "Studio Ghibli",
+    "aliases": [],
+    "category": "Anime & Manga",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-anime-and-manga-1320",
+    "answer": "Pokeball",
+    "aliases": [
+      "Poke Ball"
+    ],
+    "category": "Anime & Manga",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-cartoons-1321",
+    "answer": "Mickey Mouse",
+    "aliases": [],
+    "category": "Cartoons",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-cartoons-1322",
+    "answer": "Tom and Jerry",
+    "aliases": [],
+    "category": "Cartoons",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-cartoons-1323",
+    "answer": "Scooby-Doo",
+    "aliases": [],
+    "category": "Cartoons",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-cartoons-1324",
+    "answer": "Doraemon",
+    "aliases": [],
+    "category": "Cartoons",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-cartoons-1325",
+    "answer": "The Flintstones",
+    "aliases": [],
+    "category": "Cartoons",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-cartoons-1326",
+    "answer": "Avatar Aang",
+    "aliases": [],
+    "category": "Cartoons",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-cartoons-1327",
+    "answer": "Adventure Time",
+    "aliases": [],
+    "category": "Cartoons",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-cartoons-1328",
+    "answer": "Regular Show",
+    "aliases": [],
+    "category": "Cartoons",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-cartoons-1329",
+    "answer": "Courage the Cowardly Dog",
+    "aliases": [],
+    "category": "Cartoons",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-cartoons-1330",
+    "answer": "Teen Titans",
+    "aliases": [],
+    "category": "Cartoons",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-countries-and-flags-1331",
+    "answer": "USA Flag",
+    "aliases": [],
+    "category": "Countries & Flags",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-countries-and-flags-1332",
+    "answer": "India Flag",
+    "aliases": [],
+    "category": "Countries & Flags",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-countries-and-flags-1333",
+    "answer": "Japan Flag",
+    "aliases": [],
+    "category": "Countries & Flags",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-countries-and-flags-1334",
+    "answer": "Brazil Flag",
+    "aliases": [],
+    "category": "Countries & Flags",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-countries-and-flags-1335",
+    "answer": "Canada Flag",
+    "aliases": [],
+    "category": "Countries & Flags",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-countries-and-flags-1336",
+    "answer": "Australia Flag",
+    "aliases": [],
+    "category": "Countries & Flags",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-countries-and-flags-1337",
+    "answer": "UK Flag",
+    "aliases": [],
+    "category": "Countries & Flags",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-countries-and-flags-1338",
+    "answer": "Nepal Flag",
+    "aliases": [],
+    "category": "Countries & Flags",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-countries-and-flags-1339",
+    "answer": "South Africa Flag",
+    "aliases": [],
+    "category": "Countries & Flags",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-countries-and-flags-1340",
+    "answer": "Seychelles Flag",
+    "aliases": [],
+    "category": "Countries & Flags",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-cities-1341",
+    "answer": "New York",
+    "aliases": [],
+    "category": "Cities",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-cities-1342",
+    "answer": "Paris",
+    "aliases": [],
+    "category": "Cities",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-cities-1343",
+    "answer": "Tokyo",
+    "aliases": [],
+    "category": "Cities",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-cities-1344",
+    "answer": "London",
+    "aliases": [],
+    "category": "Cities",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-cities-1345",
+    "answer": "Dubai",
+    "aliases": [],
+    "category": "Cities",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-cities-1346",
+    "answer": "Mumbai",
+    "aliases": [],
+    "category": "Cities",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-cities-1347",
+    "answer": "Sydney",
+    "aliases": [],
+    "category": "Cities",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-cities-1348",
+    "answer": "Rome",
+    "aliases": [],
+    "category": "Cities",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-cities-1349",
+    "answer": "Istanbul",
+    "aliases": [],
+    "category": "Cities",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-cities-1350",
+    "answer": "Rio de Janeiro",
+    "aliases": [],
+    "category": "Cities",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-cities-1351",
+    "answer": "Kyoto",
+    "aliases": [],
+    "category": "Cities",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-cities-1352",
+    "answer": "Cairo",
+    "aliases": [],
+    "category": "Cities",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-cities-1353",
+    "answer": "Seoul",
+    "aliases": [],
+    "category": "Cities",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-cities-1354",
+    "answer": "Bangkok",
+    "aliases": [],
+    "category": "Cities",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-actions-1355",
+    "answer": "Running",
+    "aliases": [],
+    "category": "Actions",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-actions-1356",
+    "answer": "Sleeping",
+    "aliases": [],
+    "category": "Actions",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-actions-1357",
+    "answer": "Dancing",
+    "aliases": [],
+    "category": "Actions",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-actions-1358",
+    "answer": "Cooking",
+    "aliases": [],
+    "category": "Actions",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-actions-1359",
+    "answer": "Swimming",
+    "aliases": [],
+    "category": "Actions",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-actions-1360",
+    "answer": "Reading",
+    "aliases": [],
+    "category": "Actions",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-actions-1361",
+    "answer": "Singing",
+    "aliases": [],
+    "category": "Actions",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-actions-1362",
+    "answer": "Jumping",
+    "aliases": [],
+    "category": "Actions",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-actions-1363",
+    "answer": "Climbing",
+    "aliases": [],
+    "category": "Actions",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-actions-1364",
+    "answer": "Painting",
+    "aliases": [],
+    "category": "Actions",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-actions-1365",
+    "answer": "Juggling",
+    "aliases": [],
+    "category": "Actions",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-actions-1366",
+    "answer": "Meditating",
+    "aliases": [],
+    "category": "Actions",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-actions-1367",
+    "answer": "Whispering",
+    "aliases": [],
+    "category": "Actions",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-actions-1368",
+    "answer": "Tiptoeing",
+    "aliases": [],
+    "category": "Actions",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-actions-1369",
+    "answer": "Stretching",
+    "aliases": [],
+    "category": "Actions",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-actions-1370",
+    "answer": "Sneezing",
+    "aliases": [],
+    "category": "Actions",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-emotions-1371",
+    "answer": "Happy",
+    "aliases": [],
+    "category": "Emotions",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-emotions-1372",
+    "answer": "Sad",
+    "aliases": [],
+    "category": "Emotions",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-emotions-1373",
+    "answer": "Angry",
+    "aliases": [],
+    "category": "Emotions",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-emotions-1374",
+    "answer": "Scared",
+    "aliases": [],
+    "category": "Emotions",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-emotions-1375",
+    "answer": "Sleepy",
+    "aliases": [],
+    "category": "Emotions",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-emotions-1376",
+    "answer": "Confused",
+    "aliases": [],
+    "category": "Emotions",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-emotions-1377",
+    "answer": "Excited",
+    "aliases": [],
+    "category": "Emotions",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-emotions-1378",
+    "answer": "Surprised",
+    "aliases": [],
+    "category": "Emotions",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-emotions-1379",
+    "answer": "Embarrassed",
+    "aliases": [],
+    "category": "Emotions",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-emotions-1380",
+    "answer": "Jealous",
+    "aliases": [],
+    "category": "Emotions",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-emotions-1381",
+    "answer": "Suspicious",
+    "aliases": [],
+    "category": "Emotions",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-emotions-1382",
+    "answer": "Relieved",
+    "aliases": [],
+    "category": "Emotions",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-emotions-1383",
+    "answer": "Awkward",
+    "aliases": [],
+    "category": "Emotions",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-emotions-1384",
+    "answer": "Nostalgic",
+    "aliases": [],
+    "category": "Emotions",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clothing-and-fashion-1385",
+    "answer": "Hat",
+    "aliases": [],
+    "category": "Clothing & Fashion",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-clothing-and-fashion-1386",
+    "answer": "Shoes",
+    "aliases": [],
+    "category": "Clothing & Fashion",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-clothing-and-fashion-1387",
+    "answer": "Sunglasses",
+    "aliases": [],
+    "category": "Clothing & Fashion",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-clothing-and-fashion-1388",
+    "answer": "Dress",
+    "aliases": [],
+    "category": "Clothing & Fashion",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-clothing-and-fashion-1389",
+    "answer": "Hoodie",
+    "aliases": [],
+    "category": "Clothing & Fashion",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-clothing-and-fashion-1390",
+    "answer": "Boots",
+    "aliases": [],
+    "category": "Clothing & Fashion",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-clothing-and-fashion-1391",
+    "answer": "Scarf",
+    "aliases": [],
+    "category": "Clothing & Fashion",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-clothing-and-fashion-1392",
+    "answer": "Gloves",
+    "aliases": [],
+    "category": "Clothing & Fashion",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-clothing-and-fashion-1393",
+    "answer": "Bow Tie",
+    "aliases": [],
+    "category": "Clothing & Fashion",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clothing-and-fashion-1394",
+    "answer": "Tuxedo",
+    "aliases": [],
+    "category": "Clothing & Fashion",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clothing-and-fashion-1395",
+    "answer": "Kimono",
+    "aliases": [],
+    "category": "Clothing & Fashion",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clothing-and-fashion-1396",
+    "answer": "Poncho",
+    "aliases": [],
+    "category": "Clothing & Fashion",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clothing-and-fashion-1397",
+    "answer": "Trench Coat",
+    "aliases": [],
+    "category": "Clothing & Fashion",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-clothing-and-fashion-1398",
+    "answer": "Overalls",
+    "aliases": [],
+    "category": "Clothing & Fashion",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-home-and-rooms-1399",
+    "answer": "Bedroom",
+    "aliases": [],
+    "category": "Home & Rooms",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-home-and-rooms-1400",
+    "answer": "Kitchen",
+    "aliases": [],
+    "category": "Home & Rooms",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-home-and-rooms-1401",
+    "answer": "Bathroom",
+    "aliases": [],
+    "category": "Home & Rooms",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-home-and-rooms-1402",
+    "answer": "Sofa",
+    "aliases": [],
+    "category": "Home & Rooms",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-home-and-rooms-1403",
+    "answer": "Bed",
+    "aliases": [],
+    "category": "Home & Rooms",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-home-and-rooms-1404",
+    "answer": "Door",
+    "aliases": [],
+    "category": "Home & Rooms",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-home-and-rooms-1405",
+    "answer": "Window",
+    "aliases": [],
+    "category": "Home & Rooms",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-home-and-rooms-1406",
+    "answer": "Refrigerator",
+    "aliases": [],
+    "category": "Home & Rooms",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-home-and-rooms-1407",
+    "answer": "Attic",
+    "aliases": [],
+    "category": "Home & Rooms",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-home-and-rooms-1408",
+    "answer": "Basement",
+    "aliases": [],
+    "category": "Home & Rooms",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-home-and-rooms-1409",
+    "answer": "Fireplace",
+    "aliases": [],
+    "category": "Home & Rooms",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-home-and-rooms-1410",
+    "answer": "Chandelier",
+    "aliases": [],
+    "category": "Home & Rooms",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-home-and-rooms-1411",
+    "answer": "Balcony",
+    "aliases": [],
+    "category": "Home & Rooms",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-home-and-rooms-1412",
+    "answer": "Laundry Room",
+    "aliases": [],
+    "category": "Home & Rooms",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-school-supplies-1413",
+    "answer": "Pencil",
+    "aliases": [],
+    "category": "School Supplies",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-school-supplies-1414",
+    "answer": "Notebook",
+    "aliases": [],
+    "category": "School Supplies",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-school-supplies-1415",
+    "answer": "Backpack",
+    "aliases": [],
+    "category": "School Supplies",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-school-supplies-1416",
+    "answer": "Ruler",
+    "aliases": [],
+    "category": "School Supplies",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-school-supplies-1417",
+    "answer": "Eraser",
+    "aliases": [],
+    "category": "School Supplies",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-school-supplies-1418",
+    "answer": "Blackboard",
+    "aliases": [],
+    "category": "School Supplies",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-school-supplies-1419",
+    "answer": "Lunchbox",
+    "aliases": [],
+    "category": "School Supplies",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-school-supplies-1420",
+    "answer": "Protractor",
+    "aliases": [],
+    "category": "School Supplies",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-school-supplies-1421",
+    "answer": "Compass Tool",
+    "aliases": [],
+    "category": "School Supplies",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-school-supplies-1422",
+    "answer": "Microscope",
+    "aliases": [],
+    "category": "School Supplies",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-school-life-1423",
+    "answer": "Teacher",
+    "aliases": [],
+    "category": "School Life",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-school-life-1424",
+    "answer": "Classroom",
+    "aliases": [],
+    "category": "School Life",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-school-life-1425",
+    "answer": "School Bus",
+    "aliases": [],
+    "category": "School Life",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-school-life-1426",
+    "answer": "Homework",
+    "aliases": [],
+    "category": "School Life",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-school-life-1427",
+    "answer": "Recess",
+    "aliases": [],
+    "category": "School Life",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-school-life-1428",
+    "answer": "Exam",
+    "aliases": [],
+    "category": "School Life",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-school-life-1429",
+    "answer": "Report Card",
+    "aliases": [],
+    "category": "School Life",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-school-life-1430",
+    "answer": "Science Fair",
+    "aliases": [],
+    "category": "School Life",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-school-life-1431",
+    "answer": "Detention",
+    "aliases": [],
+    "category": "School Life",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-school-life-1432",
+    "answer": "Graduation Cap",
+    "aliases": [],
+    "category": "School Life",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-school-subjects-1433",
+    "answer": "Math",
+    "aliases": [],
+    "category": "School Subjects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-school-subjects-1434",
+    "answer": "Science",
+    "aliases": [],
+    "category": "School Subjects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-school-subjects-1435",
+    "answer": "Art Class",
+    "aliases": [],
+    "category": "School Subjects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-school-subjects-1436",
+    "answer": "History",
+    "aliases": [],
+    "category": "School Subjects",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-school-subjects-1437",
+    "answer": "Geography",
+    "aliases": [],
+    "category": "School Subjects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-school-subjects-1438",
+    "answer": "Algebra",
+    "aliases": [],
+    "category": "School Subjects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-school-subjects-1439",
+    "answer": "Chemistry",
+    "aliases": [],
+    "category": "School Subjects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-school-subjects-1440",
+    "answer": "Biology",
+    "aliases": [],
+    "category": "School Subjects",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-south-america-1441",
+    "answer": "Empanada",
+    "aliases": [],
+    "category": "Food South America",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-south-america-1442",
+    "answer": "Arepa",
+    "aliases": [],
+    "category": "Food South America",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-south-america-1443",
+    "answer": "Ceviche",
+    "aliases": [],
+    "category": "Food South America",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-south-america-1444",
+    "answer": "Feijoada",
+    "aliases": [],
+    "category": "Food South America",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-south-america-1445",
+    "answer": "Brigadeiro",
+    "aliases": [],
+    "category": "Food South America",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-south-america-1446",
+    "answer": "Dulce de Leche",
+    "aliases": [],
+    "category": "Food South America",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-africa-1447",
+    "answer": "Jollof Rice",
+    "aliases": [],
+    "category": "Food Africa",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-africa-1448",
+    "answer": "Injera",
+    "aliases": [],
+    "category": "Food Africa",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-africa-1449",
+    "answer": "Tagine",
+    "aliases": [],
+    "category": "Food Africa",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-africa-1450",
+    "answer": "Fufu",
+    "aliases": [],
+    "category": "Food Africa",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-africa-1451",
+    "answer": "Suya",
+    "aliases": [],
+    "category": "Food Africa",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-africa-1452",
+    "answer": "Koshari",
+    "aliases": [],
+    "category": "Food Africa",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-australia-1453",
+    "answer": "Meat Pie",
+    "aliases": [],
+    "category": "Food Australia",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-australia-1454",
+    "answer": "Lamington",
+    "aliases": [],
+    "category": "Food Australia",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-australia-1455",
+    "answer": "Fairy Bread",
+    "aliases": [],
+    "category": "Food Australia",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-australia-1456",
+    "answer": "Vegemite Toast",
+    "aliases": [],
+    "category": "Food Australia",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-australia-1457",
+    "answer": "Pavlova",
+    "aliases": [],
+    "category": "Food Australia",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-snacks-1458",
+    "answer": "Popcorn",
+    "aliases": [],
+    "category": "Food Snacks",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-snacks-1459",
+    "answer": "Nachos",
+    "aliases": [],
+    "category": "Food Snacks",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-snacks-1460",
+    "answer": "Potato Chips",
+    "aliases": [],
+    "category": "Food Snacks",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-snacks-1461",
+    "answer": "Chocolate Bar",
+    "aliases": [],
+    "category": "Food Snacks",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-snacks-1462",
+    "answer": "Pretzel",
+    "aliases": [],
+    "category": "Food Snacks",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-snacks-1463",
+    "answer": "Trail Mix",
+    "aliases": [],
+    "category": "Food Snacks",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-snacks-1464",
+    "answer": "Granola Bar",
+    "aliases": [],
+    "category": "Food Snacks",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-snacks-1465",
+    "answer": "Rice Crackers",
+    "aliases": [],
+    "category": "Food Snacks",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-breakfast-and-cereal-1466",
+    "answer": "Cereal Bowl",
+    "aliases": [],
+    "category": "Food Breakfast & Cereal",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-breakfast-and-cereal-1467",
+    "answer": "Pancakes",
+    "aliases": [],
+    "category": "Food Breakfast & Cereal",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-breakfast-and-cereal-1468",
+    "answer": "Waffles",
+    "aliases": [],
+    "category": "Food Breakfast & Cereal",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-breakfast-and-cereal-1469",
+    "answer": "Toast",
+    "aliases": [],
+    "category": "Food Breakfast & Cereal",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-breakfast-and-cereal-1470",
+    "answer": "Fried Egg",
+    "aliases": [],
+    "category": "Food Breakfast & Cereal",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-breakfast-and-cereal-1471",
+    "answer": "Omelette",
+    "aliases": [],
+    "category": "Food Breakfast & Cereal",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-breakfast-and-cereal-1472",
+    "answer": "Oatmeal",
+    "aliases": [],
+    "category": "Food Breakfast & Cereal",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-breakfast-and-cereal-1473",
+    "answer": "Cornflakes",
+    "aliases": [],
+    "category": "Food Breakfast & Cereal",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-breakfast-and-cereal-1474",
+    "answer": "Muesli",
+    "aliases": [],
+    "category": "Food Breakfast & Cereal",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-desserts-1475",
+    "answer": "Ice Cream",
+    "aliases": [],
+    "category": "Food Desserts",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-desserts-1476",
+    "answer": "Cupcake",
+    "aliases": [],
+    "category": "Food Desserts",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-desserts-1477",
+    "answer": "Donut",
+    "aliases": [],
+    "category": "Food Desserts",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-desserts-1478",
+    "answer": "Brownie",
+    "aliases": [],
+    "category": "Food Desserts",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-desserts-1479",
+    "answer": "Cheesecake",
+    "aliases": [],
+    "category": "Food Desserts",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-desserts-1480",
+    "answer": "Tiramisu",
+    "aliases": [],
+    "category": "Food Desserts",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-desserts-1481",
+    "answer": "Baklava",
+    "aliases": [],
+    "category": "Food Desserts",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-desserts-1482",
+    "answer": "Macaron",
+    "aliases": [],
+    "category": "Food Desserts",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-drinks-1483",
+    "answer": "Coffee",
+    "aliases": [],
+    "category": "Food Drinks",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-drinks-1484",
+    "answer": "Tea",
+    "aliases": [],
+    "category": "Food Drinks",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-drinks-1485",
+    "answer": "Milkshake",
+    "aliases": [],
+    "category": "Food Drinks",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-drinks-1486",
+    "answer": "Lemonade",
+    "aliases": [],
+    "category": "Food Drinks",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-drinks-1487",
+    "answer": "Bubble Tea",
+    "aliases": [],
+    "category": "Food Drinks",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-drinks-1488",
+    "answer": "Smoothie",
+    "aliases": [],
+    "category": "Food Drinks",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-drinks-1489",
+    "answer": "Hot Chocolate",
+    "aliases": [],
+    "category": "Food Drinks",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-drinks-1490",
+    "answer": "Kombucha",
+    "aliases": [],
+    "category": "Food Drinks",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-street-food-1491",
+    "answer": "Hot Dog",
+    "aliases": [],
+    "category": "Food Street Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-street-food-1492",
+    "answer": "Taco",
+    "aliases": [],
+    "category": "Food Street Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-street-food-1493",
+    "answer": "Kebab",
+    "aliases": [],
+    "category": "Food Street Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-street-food-1494",
+    "answer": "Shawarma",
+    "aliases": [],
+    "category": "Food Street Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-street-food-1495",
+    "answer": "Falafel",
+    "aliases": [],
+    "category": "Food Street Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-street-food-1496",
+    "answer": "Takoyaki",
+    "aliases": [],
+    "category": "Food Street Food",
+    "difficulty": "hard"
+  },
+  {
+    "id": "artist-food-street-food-1497",
+    "answer": "Churros",
+    "aliases": [],
+    "category": "Food Street Food",
+    "difficulty": "easy"
+  },
+  {
+    "id": "artist-food-street-food-1498",
+    "answer": "Bao Bun",
+    "aliases": [],
+    "category": "Food Street Food",
+    "difficulty": "hard"
   }
 ]

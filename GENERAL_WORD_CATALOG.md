@@ -62,7 +62,7 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 
 - None yet
 
-#### Other
+#### Popular Picks
 
 **Easy (21)**
 
@@ -123,6 +123,46 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Brawndo
 - Redrum
 - Kobayashi Maru
+
+### Anime & Cartoons
+
+#### Anime & Manga
+
+**Easy (7)**
+
+- Naruto
+- Pikachu
+- Goku
+- One Piece
+- Totoro
+- Sailor Moon
+- Pokeball
+
+**Hard (5)**
+
+- Death Note
+- Attack on Titan
+- Evangelion
+- Demon Slayer
+- Studio Ghibli
+
+#### Cartoons
+
+**Easy (5)**
+
+- Mickey Mouse
+- Tom and Jerry
+- Scooby-Doo
+- Doraemon
+- The Flintstones
+
+**Hard (5)**
+
+- Avatar Aang
+- Adventure Time
+- Regular Show
+- Courage the Cowardly Dog
+- Teen Titans
 
 ### Music
 
@@ -643,6 +683,48 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 
 ## World & Nature
 
+### Countries & Cities
+
+#### Countries & Flags
+
+**Easy (6)**
+
+- USA Flag
+- India Flag
+- Japan Flag
+- Brazil Flag
+- Canada Flag
+- Australia Flag
+
+**Hard (4)**
+
+- UK Flag
+- Nepal Flag
+- South Africa Flag
+- Seychelles Flag
+
+#### Cities
+
+**Easy (8)**
+
+- New York
+- Paris
+- Tokyo
+- London
+- Dubai
+- Mumbai
+- Sydney
+- Rome
+
+**Hard (6)**
+
+- Istanbul
+- Rio de Janeiro
+- Kyoto
+- Cairo
+- Seoul
+- Bangkok
+
 ### Animals & Sea Life
 
 #### Common
@@ -998,34 +1080,24 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 
 ### Nature
 
-#### Landscapes & Plants
+#### Landscapes
 
-**Easy (27)**
+**Easy (17)**
 
-- Sunflower
 - Mountain
-- Cactus
-- Palm Tree
-- Mushroom
 - River
 - Forest
 - Cave
 - Waterfall
 - Volcano
 - Desert
-- Leaf
-- Flower
 - Ocean
-- Dandelion
-- Bamboo
 - Water Lily
 - Mangrove
 - Sand Dune
 - Canyon
 - Glacier
 - Coral Reef
-- Redwood Tree
-- Venus Flytrap
 - Hot Spring
 - Sinkhole
 - Petrified Forest
@@ -1067,6 +1139,34 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Moonbow
 - Catatumbo Lightning
 
+#### Common
+
+**Easy (9)**
+
+- Sunflower
+- Cactus
+- Palm Tree
+- Mushroom
+- Leaf
+- Flower
+- Dandelion
+- Bamboo
+- Redwood Tree
+
+**Hard (0)**
+
+- None yet
+
+#### Unusual
+
+**Easy (1)**
+
+- Venus Flytrap
+
+**Hard (0)**
+
+- None yet
+
 #### Rare Phenomena
 
 **Easy (0)**
@@ -1084,336 +1184,155 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Penitentes
 - Frost Flower
 
-## Lifestyle
+## Daily Life
 
-### Food
+### Actions & Emotions
 
-#### USA
-
-**Easy (11)**
-
-- Pancakes
-- Popcorn
-- Sandwich
-- Cheeseburger
-- French Fries
-- Hot Dog
-- Apple Pie
-- Fried Egg
-- Birthday Cake
-- Mac and Cheese
-- BBQ Ribs
-
-**Hard (0)**
-
-- None yet
-
-#### France
-
-**Easy (5)**
-
-- Croissant
-- Macaron
-- Fondue
-- Baguette
-- Cr?pe
-
-**Hard (1)**
-
-- Dacquoise
-
-#### India
-
-**Easy (6)**
-
-- Curry
-- Biryani
-- Samosa
-- Dosa
-- Butter Chicken
-- Naan
-
-**Hard (0)**
-
-- None yet
-
-#### Japan
-
-**Easy (5)**
-
-- Sushi
-- Ramen
-- Mochi
-- Tempura
-- Onigiri
-
-**Hard (3)**
-
-- Kaiseki
-- Takoyaki
-- Okonomiyaki
-
-#### Korea
-
-**Easy (2)**
-
-- Kimchi
-- Korean BBQ
-
-**Hard (3)**
-
-- Bibimbap
-- Tteokbokki
-- Bulgogi
-
-#### Middle East
-
-**Easy (5)**
-
-- Falafel
-- Kebab
-- Baklava
-- Hummus
-- Shawarma
-
-**Hard (3)**
-
-- Baba Ganoush
-- Dolma
-- Shakshuka
-
-#### Europe
-
-**Easy (9)**
-
-- Spaghetti
-- Paella
-- Lasagna
-- Risotto
-- Tiramisu
-- Gnocchi
-- Pierogi
-- Fish and Chips
-- Pretzel
-
-**Hard (3)**
-
-- Sauerbraten
-- Pastitsio
-- Bouillabaisse
-
-#### Fruits & Sweets
+#### Actions
 
 **Easy (10)**
 
-- Watermelon
-- Cupcake
-- Ice Cream
-- Pineapple
-- Donut
-- Waffle
-- Churros
-- Banana
-- Strawberry
-- Chocolate Bar
+- Running
+- Sleeping
+- Dancing
+- Cooking
+- Swimming
+- Reading
+- Singing
+- Jumping
+- Climbing
+- Painting
 
-**Hard (0)**
+**Hard (6)**
 
-- None yet
+- Juggling
+- Meditating
+- Whispering
+- Tiptoeing
+- Stretching
+- Sneezing
 
-#### Other
+#### Emotions
 
-**Easy (9)**
+**Easy (8)**
 
-- Pizza
-- Taco
-- Noodles
-- Burrito
-- Dumpling
-- Pretzel
-- Nachos
-- Spring Roll
-- Dim Sum
+- Happy
+- Sad
+- Angry
+- Scared
+- Sleepy
+- Confused
+- Excited
+- Surprised
 
-**Hard (9)**
+**Hard (6)**
 
-- Mole Poblano
-- Khachapuri
-- Peking Duck
-- Koshari
-- Feijoada
-- Jollof Rice
-- Lomo Saltado
-- Banh Xeo
-- Canelé
+- Embarrassed
+- Jealous
+- Suspicious
+- Relieved
+- Awkward
+- Nostalgic
 
-### Jobs
+### Home & Clothing
 
-#### Common
+#### Home & Rooms
 
-**Easy (20)**
+**Easy (8)**
 
-- Firefighter
-- Astronaut
-- Chef
-- Photographer
-- Detective
-- Dentist
-- Pilot
-- Lifeguard
-- Mechanic
-- Magician
-- Scientist
-- Farmer
+- Bedroom
+- Kitchen
+- Bathroom
+- Sofa
+- Bed
+- Door
+- Window
+- Refrigerator
+
+**Hard (6)**
+
+- Attic
+- Basement
+- Fireplace
+- Chandelier
+- Balcony
+- Laundry Room
+
+#### Clothing & Fashion
+
+**Easy (8)**
+
+- Hat
+- Shoes
+- Sunglasses
+- Dress
+- Hoodie
+- Boots
+- Scarf
+- Gloves
+
+**Hard (6)**
+
+- Bow Tie
+- Tuxedo
+- Kimono
+- Poncho
+- Trench Coat
+- Overalls
+
+### School
+
+#### Supplies
+
+**Easy (7)**
+
+- Pencil
+- Notebook
+- Backpack
+- Ruler
+- Eraser
+- Blackboard
+- Lunchbox
+
+**Hard (3)**
+
+- Protractor
+- Compass Tool
+- Microscope
+
+#### Life
+
+**Easy (6)**
+
 - Teacher
-- Veterinarian
-- Carpenter
-- News Reporter
-- Doctor
-- Police Officer
-- Engineer
-- Musician
+- Classroom
+- School Bus
+- Homework
+- Recess
+- Exam
 
-**Hard (0)**
+**Hard (4)**
 
-- None yet
+- Report Card
+- Science Fair
+- Detention
+- Graduation Cap
 
-#### Specialist
+#### Subjects
 
-**Easy (20)**
+**Easy (4)**
 
-- Architect
-- Paramedic
-- Electrician
-- Plumber
-- Archaeologist
-- Film Director
-- Flight Attendant
-- Zookeeper
-- Blacksmith
-- Librarian
-- Meteorologist
-- Tattoo Artist
-- Park Ranger
-- Civil Engineer
-- Courtroom Judge
-- Forensic Scientist
-- Stunt Performer
-- Sound Engineer
-- Wildlife Photographer
-- Crane Operator
+- Math
+- Science
+- Art Class
+- History
 
-**Hard (20)**
+**Hard (4)**
 
-- Cartographer
-- Horologist
-- Entomologist
-- Volcanologist
-- Sommelier
-- Luthier
-- Foley Artist
-- Actuary
-- Cryptographer
-- Ornithologist
-- Oceanographer
-- Paleontologist
-- Gemologist
-- Air Traffic Controller
-- Prosthetist
-- Conservator
-- Mycologist
-- Numismatist
-- Arborist
-- Epidemiologist
-
-### Technology
-
-#### Daily Tech
-
-**Easy (28)**
-
-- Robot
-- Smartphone
-- Keyboard
-- Drone
-- Computer Mouse
-- Printer
-- Video Call
-- Game Controller
-- Smartwatch
-- Laptop
-- Touchscreen
-- Webcam
-- Headphones
-- USB Drive
-- Wi-Fi Router
-- Tablet
-- Television
-- Camera
-- Calculator
-- Earbuds
-- Virtual Reality
-- 3D Printer
-- Password
-- QR Code
-- Cloud Storage
-- Streaming
-- Bluetooth
-- Solar Panel
-
-**Hard (0)**
-
-- None yet
-
-#### Parts & Concepts
-
-**Easy (12)**
-
-- Fingerprint Scanner
-- Graphics Card
-- Circuit Board
-- Microchip
-- Hard Drive
-- Power Bank
-- Smart Speaker
-- Face Recognition
-- Motherboard
-- Server Rack
-- Heat Sink
-- Optical Fiber
-
-**Hard (11)**
-
-- Logic Gate
-- Binary Tree
-- Load Balancer
-- Packet Switching
-- RAID Array
-- CMOS Battery
-- Rasterization
-- Ray Tracing
-- DNS Resolver
-- FPGA
-- Shader Compilation
-
-#### Advanced Tech
-
-**Easy (2)**
-
-- Augmented Reality
-- Machine Learning
-
-**Hard (9)**
-
-- Quantum Entanglement
-- Neural Processing Unit
-- Photolithography
-- Containerization
-- Public Key Encryption
-- Kernel Panic
-- Branch Prediction
-- Differential Privacy
-- Homomorphic Encryption
+- Geography
+- Algebra
+- Chemistry
+- Biology
 
 ### Everyday Objects
 
@@ -1502,4 +1421,432 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Center Punch
 - Deburring Tool
 - Combination Square
+
+## Food & Work
+
+### Regional Food
+
+#### North America
+
+**Easy (11)**
+
+- Pancakes
+- Popcorn
+- Sandwich
+- Cheeseburger
+- French Fries
+- Hot Dog
+- Apple Pie
+- Fried Egg
+- Birthday Cake
+- Mac and Cheese
+- BBQ Ribs
+
+**Hard (0)**
+
+- None yet
+
+#### South America
+
+**Easy (1)**
+
+- Empanada
+
+**Hard (5)**
+
+- Arepa
+- Ceviche
+- Feijoada
+- Brigadeiro
+- Dulce de Leche
+
+#### Europe
+
+**Easy (14)**
+
+- Spaghetti
+- Croissant
+- Paella
+- Lasagna
+- Macaron
+- Risotto
+- Fondue
+- Tiramisu
+- Gnocchi
+- Pierogi
+- Baguette
+- Crepe
+- Fish and Chips
+- Pretzel
+
+**Hard (4)**
+
+- Sauerbraten
+- Pastitsio
+- Dacquoise
+- Bouillabaisse
+
+#### Asia
+
+**Easy (13)**
+
+- Sushi
+- Ramen
+- Curry
+- Mochi
+- Biryani
+- Samosa
+- Dosa
+- Butter Chicken
+- Naan
+- Kimchi
+- Korean BBQ
+- Tempura
+- Onigiri
+
+**Hard (6)**
+
+- Kaiseki
+- Takoyaki
+- Okonomiyaki
+- Bibimbap
+- Tteokbokki
+- Bulgogi
+
+#### Middle East
+
+**Easy (5)**
+
+- Falafel
+- Kebab
+- Baklava
+- Hummus
+- Shawarma
+
+**Hard (3)**
+
+- Baba Ganoush
+- Dolma
+- Shakshuka
+
+#### Africa
+
+**Easy (1)**
+
+- Jollof Rice
+
+**Hard (5)**
+
+- Injera
+- Tagine
+- Fufu
+- Suya
+- Koshari
+
+#### Australia
+
+**Easy (2)**
+
+- Meat Pie
+- Fairy Bread
+
+**Hard (3)**
+
+- Lamington
+- Vegemite Toast
+- Pavlova
+
+### Food Types
+
+#### Snacks
+
+**Easy (5)**
+
+- Popcorn
+- Nachos
+- Potato Chips
+- Chocolate Bar
+- Pretzel
+
+**Hard (3)**
+
+- Trail Mix
+- Granola Bar
+- Rice Crackers
+
+#### Breakfast & Cereal
+
+**Easy (6)**
+
+- Cereal Bowl
+- Pancakes
+- Waffles
+- Toast
+- Fried Egg
+- Cornflakes
+
+**Hard (3)**
+
+- Omelette
+- Oatmeal
+- Muesli
+
+#### Fruits & Sweets
+
+**Easy (10)**
+
+- Watermelon
+- Cupcake
+- Ice Cream
+- Pineapple
+- Donut
+- Waffle
+- Churros
+- Banana
+- Strawberry
+- Chocolate Bar
+
+**Hard (0)**
+
+- None yet
+
+#### Desserts
+
+**Easy (4)**
+
+- Ice Cream
+- Cupcake
+- Donut
+- Brownie
+
+**Hard (4)**
+
+- Cheesecake
+- Tiramisu
+- Baklava
+- Macaron
+
+#### Drinks
+
+**Easy (6)**
+
+- Coffee
+- Tea
+- Milkshake
+- Lemonade
+- Smoothie
+- Hot Chocolate
+
+**Hard (2)**
+
+- Bubble Tea
+- Kombucha
+
+#### Street Food
+
+**Easy (6)**
+
+- Hot Dog
+- Taco
+- Kebab
+- Shawarma
+- Falafel
+- Churros
+
+**Hard (2)**
+
+- Takoyaki
+- Bao Bun
+
+#### Everyday Favorites
+
+**Easy (9)**
+
+- Pizza
+- Taco
+- Noodles
+- Burrito
+- Dumpling
+- Pretzel
+- Nachos
+- Spring Roll
+- Dim Sum
+
+**Hard (9)**
+
+- Mole Poblano
+- Khachapuri
+- Peking Duck
+- Koshari
+- Feijoada
+- Jollof Rice
+- Lomo Saltado
+- Banh Xeo
+- Canelé
+
+### Work & Tech
+
+#### Everyday Jobs
+
+**Easy (20)**
+
+- Firefighter
+- Astronaut
+- Chef
+- Photographer
+- Detective
+- Dentist
+- Pilot
+- Lifeguard
+- Mechanic
+- Magician
+- Scientist
+- Farmer
+- Teacher
+- Veterinarian
+- Carpenter
+- News Reporter
+- Doctor
+- Police Officer
+- Engineer
+- Musician
+
+**Hard (0)**
+
+- None yet
+
+#### Specialist Jobs
+
+**Easy (20)**
+
+- Architect
+- Paramedic
+- Electrician
+- Plumber
+- Archaeologist
+- Film Director
+- Flight Attendant
+- Zookeeper
+- Blacksmith
+- Librarian
+- Meteorologist
+- Tattoo Artist
+- Park Ranger
+- Civil Engineer
+- Courtroom Judge
+- Forensic Scientist
+- Stunt Performer
+- Sound Engineer
+- Wildlife Photographer
+- Crane Operator
+
+**Hard (20)**
+
+- Cartographer
+- Horologist
+- Entomologist
+- Volcanologist
+- Sommelier
+- Luthier
+- Foley Artist
+- Actuary
+- Cryptographer
+- Ornithologist
+- Oceanographer
+- Paleontologist
+- Gemologist
+- Air Traffic Controller
+- Prosthetist
+- Conservator
+- Mycologist
+- Numismatist
+- Arborist
+- Epidemiologist
+
+#### Everyday Tech
+
+**Easy (28)**
+
+- Robot
+- Smartphone
+- Keyboard
+- Drone
+- Computer Mouse
+- Printer
+- Video Call
+- Game Controller
+- Smartwatch
+- Laptop
+- Touchscreen
+- Webcam
+- Headphones
+- USB Drive
+- Wi-Fi Router
+- Tablet
+- Television
+- Camera
+- Calculator
+- Earbuds
+- Virtual Reality
+- 3D Printer
+- Password
+- QR Code
+- Cloud Storage
+- Streaming
+- Bluetooth
+- Solar Panel
+
+**Hard (0)**
+
+- None yet
+
+#### Tech Parts
+
+**Easy (12)**
+
+- Fingerprint Scanner
+- Graphics Card
+- Circuit Board
+- Microchip
+- Hard Drive
+- Power Bank
+- Smart Speaker
+- Face Recognition
+- Motherboard
+- Server Rack
+- Heat Sink
+- Optical Fiber
+
+**Hard (11)**
+
+- Logic Gate
+- Binary Tree
+- Load Balancer
+- Packet Switching
+- RAID Array
+- CMOS Battery
+- Rasterization
+- Ray Tracing
+- DNS Resolver
+- FPGA
+- Shader Compilation
+
+#### Advanced Tech
+
+**Easy (2)**
+
+- Augmented Reality
+- Machine Learning
+
+**Hard (9)**
+
+- Quantum Entanglement
+- Neural Processing Unit
+- Photolithography
+- Containerization
+- Public Key Encryption
+- Kernel Panic
+- Branch Prediction
+- Differential Privacy
+- Homomorphic Encryption
 
