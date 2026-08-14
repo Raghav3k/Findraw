@@ -2,7 +2,7 @@
 
 Readable review copy for Findraw's General word pool. These words are used by Artist Mode and Room Mode. Auto Draw has a separate asset-backed dataset.
 
-Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable; **hard** means niche, technical, specific, or harder to draw/guess.
+Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable; **medium** means familiar but more challenging; **hard** means niche, technical, specific, or harder to draw/guess.
 
 ## Entertainment
 
@@ -17,6 +17,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Iron Man
 - Infinity Gauntlet
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -29,6 +33,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Superman
 - Bat-Signal
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -39,6 +47,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 
 - Star Wars
 - Death Star
+
+**Medium (0)**
+
+- None yet
 
 **Hard (1)**
 
@@ -57,6 +69,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - SpongeBob SquarePants
 - Cars
 - Kung Fu Panda
+
+**Medium (0)**
+
+- None yet
 
 **Hard (0)**
 
@@ -88,6 +104,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Pirates of the Caribbean
 - Mission Impossible
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -102,26 +122,29 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - The One Ring
 - TARDIS
 
-**Hard (19)**
+**Medium (11)**
 
-- Maltese Falcon
 - Neuralyzer
 - Wilson Volleyball
 - Golden Snitch
 - Leg Lamp
 - Spinning Top
-- Lament Configuration
-- Sankara Stones
 - Rabbit Foot
-- Green Destiny
-- Rosebud
 - Flux Capacitor
 - Red Stapler
 - Burn Book
 - Hand of the King
+- Redrum
+
+**Hard (8)**
+
+- Maltese Falcon
+- Lament Configuration
+- Sankara Stones
+- Green Destiny
+- Rosebud
 - Zorg ZF-1
 - Brawndo
-- Redrum
 - Kobayashi Maru
 
 ### Anime & Cartoons
@@ -138,13 +161,16 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Sailor Moon
 - Pokeball
 
-**Hard (5)**
+**Medium (4)**
 
 - Death Note
 - Attack on Titan
-- Evangelion
 - Demon Slayer
 - Studio Ghibli
+
+**Hard (1)**
+
+- Evangelion
 
 #### Cartoons
 
@@ -156,13 +182,17 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Doraemon
 - The Flintstones
 
-**Hard (5)**
+**Medium (5)**
 
 - Avatar Aang
 - Adventure Time
 - Regular Show
 - Courage the Cowardly Dog
 - Teen Titans
+
+**Hard (0)**
+
+- None yet
 
 ### Music
 
@@ -181,7 +211,7 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Old Town Road
 - Despacito
 
-**Hard (10)**
+**Medium (10)**
 
 - Hotel California
 - Smells Like Teen Spirit
@@ -193,6 +223,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Uptown Funk
 - Blinding Lights
 - Imagine
+
+**Hard (0)**
+
+- None yet
 
 #### Singers & Bands
 
@@ -239,7 +273,7 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Nicki Minaj
 - Kendrick Lamar
 
-**Hard (20)**
+**Medium (17)**
 
 - Fleetwood Mac
 - Daft Punk
@@ -257,8 +291,11 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Jamiroquai
 - The Smashing Pumpkins
 - Måneskin
-- Cocteau Twins
 - Sigur Rós
+
+**Hard (3)**
+
+- Cocteau Twins
 - Portishead
 - King Gizzard and the Lizard Wizard
 
@@ -292,14 +329,17 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Sitar
 - Mandolin
 
-**Hard (9)**
+**Medium (5)**
 
 - Oboe
 - Bassoon
 - Harpsichord
-- Theremin
 - Contrabass
 - Timpani
+
+**Hard (4)**
+
+- Theremin
 - Aeolian Harp
 - Nyckelharpa
 - Clavichord
@@ -321,6 +361,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Orchestra
 - Headset Microphone
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -333,18 +377,21 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Sheet Music
 - Treble Clef
 
-**Hard (11)**
+**Medium (4)**
 
 - Crescendo
 - Arpeggio
-- Syncopation
 - Vibrato
+- Tremolo
+
+**Hard (7)**
+
+- Syncopation
 - Fermata
 - Glissando
 - Ostinato
 - Polyrhythm
 - Counterpoint
-- Tremolo
 - Tone Cluster
 
 ### Books & Stories
@@ -370,6 +417,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - The Princess Bride
 - The Neverending Story
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -391,6 +442,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - The Wind in the Willows
 - Around the World in Eighty Days
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -404,11 +459,14 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Frankenstein
 - Romeo and Juliet
 
-**Hard (9)**
+**Medium (3)**
 
 - Atticus Finch
 - Captain Ahab
 - Dorian Gray
+
+**Hard (6)**
+
 - Holden Caulfield
 - Gregor Samsa
 - Hester Prynne
@@ -429,16 +487,19 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - The Chronicles of Narnia
 - Life of Pi
 
-**Hard (11)**
+**Medium (3)**
+
+- The Bell Jar
+- Waiting for Godot
+- Slaughterhouse-Five
+
+**Hard (8)**
 
 - The Yellow Wallpaper
 - Invisible Man
-- The Bell Jar
 - One Hundred Years of Solitude
 - The Name of the Rose
 - The Master and Margarita
-- Waiting for Godot
-- Slaughterhouse-Five
 - The Left Hand of Darkness
 - The Unbearable Lightness of Being
 - If on a winter's night a traveler
@@ -461,6 +522,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Fencing
 - Gymnastics
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -481,6 +546,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Bowling Ball
 - Racing Car
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -500,7 +569,7 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Neymar
 - Simone Biles
 
-**Hard (10)**
+**Medium (10)**
 
 - Roger Federer
 - Rafael Nadal
@@ -512,6 +581,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Max Verstappen
 - Shohei Ohtani
 - Novak Djokovic
+
+**Hard (0)**
+
+- None yet
 
 #### Teams
 
@@ -528,7 +601,7 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Dallas Cowboys
 - Argentina Football Team
 
-**Hard (10)**
+**Medium (10)**
 
 - Boston Celtics
 - Mumbai Indians
@@ -540,6 +613,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Toronto Raptors
 - Mercedes F1 Team
 - All Blacks
+
+**Hard (0)**
+
+- None yet
 
 #### Moves & Rules
 
@@ -567,16 +644,20 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Safety Car
 - Grand Slam
 
-**Hard (20)**
+**Medium (6)**
 
 - Offside Trap
 - Pick and Roll
-- Leg Before Wicket
 - Triple Axel
-- Fosbury Flop
-- Duckworth Lewis
 - Technical Foul
 - Steeplechase
+- Dink Shot
+
+**Hard (14)**
+
+- Leg Before Wicket
+- Fosbury Flop
+- Duckworth Lewis
 - Panenka
 - Rabona
 - Googly
@@ -585,7 +666,6 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Ippon
 - Omnium
 - Libero
-- Dink Shot
 - Puck Icing
 - Silly Point
 - Keirin
@@ -621,13 +701,16 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Yeti
 - Werewolf
 
-**Hard (6)**
+**Medium (3)**
 
 - Nemean Lion
 - Ouroboros
+- Quetzalcoatl
+
+**Hard (3)**
+
 - Huldra
 - Simurgh
-- Quetzalcoatl
 - Aegir
 
 #### Gods & Heroes
@@ -647,6 +730,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Icarus
 - Midas
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -664,17 +751,20 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Fountain of Youth
 - Trojan Horse
 
-**Hard (14)**
+**Medium (5)**
 
 - Mjölnir
-- Aegis
-- Gungnir
 - Yggdrasil
 - Ragnarök
 - Bifrost
+- Caduceus
+
+**Hard (9)**
+
+- Aegis
+- Gungnir
 - Gjallarhorn
 - Draupnir
-- Caduceus
 - Helm of Darkness
 - Thread of Ariadne
 - Apples of Idunn
@@ -696,11 +786,14 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Canada Flag
 - Australia Flag
 
-**Hard (4)**
+**Medium (3)**
 
 - UK Flag
 - Nepal Flag
 - South Africa Flag
+
+**Hard (1)**
+
 - Seychelles Flag
 
 #### Cities
@@ -716,7 +809,7 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Sydney
 - Rome
 
-**Hard (6)**
+**Medium (6)**
 
 - Istanbul
 - Rio de Janeiro
@@ -724,6 +817,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Cairo
 - Seoul
 - Bangkok
+
+**Hard (0)**
+
+- None yet
 
 ### Animals & Sea Life
 
@@ -751,6 +848,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Cat
 - Cow
 - Zebra
+
+**Medium (0)**
+
+- None yet
 
 **Hard (0)**
 
@@ -781,6 +882,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Tapir
 - Red Panda
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -791,24 +896,27 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 
 - None yet
 
-**Hard (20)**
+**Medium (7)**
 
-- Aye-Aye
 - Pangolin
 - Okapi
-- Saiga Antelope
-- Fossa
 - Quokka
-- Tarsier
-- Kakapo
-- Shoebill
 - Axolotl
 - Naked Mole Rat
 - Maned Wolf
+- Leafy Sea Dragon
+
+**Hard (13)**
+
+- Aye-Aye
+- Saiga Antelope
+- Fossa
+- Tarsier
+- Kakapo
+- Shoebill
 - Binturong
 - Proboscis Monkey
 - Secretary Bird
-- Leafy Sea Dragon
 - Gerenuk
 - Markhor
 - Dhole
@@ -839,6 +947,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Walrus
 - Pelican
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -868,6 +980,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Sawfish
 - Whale Shark
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -878,24 +994,27 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 
 - None yet
 
-**Hard (20)**
+**Medium (7)**
 
-- Goblin Shark
-- Vampire Squid
 - Oarfish
 - Blobfish
 - Dumbo Octopus
-- Coelacanth
 - Mantis Shrimp
-- Cookiecutter Shark
 - Giant Isopod
-- Frilled Shark
 - Wolffish
+- Leafy Sea Dragon
+
+**Hard (13)**
+
+- Goblin Shark
+- Vampire Squid
+- Coelacanth
+- Cookiecutter Shark
+- Frilled Shark
 - Siphonophore
 - Barreleye Fish
 - Sarcastic Fringehead
 - Bobbit Worm
-- Leafy Sea Dragon
 - Yeti Crab
 - Sea Pig
 - Gulper Eel
@@ -928,6 +1047,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Aquarium
 - Harbor
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -957,6 +1080,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Empire State Building
 - Gateway of India
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -967,7 +1094,7 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 
 - None yet
 
-**Hard (20)**
+**Medium (20)**
 
 - Jordan Petra
 - Peru Machu Picchu
@@ -989,6 +1116,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Bolivia Salar de Uyuni
 - Myanmar Bagan
 - Mali Great Mosque of Djenne
+
+**Hard (0)**
+
+- None yet
 
 ### Space
 
@@ -1017,6 +1148,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Space Helmet
 - Black Hole
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -1039,6 +1174,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Moon Base
 - Satellite Dish
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -1055,24 +1194,27 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Milky Way
 - Supernova
 
-**Hard (20)**
+**Medium (6)**
 
-- Event Horizon
 - Pulsar
-- Quasar
 - Red Giant
 - White Dwarf
 - Neutron Star
+- Exoplanet
+- Solar Prominence
+
+**Hard (14)**
+
+- Event Horizon
+- Quasar
 - Kuiper Belt
 - Oort Cloud
 - Lagrange Point
 - Accretion Disk
-- Exoplanet
 - Magnetar
 - Gravitational Lens
 - Cosmic Microwave Background
 - Roche Limit
-- Solar Prominence
 - Circumstellar Disk
 - Trojan Asteroid
 - Tidal Locking
@@ -1102,10 +1244,14 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Sinkhole
 - Petrified Forest
 
-**Hard (2)**
+**Medium (2)**
 
 - Stalactite
 - Stalagmite
+
+**Hard (0)**
+
+- None yet
 
 #### Weather & Sky
 
@@ -1126,17 +1272,20 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Fire Rainbow
 - Supercell
 
-**Hard (10)**
+**Medium (6)**
 
 - Cirrus Cloud
 - Cumulonimbus
 - Lenticular Cloud
 - Mammatus Cloud
-- Parhelion
 - Virga
+- Moonbow
+
+**Hard (4)**
+
+- Parhelion
 - Katabatic Wind
 - Pyrocumulonimbus
-- Moonbow
 - Catatumbo Lightning
 
 #### Common
@@ -1153,6 +1302,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Bamboo
 - Redwood Tree
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -1162,6 +1315,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 **Easy (1)**
 
 - Venus Flytrap
+
+**Medium (0)**
+
+- None yet
 
 **Hard (0)**
 
@@ -1173,13 +1330,16 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 
 - None yet
 
-**Hard (8)**
+**Medium (2)**
+
+- Permafrost
+- Fairy Circle
+
+**Hard (6)**
 
 - Bioluminescence
 - Fumarole
-- Permafrost
 - Brinicle
-- Fairy Circle
 - Crown Shyness
 - Penitentes
 - Frost Flower
@@ -1203,7 +1363,7 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Climbing
 - Painting
 
-**Hard (6)**
+**Medium (6)**
 
 - Juggling
 - Meditating
@@ -1211,6 +1371,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Tiptoeing
 - Stretching
 - Sneezing
+
+**Hard (0)**
+
+- None yet
 
 #### Emotions
 
@@ -1225,7 +1389,7 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Excited
 - Surprised
 
-**Hard (6)**
+**Medium (6)**
 
 - Embarrassed
 - Jealous
@@ -1233,6 +1397,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Relieved
 - Awkward
 - Nostalgic
+
+**Hard (0)**
+
+- None yet
 
 ### Home & Clothing
 
@@ -1249,7 +1417,7 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Window
 - Refrigerator
 
-**Hard (6)**
+**Medium (6)**
 
 - Attic
 - Basement
@@ -1257,6 +1425,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Chandelier
 - Balcony
 - Laundry Room
+
+**Hard (0)**
+
+- None yet
 
 #### Clothing & Fashion
 
@@ -1271,7 +1443,7 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Scarf
 - Gloves
 
-**Hard (6)**
+**Medium (6)**
 
 - Bow Tie
 - Tuxedo
@@ -1279,6 +1451,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Poncho
 - Trench Coat
 - Overalls
+
+**Hard (0)**
+
+- None yet
 
 ### School
 
@@ -1294,11 +1470,15 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Blackboard
 - Lunchbox
 
-**Hard (3)**
+**Medium (3)**
 
 - Protractor
 - Compass Tool
 - Microscope
+
+**Hard (0)**
+
+- None yet
 
 #### Life
 
@@ -1311,12 +1491,16 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Recess
 - Exam
 
-**Hard (4)**
+**Medium (4)**
 
 - Report Card
 - Science Fair
 - Detention
 - Graduation Cap
+
+**Hard (0)**
+
+- None yet
 
 #### Subjects
 
@@ -1327,12 +1511,16 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Art Class
 - History
 
-**Hard (4)**
+**Medium (4)**
 
 - Geography
 - Algebra
 - Chemistry
 - Biology
+
+**Hard (0)**
+
+- None yet
 
 ### Everyday Objects
 
@@ -1363,6 +1551,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Clothes Peg
 - Fly Swatter
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -1382,9 +1574,13 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Funnel
 - Nutcracker
 
-**Hard (1)**
+**Medium (1)**
 
 - Mortar and Pestle
+
+**Hard (0)**
+
+- None yet
 
 #### Tools
 
@@ -1400,23 +1596,26 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Squeegee
 - Tuning Fork
 
-**Hard (19)**
+**Medium (5)**
+
+- Carabiner
+- Palette Knife
+- Bulldog Clip
+- Wire Stripper
+- Coping Saw
+
+**Hard (14)**
 
 - Caliper
-- Carabiner
 - Awl
 - Plumb Bob
 - Grommet
 - Ratchet Strap
-- Palette Knife
 - Soldering Iron
-- Bulldog Clip
 - Seam Ripper
 - Torque Wrench
-- Wire Stripper
 - Countersink Bit
 - Rivet Gun
-- Coping Saw
 - Feeler Gauge
 - Center Punch
 - Deburring Tool
@@ -1442,6 +1641,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Mac and Cheese
 - BBQ Ribs
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -1452,13 +1655,17 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 
 - Empanada
 
-**Hard (5)**
+**Medium (5)**
 
 - Arepa
 - Ceviche
 - Feijoada
 - Brigadeiro
 - Dulce de Leche
+
+**Hard (0)**
+
+- None yet
 
 #### Europe
 
@@ -1478,6 +1685,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Crepe
 - Fish and Chips
 - Pretzel
+
+**Medium (0)**
+
+- None yet
 
 **Hard (4)**
 
@@ -1504,7 +1715,7 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Tempura
 - Onigiri
 
-**Hard (6)**
+**Medium (6)**
 
 - Kaiseki
 - Takoyaki
@@ -1512,6 +1723,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Bibimbap
 - Tteokbokki
 - Bulgogi
+
+**Hard (0)**
+
+- None yet
 
 #### Middle East
 
@@ -1522,6 +1737,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Baklava
 - Hummus
 - Shawarma
+
+**Medium (0)**
+
+- None yet
 
 **Hard (3)**
 
@@ -1535,10 +1754,13 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 
 - Jollof Rice
 
-**Hard (5)**
+**Medium (2)**
 
 - Injera
 - Tagine
+
+**Hard (3)**
+
 - Fufu
 - Suya
 - Koshari
@@ -1550,11 +1772,14 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Meat Pie
 - Fairy Bread
 
-**Hard (3)**
+**Medium (2)**
 
 - Lamington
-- Vegemite Toast
 - Pavlova
+
+**Hard (1)**
+
+- Vegemite Toast
 
 ### Food Types
 
@@ -1568,11 +1793,15 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Chocolate Bar
 - Pretzel
 
-**Hard (3)**
+**Medium (3)**
 
 - Trail Mix
 - Granola Bar
 - Rice Crackers
+
+**Hard (0)**
+
+- None yet
 
 #### Breakfast & Cereal
 
@@ -1585,10 +1814,13 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Fried Egg
 - Cornflakes
 
-**Hard (3)**
+**Medium (2)**
 
 - Omelette
 - Oatmeal
+
+**Hard (1)**
+
 - Muesli
 
 #### Fruits & Sweets
@@ -1606,6 +1838,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Strawberry
 - Chocolate Bar
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -1619,12 +1855,16 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Donut
 - Brownie
 
-**Hard (4)**
+**Medium (4)**
 
 - Cheesecake
 - Tiramisu
 - Baklava
 - Macaron
+
+**Hard (0)**
+
+- None yet
 
 #### Drinks
 
@@ -1637,9 +1877,12 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Smoothie
 - Hot Chocolate
 
-**Hard (2)**
+**Medium (1)**
 
 - Bubble Tea
+
+**Hard (1)**
+
 - Kombucha
 
 #### Street Food
@@ -1653,9 +1896,12 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Falafel
 - Churros
 
-**Hard (2)**
+**Medium (1)**
 
 - Takoyaki
+
+**Hard (1)**
+
 - Bao Bun
 
 #### Everyday Favorites
@@ -1672,17 +1918,20 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Spring Roll
 - Dim Sum
 
-**Hard (9)**
+**Medium (5)**
 
-- Mole Poblano
-- Khachapuri
 - Peking Duck
-- Koshari
 - Feijoada
 - Jollof Rice
 - Lomo Saltado
-- Banh Xeo
 - Canelé
+
+**Hard (4)**
+
+- Mole Poblano
+- Khachapuri
+- Koshari
+- Banh Xeo
 
 ### Work & Tech
 
@@ -1710,6 +1959,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Police Officer
 - Engineer
 - Musician
+
+**Medium (0)**
+
+- None yet
 
 **Hard (0)**
 
@@ -1740,27 +1993,30 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Wildlife Photographer
 - Crane Operator
 
-**Hard (20)**
+**Medium (9)**
 
 - Cartographer
-- Horologist
 - Entomologist
 - Volcanologist
 - Sommelier
-- Luthier
 - Foley Artist
-- Actuary
-- Cryptographer
 - Ornithologist
 - Oceanographer
+- Air Traffic Controller
+- Arborist
+
+**Hard (11)**
+
+- Horologist
+- Luthier
+- Actuary
+- Cryptographer
 - Paleontologist
 - Gemologist
-- Air Traffic Controller
 - Prosthetist
 - Conservator
 - Mycologist
 - Numismatist
-- Arborist
 - Epidemiologist
 
 #### Everyday Tech
@@ -1796,6 +2052,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Bluetooth
 - Solar Panel
 
+**Medium (0)**
+
+- None yet
+
 **Hard (0)**
 
 - None yet
@@ -1817,6 +2077,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Heat Sink
 - Optical Fiber
 
+**Medium (0)**
+
+- None yet
+
 **Hard (11)**
 
 - Logic Gate
@@ -1837,6 +2101,10 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 
 - Augmented Reality
 - Machine Learning
+
+**Medium (0)**
+
+- None yet
 
 **Hard (9)**
 

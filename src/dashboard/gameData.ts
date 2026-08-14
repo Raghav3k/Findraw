@@ -7,7 +7,7 @@ export type RoundPrompt = {
   aliases?: string[];
 };
 
-export type WordDifficulty = "easy" | "hard";
+export type WordDifficulty = "easy" | "medium" | "hard";
 
 export type CategoryPrompt = RoundPrompt & {
   categoryId: string;
@@ -128,7 +128,8 @@ const MODE_ASSET_POOLS: Record<FindrawModePool, UnifiedAsset[]> = {
 
 function normalizeDifficulty(difficulty: RawWordAsset["difficulty"]): WordDifficulty {
   if (difficulty === "easy" || difficulty === "Easy") return "easy";
-  if (difficulty === "hard" || difficulty === "medium" || difficulty === "Medium" || difficulty === "Hard") return "hard";
+  if (difficulty === "medium" || difficulty === "Medium") return "medium";
+  if (difficulty === "hard" || difficulty === "Hard") return "hard";
   return "easy";
 }
 
@@ -841,22 +842,32 @@ function toCategoryPrompt(asset: UnifiedAsset): CategoryPrompt {
 }
 
 function pickWeightedDifficulty(pool: UnifiedAsset[], recentKeys: string[]): WordDifficulty {
-  const hasEasy = pool.some((asset) => asset.difficulty === "easy");
-  const hasHard = pool.some((asset) => asset.difficulty === "hard");
-  if (!hasEasy) return "hard";
-  if (!hasHard) return "easy";
-
+  const availableDifficulties = new Set(pool.map((asset) => asset.difficulty));
   const recent = new Set(recentKeys.slice(-6));
   const recentPrompts = pool.filter((asset) => recent.has(getAssetPromptKey(asset)));
   const recentHardCount = recentPrompts.filter((asset) => asset.difficulty === "hard").length;
   const lastPrompt = pool.find((asset) => getAssetPromptKey(asset) === recentKeys.at(-1));
 
-  let hardChance = 0.28;
-  if (recentPrompts.length >= 3 && recentHardCount === 0) hardChance = 0.45;
-  if (recentPrompts.length >= 4 && recentHardCount >= 2) hardChance = 0.14;
-  if (lastPrompt?.difficulty === "hard") hardChance = Math.min(hardChance, 0.16);
+  let hardWeight = 0.16;
+  if (recentPrompts.length >= 5 && recentHardCount === 0) hardWeight = 0.2;
+  if (recentHardCount >= 1) hardWeight = 0.08;
+  if (recentHardCount >= 2 || lastPrompt?.difficulty === "hard") hardWeight = 0;
 
-  return Math.random() < hardChance ? "hard" : "easy";
+  const weights: Array<{ difficulty: WordDifficulty; weight: number }> = [
+    { difficulty: "easy" as WordDifficulty, weight: 0.48 },
+    { difficulty: "medium" as WordDifficulty, weight: 0.36 },
+    { difficulty: "hard" as WordDifficulty, weight: hardWeight },
+  ].filter((item) => availableDifficulties.has(item.difficulty) && item.weight > 0);
+
+  if (weights.length === 0) return pool[0]?.difficulty ?? "easy";
+
+  const total = weights.reduce((sum, item) => sum + item.weight, 0);
+  let roll = Math.random() * total;
+  for (const item of weights) {
+    roll -= item.weight;
+    if (roll <= 0) return item.difficulty;
+  }
+  return weights[weights.length - 1].difficulty;
 }
 
 export function pickBalancedPrompts(pool: UnifiedAsset[], recentKeys: string[], count: number): CategoryPrompt[] {
