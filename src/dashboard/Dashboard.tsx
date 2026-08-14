@@ -313,7 +313,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       return;
     }
     
-    const nextSelection = toggleCategorySelectionOption(selectedCategoryId, categoryId, "artist", "random");
+    const nextSelection = toggleCategorySelectionOption(selectedCategoryId, categoryId, "artist", "");
     setSelectedCategoryId(nextSelection);
     if (!roundActive) {
       preparePrompt(chooseNextPrompt(nextSelection));
@@ -322,7 +322,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   };
 
   const removeCategoryChip = (chipId: string) => {
-    const nextSelection = removeCategorySelectionChip(selectedCategoryId, chipId, "artist", "random");
+    const nextSelection = removeCategorySelectionChip(selectedCategoryId, chipId, "artist", "");
     setSelectedCategoryId(nextSelection);
     if (!roundActive) {
       preparePrompt(chooseNextPrompt(nextSelection));

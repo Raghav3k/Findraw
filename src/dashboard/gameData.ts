@@ -459,6 +459,9 @@ function getDomainTokenForDeck(mode: FindrawModePool, deckId: string): string | 
 
 export function getDeckIdsForCollectionToken(mode: FindrawModePool, collectionToken: string): string[] {
   const model = getCategoryModel(mode);
+  if (collectionToken === "all") {
+    return model.flatMap((domain) => domain.collections.flatMap((collection) => collection.decks.map((deck) => deck.id)));
+  }
   if (collectionToken.startsWith("domain:")) {
     const domainId = collectionToken.slice(7);
     const domains = domainId === "general"
@@ -479,8 +482,12 @@ export function getDeckIdsForCollectionToken(mode: FindrawModePool, collectionTo
     ?.decks.map((deck) => deck.id) ?? [];
 }
 
+function getChildDeckIdsForParentToken(mode: FindrawModePool, token: string): string[] {
+  const childDeckIds = getDeckIdsForCollectionToken(mode, token);
+  return childDeckIds.length === 1 && childDeckIds[0] === token ? [] : childDeckIds;
+}
+
 export function isCategorySelectionOptionActive(selection: string, optionId: string, mode: FindrawModePool): boolean {
-  if (selection === "random") return optionId === "domain:general";
   const tokens = getSelectionTokens(selection);
   if (tokens.length === 0) return false;
   if (tokens.includes("all")) return true;
@@ -502,10 +509,12 @@ export function toggleCategorySelectionOption(selection: string, optionId: strin
 
   let tokens = getSelectionTokens(selection);
   const globalAllSelected = tokens.includes("all");
-  if (tokens.includes("all")) tokens = [];
+  if (globalAllSelected) {
+    tokens = getDeckIdsForCollectionToken(mode, "all");
+  }
 
-  const selected = globalAllSelected ? false : isCategorySelectionOptionActive(selection, optionId, mode);
-  const childDeckIds = getDeckIdsForCollectionToken(mode, optionId);
+  const selected = isCategorySelectionOptionActive(selection, optionId, mode);
+  const childDeckIds = getChildDeckIdsForParentToken(mode, optionId);
 
   if (childDeckIds.length > 0) {
     tokens = tokens.filter((token) => token !== optionId && !childDeckIds.includes(token));
@@ -551,10 +560,14 @@ export function toggleCategorySelectionOption(selection: string, optionId: strin
 export function removeCategorySelectionChip(selection: string, chipId: string, mode: FindrawModePool, emptySelection = ""): string {
   if (chipId === "empty") return selection;
   if (chipId === "all") return emptySelection;
-  if (isCategorySelectionOptionActive(selection, chipId, mode)) {
-    return toggleCategorySelectionOption(selection, chipId, mode, emptySelection);
+  const tokens = getSelectionTokens(selection);
+  const childDeckIds = getChildDeckIdsForParentToken(mode, chipId);
+  if (childDeckIds.length > 0) {
+    const nextTokens = tokens.filter((token) => token !== chipId && !childDeckIds.includes(token));
+    return nextTokens.length > 0 ? [...new Set(nextTokens)].join(",") : emptySelection;
   }
-  return selection;
+  const nextTokens = tokens.filter((token) => token !== chipId);
+  return nextTokens.length > 0 ? [...new Set(nextTokens)].join(",") : emptySelection;
 }
 
 export function getActiveSelectionChips(selection: string, mode: FindrawModePool): CategorySelectionChip[] {
@@ -563,7 +576,7 @@ export function getActiveSelectionChips(selection: string, mode: FindrawModePool
     return [{ id: "empty", label: "No decks selected", accent: "#e6a283", kind: "empty" }];
   }
   if (tokens.includes("all")) {
-    return [{ id: "all", label: "All decks shuffled", accent: "#83c5e6", kind: "all" }];
+    return [{ id: "all", label: "Decks shuffled", accent: "#83c5e6", kind: "all" }];
   }
 
   return tokens.map((token): CategorySelectionChip => {
@@ -571,7 +584,7 @@ export function getActiveSelectionChips(selection: string, mode: FindrawModePool
     if (domain) {
       return {
         id: token,
-        label: `All ${domain.label}`,
+        label: domain.label,
         accent: domain.accent,
         kind: "domain",
       };
@@ -581,7 +594,7 @@ export function getActiveSelectionChips(selection: string, mode: FindrawModePool
     if (collection) {
       return {
         id: token,
-        label: `All ${collection.label}`,
+        label: collection.label,
         accent: collection.accent,
         kind: "collection",
       };
