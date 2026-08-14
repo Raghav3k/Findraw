@@ -12151,7 +12151,7 @@ body.resizing-panels .layout-resizer::after {
 .chip-tooltip {
   position: absolute;
   z-index: 30;
-  left: 50%;
+  left: 0;
   top: calc(100% + 6px);
   max-width: min(260px, 72vw);
   width: max-content;
@@ -12165,7 +12165,7 @@ body.resizing-panels .layout-resizer::after {
   opacity: 0;
   pointer-events: none;
   text-align: center;
-  transform: translate(-50%, -4px) scale(0.98);
+  transform: translateY(-4px) scale(0.98);
   transition: opacity 140ms ease, transform 140ms ease;
   white-space: normal;
 }
@@ -12173,7 +12173,7 @@ body.resizing-panels .layout-resizer::after {
 .chip:hover .chip-tooltip,
 .chip:focus-within .chip-tooltip {
   opacity: 1;
-  transform: translate(-50%, 0) scale(1);
+  transform: translateY(0) scale(1);
 }
 
 .chip button {
