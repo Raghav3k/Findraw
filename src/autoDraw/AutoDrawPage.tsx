@@ -45,18 +45,13 @@ const getAutoDrawFeedbackWeight = (feedback: WordFeedbackMap, asset: typeof AUTO
 };
 
 const weightedAutoDrawIndexes = (indexes: number[], feedback: WordFeedbackMap) => {
-  const remaining = [...indexes];
-  const ordered: number[] = [];
-  while (remaining.length > 0) {
-    const total = remaining.reduce((sum, index) => sum + getAutoDrawFeedbackWeight(feedback, AUTO_DRAW_ASSETS[index]), 0);
-    let roll = Math.random() * Math.max(0.001, total);
-    const pickedIndex = remaining.findIndex((index) => {
-      roll -= getAutoDrawFeedbackWeight(feedback, AUTO_DRAW_ASSETS[index]);
-      return roll <= 0;
-    });
-    ordered.push(remaining.splice(pickedIndex >= 0 ? pickedIndex : remaining.length - 1, 1)[0]);
-  }
-  return ordered;
+  return indexes
+    .map((index) => {
+      const weight = getAutoDrawFeedbackWeight(feedback, AUTO_DRAW_ASSETS[index]);
+      return { index, rank: Math.random() ** (1 / Math.max(0.001, weight)) };
+    })
+    .sort((first, second) => second.rank - first.rank)
+    .map((item) => item.index);
 };
 
 export function AutoDrawPage({ onNavigate }: Props) {
