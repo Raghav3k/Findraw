@@ -20,6 +20,7 @@ import { WordFeedbackModal } from "../feedback/WordFeedbackModal";
 import {
   recordWordFeedback,
   shouldPromptForWordFeedback,
+  type WordFeedbackContext,
   type WordFeedbackMap,
   type WordFeedbackRating,
   type WordFeedbackTarget,
@@ -102,6 +103,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const [gridSize, setGridSize] = usePersistentState("room.grid.size", 24);
   const [wordFeedback, setWordFeedback] = usePersistentState<WordFeedbackMap>("feedback.room.words", {});
   const [feedbackTarget, setFeedbackTarget] = useState<WordFeedbackTarget | null>(null);
+  const [feedbackContext, setFeedbackContext] = useState<WordFeedbackContext>("experience");
   const feedbackRoundsSinceAutoRef = useRef(5);
   const lastAutoFeedbackTurnRef = useRef<string | null>(null);
   const resizeStateRef = useRef<ResizeState | null>(null);
@@ -350,6 +352,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     };
     if (!shouldPromptForWordFeedback(wordFeedback, target, feedbackRoundsSinceAutoRef.current)) return;
     feedbackRoundsSinceAutoRef.current = 0;
+    setFeedbackContext("experience");
     setFeedbackTarget(target);
   }, [room?.answer, room?.code, room?.phase, room?.turnIndex, wordFeedback]);
 
@@ -548,6 +551,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
 
   const openWordFeedback = () => {
     if (!room?.answer || room.answer.answer.startsWith("Error:")) return;
+    setFeedbackContext("experience");
     setFeedbackTarget({
       answer: room.answer.answer,
       categoryId: room.answer.categoryId,
@@ -819,6 +823,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
         </section>
       </main>
       <WordFeedbackModal
+        context={feedbackContext}
         modeLabel="Room Mode"
         onClose={() => setFeedbackTarget(null)}
         onSubmit={submitWordFeedback}

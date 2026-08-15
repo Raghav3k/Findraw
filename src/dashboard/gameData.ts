@@ -952,7 +952,11 @@ function getFeedbackWeight(asset: UnifiedAsset, options?: PromptPickOptions): nu
 
   const positive = stats.veryGood * 1.15;
   const negativeMultiplier = options?.mode === "room" ? 1.45 : options?.mode === "autoDraw" ? 1.05 : 1.22;
-  const negative = stats.bad * negativeMultiplier + stats.mid * 0.18 + stats.skipped * 0.32;
+  const skipReasonPenalty =
+    stats.notInterested * 0.22 +
+    stats.notFun * negativeMultiplier +
+    stats.unrecognized * (negativeMultiplier + 0.35);
+  const negative = stats.bad * negativeMultiplier + stats.mid * 0.18 + skipReasonPenalty + stats.skipped * 0.32;
   const confidence = clamp((stats.submitted + stats.skipped) / 10, 0.18, 1);
   const rawScore = (positive - negative) / Math.max(4, stats.submitted + stats.skipped + 3);
   const difficultyDamping = asset.difficulty === "easy" ? 0.45 : asset.difficulty === "medium" ? 0.85 : 1;

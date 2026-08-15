@@ -22,6 +22,7 @@ import {
   normalizeWordFeedbackStats,
   recordWordFeedback,
   shouldPromptForWordFeedback,
+  type WordFeedbackContext,
   type WordFeedbackMap,
   type WordFeedbackRating,
   type WordFeedbackTarget,
@@ -42,7 +43,13 @@ const getAutoDrawFeedbackWeight = (feedback: WordFeedbackMap, asset: typeof AUTO
   const stats = normalizeWordFeedbackStats(storedStats);
   if (stats.submitted + stats.skipped < 2) return 1;
   const positive = stats.veryGood * 1.05;
-  const negative = stats.bad * 1.05 + stats.mid * 0.16 + stats.skipped * 0.28;
+  const negative =
+    stats.bad * 1.05 +
+    stats.mid * 0.16 +
+    stats.notInterested * 0.18 +
+    stats.notFun * 0.92 +
+    stats.unrecognized * 1.2 +
+    stats.skipped * 0.28;
   const confidence = Math.min(1, Math.max(0.18, (stats.submitted + stats.skipped) / 10));
   return Math.min(1.28, Math.max(0.42, 1 + ((positive - negative) / Math.max(4, stats.submitted + stats.skipped + 3)) * confidence));
 };
@@ -84,6 +91,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
   const [canvasResetToken, setCanvasResetToken] = useState(0);
   const [twitchSession, setTwitchSession] = useState<TwitchSession>(EMPTY_TWITCH_SESSION);
   const [feedbackTarget, setFeedbackTarget] = useState<WordFeedbackTarget | null>(null);
+  const [feedbackContext, setFeedbackContext] = useState<WordFeedbackContext>("experience");
   const feedbackRoundsSinceAutoRef = useRef(5);
   const pendingFeedbackActionRef = useRef<(() => void) | null>(null);
   const [chatMessages, setChatMessages] = useState<LiveChatMessage[]>([]);
@@ -218,6 +226,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
   };
 
   const nextDrawing = async () => {
+    if ((status === "playing" || status === "paused") && openSkippedWordFeedback(() => void performNextDrawing())) return;
     if (maybeOpenAutomaticFeedback(() => void performNextDrawing())) return;
     await performNextDrawing();
   };
@@ -232,6 +241,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
 
   const openWordFeedback = () => {
     if (!asset) return;
+    setFeedbackContext("experience");
     setFeedbackTarget({
       answer: asset.answer,
       categoryId: asset.category,
@@ -266,7 +276,20 @@ export function AutoDrawPage({ onNavigate }: Props) {
     if (!shouldPromptForWordFeedback(wordFeedback, target, feedbackRoundsSinceAutoRef.current)) return false;
     feedbackRoundsSinceAutoRef.current = 0;
     pendingFeedbackActionRef.current = afterFeedback ?? null;
+    setFeedbackContext("experience");
     setFeedbackTarget(target);
+    return true;
+  };
+
+  const openSkippedWordFeedback = (afterFeedback?: () => void) => {
+    if (!asset) return false;
+    pendingFeedbackActionRef.current = afterFeedback ?? null;
+    setFeedbackContext("skip");
+    setFeedbackTarget({
+      answer: asset.answer,
+      categoryId: asset.category,
+      difficulty: asset.difficulty === "Easy" ? "easy" : asset.difficulty === "Hard" ? "hard" : "medium",
+    });
     return true;
   };
 
@@ -514,6 +537,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
         </section>
       </main>
       <WordFeedbackModal
+        context={feedbackContext}
         modeLabel="Auto Draw"
         onClose={closeWordFeedback}
         onSubmit={submitWordFeedback}

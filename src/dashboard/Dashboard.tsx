@@ -42,6 +42,7 @@ import { WordFeedbackModal } from "../feedback/WordFeedbackModal";
 import {
   recordWordFeedback,
   shouldPromptForWordFeedback,
+  type WordFeedbackContext,
   type WordFeedbackMap,
   type WordFeedbackRating,
   type WordFeedbackTarget,
@@ -90,6 +91,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   const [roundStatus, setRoundStatus] = useState<RoundStatus>("idle");
   const [currentPrompt, setCurrentPrompt] = useState<CategoryPrompt>(() => pickNextPrompt(selectedCategoryId, [], { feedback: wordFeedback, mode: "artist" }));
   const [feedbackTarget, setFeedbackTarget] = useState<WordFeedbackTarget | null>(null);
+  const [feedbackContext, setFeedbackContext] = useState<WordFeedbackContext>("experience");
   const feedbackRoundsSinceAutoRef = useRef(5);
   const pendingFeedbackActionRef = useRef<(() => void) | null>(null);
   const recentPromptKeysRef = useRef<string[]>([getPromptKey(currentPrompt)]);
@@ -281,6 +283,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
 
   const openWordFeedback = (prompt: CategoryPrompt = currentPrompt) => {
     if (prompt.categoryId === "custom" || prompt.answer.startsWith("Error:")) return;
+    setFeedbackContext("experience");
     setFeedbackTarget({
       answer: prompt.answer,
       categoryId: prompt.categoryId,
@@ -315,7 +318,20 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     if (!shouldPromptForWordFeedback(wordFeedback, target, feedbackRoundsSinceAutoRef.current)) return false;
     feedbackRoundsSinceAutoRef.current = 0;
     pendingFeedbackActionRef.current = afterFeedback ?? null;
+    setFeedbackContext("experience");
     setFeedbackTarget(target);
+    return true;
+  };
+
+  const openSkippedWordFeedback = (prompt: CategoryPrompt = currentPrompt, afterFeedback?: () => void) => {
+    if (prompt.categoryId === "custom" || prompt.answer.startsWith("Error:")) return false;
+    pendingFeedbackActionRef.current = afterFeedback ?? null;
+    setFeedbackContext("skip");
+    setFeedbackTarget({
+      answer: prompt.answer,
+      categoryId: prompt.categoryId,
+      difficulty: prompt.difficulty,
+    });
     return true;
   };
 
@@ -355,7 +371,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     if (roundActive) {
       void endServerRound();
       setRoundStatus("ended");
-      if (maybeOpenAutomaticFeedback(currentPrompt, () => void beginPrompt(chooseNextPrompt()))) return;
+      if (openSkippedWordFeedback(currentPrompt, () => void beginPrompt(chooseNextPrompt()))) return;
       void beginPrompt(chooseNextPrompt());
     }
   };
@@ -637,6 +653,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         </section>
       </main>
       <WordFeedbackModal
+        context={feedbackContext}
         modeLabel="Artist Mode"
         onClose={closeWordFeedback}
         onSubmit={submitWordFeedback}
