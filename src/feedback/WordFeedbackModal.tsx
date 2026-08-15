@@ -9,12 +9,12 @@ type WordFeedbackModalProps = {
 
 const FEEDBACK_OPTIONS: Array<{
   rating: WordFeedbackRating;
-  icon: string;
+  image: string;
   label: string;
 }> = [
-  { rating: "very_good", icon: "palette", label: "Insane Mona Lisa" },
-  { rating: "good", icon: "brush", label: "Okay Mona Lisa" },
-  { rating: "bad", icon: "gesture", label: "Child drawing" },
+  { rating: "very_good", image: "/feedback/mona-lisa-very-good.webp", label: "Insane Mona Lisa" },
+  { rating: "good", image: "/feedback/mona-lisa-good.webp", label: "Okay Mona Lisa" },
+  { rating: "bad", image: "/feedback/mona-lisa-bad.webp", label: "Child drawing" },
 ];
 
 export function WordFeedbackModal({ modeLabel, onClose, onSubmit, target }: WordFeedbackModalProps) {
@@ -38,7 +38,7 @@ export function WordFeedbackModal({ modeLabel, onClose, onSubmit, target }: Word
         <div className="word-feedback-options">
           {FEEDBACK_OPTIONS.map((option) => (
             <button key={option.rating} onClick={() => onSubmit(option.rating)} type="button">
-              <span className="material-symbols-outlined">{option.icon}</span>
+              <img alt="" src={option.image} />
               <strong>{option.label}</strong>
             </button>
           ))}
