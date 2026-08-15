@@ -66,6 +66,7 @@ const createPlayer = (id: string, name: string): RoomPlayer => ({
   connectedAt: Date.now(),
 });
 
+const normalizePlayerName = (name: string) => name.trim().toLocaleLowerCase("en");
 const getDrawer = (room: RoomState | null) => room?.players.find((player) => player.id === room.drawerId) ?? null;
 
 const getNextTurn = (room: RoomState) => {
@@ -229,7 +230,16 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
         },
         onDrawingPreview: setLiveDrawingOperation,
         onStatus: setRoomConnectionStatus,
-        onError: setNotice,
+        onError: (message) => {
+          setNotice(message);
+          if (!message.toLocaleLowerCase("en").includes("name") || !message.toLocaleLowerCase("en").includes("taken")) return;
+          onlineRoomRef.current?.close();
+          onlineRoomRef.current = null;
+          setRoom(null);
+          setJoinedCode("");
+          setRoomTransport("none");
+          setRoomConnectionStatus("offline");
+        },
       });
       if (!onlineRoomRef.current) setNotice("Online room server is unavailable.");
       return;
@@ -241,6 +251,10 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     }
     if (mode === "join" && existing && !existing.players.some((item) => item.id === player.id) && existing.players.length >= (existing.maxPlayers ?? 8)) {
       setNotice(`Room ${code} is full.`);
+      return;
+    }
+    if (existing?.players.some((item) => item.id !== player.id && normalizePlayerName(item.name) === normalizePlayerName(player.name))) {
+      setNotice("That name is already taken in this room.");
       return;
     }
     const nextRoom = existing

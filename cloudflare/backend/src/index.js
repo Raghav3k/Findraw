@@ -50,6 +50,7 @@ const pointsForPosition = (position) => {
 };
 
 const normalizeRoomCode = (value) => String(value || "").trim().replace(/\D/g, "").slice(0, 4);
+const normalizePlayerName = (value) => String(value || "").trim().toLocaleLowerCase("en");
 const roomPromptKey = (prompt) => `${prompt.categoryId || "custom"}:${String(prompt.answer || "").toLowerCase()}`;
 const getRoomMessageByteLength = (data) => {
   if (typeof data === "string") return encoder.encode(data).byteLength;
@@ -276,16 +277,20 @@ export class FindrawRoom {
       connectedAt: Date.now(),
     };
     if (!code || !player.id) throw new Error("Room code and player id are required.");
-    this.clients.set(socket, { id: player.id, name: player.name, rateLimits: {} });
     if (!this.room) this.room = createEmptyRoomState(code, player);
     else {
       const alreadyInRoom = this.room.players.some((item) => item.id === player.id);
+      const nameTaken = this.room.players.some((item) => (
+        item.id !== player.id && normalizePlayerName(item.name) === normalizePlayerName(player.name)
+      ));
+      if (nameTaken) throw new Error("That name is already taken in this room.");
       if (!alreadyInRoom && this.room.players.length >= (this.room.maxPlayers || 8)) throw new Error("That room is full.");
       this.room.players = this.room.players.some((item) => item.id === player.id)
         ? this.room.players.map((item) => item.id === player.id ? { ...item, name: player.name } : item)
         : [...this.room.players, player];
       this.room.updatedAt = Date.now();
     }
+    this.clients.set(socket, { id: player.id, name: player.name, rateLimits: {} });
     await this.save();
     this.broadcastState();
   }

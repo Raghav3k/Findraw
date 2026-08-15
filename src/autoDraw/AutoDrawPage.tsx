@@ -283,13 +283,16 @@ export function AutoDrawPage({ onNavigate }: Props) {
 
   const openSkippedWordFeedback = (afterFeedback?: () => void) => {
     if (!asset) return false;
-    pendingFeedbackActionRef.current = afterFeedback ?? null;
-    setFeedbackContext("skip");
-    setFeedbackTarget({
+    const target: WordFeedbackTarget = {
       answer: asset.answer,
       categoryId: asset.category,
       difficulty: asset.difficulty === "Easy" ? "easy" : asset.difficulty === "Hard" ? "hard" : "medium",
-    });
+    };
+    if (!shouldPromptForWordFeedback(wordFeedback, target, feedbackRoundsSinceAutoRef.current + 1)) return false;
+    feedbackRoundsSinceAutoRef.current = 0;
+    pendingFeedbackActionRef.current = afterFeedback ?? null;
+    setFeedbackContext("skip");
+    setFeedbackTarget(target);
     return true;
   };
 
