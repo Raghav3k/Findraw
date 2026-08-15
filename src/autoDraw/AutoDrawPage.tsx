@@ -19,6 +19,7 @@ import { CategorySelectionTools } from "../dashboard/CategorySelectionTools";
 import { WordFeedbackModal } from "../feedback/WordFeedbackModal";
 import {
   getWordFeedbackKey,
+  normalizeWordFeedbackStats,
   recordWordFeedback,
   shouldPromptForWordFeedback,
   type WordFeedbackMap,
@@ -36,10 +37,12 @@ const EMPTY_TWITCH_SESSION: TwitchSession = { authenticated: false, configured: 
 const normalize = (value: string) => value.trim().toLowerCase().replace(/[^a-z0-9]+/g, "");
 
 const getAutoDrawFeedbackWeight = (feedback: WordFeedbackMap, asset: typeof AUTO_DRAW_ASSETS[number]) => {
-  const stats = feedback[getWordFeedbackKey({ answer: asset.answer, categoryId: asset.category })];
-  if (!stats || stats.submitted + stats.skipped < 2) return 1;
-  const positive = stats.veryGood * 1.05 + stats.good * 0.35;
-  const negative = stats.bad * 1.05 + stats.skipped * 0.28;
+  const storedStats = feedback[getWordFeedbackKey({ answer: asset.answer, categoryId: asset.category })];
+  if (!storedStats) return 1;
+  const stats = normalizeWordFeedbackStats(storedStats);
+  if (stats.submitted + stats.skipped < 2) return 1;
+  const positive = stats.veryGood * 1.05;
+  const negative = stats.bad * 1.05 + stats.mid * 0.16 + stats.skipped * 0.28;
   const confidence = Math.min(1, Math.max(0.18, (stats.submitted + stats.skipped) / 10));
   return Math.min(1.28, Math.max(0.42, 1 + ((positive - negative) / Math.max(4, stats.submitted + stats.skipped + 3)) * confidence));
 };

@@ -13,7 +13,7 @@ const FEEDBACK_OPTIONS: Array<{
   label: string;
 }> = [
   { rating: "very_good", image: "/feedback/mona-lisa-very-good.webp", label: "Insane Mona Lisa" },
-  { rating: "good", image: "/feedback/mona-lisa-good.webp", label: "Okay Mona Lisa" },
+  { rating: "mid", image: "/feedback/mona-lisa-mid.webp", label: "Mid Mona Lisa" },
   { rating: "bad", image: "/feedback/mona-lisa-bad.webp", label: "Child drawing" },
 ];
 

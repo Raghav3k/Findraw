@@ -1,7 +1,7 @@
 import { AUTO_DRAW_ASSETS } from "../autoDraw/autoDrawAssets";
 import type { CategoryPickerDomain, CategoryPickerGroup, CategoryPickerSection } from "../ui/CategoryPickerWindow";
 import artistWordsRaw from "./artistWords.json";
-import type { FeedbackMode, WordFeedbackMap } from "../feedback/wordFeedback";
+import { normalizeWordFeedbackStats, type FeedbackMode, type WordFeedbackMap } from "../feedback/wordFeedback";
 
 export type RoundPrompt = {
   answer: string;
@@ -945,12 +945,14 @@ type PromptPickOptions = {
 const clamp = (value: number, minimum: number, maximum: number) => Math.max(minimum, Math.min(maximum, value));
 
 function getFeedbackWeight(asset: UnifiedAsset, options?: PromptPickOptions): number {
-  const stats = options?.feedback?.[getAssetPromptKey(asset)];
-  if (!stats || stats.submitted + stats.skipped < 2) return 1;
+  const storedStats = options?.feedback?.[getAssetPromptKey(asset)];
+  if (!storedStats) return 1;
+  const stats = normalizeWordFeedbackStats(storedStats);
+  if (stats.submitted + stats.skipped < 2) return 1;
 
-  const positive = stats.veryGood * 1.15 + stats.good * 0.42;
+  const positive = stats.veryGood * 1.15;
   const negativeMultiplier = options?.mode === "room" ? 1.45 : options?.mode === "autoDraw" ? 1.05 : 1.22;
-  const negative = stats.bad * negativeMultiplier + stats.skipped * 0.32;
+  const negative = stats.bad * negativeMultiplier + stats.mid * 0.18 + stats.skipped * 0.32;
   const confidence = clamp((stats.submitted + stats.skipped) / 10, 0.18, 1);
   const rawScore = (positive - negative) / Math.max(4, stats.submitted + stats.skipped + 3);
   const difficultyDamping = asset.difficulty === "easy" ? 0.45 : asset.difficulty === "medium" ? 0.85 : 1;
