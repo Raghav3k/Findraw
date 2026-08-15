@@ -38,6 +38,14 @@ import {
   type CategoryPrompt,
   type CategorySelection,
 } from "./gameData";
+import { WordFeedbackModal } from "../feedback/WordFeedbackModal";
+import {
+  recordWordFeedback,
+  shouldPromptForWordFeedback,
+  type WordFeedbackMap,
+  type WordFeedbackRating,
+  type WordFeedbackTarget,
+} from "../feedback/wordFeedback";
 
 type RoundStatus = "idle" | "playing" | "ended";
 type RevealMode = "random" | "sequence";
@@ -78,8 +86,11 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   const [revealAnswerOnTimeout, setRevealAnswerOnTimeout] = usePersistentState("round.revealOnTimeout", true);
   const [testBotsEnabled, setTestBotsEnabled] = usePersistentState("round.testBotsEnabled", true);
   const [selectedCategoryId, setSelectedCategoryId] = usePersistentState<CategorySelection>("round.category", "domain:general");
+  const [wordFeedback, setWordFeedback] = usePersistentState<WordFeedbackMap>("feedback.artist.words", {});
   const [roundStatus, setRoundStatus] = useState<RoundStatus>("idle");
-  const [currentPrompt, setCurrentPrompt] = useState<CategoryPrompt>(() => pickNextPrompt(selectedCategoryId, []));
+  const [currentPrompt, setCurrentPrompt] = useState<CategoryPrompt>(() => pickNextPrompt(selectedCategoryId, [], { feedback: wordFeedback, mode: "artist" }));
+  const [feedbackTarget, setFeedbackTarget] = useState<WordFeedbackTarget | null>(null);
+  const feedbackRoundsSinceAutoRef = useRef(5);
   const recentPromptKeysRef = useRef<string[]>([getPromptKey(currentPrompt)]);
   const [secondsRemaining, setSecondsRemaining] = useState(wordDurationSeconds);
   const [revealedLetters, setRevealedLetters] = useState<number[]>([]);
@@ -264,7 +275,35 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   };
 
   const chooseNextPrompt = (selection: CategorySelection = selectedCategoryId) => {
-    return rememberPrompt(pickNextPrompt(selection, recentPromptKeysRef.current));
+    return rememberPrompt(pickNextPrompt(selection, recentPromptKeysRef.current, { feedback: wordFeedback, mode: "artist" }));
+  };
+
+  const openWordFeedback = (prompt: CategoryPrompt = currentPrompt) => {
+    if (prompt.categoryId === "custom" || prompt.answer.startsWith("Error:")) return;
+    setFeedbackTarget({
+      answer: prompt.answer,
+      categoryId: prompt.categoryId,
+      difficulty: prompt.difficulty,
+    });
+  };
+
+  const submitWordFeedback = (rating: WordFeedbackRating | "skip") => {
+    if (!feedbackTarget) return;
+    setWordFeedback((current) => recordWordFeedback(current, feedbackTarget, rating));
+    setFeedbackTarget(null);
+  };
+
+  const maybeOpenAutomaticFeedback = (prompt: CategoryPrompt = currentPrompt) => {
+    if (prompt.categoryId === "custom" || prompt.answer.startsWith("Error:")) return;
+    feedbackRoundsSinceAutoRef.current += 1;
+    const target: WordFeedbackTarget = {
+      answer: prompt.answer,
+      categoryId: prompt.categoryId,
+      difficulty: prompt.difficulty,
+    };
+    if (!shouldPromptForWordFeedback(wordFeedback, target, feedbackRoundsSinceAutoRef.current)) return;
+    feedbackRoundsSinceAutoRef.current = 0;
+    setFeedbackTarget(target);
   };
 
   const preparePrompt = (prompt: CategoryPrompt) => {
@@ -300,7 +339,10 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   };
 
   const skipWord = () => {
-    if (roundActive) void beginPrompt(chooseNextPrompt());
+    if (roundActive) {
+      maybeOpenAutomaticFeedback();
+      void beginPrompt(chooseNextPrompt());
+    }
   };
 
   const selectCategory = (categoryId: string) => {
@@ -376,6 +418,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   const endRound = () => {
     if (!roundActive) return;
     void endServerRound();
+    maybeOpenAutomaticFeedback();
     setRoundStatus("ended");
   };
 
@@ -456,6 +499,9 @@ export function Dashboard({ onNavigate }: DashboardProps) {
               >
                 <div aria-label="Masked round word" className="round-word-mask" style={{ fontSize: `clamp(16px, ${65 / Math.max(1, maskedPrompt.length)}vw, 44px)` }}>{maskedPrompt}</div>
                 <span className="prompt-solve-count">{solvedViewers.length}/{correctGuessTarget}</span>
+                <button aria-label="Give word feedback" className="word-feedback-trigger" onClick={() => openWordFeedback()} title="Give word feedback" type="button">
+                  <span className="material-symbols-outlined">rate_review</span>
+                </button>
               </section>
               <div className="prompt-settings-wrap" ref={roundSettingsRef}>
                 <button
@@ -575,6 +621,12 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           </aside>
         </section>
       </main>
+      <WordFeedbackModal
+        modeLabel="Artist Mode"
+        onClose={() => setFeedbackTarget(null)}
+        onSubmit={submitWordFeedback}
+        target={feedbackTarget}
+      />
     </div>
   );
 }

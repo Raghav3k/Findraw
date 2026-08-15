@@ -16,6 +16,14 @@ import { CategorySelectionTools } from "../dashboard/CategorySelectionTools";
 import { CategoryPickerWindow } from "../ui/CategoryPickerWindow";
 import { WorkspaceIdentity } from "../ui/WorkspaceIdentity";
 import { usePersistentState } from "../ui/usePersistentState";
+import { WordFeedbackModal } from "../feedback/WordFeedbackModal";
+import {
+  recordWordFeedback,
+  shouldPromptForWordFeedback,
+  type WordFeedbackMap,
+  type WordFeedbackRating,
+  type WordFeedbackTarget,
+} from "../feedback/wordFeedback";
 import { hasApiBaseUrl } from "../apiUrls";
 import {
   createClientId,
@@ -92,6 +100,10 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const [skipRoomExitConfirm, setSkipRoomExitConfirm] = usePersistentState("room.exit.skipConfirm", false);
   const [canvasColor, setCanvasColor] = usePersistentState("room.canvas.background", "#FFF2CF");
   const [gridSize, setGridSize] = usePersistentState("room.grid.size", 24);
+  const [wordFeedback, setWordFeedback] = usePersistentState<WordFeedbackMap>("feedback.room.words", {});
+  const [feedbackTarget, setFeedbackTarget] = useState<WordFeedbackTarget | null>(null);
+  const feedbackRoundsSinceAutoRef = useRef(5);
+  const lastAutoFeedbackTurnRef = useRef<string | null>(null);
   const resizeStateRef = useRef<ResizeState | null>(null);
   const onlineRoomRef = useRef<OnlineRoomClient | null>(null);
 
@@ -321,8 +333,24 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
 
   useEffect(() => {
     if (roomTransport !== "online" || !room || !isHost || room.phase !== "choosing" || room.choices.length > 0) return;
-    onlineRoomRef.current?.sendChoices(pickRoomChoices(room.categorySelection, room.recentPromptKeys));
+    onlineRoomRef.current?.sendChoices(pickRoomChoices(room.categorySelection, room.recentPromptKeys, 3, wordFeedback));
   }, [isHost, room, roomTransport]);
+
+  useEffect(() => {
+    if (!room?.answer || room.phase !== "results") return;
+    const turnKey = `${room.code}:${room.turnIndex}:${room.answer.categoryId}:${room.answer.answer}`;
+    if (lastAutoFeedbackTurnRef.current === turnKey) return;
+    lastAutoFeedbackTurnRef.current = turnKey;
+    feedbackRoundsSinceAutoRef.current += 1;
+    const target: WordFeedbackTarget = {
+      answer: room.answer.answer,
+      categoryId: room.answer.categoryId,
+      difficulty: room.answer.difficulty,
+    };
+    if (!shouldPromptForWordFeedback(wordFeedback, target, feedbackRoundsSinceAutoRef.current)) return;
+    feedbackRoundsSinceAutoRef.current = 0;
+    setFeedbackTarget(target);
+  }, [room?.answer, room?.code, room?.phase, room?.turnIndex, wordFeedback]);
 
   useEffect(() => {
     const handlePointerMove = (event: PointerEvent) => {
@@ -393,7 +421,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const startGame = () => {
     if (!room || !isHost || room.players.length < 2) return;
     const drawerId = room.players[0]?.id ?? null;
-    const choices = pickRoomChoices(room.categorySelection, room.recentPromptKeys);
+    const choices = pickRoomChoices(room.categorySelection, room.recentPromptKeys, 3, wordFeedback);
     if (roomTransport === "online") {
       onlineRoomRef.current?.sendStartGame(choices);
       setNotice("Game started. Players are voting on the word.");
@@ -501,7 +529,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       phase: "choosing",
       ...next,
       answer: null,
-      choices: pickRoomChoices(room.categorySelection, room.recentPromptKeys),
+      choices: pickRoomChoices(room.categorySelection, room.recentPromptKeys, 3, wordFeedback),
       choiceVotes: {},
       guesses: [],
       solved: [],
@@ -516,6 +544,21 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const syncLiveDrawingOperation = useCallback((operation: DrawingOperation | null) => {
     if (roomTransport === "online" && isDrawer) onlineRoomRef.current?.sendDrawingPreview(operation);
   }, [isDrawer, roomTransport]);
+
+  const openWordFeedback = () => {
+    if (!room?.answer || room.answer.answer.startsWith("Error:")) return;
+    setFeedbackTarget({
+      answer: room.answer.answer,
+      categoryId: room.answer.categoryId,
+      difficulty: room.answer.difficulty,
+    });
+  };
+
+  const submitWordFeedback = (rating: WordFeedbackRating | "skip") => {
+    if (!feedbackTarget) return;
+    setWordFeedback((current) => recordWordFeedback(current, feedbackTarget, rating));
+    setFeedbackTarget(null);
+  };
 
   const selectedOption = {
     id: selectedTokens.length === 0 ? "empty" : room?.categorySelection ?? "all",
@@ -568,7 +611,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
             <header className="source-card-header">
               <div>
                 <span className="source-eyebrow">Camera frame</span>
-                <h2>{showRoomDetails ? "Room details" : isDrawer ? "Your secret word" : "Drawer on camera"}</h2>
+                <h2>{showRoomDetails ? "Room details" : isDrawer ? "Word panel" : "Drawer on camera"}</h2>
               </div>
               <span className={`source-status ${room.phase === "drawing" ? "ready" : ""}`}><i />{room.phase === "drawing" ? "Round live" : room.phase}</span>
             </header>
@@ -662,7 +705,9 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
               <div className="round-word-mask">
                 {room?.phase === "drawing" && isDrawer ? room.answer?.answer.toUpperCase() : room?.answer?.mask ?? maskedAnswer(room?.answer?.answer ?? null)}
               </div>
-              <span className="prompt-solve-count">{room?.phase ?? "offline"}</span>
+              <button aria-label="Give word feedback" className="word-feedback-trigger" disabled={!room?.answer} onClick={openWordFeedback} title="Give word feedback" type="button">
+                <span className="material-symbols-outlined">rate_review</span>
+              </button>
             </section>
 
             <section className="canvas-card room-canvas-card">
@@ -772,6 +817,12 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
           </aside>
         </section>
       </main>
+      <WordFeedbackModal
+        modeLabel="Room Mode"
+        onClose={() => setFeedbackTarget(null)}
+        onSubmit={submitWordFeedback}
+        target={feedbackTarget}
+      />
     </div>
   );
 }

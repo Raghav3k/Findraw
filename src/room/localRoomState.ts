@@ -5,6 +5,7 @@ import {
   type CategoryPrompt,
   type CategorySelection,
 } from "../dashboard/gameData";
+import type { WordFeedbackMap } from "../feedback/wordFeedback";
 import type { DrawingOperation } from "../canvas/drawingTypes";
 
 export type RoomPhase = "lobby" | "choosing" | "drawing" | "results" | "finished";
@@ -123,11 +124,11 @@ export const deleteRoom = (code: string) => {
 
 export const roomPromptKey = (prompt: CategoryPrompt) => `${prompt.categoryId}:${prompt.answer.toLowerCase()}`;
 
-export const pickRoomChoices = (selection: CategorySelection, recentKeys: string[], count = 3): CategoryPrompt[] => {
+export const pickRoomChoices = (selection: CategorySelection, recentKeys: string[], count = 3, feedback?: WordFeedbackMap): CategoryPrompt[] => {
   const pool = getPromptsForMode("room")
     .filter((prompt) => matchesCategorySelection(prompt.category, selection));
 
-  const choices = pickBalancedPrompts(pool, recentKeys, count);
+  const choices = pickBalancedPrompts(pool, recentKeys, count, { feedback, mode: "room" });
   for (let index = choices.length - 1; index > 0; index -= 1) {
     const swapIndex = Math.floor(Math.random() * (index + 1));
     [choices[index], choices[swapIndex]] = [choices[swapIndex], choices[index]];

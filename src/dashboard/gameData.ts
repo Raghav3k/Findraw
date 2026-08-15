@@ -1,6 +1,7 @@
 import { AUTO_DRAW_ASSETS } from "../autoDraw/autoDrawAssets";
 import type { CategoryPickerDomain, CategoryPickerGroup, CategoryPickerSection } from "../ui/CategoryPickerWindow";
 import artistWordsRaw from "./artistWords.json";
+import type { FeedbackMode, WordFeedbackMap } from "../feedback/wordFeedback";
 
 export type RoundPrompt = {
   answer: string;
@@ -936,7 +937,42 @@ function pickWeightedDifficulty(pool: UnifiedAsset[], recentKeys: string[]): Wor
   return weights[weights.length - 1].difficulty;
 }
 
-export function pickBalancedPrompts(pool: UnifiedAsset[], recentKeys: string[], count: number): CategoryPrompt[] {
+type PromptPickOptions = {
+  feedback?: WordFeedbackMap;
+  mode?: FeedbackMode;
+};
+
+const clamp = (value: number, minimum: number, maximum: number) => Math.max(minimum, Math.min(maximum, value));
+
+function getFeedbackWeight(asset: UnifiedAsset, options?: PromptPickOptions): number {
+  const stats = options?.feedback?.[getAssetPromptKey(asset)];
+  if (!stats || stats.submitted + stats.skipped < 2) return 1;
+
+  const positive = stats.veryGood * 1.15 + stats.good * 0.42;
+  const negativeMultiplier = options?.mode === "room" ? 1.45 : options?.mode === "autoDraw" ? 1.05 : 1.22;
+  const negative = stats.bad * negativeMultiplier + stats.skipped * 0.32;
+  const confidence = clamp((stats.submitted + stats.skipped) / 10, 0.18, 1);
+  const rawScore = (positive - negative) / Math.max(4, stats.submitted + stats.skipped + 3);
+  const difficultyDamping = asset.difficulty === "easy" ? 0.45 : asset.difficulty === "medium" ? 0.85 : 1;
+
+  return clamp(1 + rawScore * confidence * difficultyDamping, 0.35, 1.35);
+}
+
+function pickWeightedAsset(choices: UnifiedAsset[], options?: PromptPickOptions): UnifiedAsset {
+  const weighted = choices.map((asset) => ({
+    asset,
+    weight: getFeedbackWeight(asset, options),
+  }));
+  const total = weighted.reduce((sum, item) => sum + item.weight, 0);
+  let roll = Math.random() * Math.max(0.001, total);
+  for (const item of weighted) {
+    roll -= item.weight;
+    if (roll <= 0) return item.asset;
+  }
+  return choices[choices.length - 1];
+}
+
+export function pickBalancedPrompts(pool: UnifiedAsset[], recentKeys: string[], count: number, options?: PromptPickOptions): CategoryPrompt[] {
   const picked: CategoryPrompt[] = [];
   const workingRecentKeys = [...recentKeys];
 
@@ -951,7 +987,7 @@ export function pickBalancedPrompts(pool: UnifiedAsset[], recentKeys: string[], 
     const preferredDifficulty = pickWeightedDifficulty(choices, workingRecentKeys);
     const preferredChoices = choices.filter((asset) => asset.difficulty === preferredDifficulty);
     const finalChoices = preferredChoices.length > 0 ? preferredChoices : choices;
-    const asset = finalChoices[Math.floor(Math.random() * finalChoices.length)];
+    const asset = pickWeightedAsset(finalChoices, options);
     const prompt = toCategoryPrompt(asset);
 
     picked.push(prompt);
@@ -964,9 +1000,10 @@ export function pickBalancedPrompts(pool: UnifiedAsset[], recentKeys: string[], 
 export function pickNextPrompt(
   selection: CategorySelection,
   recentKeys: string[],
+  options?: PromptPickOptions,
 ): CategoryPrompt {
   const matchingAssets = UNIFIED_ASSETS.filter((a) => matchesCategorySelection(a.category, selection));
-  const choices = pickBalancedPrompts(matchingAssets, recentKeys, 1);
+  const choices = pickBalancedPrompts(matchingAssets, recentKeys, 1, options);
   
   if (choices.length === 0) {
     return { answer: "Error: No words found", categoryId: "random" };

@@ -16,6 +16,15 @@ import { AutoDrawCanvas } from "./AutoDrawCanvas";
 import { AUTO_DRAW_ASSETS } from "./autoDrawAssets";
 import { GAME_TITLES, getActiveSelectionChips, getCategoryDomains, getSelectionTokens, isCategorySelectionOptionActive, matchesCategorySelection as matchesCategory, removeCategorySelectionChip, toggleCategorySelectionOption } from "../dashboard/gameData";
 import { CategorySelectionTools } from "../dashboard/CategorySelectionTools";
+import { WordFeedbackModal } from "../feedback/WordFeedbackModal";
+import {
+  getWordFeedbackKey,
+  recordWordFeedback,
+  shouldPromptForWordFeedback,
+  type WordFeedbackMap,
+  type WordFeedbackRating,
+  type WordFeedbackTarget,
+} from "../feedback/wordFeedback";
 
 type Props = { onNavigate: (path: string) => void };
 type Status = "idle" | "playing" | "paused" | "complete";
@@ -25,28 +34,47 @@ type ResizeState = { panel: "source" | "side"; startX: number; startWidth: numbe
 const TRANSITION_MS = 900;
 const EMPTY_TWITCH_SESSION: TwitchSession = { authenticated: false, configured: false, eventSubStatus: "disconnected", user: null };
 const normalize = (value: string) => value.trim().toLowerCase().replace(/[^a-z0-9]+/g, "");
+
+const getAutoDrawFeedbackWeight = (feedback: WordFeedbackMap, asset: typeof AUTO_DRAW_ASSETS[number]) => {
+  const stats = feedback[getWordFeedbackKey({ answer: asset.answer, categoryId: asset.category })];
+  if (!stats || stats.submitted + stats.skipped < 2) return 1;
+  const positive = stats.veryGood * 1.05 + stats.good * 0.35;
+  const negative = stats.bad * 1.05 + stats.skipped * 0.28;
+  const confidence = Math.min(1, Math.max(0.18, (stats.submitted + stats.skipped) / 10));
+  return Math.min(1.28, Math.max(0.42, 1 + ((positive - negative) / Math.max(4, stats.submitted + stats.skipped + 3)) * confidence));
+};
+
+const weightedAutoDrawIndexes = (indexes: number[], feedback: WordFeedbackMap) => {
+  const remaining = [...indexes];
+  const ordered: number[] = [];
+  while (remaining.length > 0) {
+    const total = remaining.reduce((sum, index) => sum + getAutoDrawFeedbackWeight(feedback, AUTO_DRAW_ASSETS[index]), 0);
+    let roll = Math.random() * Math.max(0.001, total);
+    const pickedIndex = remaining.findIndex((index) => {
+      roll -= getAutoDrawFeedbackWeight(feedback, AUTO_DRAW_ASSETS[index]);
+      return roll <= 0;
+    });
+    ordered.push(remaining.splice(pickedIndex >= 0 ? pickedIndex : remaining.length - 1, 1)[0]);
+  }
+  return ordered;
+};
+
 export function AutoDrawPage({ onNavigate }: Props) {
   const [sourceRailWidth, setSourceRailWidth] = usePersistentState("autoDraw.layout.leftRailWidth.artistAligned", 380);
   const [sidePanelWidth, setSidePanelWidth] = usePersistentState("autoDraw.layout.rightRailWidth.artistAligned", 280);
   const [selectedCategory, setSelectedCategory] = usePersistentState("autoDraw.category", "all");
+  const [wordFeedback, setWordFeedback] = usePersistentState<WordFeedbackMap>("feedback.autoDraw.words", {});
   const availableIndexes = useMemo(() => {
     const indexes = AUTO_DRAW_ASSETS.flatMap((item, index) => matchesCategory(item.category, selectedCategory) ? [index] : []);
-    if (indexes.length === 0) return AUTO_DRAW_ASSETS.map((_, index) => index);
-    
-    // Fisher-Yates shuffle
-    for (let i = indexes.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [indexes[i], indexes[j]] = [indexes[j], indexes[i]];
-    }
-    return indexes;
-  }, [selectedCategory]);
+    return weightedAutoDrawIndexes(indexes.length === 0 ? AUTO_DRAW_ASSETS.map((_, index) => index) : indexes, wordFeedback);
+  }, [selectedCategory, wordFeedback]);
   
   const [assetIndex, setAssetIndex] = useState(() => availableIndexes[0] ?? 0);
 
   // If selectedCategory changes, we might want to pick a new asset
   useEffect(() => {
     setAssetIndex(availableIndexes[0] ?? 0);
-  }, [availableIndexes]);
+  }, [selectedCategory]);
 
   const [stageIndex, setStageIndex] = useState(0);
   const [transitionProgress, setTransitionProgress] = useState(1);
@@ -57,6 +85,8 @@ export function AutoDrawPage({ onNavigate }: Props) {
   const [notice, setNotice] = useState("Press start when everyone is ready.");
   const [canvasResetToken, setCanvasResetToken] = useState(0);
   const [twitchSession, setTwitchSession] = useState<TwitchSession>(EMPTY_TWITCH_SESSION);
+  const [feedbackTarget, setFeedbackTarget] = useState<WordFeedbackTarget | null>(null);
+  const feedbackRoundsSinceAutoRef = useRef(5);
   const [chatMessages, setChatMessages] = useState<LiveChatMessage[]>([]);
   const [solvers, setSolvers] = useState<SolvedViewer[]>([]);
   const frame = useRef<number | null>(null);
@@ -171,6 +201,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
   };
 
   const nextDrawing = async () => {
+    maybeOpenAutomaticFeedback();
     const queue = availableIndexes.length ? availableIndexes : AUTO_DRAW_ASSETS.map((_, index) => index);
     const position = queue.indexOf(assetIndex);
     const nextIdx = queue[(position + 1 + queue.length) % queue.length];
@@ -192,7 +223,36 @@ export function AutoDrawPage({ onNavigate }: Props) {
     setStatus("complete");
     setGuessFeedback("idle");
     setNotice("The answer was revealed.");
+    maybeOpenAutomaticFeedback();
     void closeLiveRound();
+  };
+
+  const openWordFeedback = () => {
+    if (!asset) return;
+    setFeedbackTarget({
+      answer: asset.answer,
+      categoryId: asset.category,
+      difficulty: asset.difficulty === "Easy" ? "easy" : asset.difficulty === "Hard" ? "hard" : "medium",
+    });
+  };
+
+  const submitWordFeedback = (rating: WordFeedbackRating | "skip") => {
+    if (!feedbackTarget) return;
+    setWordFeedback((current) => recordWordFeedback(current, feedbackTarget, rating));
+    setFeedbackTarget(null);
+  };
+
+  const maybeOpenAutomaticFeedback = () => {
+    if (!asset) return;
+    feedbackRoundsSinceAutoRef.current += 1;
+    const target: WordFeedbackTarget = {
+      answer: asset.answer,
+      categoryId: asset.category,
+      difficulty: asset.difficulty === "Easy" ? "easy" : asset.difficulty === "Hard" ? "hard" : "medium",
+    };
+    if (!shouldPromptForWordFeedback(wordFeedback, target, feedbackRoundsSinceAutoRef.current)) return;
+    feedbackRoundsSinceAutoRef.current = 0;
+    setFeedbackTarget(target);
   };
 
   const isCategoryOptionActive = (optionId: string): boolean => {
@@ -368,6 +428,9 @@ export function AutoDrawPage({ onNavigate }: Props) {
                   </>
                 )}
               </div>
+              <button aria-label="Give word feedback" className="word-feedback-trigger auto-feedback-trigger" onClick={(event) => { event.stopPropagation(); openWordFeedback(); }} title="Give word feedback" type="button">
+                <span className="material-symbols-outlined">rate_review</span>
+              </button>
               <input aria-label="Type your AutoDraw answer" autoComplete="off" disabled={status === "idle" || status === "complete"} maxLength={80} onBlur={() => setGuessFocused(false)} onChange={(event) => { setGuess(event.target.value); if (guessFeedback === "wrong") setGuessFeedback("idle"); }} onFocus={() => setGuessFocused(true)} onKeyDown={(event) => { if (event.key === "Enter") { event.preventDefault(); submitGuess(); } }} ref={guessInputRef} value={guess}/>
             </div>
             <span aria-live="polite" className="auto-guess-announcement">{notice}</span>
@@ -435,6 +498,12 @@ export function AutoDrawPage({ onNavigate }: Props) {
           </aside>
         </section>
       </main>
+      <WordFeedbackModal
+        modeLabel="Auto Draw"
+        onClose={() => setFeedbackTarget(null)}
+        onSubmit={submitWordFeedback}
+        target={feedbackTarget}
+      />
     </div>
   );
 }
