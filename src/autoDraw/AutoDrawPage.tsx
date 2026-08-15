@@ -48,7 +48,7 @@ const getAutoDrawFeedbackWeight = (feedback: WordFeedbackMap, asset: typeof AUTO
     stats.mid * 0.16 +
     stats.notInterested * 0.18 +
     stats.notFun * 0.92 +
-    stats.unrecognized * 1.2 +
+    stats.unrecognized * 0.5 +
     stats.skipped * 0.28;
   const confidence = Math.min(1, Math.max(0.18, (stats.submitted + stats.skipped) / 10));
   return Math.min(1.28, Math.max(0.42, 1 + ((positive - negative) / Math.max(4, stats.submitted + stats.skipped + 3)) * confidence));

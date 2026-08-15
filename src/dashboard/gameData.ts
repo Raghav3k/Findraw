@@ -955,7 +955,7 @@ function getFeedbackWeight(asset: UnifiedAsset, options?: PromptPickOptions): nu
   const skipReasonPenalty =
     stats.notInterested * 0.22 +
     stats.notFun * negativeMultiplier +
-    stats.unrecognized * (negativeMultiplier + 0.35);
+    stats.unrecognized * 0.52;
   const negative = stats.bad * negativeMultiplier + stats.mid * 0.18 + skipReasonPenalty + stats.skipped * 0.32;
   const confidence = clamp((stats.submitted + stats.skipped) / 10, 0.18, 1);
   const rawScore = (positive - negative) / Math.max(4, stats.submitted + stats.skipped + 3);

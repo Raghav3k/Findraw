@@ -97,7 +97,7 @@ export const shouldPromptForWordFeedback = (
   if (!storedStats) return target.difficulty === "hard" && roundsSincePrompt >= 7;
 
   const stats = normalizeWordFeedbackStats(storedStats);
-  const badSignals = stats.bad + stats.notFun + stats.unrecognized + stats.skipped;
+  const badSignals = stats.bad + stats.notFun + stats.skipped;
   const strongSignals = stats.veryGood;
   if (badSignals >= 2 && badSignals >= strongSignals) return true;
   if (target.difficulty === "hard" && roundsSincePrompt >= 8 && stats.submitted < 2) return true;
