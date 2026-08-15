@@ -33,6 +33,7 @@ import {
   deleteRoom,
   maskedAnswer,
   normalizeGuess,
+  normalizeRoomState,
   normalizeRoomCode,
   pickRoomChoices,
   readRoom,
@@ -109,7 +110,12 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const resizeStateRef = useRef<ResizeState | null>(null);
   const onlineRoomRef = useRef<OnlineRoomClient | null>(null);
 
-  const localPlayer = room?.players.find((player) => player.id === clientId) ?? null;
+  const roomPlayers = room?.players ?? [];
+  const roomChoices = room?.choices ?? [];
+  const roomGuesses = room?.guesses ?? [];
+  const roomSolved = room?.solved ?? [];
+  const roomAnswerText = typeof room?.answer?.answer === "string" ? room.answer.answer : "";
+  const localPlayer = roomPlayers.find((player) => player.id === clientId) ?? null;
   const drawer = getDrawer(room);
   const isHost = room?.hostId === clientId;
   const isDrawer = room?.drawerId === clientId;
@@ -121,18 +127,18 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const secondsRemaining = room?.phase === "drawing" && room.endAt
     ? Math.max(0, Math.ceil((room.endAt - timerNow) / 1000))
     : room?.roundSeconds ?? 90;
-  const totalTurns = room ? Math.max(1, room.players.length) * room.roundsPerPlayer : 0;
+  const totalTurns = room ? Math.max(1, roomPlayers.length) * room.roundsPerPlayer : 0;
   const currentTurnNumber = room && room.turnIndex >= 0 ? Math.min(totalTurns, room.turnIndex + 1) : 0;
   const winner = room?.phase === "finished" ? sortedPlayers[0] ?? null : null;
   const roomMaxPlayers = room?.maxPlayers ?? 8;
-  const roomLeader = room?.players.find((player) => player.id === room.hostId) ?? null;
+  const roomLeader = roomPlayers.find((player) => player.id === room?.hostId) ?? null;
   const canEditRoomDetails = Boolean(room && isHost && (room.phase === "lobby" || room.phase === "finished"));
   const roomChoiceVotes = room?.choiceVotes ?? {};
-  const eligibleChoiceVoters = room ? room.players.filter((player) => player.id !== room.drawerId) : [];
+  const eligibleChoiceVoters = roomPlayers.filter((player) => player.id !== room?.drawerId);
   const localChoiceVote = localPlayer ? roomChoiceVotes[localPlayer.id] : undefined;
-  const choiceVoteCounts = room?.choices.map((_, index) => (
+  const choiceVoteCounts = roomChoices.map((_, index) => (
     Object.values(roomChoiceVotes).filter((vote) => vote === index).length
-  )) ?? [];
+  ));
   const submittedChoiceVotes = Object.keys(roomChoiceVotes).filter((playerId) => eligibleChoiceVoters.some((player) => player.id === playerId)).length;
 
   const leaveLocalRoom = useCallback((roomToLeave: RoomState) => {
@@ -217,7 +223,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       setNotice(mode === "create" ? `Created online room ${code}.` : `Joining online room ${code}.`);
       onlineRoomRef.current = connectOnlineRoom(code, player.id, player.name, {
         onState: (nextRoom) => {
-          setRoom(nextRoom);
+          setRoom(normalizeRoomState(nextRoom));
           if ((nextRoom.drawingOperations?.length ?? 0) > 0) setLiveDrawingOperation(null);
           setNotice(`Online room ${nextRoom.code} is synced.`);
         },
@@ -265,7 +271,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const updateRoomSettings = (settings: { roundsPerPlayer?: number; maxPlayers?: number }) => {
     if (!room || !canEditRoomDetails) return;
     const nextRounds = Math.min(10, Math.max(1, Math.round(settings.roundsPerPlayer ?? room.roundsPerPlayer)));
-    const nextMaxPlayers = Math.min(16, Math.max(room.players.length, Math.max(2, Math.round(settings.maxPlayers ?? roomMaxPlayers))));
+    const nextMaxPlayers = Math.min(16, Math.max(roomPlayers.length, Math.max(2, Math.round(settings.maxPlayers ?? roomMaxPlayers))));
     if (roomTransport === "online") {
       onlineRoomRef.current?.sendRoomSettings({ roundsPerPlayer: nextRounds, maxPlayers: nextMaxPlayers });
       return;
@@ -273,7 +279,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     saveRoom({ ...room, roundsPerPlayer: nextRounds, maxPlayers: nextMaxPlayers });
   };
   const transferRoomLeader = (hostId: string) => {
-    if (!room || !canEditRoomDetails || !room.players.some((player) => player.id === hostId)) return;
+    if (!room || !canEditRoomDetails || !roomPlayers.some((player) => player.id === hostId)) return;
     setLeaderPickerOpen(false);
     if (roomTransport === "online") {
       onlineRoomRef.current?.sendRoomLeader(hostId);
@@ -298,7 +304,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     if (!joinedCode || roomTransport !== "local") return;
     const sync = (event: StorageEvent) => {
       if (event.key !== roomStorageKey(joinedCode) || !event.newValue) return;
-      setRoom(JSON.parse(event.newValue) as RoomState);
+      setRoom(normalizeRoomState(JSON.parse(event.newValue)));
     };
     window.addEventListener("storage", sync);
     const timer = window.setInterval(() => {
@@ -320,11 +326,11 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   useEffect(() => {
     if (roomTransport === "online") return;
     if (!room || !isHost || room.phase !== "drawing" || !room.answer) return;
-    const guessers = room.players.filter((player) => player.id !== room.drawerId);
-    if (guessers.length > 0 && room.solved.length >= guessers.length) {
+    const guessers = roomPlayers.filter((player) => player.id !== room.drawerId);
+    if (guessers.length > 0 && roomSolved.length >= guessers.length) {
       saveRoom({ ...room, phase: "results", endAt: null });
     }
-  }, [isHost, room, roomTransport]);
+  }, [isHost, room, roomPlayers, roomSolved.length, roomTransport]);
 
   useEffect(() => {
     if (roomTransport === "online") return;
@@ -335,18 +341,18 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   }, [feedbackTarget, isHost, room, roomTransport]);
 
   useEffect(() => {
-    if (roomTransport !== "online" || !room || !isHost || room.phase !== "choosing" || room.choices.length > 0) return;
+    if (roomTransport !== "online" || !room || !isHost || room.phase !== "choosing" || roomChoices.length > 0) return;
     onlineRoomRef.current?.sendChoices(pickRoomChoices(room.categorySelection, room.recentPromptKeys, 3, wordFeedback));
-  }, [isHost, room, roomTransport]);
+  }, [isHost, room, roomChoices.length, roomTransport, wordFeedback]);
 
   useEffect(() => {
-    if (!room?.answer || room.phase !== "results") return;
-    const turnKey = `${room.code}:${room.turnIndex}:${room.answer.categoryId}:${room.answer.answer}`;
+    if (!room?.answer || room.phase !== "results" || !roomAnswerText) return;
+    const turnKey = `${room.code}:${room.turnIndex}:${room.answer.categoryId}:${roomAnswerText}`;
     if (lastAutoFeedbackTurnRef.current === turnKey) return;
     lastAutoFeedbackTurnRef.current = turnKey;
     feedbackRoundsSinceAutoRef.current += 1;
     const target: WordFeedbackTarget = {
-      answer: room.answer.answer,
+      answer: roomAnswerText,
       categoryId: room.answer.categoryId,
       difficulty: room.answer.difficulty,
     };
@@ -354,7 +360,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     feedbackRoundsSinceAutoRef.current = 0;
     setFeedbackContext("experience");
     setFeedbackTarget(target);
-  }, [room?.answer, room?.code, room?.phase, room?.turnIndex, wordFeedback]);
+  }, [room?.answer, room?.code, room?.phase, room?.turnIndex, roomAnswerText, wordFeedback]);
 
   useEffect(() => {
     const handlePointerMove = (event: PointerEvent) => {
@@ -423,8 +429,8 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   };
 
   const startGame = () => {
-    if (!room || !isHost || room.players.length < 2) return;
-    const drawerId = room.players[0]?.id ?? null;
+    if (!room || !isHost || roomPlayers.length < 2) return;
+    const drawerId = roomPlayers[0]?.id ?? null;
     const choices = pickRoomChoices(room.categorySelection, room.recentPromptKeys, 3, wordFeedback);
     if (roomTransport === "online") {
       onlineRoomRef.current?.sendStartGame(choices);
@@ -443,28 +449,28 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       choiceVotes: {},
       guesses: [],
       solved: [],
-      players: room.players.map((player) => ({ ...player, score: 0 })),
+      players: roomPlayers.map((player) => ({ ...player, score: 0 })),
     });
     setNotice("Game started. Players are voting on the word.");
   };
 
   const getWinningChoiceIndex = (votes: Record<string, number>) => {
-    if (!room?.choices.length) return -1;
-    const counts = room.choices.map((_, index) => Object.values(votes).filter((vote) => vote === index).length);
+    if (!roomChoices.length) return -1;
+    const counts = roomChoices.map((_, index) => Object.values(votes).filter((vote) => vote === index).length);
     return counts.reduce((bestIndex, count, index) => count > counts[bestIndex] ? index : bestIndex, 0);
   };
 
   const voteForChoice = (choiceIndex: number) => {
-    if (!room || room.phase !== "choosing" || isDrawer || !localPlayer || !room.choices[choiceIndex]) return;
+    if (!room || room.phase !== "choosing" || isDrawer || !localPlayer || !roomChoices[choiceIndex]) return;
     if (roomTransport === "online") {
       onlineRoomRef.current?.sendChoiceVote(choiceIndex);
       return;
     }
     const nextVotes = { ...(room.choiceVotes ?? {}), [localPlayer.id]: choiceIndex };
-    const eligibleVoters = room.players.filter((player) => player.id !== room.drawerId);
+    const eligibleVoters = roomPlayers.filter((player) => player.id !== room.drawerId);
     const votedCount = Object.keys(nextVotes).filter((playerId) => eligibleVoters.some((player) => player.id === playerId)).length;
     const winningIndex = getWinningChoiceIndex(nextVotes);
-    const winningChoice = room.choices[winningIndex];
+    const winningChoice = roomChoices[winningIndex];
     if (votedCount >= eligibleVoters.length && winningChoice) {
       saveRoom({
         ...room,
@@ -491,9 +497,10 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       setGuess("");
       return;
     }
-    const aliases = [room.answer.answer, ...(room.answer.aliases ?? [])].map(normalizeGuess);
+    if (!roomAnswerText) return;
+    const aliases = [roomAnswerText, ...(room.answer.aliases ?? [])].map(normalizeGuess);
     const correct = aliases.includes(normalizeGuess(text));
-    const alreadySolved = room.solved.some((item) => item.playerId === localPlayer.id);
+    const alreadySolved = roomSolved.some((item) => item.playerId === localPlayer.id);
     const remainingRatio = room.endAt ? Math.max(0, room.endAt - Date.now()) / (room.roundSeconds * 1000) : 0;
     const points = correct && !alreadySolved ? Math.round(100 + remainingRatio * 300) : 0;
     const guessEntry: RoomGuess = {
@@ -507,11 +514,11 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     const drawerBonus = correct && !alreadySolved ? 50 : 0;
     saveRoom({
       ...room,
-      guesses: [...room.guesses.slice(-30), guessEntry],
+      guesses: [...roomGuesses.slice(-30), guessEntry],
       solved: correct && !alreadySolved
-        ? [...room.solved, { playerId: localPlayer.id, playerName: localPlayer.name, points, solvedAt: Date.now() }]
-        : room.solved,
-      players: room.players.map((player) => {
+        ? [...roomSolved, { playerId: localPlayer.id, playerName: localPlayer.name, points, solvedAt: Date.now() }]
+        : roomSolved,
+      players: roomPlayers.map((player) => {
         if (player.id === localPlayer.id) return { ...player, score: player.score + points };
         if (player.id === room.drawerId) return { ...player, score: player.score + drawerBonus };
         return player;
@@ -550,10 +557,10 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   }, [isDrawer, roomTransport]);
 
   const openWordFeedback = () => {
-    if (!room?.answer || room.answer.answer.startsWith("Error:")) return;
+    if (!room?.answer || !roomAnswerText || roomAnswerText.startsWith("Error:")) return;
     setFeedbackContext("experience");
     setFeedbackTarget({
-      answer: room.answer.answer,
+      answer: roomAnswerText,
       categoryId: room.answer.categoryId,
       difficulty: room.answer.difficulty,
     });
@@ -588,7 +595,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                   <span>Exit room</span>
                 </button>
               ) : null}
-              <span className="source-status">{room?.players.length ?? 0}</span>
+              <span className="source-status">{roomPlayers.length}</span>
             </div>
           </header>
           <div className="room-player-list">
@@ -642,7 +649,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                   <div className="room-details-list">
                     <label>
                       <b>Max players</b>
-                      <input disabled={!canEditRoomDetails} max={16} min={Math.max(2, room.players.length)} onChange={(event) => updateRoomSettings({ maxPlayers: Number(event.target.value) })} type="number" value={roomMaxPlayers} />
+                      <input disabled={!canEditRoomDetails} max={16} min={Math.max(2, roomPlayers.length)} onChange={(event) => updateRoomSettings({ maxPlayers: Number(event.target.value) })} type="number" value={roomMaxPlayers} />
                     </label>
                     <label>
                       <b>Rounds</b>
@@ -654,7 +661,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                       </button>
                       {leaderPickerOpen && canEditRoomDetails ? (
                         <div className="room-leader-picker">
-                          {room.players.map((player) => (
+                          {roomPlayers.map((player) => (
                             <button className={player.id === room.hostId ? "active" : ""} key={player.id} onClick={() => transferRoomLeader(player.id)} type="button">
                               <span>{player.name}</span><small>{player.id === room.hostId ? "Leader" : "Make leader"}</small>
                             </button>
@@ -666,14 +673,14 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                 </div>
               ) : room.phase === "drawing" && isDrawer && room.answer ? (
                 <div className="camera-prompt-copy">
-                  <strong style={{ fontSize: Math.max(26, Math.min(60, 440 / Math.max(1, room.answer.answer.length))) + "px", lineHeight: 1.15 }}>{room.answer.answer}</strong>
+                  <strong style={{ fontSize: Math.max(26, Math.min(60, 440 / Math.max(1, roomAnswerText.length))) + "px", lineHeight: 1.15 }}>{roomAnswerText}</strong>
                 </div>
               ) : (
                 <div className="custom-word-card room-word-card">
                   <small className="camera-instruction">Keep this area covered by your camera in OBS</small>
                   <strong>{room.phase === "finished" && winner ? `${winner.name} wins` : room.phase === "choosing" ? "Players are voting" : "Waiting for the round"}</strong>
                   {isHost && (room.phase === "lobby" || room.phase === "finished") ? (
-                    <button className="room-start-button room-lobby-start-button" disabled={room.players.length < 2} onClick={startGame} type="button">
+                    <button className="room-start-button room-lobby-start-button" disabled={roomPlayers.length < 2} onClick={startGame} type="button">
                       <span className="material-symbols-outlined">play_arrow</span>{room.phase === "finished" ? "Start New Game" : "Start Game"}
                     </button>
                   ) : null}
@@ -708,7 +715,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
           <div className="main-column room-main-column">
             <section className="prompt-board room-prompt-board">
               <div className="round-word-mask">
-                {room?.phase === "drawing" && isDrawer ? room.answer?.answer.toUpperCase() : room?.answer?.mask ?? maskedAnswer(room?.answer?.answer ?? null)}
+                {room?.phase === "drawing" && isDrawer ? roomAnswerText.toUpperCase() : room?.answer?.mask ?? maskedAnswer(roomAnswerText || null)}
               </div>
               <button aria-label="Give word feedback" className="word-feedback-trigger" disabled={!room?.answer} onClick={openWordFeedback} title="Give word feedback" type="button">
                 <span className="material-symbols-outlined">rate_review</span>
@@ -728,7 +735,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                   <h2>{isDrawer ? "Words on the table" : "Pick a mystery slot"}</h2>
                   <p>{isDrawer ? "Players vote without seeing the words. The top slot becomes your drawing prompt." : `${drawer?.name ?? "Drawer"} can see the words. You only choose a slot.`}</p>
                   <div className="room-choice-list" role="list">
-                    {room.choices.map((choice, index) => {
+                    {roomChoices.map((choice, index) => {
                       const voteCount = choiceVoteCounts[index] ?? 0;
                       const selected = localChoiceVote === index;
                       return (
@@ -808,9 +815,9 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
             </section>
 
             <section className="feed-card room-guess-card">
-              <div className="card-title"><h3><span className="material-symbols-outlined">forum</span>Room chat</h3><b>{room?.guesses.length ?? 0}</b></div>
+              <div className="card-title"><h3><span className="material-symbols-outlined">forum</span>Room chat</h3><b>{roomGuesses.length}</b></div>
               <div className="room-guess-list scrollable">
-                {room?.guesses.length ? room.guesses.slice().reverse().map((item) => (
+                {roomGuesses.length ? roomGuesses.slice().reverse().map((item) => (
                   <p className={item.correct ? "correct" : ""} key={item.id}><strong>{item.playerName}</strong>{item.correct ? "guessed correctly" : item.text}</p>
                 )) : null}
               </div>

@@ -108,14 +108,14 @@ export const createEmptyRoom = (code: string, host: RoomPlayer): RoomState => ({
 export const readRoom = (code: string): RoomState | null => {
   try {
     const stored = window.localStorage.getItem(roomStorageKey(code));
-    return stored ? JSON.parse(stored) as RoomState : null;
+    return stored ? normalizeRoomState(JSON.parse(stored)) : null;
   } catch {
     return null;
   }
 };
 
 export const writeRoom = (room: RoomState) => {
-  window.localStorage.setItem(roomStorageKey(room.code), JSON.stringify(room));
+  window.localStorage.setItem(roomStorageKey(room.code), JSON.stringify(normalizeRoomState(room)));
 };
 
 export const deleteRoom = (code: string) => {
@@ -143,4 +143,29 @@ export const maskedAnswer = (answer: string | null) => {
   return Array.from(answer)
     .map((character) => character === " " ? "  " : "_")
     .join(" ");
+};
+
+export const normalizeRoomState = (room: Partial<RoomState> | null): RoomState | null => {
+  if (!room?.code || !room.hostId) return null;
+  return {
+    code: room.code,
+    hostId: room.hostId,
+    players: Array.isArray(room.players) ? room.players : [],
+    phase: room.phase ?? "lobby",
+    categorySelection: room.categorySelection ?? "domain:general",
+    roundSeconds: room.roundSeconds ?? 90,
+    maxPlayers: room.maxPlayers ?? 8,
+    choices: Array.isArray(room.choices) ? room.choices : [],
+    choiceVotes: room.choiceVotes ?? {},
+    answer: room.answer ?? null,
+    drawerId: room.drawerId ?? null,
+    turnIndex: room.turnIndex ?? 0,
+    roundIndex: room.roundIndex ?? 0,
+    roundsPerPlayer: room.roundsPerPlayer ?? 3,
+    endAt: room.endAt ?? null,
+    guesses: Array.isArray(room.guesses) ? room.guesses : [],
+    solved: Array.isArray(room.solved) ? room.solved : [],
+    recentPromptKeys: Array.isArray(room.recentPromptKeys) ? room.recentPromptKeys : [],
+    drawingOperations: Array.isArray(room.drawingOperations) ? room.drawingOperations : [],
+  };
 };
