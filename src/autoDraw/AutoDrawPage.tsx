@@ -82,6 +82,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
   const [twitchSession, setTwitchSession] = useState<TwitchSession>(EMPTY_TWITCH_SESSION);
   const [feedbackTarget, setFeedbackTarget] = useState<WordFeedbackTarget | null>(null);
   const feedbackRoundsSinceAutoRef = useRef(5);
+  const pendingFeedbackActionRef = useRef<(() => void) | null>(null);
   const [chatMessages, setChatMessages] = useState<LiveChatMessage[]>([]);
   const [solvers, setSolvers] = useState<SolvedViewer[]>([]);
   const frame = useRef<number | null>(null);
@@ -195,8 +196,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
     } catch { setNotice("Drawing locally. Live chat could not start."); }
   };
 
-  const nextDrawing = async () => {
-    maybeOpenAutomaticFeedback();
+  const performNextDrawing = async () => {
     const queue = availableIndexes.length ? availableIndexes : AUTO_DRAW_ASSETS.map((_, index) => index);
     const position = queue.indexOf(assetIndex);
     const nextIdx = queue[(position + 1 + queue.length) % queue.length];
@@ -212,6 +212,11 @@ export function AutoDrawPage({ onNavigate }: Props) {
       activeRoundId.current = result.roundId;
       setNotice("Drawing live. Twitch chat can guess now.");
     } catch { setNotice("Drawing locally. Live chat could not start."); }
+  };
+
+  const nextDrawing = async () => {
+    if (maybeOpenAutomaticFeedback(() => void performNextDrawing())) return;
+    await performNextDrawing();
   };
 
   const revealAnswer = () => {
@@ -235,19 +240,31 @@ export function AutoDrawPage({ onNavigate }: Props) {
     if (!feedbackTarget) return;
     setWordFeedback((current) => recordWordFeedback(current, feedbackTarget, rating));
     setFeedbackTarget(null);
+    const pendingAction = pendingFeedbackActionRef.current;
+    pendingFeedbackActionRef.current = null;
+    pendingAction?.();
   };
 
-  const maybeOpenAutomaticFeedback = () => {
-    if (!asset) return;
+  const closeWordFeedback = () => {
+    setFeedbackTarget(null);
+    const pendingAction = pendingFeedbackActionRef.current;
+    pendingFeedbackActionRef.current = null;
+    pendingAction?.();
+  };
+
+  const maybeOpenAutomaticFeedback = (afterFeedback?: () => void) => {
+    if (!asset) return false;
     feedbackRoundsSinceAutoRef.current += 1;
     const target: WordFeedbackTarget = {
       answer: asset.answer,
       categoryId: asset.category,
       difficulty: asset.difficulty === "Easy" ? "easy" : asset.difficulty === "Hard" ? "hard" : "medium",
     };
-    if (!shouldPromptForWordFeedback(wordFeedback, target, feedbackRoundsSinceAutoRef.current)) return;
+    if (!shouldPromptForWordFeedback(wordFeedback, target, feedbackRoundsSinceAutoRef.current)) return false;
     feedbackRoundsSinceAutoRef.current = 0;
+    pendingFeedbackActionRef.current = afterFeedback ?? null;
     setFeedbackTarget(target);
+    return true;
   };
 
   const isCategoryOptionActive = (optionId: string): boolean => {
@@ -495,7 +512,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
       </main>
       <WordFeedbackModal
         modeLabel="Auto Draw"
-        onClose={() => setFeedbackTarget(null)}
+        onClose={closeWordFeedback}
         onSubmit={submitWordFeedback}
         target={feedbackTarget}
       />

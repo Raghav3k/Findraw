@@ -327,9 +327,10 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   useEffect(() => {
     if (roomTransport === "online") return;
     if (!room || !isHost || room.phase !== "results") return;
+    if (feedbackTarget) return;
     const timer = window.setTimeout(() => advanceTurn(room), 2500);
     return () => window.clearTimeout(timer);
-  }, [isHost, room, roomTransport]);
+  }, [feedbackTarget, isHost, room, roomTransport]);
 
   useEffect(() => {
     if (roomTransport !== "online" || !room || !isHost || room.phase !== "choosing" || room.choices.length > 0) return;
