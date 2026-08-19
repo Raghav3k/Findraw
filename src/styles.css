@@ -12898,6 +12898,70 @@ body.resizing-panels .layout-resizer::after {
   text-transform: uppercase;
 }
 
+.bot-tag {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 4px;
+  padding: 1px 4px;
+  color: #4a6356;
+  border: 1px solid rgba(74, 99, 86, 0.35);
+  border-radius: 4px;
+  background: rgba(74, 99, 86, 0.12);
+  font: 900 8px/1 var(--font-sketch, "Shantell Sans", cursive);
+  letter-spacing: 0.04em;
+  vertical-align: middle;
+}
+
+.room-player-list span.bot-player {
+  opacity: 0.95;
+}
+
+.room-join-bot-option {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 7px;
+  margin-top: 4px;
+  cursor: pointer;
+}
+
+.room-join-bot-option input[type="checkbox"] {
+  width: 16px;
+  min-height: 16px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.room-join-bot-option span {
+  color: #554e42 !important;
+  font: 800 11px/1.2 var(--font-sketch, "Shantell Sans", cursive) !important;
+}
+
+.room-bot-toggle-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 0;
+  border-top: 1px dashed rgba(60, 54, 44, 0.2);
+  font-family: var(--font-sketch, "Shantell Sans", cursive);
+}
+
+.room-bot-toggle-row span {
+  display: grid;
+  gap: 2px;
+}
+
+.room-bot-toggle-row b {
+  font-size: 13px;
+  color: #302e29;
+}
+
+.room-bot-toggle-row small {
+  font-size: 11px;
+  color: #6d665c;
+}
+
 .room-category-card {
   flex: 1 1 0;
   min-height: 280px;

@@ -84,14 +84,14 @@ export const createRoomCode = () => {
 
 export const roomStorageKey = (code: string) => `${ROOM_STORAGE_PREFIX}${normalizeRoomCode(code)}`;
 
-export const createEmptyRoom = (code: string, host: RoomPlayer): RoomState => ({
+export const createEmptyRoom = (code: string, host: RoomPlayer, initialBots: RoomPlayer[] = []): RoomState => ({
   code,
   hostId: host.id,
-  players: [host],
+  players: [host, ...initialBots],
   phase: "lobby",
   categorySelection: "domain:general",
   roundSeconds: 90,
-  maxPlayers: 8,
+  maxPlayers: Math.max(8, 1 + initialBots.length),
   choices: [],
   choiceVotes: {},
   answer: null,
