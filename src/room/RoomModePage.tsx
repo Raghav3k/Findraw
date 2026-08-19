@@ -743,49 +743,21 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                   {`${Math.floor(secondsRemaining / 60)}:${String(secondsRemaining % 60).padStart(2, "0")}`}
                 </div>
               </header>
-              {room?.phase === "choosing" ? (
-                <div className="room-choice-board">
-                  <span className="source-eyebrow">Word vote</span>
-                  <h2>{isDrawer ? "Words on the table" : "Pick a mystery slot"}</h2>
-                  <p>{isDrawer ? "Players vote without seeing the words. The top slot becomes your drawing prompt." : `${drawer?.name ?? "Drawer"} can see the words. You only choose a slot.`}</p>
-                  <div className="room-choice-list" role="list">
-                    {roomChoices.map((choice, index) => {
-                      const voteCount = choiceVoteCounts[index] ?? 0;
-                      const selected = localChoiceVote === index;
-                      return (
-                        <button
-                          className={selected ? "selected" : ""}
-                          disabled={isDrawer || !localPlayer}
-                          key={`${choice.categoryId}-${choice.answer}-${index}`}
-                          onClick={() => voteForChoice(index)}
-                          type="button"
-                        >
-                          <span className="room-choice-slot">Slot {index + 1}</span>
-                          <strong>{isDrawer ? choice.answer : "Hidden word"}</strong>
-                          <small>{voteCount} vote{voteCount === 1 ? "" : "s"}</small>
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <span className="room-choice-progress">{submittedChoiceVotes}/{eligibleChoiceVoters.length} players voted</span>
-                </div>
-              ) : (
-                <ExcalidrawStage
-                  key={`${room?.code ?? "offline"}-${room?.turnIndex ?? 0}-${room?.phase ?? "empty"}-${room?.drawerId ?? "none"}`}
-                  canvasColor={canvasColor}
-                  gridSize={gridSize}
-                  hoverMenuDelay={500}
-                  hoverMenusEnabled
-                  onCanvasColorChange={setCanvasColor}
-                  onGridSizeChange={setGridSize}
-                  shortcuts={DEFAULT_KEYBOARD_SHORTCUTS}
-                  externalOperations={isDrawer && room?.phase === "drawing" ? undefined : room?.drawingOperations}
-                  liveOperation={!isDrawer ? liveDrawingOperation : null}
-                  onLiveOperation={syncLiveDrawingOperation}
-                  onOperationsChange={syncDrawingOperations}
-                  readOnly={room?.phase === "drawing" && !isDrawer}
-                />
-              )}
+              <ExcalidrawStage
+                key={`${room?.code ?? "offline"}-${room?.turnIndex ?? 0}-${room?.phase ?? "empty"}-${room?.drawerId ?? "none"}`}
+                canvasColor={canvasColor}
+                gridSize={gridSize}
+                hoverMenuDelay={500}
+                hoverMenusEnabled
+                onCanvasColorChange={setCanvasColor}
+                onGridSizeChange={setGridSize}
+                shortcuts={DEFAULT_KEYBOARD_SHORTCUTS}
+                externalOperations={isDrawer && room?.phase === "drawing" ? undefined : room?.drawingOperations}
+                liveOperation={!isDrawer ? liveDrawingOperation : null}
+                onLiveOperation={syncLiveDrawingOperation}
+                onOperationsChange={syncDrawingOperations}
+                readOnly={room?.phase === "drawing" && !isDrawer}
+              />
               {room?.phase === "drawing" && !isDrawer ? (
                 <div className="room-viewer-note">
                   <span className="material-symbols-outlined">visibility</span>
@@ -843,6 +815,46 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
           </aside>
         </section>
       </main>
+      {room?.phase === "choosing" ? (
+        <div className="room-choice-layer" role="presentation">
+          <div className="room-choice-backdrop" />
+          <section aria-label="Word vote" aria-modal="true" className="room-choice-dialog" role="dialog">
+            <header className="room-choice-header">
+              <span className="source-eyebrow">Word vote</span>
+              <h2>{isDrawer ? "Words on the table" : "Pick a mystery slot"}</h2>
+              <p>
+                {isDrawer
+                  ? "Players vote without seeing the words. The top slot becomes your drawing prompt."
+                  : `${drawer?.name ?? "Drawer"} can see the words. You only choose a slot.`}
+              </p>
+            </header>
+            <div className="room-choice-list" role="list">
+              {roomChoices.map((choice, index) => {
+                const voteCount = choiceVoteCounts[index] ?? 0;
+                const selected = localChoiceVote === index;
+                return (
+                  <button
+                    className={`room-choice-card ${selected ? "selected" : ""}`}
+                    disabled={isDrawer || !localPlayer}
+                    key={`${choice.categoryId}-${choice.answer}-${index}`}
+                    onClick={() => voteForChoice(index)}
+                    type="button"
+                  >
+                    <span className="room-choice-slot">Slot {index + 1}</span>
+                    <strong>{isDrawer ? choice.answer : "Hidden word"}</strong>
+                    <small>{voteCount} vote{voteCount === 1 ? "" : "s"}</small>
+                  </button>
+                );
+              })}
+            </div>
+            <footer className="room-choice-footer">
+              <span className="room-choice-progress">
+                {submittedChoiceVotes}/{eligibleChoiceVoters.length} players voted
+              </span>
+            </footer>
+          </section>
+        </div>
+      ) : null}
       <WordFeedbackModal
         context={feedbackContext}
         modeLabel="Room Mode"
