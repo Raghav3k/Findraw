@@ -221,6 +221,27 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     setRoom(nextRoom);
   };
 
+  const advanceTurn = useCallback((roomToAdvance = room) => {
+    if (!roomToAdvance || !isHost) return;
+    const currentRoom = roomToAdvance;
+    const next = getNextTurn(currentRoom);
+    if (!next) {
+      saveRoom({ ...currentRoom, phase: "finished", answer: null, choices: [], choiceVotes: {}, drawerId: null, endAt: null });
+      return;
+    }
+    saveRoom({
+      ...currentRoom,
+      phase: "choosing",
+      ...next,
+      answer: null,
+      choices: pickRoomChoices(currentRoom.categorySelection, currentRoom.recentPromptKeys, 3, wordFeedback),
+      choiceVotes: {},
+      guesses: [],
+      solved: [],
+      endAt: null,
+    });
+  }, [isHost, room, wordFeedback]);
+
   const enterRoom = (mode: RoomEntryMode, event?: FormEvent) => {
     event?.preventDefault();
     let code = mode === "create" ? createRoomCode() : normalizeRoomCode(roomCodeInput);
@@ -381,11 +402,12 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
 
   useEffect(() => {
     if (roomTransport === "online") return;
-    if (!room || !isHost || room.phase !== "results") return;
+    if (!room || !isHost || room.phase !== "results" || !resultsEndAt) return;
     if (feedbackTarget) return;
-    const timer = window.setTimeout(() => advanceTurn(room), 10000);
-    return () => window.clearTimeout(timer);
-  }, [feedbackTarget, isHost, room, roomTransport]);
+    if (Date.now() >= resultsEndAt) {
+      advanceTurn(room);
+    }
+  }, [advanceTurn, feedbackTarget, isHost, resultsEndAt, room, roomTransport, timerNow]);
 
   useEffect(() => {
     if (roomTransport !== "online" || !room || !isHost || room.phase !== "choosing" || roomChoices.length > 0) return;
@@ -572,27 +594,6 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       }),
     });
     setGuess("");
-  };
-
-  const advanceTurn = (roomToAdvance = room) => {
-    if (!roomToAdvance || !isHost) return;
-    const room = roomToAdvance;
-    const next = getNextTurn(room);
-    if (!next) {
-      saveRoom({ ...room, phase: "finished", answer: null, choices: [], choiceVotes: {}, drawerId: null, endAt: null });
-      return;
-    }
-    saveRoom({
-      ...room,
-      phase: "choosing",
-      ...next,
-      answer: null,
-      choices: pickRoomChoices(room.categorySelection, room.recentPromptKeys, 3, wordFeedback),
-      choiceVotes: {},
-      guesses: [],
-      solved: [],
-      endAt: null,
-    });
   };
 
   const syncDrawingOperations = useCallback((operations: DrawingOperation[]) => {
