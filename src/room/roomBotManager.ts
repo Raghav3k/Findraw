@@ -45,6 +45,9 @@ const WRONG_GUESSES = [
   "flower?",
   "guitar?",
   "clock?",
+  "sandwich?",
+  "pencil?",
+  "mountain?",
 ];
 
 type UseRoomBotsParams = {
@@ -64,7 +67,11 @@ export function useRoomBots({
 }: UseRoomBotsParams) {
   const onlineBotsRef = useRef<Map<string, OnlineRoomClient>>(new Map());
   const timersRef = useRef<number[]>([]);
-  const lastTurnKeyRef = useRef<string | null>(null);
+  const roomRef = useRef(room);
+  roomRef.current = room;
+  const onSaveLocalRoomRef = useRef(onSaveLocalRoom);
+  onSaveLocalRoomRef.current = onSaveLocalRoom;
+  const activePhaseKeyRef = useRef<string>("");
 
   const clearBotTimers = () => {
     for (const timer of timersRef.current) window.clearTimeout(timer);
@@ -111,84 +118,90 @@ export function useRoomBots({
     }));
 
     if (missingBots.length > 0) {
-      onSaveLocalRoom({
+      onSaveLocalRoomRef.current({
         ...room,
         maxPlayers: Math.max(room.maxPlayers ?? 8, room.players.length + missingBots.length),
         players: [...room.players, ...missingBots],
       });
     }
-  }, [isHost, onSaveLocalRoom, room, roomTransport, testBotsEnabled]);
+  }, [isHost, room?.phase, roomTransport, testBotsEnabled]);
 
-  // 3. Bot behaviors during Choosing and Drawing phases
+  // 3. Bot behaviors triggered when phase or turn changes
+  const currentPhaseKey = room ? `${room.code}:${room.turnIndex}:${room.phase}:${room.drawerId}` : "";
+
   useEffect(() => {
     if (!testBotsEnabled || !isHost || !room) {
       clearBotTimers();
+      activePhaseKeyRef.current = "";
       return;
     }
 
-    const turnKey = `${room.code}:${room.turnIndex}:${room.phase}:${room.drawerId}`;
-    if (lastTurnKeyRef.current !== turnKey) {
-      clearBotTimers();
-      lastTurnKeyRef.current = turnKey;
-    }
+    // Only initiate phase behaviors when the phase/turn actually changes
+    if (activePhaseKeyRef.current === currentPhaseKey) return;
+    activePhaseKeyRef.current = currentPhaseKey;
+    clearBotTimers();
 
-    // A. CHOOSING PHASE: Bots vote on slots
+    // A. CHOOSING PHASE: Bots vote on mystery slots
     if (room.phase === "choosing" && room.choices.length > 0) {
       const choiceCount = room.choices.length;
       const drawerId = room.drawerId;
       const botPlayers = room.players.filter((p) => isBotPlayer(p.id) && p.id !== drawerId);
 
-      for (const bot of botPlayers) {
-        if (room.choiceVotes?.[bot.id] !== undefined) continue;
-
-        const delay = 700 + Math.floor(Math.random() * 2200) + (ROOM_BOT_PROFILES.findIndex((b) => b.id === bot.id) * 300);
+      botPlayers.forEach((bot, index) => {
+        // Staggered realistic voting delays (e.g. 800ms, 1400ms, 2000ms, 2600ms, 3200ms)
+        const delay = 600 + (index * 600) + Math.floor(Math.random() * 500);
         const slot = Math.floor(Math.random() * choiceCount);
 
         const timer = window.setTimeout(() => {
+          const currentRoom = roomRef.current;
+          if (!currentRoom || currentRoom.phase !== "choosing") return;
+
           if (roomTransport === "online") {
             onlineBotsRef.current.get(bot.id)?.sendChoiceVote(slot);
           } else if (roomTransport === "local") {
-            // Local mode vote calculation
-            const currentVotes = { ...(room.choiceVotes ?? {}), [bot.id]: slot };
-            const eligible = room.players.filter((p) => p.id !== room.drawerId);
-            const votedCount = Object.keys(currentVotes).filter((pid) => eligible.some((p) => p.id === pid)).length;
-            const counts = room.choices.map((_, idx) => Object.values(currentVotes).filter((v) => v === idx).length);
+            // Local mode state update
+            const nextVotes = { ...(currentRoom.choiceVotes ?? {}), [bot.id]: slot };
+            const eligible = currentRoom.players.filter((p) => p.id !== currentRoom.drawerId);
+            const votedCount = Object.keys(nextVotes).filter((pid) => eligible.some((p) => p.id === pid)).length;
+            const counts = currentRoom.choices.map((_, idx) => Object.values(nextVotes).filter((v) => v === idx).length);
             const winningIndex = counts.reduce((best, count, idx) => count > counts[best] ? idx : best, 0);
-            const winningChoice = room.choices[winningIndex];
+            const winningChoice = currentRoom.choices[winningIndex];
 
             if (votedCount >= eligible.length && winningChoice) {
-              onSaveLocalRoom({
-                ...room,
+              onSaveLocalRoomRef.current({
+                ...currentRoom,
                 phase: "drawing",
                 answer: winningChoice,
                 choiceVotes: {},
                 guesses: [],
                 solved: [],
-                endAt: Date.now() + room.roundSeconds * 1000,
-                recentPromptKeys: [...room.recentPromptKeys, roomPromptKey(winningChoice)].slice(-32),
+                endAt: Date.now() + currentRoom.roundSeconds * 1000,
+                recentPromptKeys: [...currentRoom.recentPromptKeys, roomPromptKey(winningChoice)].slice(-32),
               });
             } else {
-              onSaveLocalRoom({ ...room, choiceVotes: currentVotes });
+              onSaveLocalRoomRef.current({ ...currentRoom, choiceVotes: nextVotes });
             }
           }
         }, delay);
 
         timersRef.current.push(timer);
-      }
+      });
     }
 
-    // B. DRAWING PHASE: Bots guess in chat
+    // B. DRAWING PHASE: Bots chat with wrong guesses and solve after time
     if (room.phase === "drawing" && room.answer?.answer) {
       const rawAnswer = room.answer.answer;
       const drawerId = room.drawerId;
       const botPlayers = room.players.filter((p) => isBotPlayer(p.id) && p.id !== drawerId);
 
-      // Schedule periodic random wrong guesses
       botPlayers.forEach((bot, botIndex) => {
-        // Random wrong guesses during the round
-        const wrongGuessDelay = 3000 + (botIndex * 3500) + Math.floor(Math.random() * 4000);
-        const wrongTimer = window.setTimeout(() => {
+        // Schedule 1 or 2 wrong guesses per bot during drawing
+        const wrongGuessDelay1 = 2500 + (botIndex * 2800) + Math.floor(Math.random() * 3000);
+        const wrongTimer1 = window.setTimeout(() => {
+          const currentRoom = roomRef.current;
+          if (!currentRoom || currentRoom.phase !== "drawing") return;
           const text = WRONG_GUESSES[Math.floor(Math.random() * WRONG_GUESSES.length)];
+
           if (roomTransport === "online") {
             onlineBotsRef.current.get(bot.id)?.sendGuess(text);
           } else if (roomTransport === "local") {
@@ -200,25 +213,28 @@ export function useRoomBots({
               correct: false,
               createdAt: Date.now(),
             };
-            onSaveLocalRoom({
-              ...room,
-              guesses: [...room.guesses.slice(-30), guessEntry],
+            onSaveLocalRoomRef.current({
+              ...currentRoom,
+              guesses: [...currentRoom.guesses.slice(-30), guessEntry],
             });
           }
-        }, wrongGuessDelay);
-        timersRef.current.push(wrongTimer);
+        }, wrongGuessDelay1);
+        timersRef.current.push(wrongTimer1);
 
-        // Chance to solve correctly after some seconds
-        const willSolve = Math.random() < 0.65;
+        // Chance to solve correctly after 8s - 25s
+        const willSolve = Math.random() < 0.70;
         if (willSolve) {
-          const solveDelay = 8000 + (botIndex * 4000) + Math.floor(Math.random() * 6000);
+          const solveDelay = 7000 + (botIndex * 4000) + Math.floor(Math.random() * 5000);
           const solveTimer = window.setTimeout(() => {
+            const currentRoom = roomRef.current;
+            if (!currentRoom || currentRoom.phase !== "drawing") return;
+
             if (roomTransport === "online") {
               onlineBotsRef.current.get(bot.id)?.sendGuess(rawAnswer);
             } else if (roomTransport === "local") {
-              const alreadySolved = room.solved.some((s) => s.playerId === bot.id);
+              const alreadySolved = currentRoom.solved.some((s) => s.playerId === bot.id);
               if (alreadySolved) return;
-              const remainingRatio = room.endAt ? Math.max(0, room.endAt - Date.now()) / (room.roundSeconds * 1000) : 0;
+              const remainingRatio = currentRoom.endAt ? Math.max(0, currentRoom.endAt - Date.now()) / (currentRoom.roundSeconds * 1000) : 0;
               const points = Math.round(100 + remainingRatio * 300);
               const guessEntry: RoomGuess = {
                 id: `bot-guess-win-${Date.now()}-${bot.id}`,
@@ -229,13 +245,19 @@ export function useRoomBots({
                 createdAt: Date.now(),
               };
               const drawerBonus = 50;
-              onSaveLocalRoom({
-                ...room,
-                guesses: [...room.guesses.slice(-30), guessEntry],
-                solved: [...room.solved, { playerId: bot.id, playerName: bot.name, points, solvedAt: Date.now() }],
-                players: room.players.map((p) => {
+              const nextSolved = [...currentRoom.solved, { playerId: bot.id, playerName: bot.name, points, solvedAt: Date.now() }];
+              const guessers = currentRoom.players.filter((p) => p.id !== currentRoom.drawerId);
+              const allSolved = nextSolved.length >= guessers.length;
+
+              onSaveLocalRoomRef.current({
+                ...currentRoom,
+                phase: allSolved ? "results" : currentRoom.phase,
+                endAt: allSolved ? null : currentRoom.endAt,
+                guesses: [...currentRoom.guesses.slice(-30), guessEntry],
+                solved: nextSolved,
+                players: currentRoom.players.map((p) => {
                   if (p.id === bot.id) return { ...p, score: p.score + points };
-                  if (p.id === room.drawerId) return { ...p, score: p.score + drawerBonus };
+                  if (p.id === currentRoom.drawerId) return { ...p, score: p.score + drawerBonus };
                   return p;
                 }),
               });
@@ -247,9 +269,9 @@ export function useRoomBots({
     }
 
     return () => {
-      clearBotTimers();
+      // Intentionally keep timers across re-renders within the same phase; phase change clears them above
     };
-  }, [isHost, onSaveLocalRoom, room, roomTransport, testBotsEnabled]);
+  }, [currentPhaseKey, isHost, roomTransport, testBotsEnabled]);
 
   return {
     botProfiles: ROOM_BOT_PROFILES,
