@@ -106,6 +106,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const [gridSize, setGridSize] = usePersistentState("room.grid.size", 24);
   const [wordFeedback, setWordFeedback] = usePersistentState<WordFeedbackMap>("feedback.room.words", {});
   const [testBotsEnabled, setTestBotsEnabled] = usePersistentState("room.testBotsEnabled", true);
+  const [resultsEndAt, setResultsEndAt] = useState<number | null>(null);
   const [feedbackTarget, setFeedbackTarget] = useState<WordFeedbackTarget | null>(null);
   const [feedbackContext, setFeedbackContext] = useState<WordFeedbackContext>("experience");
   const feedbackRoundsSinceAutoRef = useRef(0);
@@ -130,6 +131,9 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const secondsRemaining = room?.phase === "drawing" && room.endAt
     ? Math.max(0, Math.ceil((room.endAt - timerNow) / 1000))
     : room?.roundSeconds ?? 90;
+  const resultsSecondsRemaining = resultsEndAt
+    ? Math.max(0, Math.ceil((resultsEndAt - timerNow) / 1000))
+    : 10;
   const totalTurns = room ? Math.max(1, roomPlayers.length) * room.roundsPerPlayer : 0;
   const currentTurnNumber = room && room.turnIndex >= 0 ? Math.min(totalTurns, room.turnIndex + 1) : 0;
   const winner = room?.phase === "finished" ? sortedPlayers[0] ?? null : null;
@@ -368,10 +372,18 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   }, [isHost, room, roomPlayers, roomSolved.length, roomTransport]);
 
   useEffect(() => {
+    if (room?.phase === "results") {
+      setResultsEndAt((current) => current ?? (Date.now() + 10000));
+    } else {
+      setResultsEndAt(null);
+    }
+  }, [room?.phase, room?.turnIndex]);
+
+  useEffect(() => {
     if (roomTransport === "online") return;
     if (!room || !isHost || room.phase !== "results") return;
     if (feedbackTarget) return;
-    const timer = window.setTimeout(() => advanceTurn(room), 2500);
+    const timer = window.setTimeout(() => advanceTurn(room), 10000);
     return () => window.clearTimeout(timer);
   }, [feedbackTarget, isHost, room, roomTransport]);
 
@@ -880,6 +892,67 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
               <span className="room-choice-progress">
                 {submittedChoiceVotes}/{eligibleChoiceVoters.length} players voted
               </span>
+            </footer>
+          </section>
+        </div>
+      ) : null}
+      {room?.phase === "results" ? (
+        <div className="room-choice-layer room-results-layer" role="presentation">
+          <div className="room-choice-backdrop" />
+          <section aria-label="Round results" aria-modal="true" className="room-choice-dialog room-results-dialog" role="dialog">
+            <header className="room-results-header">
+              <span className="source-eyebrow">Round Over</span>
+              <h2>The word was</h2>
+              <div className="room-results-word-card">
+                <span className="category-pill">{room.answer?.categoryId ? room.answer.categoryId.replace(/^[^:]+:/, "") : "Prompt"}</span>
+                <strong className="revealed-word">{roomAnswerText.toUpperCase()}</strong>
+              </div>
+            </header>
+            <div className="room-results-body">
+              <div className="room-results-scoreboard">
+                <div className="room-results-score-list scrollable">
+                  {sortedPlayers.map((player) => {
+                    const solvedEntry = room.solved.find((s) => s.playerId === player.id);
+                    const isPlayerDrawer = player.id === room.drawerId;
+                    const solveRank = solvedEntry ? room.solved.findIndex((s) => s.playerId === player.id) + 1 : 0;
+                    const roundPoints = solvedEntry
+                      ? solvedEntry.points
+                      : isPlayerDrawer
+                        ? room.solved.length * 50
+                        : 0;
+
+                    return (
+                      <div className={`room-results-player-item ${solvedEntry ? "solved" : isPlayerDrawer ? "drawer" : ""}`} key={player.id}>
+                        <div className="player-meta">
+                          <span className="player-rank-icon">
+                            {solveRank === 1 ? "🥇" : solveRank === 2 ? "🥈" : solveRank === 3 ? "🥉" : isPlayerDrawer ? "🎨" : "❌"}
+                          </span>
+                          <b>{player.name}</b>
+                          {isBotPlayer(player.id) && <small className="bot-tag">BOT</small>}
+                          {isPlayerDrawer && <small className="role-tag">Drawer</small>}
+                        </div>
+                        <div className="score-meta">
+                          <span className={`round-gain ${roundPoints > 0 ? "gain-positive" : "gain-zero"}`}>
+                            {roundPoints > 0 ? `+${roundPoints} pts` : "0 pts"}
+                          </span>
+                          <small className="total-badge">Total: {player.score} pts</small>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+            <footer className="room-results-footer">
+              <span className="room-results-timer">
+                <span className="material-symbols-outlined">timer</span>
+                Next round in {resultsSecondsRemaining}s...
+              </span>
+              {isHost && (
+                <button className="room-results-skip-button" onClick={() => advanceTurn(room)} type="button">
+                  <span className="material-symbols-outlined">skip_next</span>Next Round Now
+                </button>
+              )}
             </footer>
           </section>
         </div>

@@ -13906,6 +13906,176 @@ body.resizing-panels .layout-resizer::after {
   color: #6d665c;
 }
 
+.room-results-dialog {
+  width: min(620px, calc(100vw - 32px));
+  gap: 14px;
+}
+
+.room-results-header {
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+}
+
+.room-results-word-card {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  margin-top: 4px;
+  padding: 10px 28px;
+  border: 2px dashed rgba(165, 79, 75, 0.45);
+  border-radius: 10px;
+  background: rgba(255, 250, 240, 0.88);
+  box-shadow: 2px 3px 0 rgba(78, 67, 45, 0.1);
+}
+
+.room-results-word-card .category-pill {
+  color: #716a5b;
+  font: 800 10px/1 Inter, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.room-results-word-card .revealed-word {
+  color: #a54f4b;
+  font: 900 clamp(24px, 3.5vw, 34px)/1.05 var(--font-sketch, "Shantell Sans", cursive);
+  letter-spacing: 0.02em;
+}
+
+.room-results-scoreboard {
+  display: grid;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.room-results-score-list {
+  display: grid;
+  gap: 6px;
+  max-height: 220px;
+  padding: 2px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.room-results-player-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border: 1px solid rgba(78, 67, 45, 0.22);
+  border-radius: 8px;
+  background: rgba(255, 250, 240, 0.78);
+  transition: transform 120ms ease;
+}
+
+.room-results-player-item.solved {
+  background: rgba(232, 246, 233, 0.9);
+  border-color: rgba(46, 125, 50, 0.38);
+}
+
+.room-results-player-item.drawer {
+  background: rgba(255, 248, 225, 0.95);
+  border-color: rgba(212, 160, 23, 0.45);
+}
+
+.room-results-player-item .player-meta {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-sketch, "Shantell Sans", cursive);
+}
+
+.room-results-player-item .player-rank-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.room-results-player-item .role-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 5px;
+  color: #8c6812;
+  border: 1px solid rgba(140, 104, 18, 0.35);
+  border-radius: 4px;
+  background: rgba(245, 215, 110, 0.25);
+  font: 900 8px/1 var(--font-sketch, "Shantell Sans", cursive);
+  letter-spacing: 0.04em;
+}
+
+.room-results-player-item .score-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.room-results-player-item .round-gain {
+  font: 900 15px/1 var(--font-sketch, "Shantell Sans", cursive);
+}
+
+.room-results-player-item .round-gain.gain-positive {
+  color: #2e7d32;
+}
+
+.room-results-player-item .round-gain.gain-zero {
+  color: #8a8275;
+  font-size: 13px;
+}
+
+.room-results-player-item .total-badge {
+  color: #615a4e;
+  font: 800 11px/1 Inter, sans-serif;
+  text-transform: uppercase;
+}
+
+.room-results-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(61, 55, 45, 0.25);
+  font-family: var(--font-sketch, "Shantell Sans", cursive);
+}
+
+.room-results-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #615a4e;
+  font: 800 13px/1 var(--font-sketch, "Shantell Sans", cursive);
+}
+
+.room-results-timer .material-symbols-outlined {
+  font-size: 18px;
+  color: #a54f4b;
+}
+
+.room-results-skip-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  color: #302e29;
+  border: 1.5px solid rgba(61, 55, 45, 0.45);
+  border-radius: 8px;
+  background: #f7d566;
+  box-shadow: 2px 3px 0 rgba(61, 55, 45, 0.2);
+  font: 900 13px/1 var(--font-sketch, "Shantell Sans", cursive);
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.room-results-skip-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 2px 4px 0 rgba(61, 55, 45, 0.25);
+}
+
+.room-results-skip-button:active {
+  transform: translateY(1px);
+  box-shadow: 1px 1px 0 rgba(61, 55, 45, 0.2);
+}
+
 .room-guess-card {
   display: flex;
   flex-direction: column;

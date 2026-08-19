@@ -523,7 +523,7 @@ export class FindrawRoom {
     this.room.endAt = null;
     this.room.updatedAt = Date.now();
     await this.save();
-    await this.state.storage.setAlarm(Date.now() + 2500);
+    await this.state.storage.setAlarm(Date.now() + 10000);
     this.broadcastState();
   }
 
