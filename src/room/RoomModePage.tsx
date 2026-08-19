@@ -106,7 +106,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const [wordFeedback, setWordFeedback] = usePersistentState<WordFeedbackMap>("feedback.room.words", {});
   const [feedbackTarget, setFeedbackTarget] = useState<WordFeedbackTarget | null>(null);
   const [feedbackContext, setFeedbackContext] = useState<WordFeedbackContext>("experience");
-  const feedbackRoundsSinceAutoRef = useRef(5);
+  const feedbackRoundsSinceAutoRef = useRef(0);
   const lastAutoFeedbackTurnRef = useRef<string | null>(null);
   const resizeStateRef = useRef<ResizeState | null>(null);
   const onlineRoomRef = useRef<OnlineRoomClient | null>(null);

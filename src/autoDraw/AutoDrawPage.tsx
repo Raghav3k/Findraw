@@ -92,7 +92,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
   const [twitchSession, setTwitchSession] = useState<TwitchSession>(EMPTY_TWITCH_SESSION);
   const [feedbackTarget, setFeedbackTarget] = useState<WordFeedbackTarget | null>(null);
   const [feedbackContext, setFeedbackContext] = useState<WordFeedbackContext>("experience");
-  const feedbackRoundsSinceAutoRef = useRef(5);
+  const feedbackRoundsSinceAutoRef = useRef(0);
   const pendingFeedbackActionRef = useRef<(() => void) | null>(null);
   const [chatMessages, setChatMessages] = useState<LiveChatMessage[]>([]);
   const [solvers, setSolvers] = useState<SolvedViewer[]>([]);
@@ -273,7 +273,12 @@ export function AutoDrawPage({ onNavigate }: Props) {
       categoryId: asset.category,
       difficulty: asset.difficulty === "Easy" ? "easy" : asset.difficulty === "Hard" ? "hard" : "medium",
     };
-    if (!shouldPromptForWordFeedback(wordFeedback, target, feedbackRoundsSinceAutoRef.current)) return false;
+    if (!shouldPromptForWordFeedback(wordFeedback, target, feedbackRoundsSinceAutoRef.current, {
+      durationSeconds: stageIndex,
+      strokeCount: stageIndex,
+      chatSolved: status === "complete",
+      didSkip: false,
+    })) return false;
     feedbackRoundsSinceAutoRef.current = 0;
     pendingFeedbackActionRef.current = afterFeedback ?? null;
     setFeedbackContext("experience");
@@ -288,7 +293,17 @@ export function AutoDrawPage({ onNavigate }: Props) {
       categoryId: asset.category,
       difficulty: asset.difficulty === "Easy" ? "easy" : asset.difficulty === "Hard" ? "hard" : "medium",
     };
-    if (!shouldPromptForWordFeedback(wordFeedback, target, feedbackRoundsSinceAutoRef.current + 1)) return false;
+
+    // Silently log skip in background so priority queue adjusts
+    setWordFeedback((current) => recordWordFeedback(current, target, "skip"));
+
+    feedbackRoundsSinceAutoRef.current += 1;
+    if (!shouldPromptForWordFeedback(wordFeedback, target, feedbackRoundsSinceAutoRef.current, {
+      durationSeconds: stageIndex,
+      strokeCount: stageIndex,
+      didSkip: true,
+      instantSkip: stageIndex <= 1,
+    })) return false;
     feedbackRoundsSinceAutoRef.current = 0;
     pendingFeedbackActionRef.current = afterFeedback ?? null;
     setFeedbackContext("skip");

@@ -92,8 +92,10 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   const [currentPrompt, setCurrentPrompt] = useState<CategoryPrompt>(() => pickNextPrompt(selectedCategoryId, [], { feedback: wordFeedback, mode: "artist" }));
   const [feedbackTarget, setFeedbackTarget] = useState<WordFeedbackTarget | null>(null);
   const [feedbackContext, setFeedbackContext] = useState<WordFeedbackContext>("experience");
-  const feedbackRoundsSinceAutoRef = useRef(5);
+  const feedbackRoundsSinceAutoRef = useRef(0);
   const pendingFeedbackActionRef = useRef<(() => void) | null>(null);
+  const roundStartTimeRef = useRef(Date.now());
+  const strokeCountRef = useRef(0);
   const recentPromptKeysRef = useRef<string[]>([getPromptKey(currentPrompt)]);
   const [secondsRemaining, setSecondsRemaining] = useState(wordDurationSeconds);
   const [revealedLetters, setRevealedLetters] = useState<number[]>([]);
@@ -315,23 +317,22 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       categoryId: prompt.categoryId,
       difficulty: prompt.difficulty,
     };
-    if (!shouldPromptForWordFeedback(wordFeedback, target, feedbackRoundsSinceAutoRef.current)) return false;
+    const durationSeconds = Math.max(0, (Date.now() - roundStartTimeRef.current) / 1000);
+    const strokeCount = strokeCountRef.current;
+    const chatSolved = solvedViewers.length >= correctGuessTarget;
+
+    if (!shouldPromptForWordFeedback(wordFeedback, target, feedbackRoundsSinceAutoRef.current, {
+      durationSeconds,
+      strokeCount,
+      chatSolved,
+      didSkip: false,
+      instantSkip: false,
+    })) return false;
+
     feedbackRoundsSinceAutoRef.current = 0;
     pendingFeedbackActionRef.current = afterFeedback ?? null;
     setFeedbackContext("experience");
     setFeedbackTarget(target);
-    return true;
-  };
-
-  const openSkippedWordFeedback = (prompt: CategoryPrompt = currentPrompt, afterFeedback?: () => void) => {
-    if (prompt.categoryId === "custom" || prompt.answer.startsWith("Error:")) return false;
-    pendingFeedbackActionRef.current = afterFeedback ?? null;
-    setFeedbackContext("skip");
-    setFeedbackTarget({
-      answer: prompt.answer,
-      categoryId: prompt.categoryId,
-      difficulty: prompt.difficulty,
-    });
     return true;
   };
 
@@ -345,6 +346,8 @@ export function Dashboard({ onNavigate }: DashboardProps) {
 
   const beginPrompt = async (prompt: CategoryPrompt) => {
     activeRoundIdRef.current = null;
+    roundStartTimeRef.current = Date.now();
+    strokeCountRef.current = 0;
     preparePrompt(prompt);
     setRoundStatus("playing");
     if (!twitchSession.authenticated || twitchSession.eventSubStatus !== "connected") {
@@ -371,7 +374,40 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     if (roundActive) {
       void endServerRound();
       setRoundStatus("ended");
-      if (openSkippedWordFeedback(currentPrompt, () => void beginPrompt(chooseNextPrompt()))) return;
+
+      const prompt = currentPrompt;
+      const target: WordFeedbackTarget = {
+        answer: prompt.answer,
+        categoryId: prompt.categoryId,
+        difficulty: prompt.difficulty,
+      };
+      const durationSeconds = Math.max(0, (Date.now() - roundStartTimeRef.current) / 1000);
+      const strokeCount = strokeCountRef.current;
+      const isInstant = durationSeconds < 3 || strokeCount === 0;
+
+      // Silently record skip in background so priority queue ranking stays accurate without UI spam
+      if (target.categoryId !== "custom" && !target.answer.startsWith("Error:")) {
+        setWordFeedback((current) => recordWordFeedback(current, target, "skip"));
+      }
+
+      // Only prompt for skip feedback if medium/hard, not instant, streamer drew strokes, and cooldown met
+      if (target.difficulty !== "easy" && !isInstant && strokeCount > 0 && target.categoryId !== "custom" && !target.answer.startsWith("Error:")) {
+        feedbackRoundsSinceAutoRef.current += 1;
+        const shouldPrompt = shouldPromptForWordFeedback(wordFeedback, target, feedbackRoundsSinceAutoRef.current, {
+          didSkip: true,
+          durationSeconds,
+          strokeCount,
+          instantSkip: false,
+        });
+        if (shouldPrompt) {
+          feedbackRoundsSinceAutoRef.current = 0;
+          pendingFeedbackActionRef.current = () => void beginPrompt(chooseNextPrompt());
+          setFeedbackContext("skip");
+          setFeedbackTarget(target);
+          return;
+        }
+      }
+
       void beginPrompt(chooseNextPrompt());
     }
   };
@@ -596,7 +632,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
               <div className="canvas-header simplified-canvas-header">
                 <div className={`timer ${secondsRemaining <= 10 && roundActive ? "timer-warning" : ""}`}>{formattedTime}</div>
               </div>
-              <ExcalidrawStage canvasColor={canvasColor} gridSize={gridSize} hoverMenuDelay={hoverMenuDelay} hoverMenusEnabled={hoverMenusEnabled} onCanvasColorChange={setCanvasColor} onGridSizeChange={setGridSize} shortcuts={shortcuts} />
+              <ExcalidrawStage canvasColor={canvasColor} gridSize={gridSize} hoverMenuDelay={hoverMenuDelay} hoverMenusEnabled={hoverMenusEnabled} onCanvasColorChange={setCanvasColor} onGridSizeChange={setGridSize} onOperationsChange={(ops) => { strokeCountRef.current = ops.length; }} shortcuts={shortcuts} />
             </section>
 
             <section className="round-controls" aria-label="Round controls">

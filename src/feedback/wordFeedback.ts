@@ -87,20 +87,66 @@ export const recordWordFeedback = (
   };
 };
 
+export type WordFeedbackTelemetry = {
+  durationSeconds?: number;
+  strokeCount?: number;
+  chatSolved?: boolean;
+  didSkip?: boolean;
+  instantSkip?: boolean;
+};
+
 export const shouldPromptForWordFeedback = (
   feedback: WordFeedbackMap,
   target: WordFeedbackTarget,
   roundsSincePrompt: number,
-) => {
-  if (target.difficulty === "easy" || roundsSincePrompt < 5) return false;
-  const storedStats = feedback[getWordFeedbackKey(target)];
-  if (!storedStats) return target.difficulty === "hard" && roundsSincePrompt >= 7;
+  telemetry?: WordFeedbackTelemetry,
+): boolean => {
+  // 1. Easy words NEVER prompt for feedback under any circumstances
+  if (target.difficulty === "easy") return false;
 
-  const stats = normalizeWordFeedbackStats(storedStats);
+  // 2. Strict minimum round cooldown between feedback popups
+  if (roundsSincePrompt < 6) return false;
+
+  // 3. Instant skip (< 3s or 0 strokes) should be recorded silently, never modal-prompted
+  if (telemetry?.instantSkip) return false;
+
+  // 4. Handle skip action
+  if (telemetry?.didSkip) {
+    // Only prompt on skip if the user actually attempted drawing or spent substantial time
+    const attemptedDrawing = (telemetry.strokeCount ?? 0) > 0;
+    const spentTime = (telemetry.durationSeconds ?? 0) >= 15;
+    if (!attemptedDrawing && !spentTime) return false;
+
+    // If they struggled on medium/hard after attempting, prompt for skip reason
+    return target.difficulty === "hard" || target.difficulty === "medium";
+  }
+
+  // 5. Handle completed round (timeout or solves)
+  const storedStats = feedback[getWordFeedbackKey(target)];
+  const stats = storedStats ? normalizeWordFeedbackStats(storedStats) : null;
+
+  // If chat solved the word smoothly, don't interrupt unless word has a history of bad ratings
+  if (telemetry?.chatSolved) {
+    if (!stats) return false;
+    const badSignals = stats.bad + stats.notFun;
+    return badSignals >= 2 && badSignals > stats.veryGood;
+  }
+
+  // If round timed out with 0 solves despite streamer drawing strokes -> genuine struggle
+  if (telemetry && !telemetry.chatSolved && (telemetry.strokeCount ?? 0) > 0) {
+    return true;
+  }
+
+  // General historical check for unassisted/room mode
+  if (!stats) {
+    return target.difficulty === "hard" && roundsSincePrompt >= 8;
+  }
+
   const badSignals = stats.bad + stats.notFun + stats.skipped;
   const strongSignals = stats.veryGood;
   if (badSignals >= 2 && badSignals >= strongSignals) return true;
   if (target.difficulty === "hard" && roundsSincePrompt >= 8 && stats.submitted < 2) return true;
   if (target.difficulty === "medium" && roundsSincePrompt >= 10 && stats.bad > stats.veryGood) return true;
+
   return false;
 };
