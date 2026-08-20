@@ -881,6 +881,10 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
               {roomChoices.map((choice, index) => {
                 const voteCount = choiceVoteCounts[index] ?? 0;
                 const selected = localChoiceVote === index;
+                const categoryName = choice.categoryId
+                  ? choice.categoryId.replace(/^[^:]+:/, "").replace(/[-_]/g, " ")
+                  : "General";
+
                 return (
                   <button
                     className={`room-choice-card ${selected ? "selected" : ""}`}
@@ -889,9 +893,25 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                     onClick={() => voteForChoice(index)}
                     type="button"
                   >
-                    <span className="room-choice-slot">Slot {index + 1}</span>
-                    <strong>{isDrawer ? choice.answer : "Hidden word"}</strong>
-                    <small>{voteCount} vote{voteCount === 1 ? "" : "s"}</small>
+                    <div className="room-choice-card-header">
+                      <span className="room-choice-slot">Slot {index + 1}</span>
+                      <span className="room-choice-category-tag">{categoryName}</span>
+                    </div>
+
+                    <div className="room-choice-word-container">
+                      {isDrawer ? (
+                        <strong className="room-choice-word">{choice.answer}</strong>
+                      ) : (
+                        <div className="room-choice-mystery-cover">
+                          <span className="mystery-icon">?</span>
+                          <small className="mystery-label">Mystery Word</small>
+                        </div>
+                      )}
+                    </div>
+
+                    <span className="room-choice-votes-badge">
+                      {voteCount} vote{voteCount === 1 ? "" : "s"}
+                    </span>
                   </button>
                 );
               })}
