@@ -926,7 +926,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                       <div className={`room-results-player-item ${solvedEntry ? "solved" : isPlayerDrawer ? "drawer" : ""}`} key={player.id}>
                         <div className="player-meta">
                           <span className="player-rank-icon">
-                            {solveRank === 1 ? "🥇" : solveRank === 2 ? "🥈" : solveRank === 3 ? "🥉" : isPlayerDrawer ? "🎨" : "❌"}
+                            {isPlayerDrawer ? "🎨" : solveRank === 1 ? "🥇" : solveRank === 2 ? "🥈" : solveRank === 3 ? "🥉" : solvedEntry ? "✅" : "❌"}
                           </span>
                           <b>{player.name}</b>
                           {isBotPlayer(player.id) && <small className="bot-tag">BOT</small>}
