@@ -12979,13 +12979,17 @@ body.resizing-panels .layout-resizer::after {
 }
 
 .room-guess-list {
-  display: grid;
-  align-content: start;
+  display: flex;
+  flex-direction: column;
   gap: 6px;
   min-height: 0;
   padding: 0 10px 10px;
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+.room-guess-list > :first-child {
+  margin-top: auto;
 }
 
 .room-guess-list p {
