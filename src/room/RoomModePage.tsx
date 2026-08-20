@@ -113,6 +113,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const lastAutoFeedbackTurnRef = useRef<string | null>(null);
   const resizeStateRef = useRef<ResizeState | null>(null);
   const onlineRoomRef = useRef<OnlineRoomClient | null>(null);
+  const chatScrollRef = useRef<HTMLDivElement | null>(null);
 
   const roomPlayers = room?.players ?? [];
   const roomChoices = room?.choices ?? [];
@@ -408,6 +409,12 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       advanceTurn(room);
     }
   }, [advanceTurn, feedbackTarget, isHost, resultsEndAt, room, roomTransport, timerNow]);
+
+  useEffect(() => {
+    if (chatScrollRef.current) {
+      chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
+    }
+  }, [roomGuesses.length]);
 
   useEffect(() => {
     if (roomTransport !== "online" || !room || !isHost || room.phase !== "choosing" || roomChoices.length > 0) return;
@@ -844,8 +851,8 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
 
             <section className="feed-card room-guess-card">
               <div className="card-title"><h3><span className="material-symbols-outlined">forum</span>Room chat</h3><b>{roomGuesses.length}</b></div>
-              <div className="room-guess-list scrollable">
-                {roomGuesses.length ? roomGuesses.slice().reverse().map((item) => (
+              <div className="room-guess-list scrollable" ref={chatScrollRef}>
+                {roomGuesses.length ? roomGuesses.map((item) => (
                   <p className={item.correct ? "correct" : ""} key={item.id}><strong>{item.playerName}</strong>{item.correct ? "guessed correctly" : item.text}</p>
                 )) : null}
               </div>
