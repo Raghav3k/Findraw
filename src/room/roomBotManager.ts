@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { RoomGuess, RoomPlayer, RoomState } from "./localRoomState";
-import { normalizeGuess, roomPromptKey } from "./localRoomState";
+import { roomPromptKey } from "./localRoomState";
 import { connectOnlineRoom, type OnlineRoomClient } from "./onlineRoomClient";
 
 export type BotProfile = {
@@ -148,7 +148,7 @@ export function useRoomBots({
       const botPlayers = room.players.filter((p) => isBotPlayer(p.id) && p.id !== drawerId);
 
       botPlayers.forEach((bot, index) => {
-        // Staggered realistic voting delays (e.g. 800ms, 1400ms, 2000ms, 2600ms, 3200ms)
+        // Staggered realistic voting delays (e.g. 600ms, 1200ms, 1800ms, 2400ms, 3000ms)
         const delay = 600 + (index * 600) + Math.floor(Math.random() * 500);
         const slot = Math.floor(Math.random() * choiceCount);
 
@@ -188,43 +188,57 @@ export function useRoomBots({
       });
     }
 
-    // B. DRAWING PHASE: Bots chat with wrong guesses and solve after time
+    // B. DRAWING PHASE: Realistic Bot Guessing & Solving
     if (room.phase === "drawing" && room.answer?.answer) {
       const rawAnswer = room.answer.answer;
       const drawerId = room.drawerId;
       const botPlayers = room.players.filter((p) => isBotPlayer(p.id) && p.id !== drawerId);
 
+      // Randomly pick ONLY 1 or 2 bots to correctly solve this round (the rest will fail and get 0 pts)
+      const shuffledBots = [...botPlayers].sort(() => Math.random() - 0.5);
+      const solverCount = Math.min(shuffledBots.length, Math.floor(Math.random() * 2) + 1); // 1 or 2 bots solve
+      const solverBotIds = new Set(shuffledBots.slice(0, solverCount).map((b) => b.id));
+
       botPlayers.forEach((bot, botIndex) => {
-        // Schedule 1 or 2 wrong guesses per bot during drawing
-        const wrongGuessDelay1 = 2500 + (botIndex * 2800) + Math.floor(Math.random() * 3000);
-        const wrongTimer1 = window.setTimeout(() => {
-          const currentRoom = roomRef.current;
-          if (!currentRoom || currentRoom.phase !== "drawing") return;
-          const text = WRONG_GUESSES[Math.floor(Math.random() * WRONG_GUESSES.length)];
+        const isSolver = solverBotIds.has(bot.id);
 
-          if (roomTransport === "online") {
-            onlineBotsRef.current.get(bot.id)?.sendGuess(text);
-          } else if (roomTransport === "local") {
-            const guessEntry: RoomGuess = {
-              id: `bot-guess-${Date.now()}-${bot.id}`,
-              playerId: bot.id,
-              playerName: bot.name,
-              text,
-              correct: false,
-              createdAt: Date.now(),
-            };
-            onSaveLocalRoomRef.current({
-              ...currentRoom,
-              guesses: [...currentRoom.guesses.slice(-30), guessEntry],
-            });
-          }
-        }, wrongGuessDelay1);
-        timersRef.current.push(wrongTimer1);
+        // 1. Schedule 1 to 3 wrong guesses for every bot at various intervals
+        const wrongGuessCount = isSolver ? 1 : 2 + Math.floor(Math.random() * 2);
+        for (let g = 0; g < wrongGuessCount; g++) {
+          const wrongDelay = 4000 + (botIndex * 3000) + (g * 14000) + Math.floor(Math.random() * 5000);
+          const wrongTimer = window.setTimeout(() => {
+            const currentRoom = roomRef.current;
+            if (!currentRoom || currentRoom.phase !== "drawing") return;
+            // Don't post wrong guesses if bot already solved
+            if (currentRoom.solved.some((s) => s.playerId === bot.id)) return;
 
-        // Chance to solve correctly after 8s - 25s
-        const willSolve = Math.random() < 0.70;
-        if (willSolve) {
-          const solveDelay = 7000 + (botIndex * 4000) + Math.floor(Math.random() * 5000);
+            const text = WRONG_GUESSES[Math.floor(Math.random() * WRONG_GUESSES.length)];
+
+            if (roomTransport === "online") {
+              onlineBotsRef.current.get(bot.id)?.sendGuess(text);
+            } else if (roomTransport === "local") {
+              const guessEntry: RoomGuess = {
+                id: `bot-guess-${Date.now()}-${bot.id}-${g}`,
+                playerId: bot.id,
+                playerName: bot.name,
+                text,
+                correct: false,
+                createdAt: Date.now(),
+              };
+              onSaveLocalRoomRef.current({
+                ...currentRoom,
+                guesses: [...currentRoom.guesses.slice(-30), guessEntry],
+              });
+            }
+          }, wrongDelay);
+          timersRef.current.push(wrongTimer);
+        }
+
+        // 2. If this bot is one of the chosen solvers, schedule its correct solve after human-like drawing time (e.g. 14s to 45s)
+        if (isSolver) {
+          const solverIndex = shuffledBots.findIndex((b) => b.id === bot.id);
+          const solveDelay = 12000 + (solverIndex * 15000) + Math.floor(Math.random() * 8000);
+
           const solveTimer = window.setTimeout(() => {
             const currentRoom = roomRef.current;
             if (!currentRoom || currentRoom.phase !== "drawing") return;
