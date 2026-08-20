@@ -14032,6 +14032,103 @@ body.resizing-panels .layout-resizer::after {
   letter-spacing: 0.02em;
 }
 
+.room-results-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.room-results-feedback-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 5px 12px;
+  border: 1.5px solid rgba(78, 67, 45, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 250, 240, 0.88);
+  box-shadow: 1px 2px 0 rgba(78, 67, 45, 0.08);
+}
+
+.feedback-bar-title {
+  color: #685e50;
+  font: 900 10px/1 var(--font-sketch, "Shantell Sans", cursive);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.feedback-rating-pills {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rating-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border: 1.5px solid rgba(78, 67, 45, 0.25);
+  border-radius: 999px;
+  background: #ffffff;
+  color: #302e29;
+  font: 900 11px/1 var(--font-sketch, "Shantell Sans", cursive);
+  cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.rating-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 1px 2px 0 rgba(78, 67, 45, 0.15);
+}
+
+.rating-pill:active {
+  transform: translateY(1px);
+}
+
+.rating-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.dot-green {
+  background: #2e7d32;
+  box-shadow: 0 0 3px rgba(46, 125, 50, 0.4);
+}
+
+.dot-yellow {
+  background: #f9a825;
+  box-shadow: 0 0 3px rgba(249, 168, 37, 0.4);
+}
+
+.dot-red {
+  background: #d32f2f;
+  box-shadow: 0 0 3px rgba(211, 47, 47, 0.4);
+}
+
+.rating-pill.pill-good.active {
+  border-color: #2e7d32;
+  background: #e8f5e9;
+  color: #1b5e20;
+  box-shadow: 1px 2px 0 rgba(46, 125, 50, 0.25);
+}
+
+.rating-pill.pill-mid.active {
+  border-color: #f9a825;
+  background: #fffde7;
+  color: #f57f17;
+  box-shadow: 1px 2px 0 rgba(249, 168, 37, 0.25);
+}
+
+.rating-pill.pill-bad.active {
+  border-color: #d32f2f;
+  background: #ffebee;
+  color: #b71c1c;
+  box-shadow: 1px 2px 0 rgba(211, 47, 47, 0.25);
+}
+
 .room-results-scoreboard {
   display: grid;
   gap: 4px;

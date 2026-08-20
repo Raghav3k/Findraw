@@ -16,11 +16,8 @@ import { CategorySelectionTools } from "../dashboard/CategorySelectionTools";
 import { CategoryPickerWindow } from "../ui/CategoryPickerWindow";
 import { WorkspaceIdentity } from "../ui/WorkspaceIdentity";
 import { usePersistentState } from "../ui/usePersistentState";
-import { WordFeedbackModal } from "../feedback/WordFeedbackModal";
 import {
   recordWordFeedback,
-  shouldPromptForWordFeedback,
-  type WordFeedbackContext,
   type WordFeedbackMap,
   type WordFeedbackRating,
   type WordFeedbackTarget,
@@ -107,10 +104,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const [wordFeedback, setWordFeedback] = usePersistentState<WordFeedbackMap>("feedback.room.words", {});
   const [testBotsEnabled, setTestBotsEnabled] = usePersistentState("room.testBotsEnabled", true);
   const [resultsEndAt, setResultsEndAt] = useState<number | null>(null);
-  const [feedbackTarget, setFeedbackTarget] = useState<WordFeedbackTarget | null>(null);
-  const [feedbackContext, setFeedbackContext] = useState<WordFeedbackContext>("experience");
-  const feedbackRoundsSinceAutoRef = useRef(0);
-  const lastAutoFeedbackTurnRef = useRef<string | null>(null);
+  const [currentRoundRating, setCurrentRoundRating] = useState<WordFeedbackRating | null>(null);
   const resizeStateRef = useRef<ResizeState | null>(null);
   const onlineRoomRef = useRef<OnlineRoomClient | null>(null);
   const chatScrollRef = useRef<HTMLDivElement | null>(null);
@@ -402,13 +396,18 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   }, [room?.phase, room?.turnIndex]);
 
   useEffect(() => {
+    if (room?.phase === "choosing" || room?.phase === "drawing") {
+      setCurrentRoundRating(null);
+    }
+  }, [room?.phase, room?.turnIndex]);
+
+  useEffect(() => {
     if (roomTransport === "online") return;
     if (!room || !isHost || room.phase !== "results" || !resultsEndAt) return;
-    if (feedbackTarget) return;
     if (Date.now() >= resultsEndAt) {
       advanceTurn(room);
     }
-  }, [advanceTurn, feedbackTarget, isHost, resultsEndAt, room, roomTransport, timerNow]);
+  }, [advanceTurn, isHost, resultsEndAt, room, roomTransport, timerNow]);
 
   useEffect(() => {
     if (chatScrollRef.current) {
@@ -420,23 +419,6 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     if (roomTransport !== "online" || !room || !isHost || room.phase !== "choosing" || roomChoices.length > 0) return;
     onlineRoomRef.current?.sendChoices(pickRoomChoices(room.categorySelection, room.recentPromptKeys, 3, wordFeedback));
   }, [isHost, room, roomChoices.length, roomTransport, wordFeedback]);
-
-  useEffect(() => {
-    if (!room?.answer || room.phase !== "results" || !roomAnswerText) return;
-    const turnKey = `${room.code}:${room.turnIndex}:${room.answer.categoryId}:${roomAnswerText}`;
-    if (lastAutoFeedbackTurnRef.current === turnKey) return;
-    lastAutoFeedbackTurnRef.current = turnKey;
-    feedbackRoundsSinceAutoRef.current += 1;
-    const target: WordFeedbackTarget = {
-      answer: roomAnswerText,
-      categoryId: room.answer.categoryId,
-      difficulty: room.answer.difficulty,
-    };
-    if (!shouldPromptForWordFeedback(wordFeedback, target, feedbackRoundsSinceAutoRef.current)) return;
-    feedbackRoundsSinceAutoRef.current = 0;
-    setFeedbackContext("experience");
-    setFeedbackTarget(target);
-  }, [room?.answer, room?.code, room?.phase, room?.turnIndex, roomAnswerText, wordFeedback]);
 
   useEffect(() => {
     const handlePointerMove = (event: PointerEvent) => {
@@ -611,20 +593,15 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     if (roomTransport === "online" && isDrawer) onlineRoomRef.current?.sendDrawingPreview(operation);
   }, [isDrawer, roomTransport]);
 
-  const openWordFeedback = () => {
+  const rateCurrentRoundWord = (rating: WordFeedbackRating) => {
     if (!room?.answer || !roomAnswerText || roomAnswerText.startsWith("Error:")) return;
-    setFeedbackContext("experience");
-    setFeedbackTarget({
+    setCurrentRoundRating(rating);
+    const target: WordFeedbackTarget = {
       answer: roomAnswerText,
       categoryId: room.answer.categoryId,
       difficulty: room.answer.difficulty,
-    });
-  };
-
-  const submitWordFeedback = (rating: WordFeedbackRating | "skip") => {
-    if (!feedbackTarget) return;
-    setWordFeedback((current) => recordWordFeedback(current, feedbackTarget, rating));
-    setFeedbackTarget(null);
+    };
+    setWordFeedback((current) => recordWordFeedback(current, target, rating));
   };
 
   const selectedOption = {
@@ -780,9 +757,6 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
               <div className="round-word-mask">
                 {room?.phase === "drawing" && isDrawer ? roomAnswerText.toUpperCase() : room?.answer?.mask ?? maskedAnswer(roomAnswerText || null)}
               </div>
-              <button aria-label="Give word feedback" className="word-feedback-trigger" disabled={!room?.answer} onClick={openWordFeedback} title="Give word feedback" type="button">
-                <span className="material-symbols-outlined">rate_review</span>
-              </button>
             </section>
 
             <section className="canvas-card room-canvas-card">
@@ -937,6 +911,39 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
               </div>
             </header>
             <div className="room-results-body">
+              <div className="room-results-feedback-bar">
+                <span className="feedback-bar-title">Word rating</span>
+                <div className="feedback-rating-pills">
+                  <button
+                    className={`rating-pill pill-good ${currentRoundRating === "very_good" ? "active" : ""}`}
+                    onClick={() => rateCurrentRoundWord("very_good")}
+                    title="Good word / fun to draw & guess"
+                    type="button"
+                  >
+                    <span className="rating-dot dot-green" />
+                    <span>Good</span>
+                  </button>
+                  <button
+                    className={`rating-pill pill-mid ${currentRoundRating === "mid" ? "active" : ""}`}
+                    onClick={() => rateCurrentRoundWord("mid")}
+                    title="Okay / average word"
+                    type="button"
+                  >
+                    <span className="rating-dot dot-yellow" />
+                    <span>Mid</span>
+                  </button>
+                  <button
+                    className={`rating-pill pill-bad ${currentRoundRating === "bad" ? "active" : ""}`}
+                    onClick={() => rateCurrentRoundWord("bad")}
+                    title="Bad / difficult or unenjoyable word"
+                    type="button"
+                  >
+                    <span className="rating-dot dot-red" />
+                    <span>Bad</span>
+                  </button>
+                </div>
+              </div>
+
               <div className="room-results-scoreboard">
                 <div className="room-results-score-list scrollable">
                   {sortedPlayers.map((player) => {
@@ -985,13 +992,6 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
           </section>
         </div>
       ) : null}
-      <WordFeedbackModal
-        context={feedbackContext}
-        modeLabel="Room Mode"
-        onClose={() => setFeedbackTarget(null)}
-        onSubmit={submitWordFeedback}
-        target={feedbackTarget}
-      />
     </div>
   );
 }
