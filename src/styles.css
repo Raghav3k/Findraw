@@ -1401,6 +1401,24 @@ button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
   object-fit: contain;
   border-radius: 4px;
 }
+.camera-category-badge {
+  position: absolute !important;
+  top: 14px;
+  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 5px;
+  border: 1px dashed rgba(78, 67, 45, 0.4);
+  background: rgba(255, 250, 240, 0.92);
+  color: #645a4a;
+  font: 800 10px/1 Inter, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  z-index: 5;
+  box-shadow: 1px 1px 0 rgba(78, 67, 45, 0.12);
+  pointer-events: none;
+}
 .asset-image-toggle {
   position: absolute !important;
   top: 16px;

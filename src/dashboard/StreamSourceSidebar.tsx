@@ -18,17 +18,21 @@ type StreamSourceSidebarProps = {
   onDisconnectTwitch?: () => void;
   roundActive: boolean;
   word: string;
+  category?: string;
   chatStatus: EventSubStatus;
   onUseCustomWord: (word: string) => boolean;
   preparedCustomWord: string | null;
 };
 
-export function StreamSourceSidebar({ configured, connected, displayName, messages, onModes, onDisconnectTwitch, roundActive, word, chatStatus, onUseCustomWord, preparedCustomWord }: StreamSourceSidebarProps) {
+export function StreamSourceSidebar({ configured, connected, displayName, messages, onModes, onDisconnectTwitch, roundActive, word, category, chatStatus, onUseCustomWord, preparedCustomWord }: StreamSourceSidebarProps) {
   const [customWord, setCustomWord] = useState("");
   const [customWordError, setCustomWordError] = useState("");
   const [showAssetImage, setShowAssetImage] = useState(false);
   const chatConnected = chatStatus === "connected";
   const chatListRef = useRef<HTMLDivElement>(null);
+  const categoryLabel = category
+    ? category.replace(/^[^:]+:/, "").replace(/[-_]/g, " ")
+    : "";
 
   useEffect(() => {
     setShowAssetImage(false);
@@ -72,6 +76,9 @@ export function StreamSourceSidebar({ configured, connected, displayName, messag
         </header>
 
         <div className={`camera-preview ${roundActive ? "source-selected round-prompt-visible" : "custom-word-position"}`}>
+          {roundActive && categoryLabel && (
+            <span className="camera-category-badge">{categoryLabel}</span>
+          )}
           {roundActive && matchedAsset && (
             <button 
               type="button" 
