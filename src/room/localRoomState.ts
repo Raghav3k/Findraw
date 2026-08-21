@@ -60,6 +60,10 @@ export type RoomState = {
 };
 
 export const ROOM_STORAGE_PREFIX = "findraw.room.v1.";
+export const ROOM_CODE_LENGTH = 6;
+const ROOM_CODE_LETTERS = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+const ROOM_CODE_NUMBERS = "23456789";
+const ROOM_CODE_CHARACTERS = `${ROOM_CODE_LETTERS}${ROOM_CODE_NUMBERS}`;
 
 export const createClientId = () => {
   const key = "findraw.room.clientId";
@@ -71,15 +75,27 @@ export const createClientId = () => {
 };
 
 export const normalizeRoomCode = (value: string) => (
-  value.trim().replace(/\D/g, "").slice(0, 4)
+  value.trim().toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, ROOM_CODE_LENGTH)
 );
 
 export const createRoomCode = () => {
-  let code = "";
-  for (let index = 0; index < 4; index += 1) {
-    code += Math.floor(Math.random() * 10).toString();
+  const randomCharacter = (characters: string) => {
+    const value = new Uint32Array(1);
+    window.crypto.getRandomValues(value);
+    return characters[value[0] % characters.length];
+  };
+  const characters = [
+    randomCharacter(ROOM_CODE_LETTERS),
+    randomCharacter(ROOM_CODE_NUMBERS),
+    ...Array.from({ length: ROOM_CODE_LENGTH - 2 }, () => randomCharacter(ROOM_CODE_CHARACTERS)),
+  ];
+  for (let index = characters.length - 1; index > 0; index -= 1) {
+    const value = new Uint32Array(1);
+    window.crypto.getRandomValues(value);
+    const swapIndex = value[0] % (index + 1);
+    [characters[index], characters[swapIndex]] = [characters[swapIndex], characters[index]];
   }
-  return code;
+  return characters.join("");
 };
 
 export const roomStorageKey = (code: string) => `${ROOM_STORAGE_PREFIX}${normalizeRoomCode(code)}`;

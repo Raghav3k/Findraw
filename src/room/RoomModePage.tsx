@@ -34,6 +34,7 @@ import {
   normalizeRoomCode,
   pickRoomChoices,
   readRoom,
+  ROOM_CODE_LENGTH,
   roomPromptKey,
   roomStorageKey,
   writeRoom,
@@ -103,6 +104,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const [wordFeedback, setWordFeedback] = usePersistentState<WordFeedbackMap>("feedback.room.words", {});
   const [resultsEndAt, setResultsEndAt] = useState<number | null>(null);
   const [currentRoundRating, setCurrentRoundRating] = useState<WordFeedbackRating | null>(null);
+  const [finishedSummaryDismissed, setFinishedSummaryDismissed] = useState(false);
   const resizeStateRef = useRef<ResizeState | null>(null);
   const onlineRoomRef = useRef<OnlineRoomClient | null>(null);
   const chatScrollRef = useRef<HTMLDivElement | null>(null);
@@ -130,6 +132,8 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const totalTurns = room ? Math.max(1, roomPlayers.length) * room.roundsPerPlayer : 0;
   const currentTurnNumber = room && room.turnIndex >= 0 ? Math.min(totalTurns, room.turnIndex + 1) : 0;
   const winner = room?.phase === "finished" ? sortedPlayers[0] ?? null : null;
+  const winningPlayers = winner ? sortedPlayers.filter((player) => player.score === winner.score) : [];
+  const finishedTitle = winningPlayers.length > 1 ? "It's a tie!" : winner ? `${winner.name} wins!` : "Game complete";
   const roomMaxPlayers = room?.maxPlayers ?? 8;
   const roomLeader = roomPlayers.find((player) => player.id === room?.hostId) ?? null;
   const canEditRoomDetails = Boolean(room && isHost && (room.phase === "lobby" || room.phase === "finished"));
@@ -227,8 +231,8 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const enterRoom = (mode: RoomEntryMode, event?: FormEvent) => {
     event?.preventDefault();
     let code = mode === "create" ? createRoomCode() : normalizeRoomCode(roomCodeInput);
-    if (!code) {
-      setNotice("Enter a room code to join.");
+    if (code.length !== ROOM_CODE_LENGTH) {
+      setNotice(`Enter the full ${ROOM_CODE_LENGTH}-character room code to join.`);
       return;
     }
     while (mode === "create" && !hasApiBaseUrl && readRoom(code)) code = createRoomCode();
@@ -236,6 +240,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     onlineRoomRef.current?.close();
     onlineRoomRef.current = null;
     if (hasApiBaseUrl) {
+      let hasSyncedRoom = false;
       setRoomCodeInput(mode === "create" ? "" : code);
       setJoinedCode(code);
       setRoomTransport("online");
@@ -244,6 +249,8 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       setNotice(mode === "create" ? `Created online room ${code}.` : `Joining online room ${code}.`);
       onlineRoomRef.current = connectOnlineRoom(code, player.id, player.name, {
         onState: (nextRoom) => {
+          if (!nextRoom) return;
+          hasSyncedRoom = true;
           setRoom(normalizeRoomState(nextRoom));
           if ((nextRoom.drawingOperations?.length ?? 0) > 0) setLiveDrawingOperation(null);
           setNotice(`Online room ${nextRoom.code} is synced.`);
@@ -252,7 +259,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
         onStatus: setRoomConnectionStatus,
         onError: (message) => {
           setNotice(message);
-          if (!message.toLocaleLowerCase("en").includes("name") || !message.toLocaleLowerCase("en").includes("taken")) return;
+          if (hasSyncedRoom) return;
           onlineRoomRef.current?.close();
           onlineRoomRef.current = null;
           setRoom(null);
@@ -260,7 +267,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
           setRoomTransport("none");
           setRoomConnectionStatus("offline");
         },
-      });
+      }, { create: mode === "create" });
       if (!onlineRoomRef.current) setNotice("Online room server is unavailable.");
       return;
     }
@@ -302,15 +309,16 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     await navigator.clipboard.writeText(room.code);
     setNotice(`Copied room code ${room.code}.`);
   };
-  const updateRoomSettings = (settings: { roundsPerPlayer?: number; maxPlayers?: number }) => {
+  const updateRoomSettings = (settings: { roundsPerPlayer?: number; maxPlayers?: number; roundSeconds?: number }) => {
     if (!room || !canEditRoomDetails) return;
     const nextRounds = Math.min(10, Math.max(1, Math.round(settings.roundsPerPlayer ?? room.roundsPerPlayer)));
     const nextMaxPlayers = Math.min(16, Math.max(roomPlayers.length, Math.max(2, Math.round(settings.maxPlayers ?? roomMaxPlayers))));
+    const nextRoundSeconds = Math.min(300, Math.max(15, Math.round(settings.roundSeconds ?? room.roundSeconds)));
     if (roomTransport === "online") {
-      onlineRoomRef.current?.sendRoomSettings({ roundsPerPlayer: nextRounds, maxPlayers: nextMaxPlayers });
+      onlineRoomRef.current?.sendRoomSettings({ roundsPerPlayer: nextRounds, maxPlayers: nextMaxPlayers, roundSeconds: nextRoundSeconds });
       return;
     }
-    saveRoom({ ...room, roundsPerPlayer: nextRounds, maxPlayers: nextMaxPlayers });
+    saveRoom({ ...room, roundsPerPlayer: nextRounds, maxPlayers: nextMaxPlayers, roundSeconds: nextRoundSeconds });
   };
   const transferRoomLeader = (hostId: string) => {
     if (!room || !canEditRoomDetails || !roomPlayers.some((player) => player.id === hostId)) return;
@@ -372,6 +380,10 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     } else {
       setResultsEndAt(null);
     }
+  }, [room?.phase, room?.turnIndex]);
+
+  useEffect(() => {
+    if (room?.phase === "finished") setFinishedSummaryDismissed(false);
   }, [room?.phase, room?.turnIndex]);
 
   useEffect(() => {
@@ -624,8 +636,8 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
             <header className="source-card-header"><div><span className="source-eyebrow">Room desk</span><h2>Room</h2></div><span className="source-status ready"><i />{hasApiBaseUrl ? "Online" : "Local"}</span></header>
             <form className="room-join-form" onSubmit={joinRoom}>
               <button onClick={createRoom} type="button"><span className="material-symbols-outlined">add_circle</span>Create room</button>
-              <button type="submit"><span className="material-symbols-outlined">login</span>Join room</button>
-              <label><span>Room code</span><input autoComplete="off" inputMode="numeric" maxLength={4} onChange={(event) => setRoomCodeInput(normalizeRoomCode(event.target.value))} placeholder="Enter code" value={roomCodeInput} /></label>
+              <button disabled={roomCodeInput.length !== ROOM_CODE_LENGTH} type="submit"><span className="material-symbols-outlined">login</span>Join room</button>
+              <label><span>Room code</span><input autoCapitalize="characters" autoComplete="off" inputMode="text" maxLength={ROOM_CODE_LENGTH} onChange={(event) => setRoomCodeInput(normalizeRoomCode(event.target.value))} placeholder="ABC123" spellCheck={false} value={roomCodeInput} /></label>
             </form>
             {notice ? <p className="room-note">{notice}</p> : null}
           </section>
@@ -659,12 +671,16 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                   </div>
                   <div className="room-details-list">
                     <label>
-                      <b>Max players</b>
+                      <b>Players</b>
                       <input disabled={!canEditRoomDetails} max={16} min={Math.max(2, roomPlayers.length)} onChange={(event) => updateRoomSettings({ maxPlayers: Number(event.target.value) })} type="number" value={roomMaxPlayers} />
                     </label>
                     <label>
-                      <b>Rounds</b>
+                      <b>Rounds/player</b>
                       <input disabled={!canEditRoomDetails} max={10} min={1} onChange={(event) => updateRoomSettings({ roundsPerPlayer: Number(event.target.value) })} type="number" value={room.roundsPerPlayer} />
+                    </label>
+                    <label>
+                      <b>Seconds</b>
+                      <input disabled={!canEditRoomDetails} max={300} min={15} onChange={(event) => updateRoomSettings({ roundSeconds: Number(event.target.value) })} step={15} type="number" value={room.roundSeconds} />
                     </label>
                     <div className="room-leader-control">
                       <button disabled={!canEditRoomDetails} onClick={() => setLeaderPickerOpen((current) => !current)} type="button">
@@ -812,13 +828,14 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       {room?.phase === "choosing" ? (
         <div className="room-choice-layer" role="presentation">
           <div className="room-choice-backdrop" />
-          <section aria-label="Word selection" aria-modal="true" className="room-choice-dialog" role="dialog" style={{ "--room-dialog-canvas": canvasColor } as CSSProperties}>
+          <section aria-label="Word vote" aria-modal="true" className="room-choice-dialog" role="dialog">
             <header className="room-choice-header">
-              <h2>{isDrawer ? "Words on the table" : "Pick a word"}</h2>
+              <span className="source-eyebrow">Word vote</span>
+              <h2>{isDrawer ? "Words on the table" : "Pick a mystery slot"}</h2>
               <p>
                 {isDrawer
                   ? "Players vote without seeing the words. The top slot becomes your drawing prompt."
-                  : `${drawer?.name ?? "Drawer"} can see the words. Pick the one you want them to draw.`}
+                  : `${drawer?.name ?? "Drawer"} can see the words. You only choose a slot.`}
               </p>
             </header>
             <div className="room-choice-list" role="list">
@@ -874,7 +891,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       {room?.phase === "results" ? (
         <div className="room-choice-layer room-results-layer" role="presentation">
           <div className="room-choice-backdrop" />
-          <section aria-label="Round results" aria-modal="true" className="room-choice-dialog room-results-dialog" role="dialog" style={{ "--room-dialog-canvas": canvasColor } as CSSProperties}>
+          <section aria-label="Round results" aria-modal="true" className="room-choice-dialog room-results-dialog" role="dialog">
             <header className="room-results-header">
               <span className="source-eyebrow">Round Over</span>
               <h2>The word was</h2>
@@ -960,6 +977,41 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                   <span className="material-symbols-outlined">skip_next</span>Next Round Now
                 </button>
               )}
+            </footer>
+          </section>
+        </div>
+      ) : null}
+      {room?.phase === "finished" && !finishedSummaryDismissed ? (
+        <div className="room-choice-layer room-finished-layer" role="presentation">
+          <div className="room-choice-backdrop" />
+          <section aria-label="Final standings" aria-modal="true" className="room-choice-dialog room-finished-dialog" role="dialog">
+            <header className="room-finished-header">
+              <span className="source-eyebrow">Game complete</span>
+              <span aria-hidden="true" className="room-finished-trophy">🏆</span>
+              <h2>{finishedTitle}</h2>
+              <p>{room.roundsPerPlayer} round{room.roundsPerPlayer === 1 ? "" : "s"} per player completed</p>
+            </header>
+            <div className="room-finished-standings scrollable">
+              {sortedPlayers.map((player, index) => {
+                const tiedForFirst = player.score === winner?.score;
+                return (
+                  <div className={`room-finished-player ${tiedForFirst ? "winner" : ""}`} key={player.id}>
+                    <span className="room-finished-rank">{tiedForFirst ? "🏆" : index + 1}</span>
+                    <span className="room-finished-player-name"><b>{player.name}</b><small>{player.id === room.hostId ? "Party leader" : `Final place #${index + 1}`}</small></span>
+                    <strong>{player.score}<small> pts</small></strong>
+                  </div>
+                );
+              })}
+            </div>
+            <footer className="room-finished-actions">
+              <button className="room-finished-room-button" onClick={() => { setFinishedSummaryDismissed(true); if (isHost) setShowRoomDetails(true); }} type="button">
+                <span className="material-symbols-outlined">tune</span>{isHost ? "Room settings" : "Back to room"}
+              </button>
+              {isHost ? (
+                <button className="room-results-skip-button" onClick={startGame} type="button">
+                  <span className="material-symbols-outlined">replay</span>Play Again
+                </button>
+              ) : null}
             </footer>
           </section>
         </div>

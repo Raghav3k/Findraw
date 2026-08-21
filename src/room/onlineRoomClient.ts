@@ -17,7 +17,7 @@ export type OnlineRoomClient = {
   sendChoices: (choices: CategoryPrompt[]) => void;
   sendChosenWord: (answer: CategoryPrompt) => void;
   sendChoiceVote: (choiceIndex: number) => void;
-  sendRoomSettings: (settings: { roundsPerPlayer?: number; maxPlayers?: number }) => void;
+  sendRoomSettings: (settings: { roundsPerPlayer?: number; maxPlayers?: number; roundSeconds?: number }) => void;
   sendRoomLeader: (hostId: string) => void;
   sendGuess: (text: string) => void;
   sendDrawingPreview: (operation: DrawingOperation | null) => void;
@@ -34,6 +34,7 @@ export function connectOnlineRoom(
   clientId: string,
   name: string,
   handlers: RoomClientHandlers,
+  options: { create?: boolean } = {},
 ): OnlineRoomClient | null {
   const url = apiWebSocketUrl(`/api/room/${code}/live`);
   if (!url) return null;
@@ -42,7 +43,7 @@ export function connectOnlineRoom(
 
   socket.addEventListener("open", () => {
     handlers.onStatus("connected");
-    send(socket, "join", { code, clientId, name });
+    send(socket, "join", { code, clientId, name, create: Boolean(options.create) });
   });
   socket.addEventListener("message", (event) => {
     try {

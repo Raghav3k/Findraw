@@ -1516,17 +1516,16 @@
 /* Voting and results windows: color carries meaning while the paper texture stays familiar. */
 .room-choice-dialog {
   --ink: #25313a;
-  --room-dialog-canvas: #fff2cf;
   gap: 0;
   overflow: hidden;
   padding: 0;
   color: var(--ink);
   border-color: rgba(38, 55, 64, 0.34);
   border-radius: 18px;
-  background-color: var(--room-dialog-canvas);
+  background-color: #f9f4e8;
   background-image:
     repeating-linear-gradient(0deg, transparent 0 30px, rgba(67, 132, 179, 0.065) 30px 31px),
-    linear-gradient(115deg, rgba(255, 255, 255, 0.2), transparent 48%);
+    linear-gradient(115deg, rgba(255, 255, 255, 0.7), transparent 48%);
   box-shadow: 7px 9px 0 rgba(43, 55, 60, 0.13), 0 28px 80px rgba(24, 30, 34, 0.3);
 }
 
@@ -1534,7 +1533,7 @@
   gap: 7px;
   padding: 25px 26px 21px;
   border-bottom: 1px solid rgba(52, 105, 135, 0.16);
-  background: transparent;
+  background: linear-gradient(135deg, rgba(219, 238, 242, 0.9), rgba(240, 232, 201, 0.32));
 }
 
 .room-choice-header .source-eyebrow,
@@ -1621,7 +1620,6 @@
 
 .room-choice-slot {
   display: inline-flex;
-  flex: 0 0 auto;
   align-items: center;
   gap: 6px;
   color: var(--choice-accent);
@@ -1640,21 +1638,14 @@
 }
 
 .room-choice-category-tag {
-  flex: 1 1 auto;
-  justify-content: center;
-  min-width: 0;
-  max-width: none;
+  max-width: 58%;
   padding: 4px 7px;
-  overflow: visible;
+  overflow: hidden;
   color: color-mix(in srgb, var(--choice-accent) 78%, #25313a);
   border-color: color-mix(in srgb, var(--choice-accent) 40%, transparent);
   background: color-mix(in srgb, var(--choice-soft) 80%, #fff);
-  font-size: 8px;
-  line-height: 1.15;
-  overflow-wrap: anywhere;
-  text-align: center;
-  text-overflow: clip;
-  white-space: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .room-choice-word-container {
@@ -1711,7 +1702,7 @@
 .room-choice-footer {
   padding: 14px 22px 18px;
   border-top: 1px solid rgba(52, 105, 135, 0.13);
-  background: transparent;
+  background: rgba(255, 255, 255, 0.46);
 }
 
 .room-choice-progress {
@@ -1762,7 +1753,7 @@
   gap: 4px;
   padding: 17px 22px 15px;
   border-bottom: 1px solid rgba(52, 105, 135, 0.15);
-  background: transparent;
+  background: linear-gradient(135deg, #dceef1, #f7e4c4);
 }
 
 .room-results-header h2 {
@@ -1791,7 +1782,6 @@
 .room-results-body {
   gap: 11px;
   padding: 14px 18px 12px;
-  background: transparent;
 }
 
 .room-results-feedback-bar {
@@ -1917,7 +1907,159 @@
   min-height: 46px;
   padding: 9px 18px 11px;
   border-top: 1px solid rgba(52, 105, 135, 0.15);
-  background: transparent;
+  background: rgba(255, 255, 255, 0.48);
+}
+
+.room-finished-dialog {
+  width: min(620px, calc(100vw - 32px));
+}
+
+.room-finished-header {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 20px 22px 17px;
+  border-bottom: 1px solid rgba(52, 105, 135, 0.15);
+  background: linear-gradient(135deg, #dceef1, #f7e4c4);
+}
+
+.room-finished-header .source-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  min-height: 23px;
+  padding: 0 10px;
+  color: #8d3e45;
+  border: 1px solid rgba(169, 76, 75, 0.25);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.58);
+  font: 900 11px/1 var(--font-sketch, "Shantell Sans", cursive);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.room-finished-trophy {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  margin-top: 2px;
+  place-items: center;
+  border: 1px solid rgba(177, 119, 19, .28);
+  border-radius: 50%;
+  background: #fff4cf;
+  box-shadow: 0 3px 0 rgba(126, 92, 28, .12);
+  font-size: 27px;
+}
+
+.room-finished-header h2 {
+  margin: 2px 0 0;
+  color: #25313a;
+  font: 900 clamp(27px, 4vw, 38px)/1 var(--font-sketch, "Shantell Sans", cursive);
+}
+
+.room-finished-header p {
+  margin: 2px 0 0;
+  color: #637077;
+  font: 700 11px/1.2 Inter, sans-serif;
+}
+
+.room-finished-standings {
+  display: grid;
+  gap: 7px;
+  max-height: min(310px, 42vh);
+  padding: 14px 18px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.room-finished-player {
+  min-height: 54px;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 12px 7px 8px;
+  border: 1px solid rgba(78, 91, 98, .2);
+  border-left: 5px solid #9aa5aa;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, .78);
+  box-shadow: 0 2px 0 rgba(67, 79, 84, .08);
+}
+
+.room-finished-player.winner {
+  border-color: rgba(203, 141, 31, .38);
+  border-left-color: #dd941f;
+  background: #fff3d7;
+}
+
+.room-finished-rank {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  color: #59666c;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .72);
+  font: 900 13px/1 Inter, sans-serif;
+}
+
+.room-finished-player-name {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+  text-align: left;
+}
+
+.room-finished-player-name b {
+  overflow: hidden;
+  color: #25313a;
+  font: 900 15px/1.1 var(--font-sketch, "Shantell Sans", cursive);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.room-finished-player-name small {
+  color: #738087;
+  font: 700 9px/1 Inter, sans-serif;
+}
+
+.room-finished-player > strong {
+  color: #2f7a47;
+  font: 900 18px/1 var(--font-sketch, "Shantell Sans", cursive);
+}
+
+.room-finished-player > strong small {
+  font-size: 10px;
+}
+
+.room-finished-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-height: 54px;
+  padding: 10px 18px 12px;
+  border-top: 1px solid rgba(52, 105, 135, .15);
+  background: rgba(255, 255, 255, .48);
+}
+
+.room-finished-room-button {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 0 12px;
+  color: #315a6b;
+  border: 1px solid rgba(49, 90, 107, .32);
+  border-radius: 7px;
+  background: #edf8f9;
+  box-shadow: 1px 2px 0 rgba(55, 92, 108, .12);
+  cursor: pointer;
+  font: 900 11px/1 var(--font-sketch, "Shantell Sans", cursive);
+}
+
+.room-finished-room-button .material-symbols-outlined {
+  font-size: 17px;
 }
 
 @media (max-width: 720px) {
@@ -1953,7 +2095,8 @@
   }
 
   .room-results-feedback-bar,
-  .room-results-footer {
+  .room-results-footer,
+  .room-finished-actions {
     align-items: stretch;
     flex-direction: column;
   }
@@ -1975,6 +2118,10 @@
 
   .room-results-skip-button {
     justify-content: center;
+  }
+
+  .room-finished-room-button {
+    width: 100%;
   }
 }
 
@@ -2181,7 +2328,7 @@
 
 .room-details-list {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 7px;
   width: 100%;
 }

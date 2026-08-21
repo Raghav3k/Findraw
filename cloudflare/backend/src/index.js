@@ -49,7 +49,7 @@ const pointsForPosition = (position) => {
   return 50;
 };
 
-const normalizeRoomCode = (value) => String(value || "").trim().replace(/\D/g, "").slice(0, 4);
+const normalizeRoomCode = (value) => String(value || "").trim().toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6);
 const normalizePlayerName = (value) => String(value || "").trim().toLocaleLowerCase("en");
 const roomPromptKey = (prompt) => `${prompt.categoryId || "custom"}:${String(prompt.answer || "").toLowerCase()}`;
 const getRoomMessageByteLength = (data) => {
@@ -138,7 +138,11 @@ const maskedRoomAnswer = (answer) => Array.from(String(answer || ""))
   .join(" ");
 const publicRoomState = (room) => ({
   ...room,
-  answer: room.answer ? { ...room.answer, answer: null, aliases: [], mask: maskedRoomAnswer(room.answer.answer) } : null,
+  answer: room.answer
+    ? room.phase === "results"
+      ? { ...room.answer, aliases: [] }
+      : { ...room.answer, answer: null, aliases: [], mask: maskedRoomAnswer(room.answer.answer) }
+    : null,
   choices: (room.choices || []).map((choice, index) => ({
     categoryId: choice.categoryId || `slot-${index}`,
     answer: "",
@@ -270,15 +274,20 @@ export class FindrawRoom {
 
   async join(socket, payload) {
     const code = normalizeRoomCode(payload.code);
+    const createRequested = payload.create === true;
     const player = {
       id: String(payload.clientId || "").slice(0, 80),
       name: String(payload.name || "Player").trim().slice(0, 20) || "Player",
       score: 0,
       connectedAt: Date.now(),
     };
-    if (!code || !player.id) throw new Error("Room code and player id are required.");
-    if (!this.room) this.room = createEmptyRoomState(code, player);
+    if (code.length !== 6 || !player.id) throw new Error("A valid 6-character room code and player id are required.");
+    if (!this.room) {
+      if (!createRequested) throw new Error("Room not found. Check the code or ask the host to create it first.");
+      this.room = createEmptyRoomState(code, player);
+    }
     else {
+      if (createRequested) throw new Error("That room code is already in use. Create a new room and try again.");
       const alreadyInRoom = this.room.players.some((item) => item.id === player.id);
       const nameTaken = this.room.players.some((item) => (
         item.id !== player.id && normalizePlayerName(item.name) === normalizePlayerName(player.name)
@@ -361,8 +370,10 @@ export class FindrawRoom {
     if (!["lobby", "finished"].includes(this.room.phase)) return;
     const maxPlayers = Math.max(this.room.players.length, Math.min(16, Math.max(2, Number(payload?.maxPlayers || this.room.maxPlayers || 8))));
     const roundsPerPlayer = Math.min(10, Math.max(1, Number(payload?.roundsPerPlayer || this.room.roundsPerPlayer || 3)));
+    const roundSeconds = Math.min(300, Math.max(15, Number(payload?.roundSeconds || this.room.roundSeconds || 90)));
     this.room.maxPlayers = maxPlayers;
     this.room.roundsPerPlayer = roundsPerPlayer;
+    this.room.roundSeconds = roundSeconds;
     this.room.updatedAt = Date.now();
     await this.save();
     this.broadcastState();
@@ -1176,7 +1187,7 @@ export class FindrawSession {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    const roomMatch = url.pathname.match(/^\/api\/room\/([A-Za-z0-9]{1,6})\/(live|state)$/);
+    const roomMatch = url.pathname.match(/^\/api\/room\/([A-Za-z0-9]{6})\/(live|state)$/);
     if (roomMatch) {
       const id = env.FINDRAW_ROOM.idFromName(normalizeRoomCode(roomMatch[1]));
       return env.FINDRAW_ROOM.get(id).fetch(request);
