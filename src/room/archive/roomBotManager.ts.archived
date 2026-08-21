@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
-import type { RoomGuess, RoomPlayer, RoomState } from "./localRoomState";
-import { roomPromptKey } from "./localRoomState";
-import { connectOnlineRoom, type OnlineRoomClient } from "./onlineRoomClient";
+import type { RoomGuess, RoomPlayer, RoomState } from "../localRoomState";
+import { roomPromptKey } from "../localRoomState";
+import { connectOnlineRoom, type OnlineRoomClient } from "../onlineRoomClient";
 
 export type BotProfile = {
   id: string;

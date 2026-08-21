@@ -42,7 +42,6 @@ import {
   type RoomState,
 } from "./localRoomState";
 import { connectOnlineRoom, type OnlineRoomClient } from "./onlineRoomClient";
-import { useRoomBots, ROOM_BOT_PROFILES, isBotPlayer } from "./roomBotManager";
 
 type RoomModePageProps = {
   onNavigate: (path: string) => void;
@@ -102,7 +101,6 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const [canvasColor, setCanvasColor] = usePersistentState("room.canvas.background", "#FFF2CF");
   const [gridSize, setGridSize] = usePersistentState("room.grid.size", 24);
   const [wordFeedback, setWordFeedback] = usePersistentState<WordFeedbackMap>("feedback.room.words", {});
-  const [testBotsEnabled, setTestBotsEnabled] = usePersistentState("room.testBotsEnabled", true);
   const [resultsEndAt, setResultsEndAt] = useState<number | null>(null);
   const [currentRoundRating, setCurrentRoundRating] = useState<WordFeedbackRating | null>(null);
   const resizeStateRef = useRef<ResizeState | null>(null);
@@ -142,17 +140,6 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     Object.values(roomChoiceVotes).filter((vote) => vote === index).length
   ));
   const submittedChoiceVotes = Object.keys(roomChoiceVotes).filter((playerId) => eligibleChoiceVoters.some((player) => player.id === playerId)).length;
-
-  useRoomBots({
-    room,
-    isHost,
-    roomTransport,
-    testBotsEnabled,
-    onSaveLocalRoom: (nextRoom) => {
-      writeRoom(nextRoom);
-      setRoom(nextRoom);
-    },
-  });
 
   const leaveLocalRoom = useCallback((roomToLeave: RoomState) => {
     const players = roomToLeave.players.filter((player) => player.id !== clientId);
@@ -290,23 +277,15 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       setNotice("That name is already taken in this room.");
       return;
     }
-    const initialBots: RoomPlayer[] = testBotsEnabled
-      ? ROOM_BOT_PROFILES.map((bot, index) => ({
-          id: bot.id,
-          name: bot.name,
-          score: 0,
-          connectedAt: Date.now() + (index + 1) * 50,
-        }))
-      : [];
     const nextRoom = existing
       ? {
         ...existing,
-        maxPlayers: existing.maxPlayers ?? Math.max(8, 1 + initialBots.length),
+        maxPlayers: existing.maxPlayers ?? 8,
         players: existing.players.some((item) => item.id === player.id)
           ? existing.players.map((item) => item.id === player.id ? { ...item, name: player.name } : item)
           : [...existing.players, player],
       }
-      : createEmptyRoom(code, player, initialBots);
+      : createEmptyRoom(code, player);
     setRoomCodeInput(mode === "create" ? "" : code);
     setJoinedCode(code);
     setRoomTransport("local");
@@ -632,8 +611,8 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
           </header>
           <div className="room-player-list">
             {sortedPlayers.length ? sortedPlayers.map((player, index) => (
-              <span className={`${player.id === room?.drawerId ? "drawer" : ""} ${isBotPlayer(player.id) ? "bot-player" : ""}`} key={player.id}>
-                <b><i>{index + 1}</i>{player.name} {isBotPlayer(player.id) ? <small className="bot-tag">BOT</small> : null}</b>
+              <span className={player.id === room?.drawerId ? "drawer" : ""} key={player.id}>
+                <b><i>{index + 1}</i>{player.name}</b>
                 <small>{player.id === room?.hostId ? `Host - ${player.score}` : player.id === room?.drawerId ? `Drawing - ${player.score}` : `${player.score} pts`}</small>
               </span>
             )) : <p>No players yet.</p>}
@@ -647,10 +626,6 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
               <button onClick={createRoom} type="button"><span className="material-symbols-outlined">add_circle</span>Create room</button>
               <button type="submit"><span className="material-symbols-outlined">login</span>Join room</button>
               <label><span>Room code</span><input autoComplete="off" inputMode="numeric" maxLength={4} onChange={(event) => setRoomCodeInput(normalizeRoomCode(event.target.value))} placeholder="Enter code" value={roomCodeInput} /></label>
-              <label className="room-join-bot-option">
-                <input checked={testBotsEnabled} onChange={(event) => setTestBotsEnabled(event.target.checked)} type="checkbox" />
-                <span>Enable 5 test bots for game testing</span>
-              </label>
             </form>
             {notice ? <p className="room-note">{notice}</p> : null}
           </section>
@@ -690,10 +665,6 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                     <label>
                       <b>Rounds</b>
                       <input disabled={!canEditRoomDetails} max={10} min={1} onChange={(event) => updateRoomSettings({ roundsPerPlayer: Number(event.target.value) })} type="number" value={room.roundsPerPlayer} />
-                    </label>
-                    <label className="room-bot-toggle-row">
-                      <span><b>Test bots (5 bots)</b><small>Auto-join bots for voting & guessing</small></span>
-                      <input checked={testBotsEnabled} disabled={!canEditRoomDetails} onChange={(event) => setTestBotsEnabled(event.target.checked)} type="checkbox" />
                     </label>
                     <div className="room-leader-control">
                       <button disabled={!canEditRoomDetails} onClick={() => setLeaderPickerOpen((current) => !current)} type="button">
@@ -963,7 +934,6 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                             {isPlayerDrawer ? "🎨" : solveRank === 1 ? "🥇" : solveRank === 2 ? "🥈" : solveRank === 3 ? "🥉" : solvedEntry ? "✅" : "❌"}
                           </span>
                           <b>{player.name}</b>
-                          {isBotPlayer(player.id) && <small className="bot-tag">BOT</small>}
                           {isPlayerDrawer && <small className="role-tag">Drawer</small>}
                         </div>
                         <div className="score-meta">

@@ -1,0 +1,71 @@
+/* Shared Findraw identity and profile controls */
+.workspace-identity {
+  position: relative;
+  z-index: 75;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  margin: 1px 0 4px;
+}
+.workspace-identity .source-brand { min-width: 0; margin: 0; }
+.workspace-identity .source-brand h1 { font-size: 31px; }
+.workspace-identity .source-brand p { overflow: hidden; font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }
+.workspace-identity-actions { display: flex; align-items: center; gap: 7px; }
+.workspace-profile-menu-wrap { position: relative; }
+.workspace-profile,
+.workspace-mode-button {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  color: #302e29;
+  border: 1px solid rgba(75, 66, 51, .52);
+  border-radius: 7px 10px 7px 9px;
+  background: rgba(255, 250, 240, .86);
+  box-shadow: 2px 3px 0 rgba(73, 61, 43, .13);
+  cursor: pointer;
+}
+.workspace-profile { gap: 7px; max-width: 132px; padding: 5px 8px 5px 5px; }
+.workspace-profile-avatar { width: 30px; height: 30px; display: grid; place-items: center; flex: 0 0 30px; color: #315d70; border: 1px solid #557d8d; border-radius: 50%; background: #b9dce8; font-size: 20px; }
+.workspace-profile-copy { min-width: 0; display: grid; gap: 1px; text-align: left; }
+.workspace-profile-copy small,
+.workspace-profile-menu small { color: #8f493f; font: 800 7px/1.2 Inter, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+.workspace-profile-copy strong { overflow: hidden; color: #34312c; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.workspace-identity .workspace-mode-button { gap: 5px; padding: 6px 9px; background: #f2d77f; font: 800 11px/1 "Shantell Sans", cursive; }
+.workspace-mode-button .material-symbols-outlined { font-size: 17px; }
+.workspace-profile:hover,
+.workspace-mode-button:hover { transform: translateY(-1px); }
+.workspace-profile-menu {
+  position: absolute;
+  top: calc(100% + 9px);
+  left: 0;
+  z-index: 150;
+  width: min(300px, calc(100vw - 28px));
+  padding: 12px;
+  color: #3b3730;
+  border: 1px solid rgba(75, 66, 51, .58);
+  border-radius: 8px 12px 8px 10px;
+  background: #fff2cf;
+  box-shadow: 6px 9px 0 rgba(73, 61, 43, .14), 0 18px 42px rgba(57, 47, 32, .2);
+}
+.workspace-profile-menu header,
+.workspace-profile-menu-person { display: flex; align-items: center; }
+.workspace-profile-menu header { justify-content: space-between; gap: 10px; padding-bottom: 10px; border-bottom: 1px dashed rgba(75, 66, 51, .3); }
+.workspace-profile-menu-person { gap: 8px; }
+.workspace-profile-menu-person div { display: grid; gap: 2px; }
+.workspace-profile-menu-person strong { font-size: 13px; }
+.workspace-profile-close { width: 28px; height: 28px; display: grid; place-items: center; padding: 0; color: #665f54; border: 0; border-radius: 5px; background: transparent; cursor: pointer; }
+.workspace-profile-close:hover { background: rgba(96, 81, 57, .09); }
+.workspace-profile-close .material-symbols-outlined { font-size: 18px; }
+.workspace-profile-details { display: grid; gap: 7px; margin: 10px 0; }
+.workspace-profile-details > div { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 7px; border-bottom: 1px dashed rgba(75, 66, 51, .18); font-size: 10px; }
+.workspace-profile-details span { color: #746d62; }
+.workspace-profile-details strong { color: #4d4840; }
+.workspace-profile-details strong.connected { color: #44794d; }
+.workspace-profile-menu > p { margin: 0 0 10px; color: #6e675d; font-size: 10px; line-height: 1.45; }
+.workspace-profile-menu-actions { display: grid; gap: 6px; }
+.workspace-profile-menu-actions button { min-height: 34px; display: flex; align-items: center; justify-content: flex-start; gap: 7px; padding: 7px 9px; color: #34312c; border: 1px solid rgba(75, 66, 51, .4); border-radius: 5px 7px 5px 6px; background: rgba(255, 250, 240, .68); cursor: pointer; font-size: 10px; font-weight: 800; }
+.workspace-profile-menu-actions button:first-child { background: #b9dce8; }
+.workspace-profile-menu-actions button:disabled { cursor: not-allowed; opacity: .48; }
+.workspace-profile-menu-actions .material-symbols-outlined { font-size: 17px; }
