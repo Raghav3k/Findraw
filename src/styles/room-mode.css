@@ -1516,16 +1516,17 @@
 /* Voting and results windows: color carries meaning while the paper texture stays familiar. */
 .room-choice-dialog {
   --ink: #25313a;
+  --room-dialog-canvas: #fff2cf;
   gap: 0;
   overflow: hidden;
   padding: 0;
   color: var(--ink);
   border-color: rgba(38, 55, 64, 0.34);
   border-radius: 18px;
-  background-color: #f9f4e8;
+  background-color: var(--room-dialog-canvas);
   background-image:
     repeating-linear-gradient(0deg, transparent 0 30px, rgba(67, 132, 179, 0.065) 30px 31px),
-    linear-gradient(115deg, rgba(255, 255, 255, 0.7), transparent 48%);
+    linear-gradient(115deg, rgba(255, 255, 255, 0.2), transparent 48%);
   box-shadow: 7px 9px 0 rgba(43, 55, 60, 0.13), 0 28px 80px rgba(24, 30, 34, 0.3);
 }
 
@@ -1533,7 +1534,7 @@
   gap: 7px;
   padding: 25px 26px 21px;
   border-bottom: 1px solid rgba(52, 105, 135, 0.16);
-  background: linear-gradient(135deg, rgba(219, 238, 242, 0.9), rgba(240, 232, 201, 0.32));
+  background: transparent;
 }
 
 .room-choice-header .source-eyebrow,
@@ -1620,6 +1621,7 @@
 
 .room-choice-slot {
   display: inline-flex;
+  flex: 0 0 auto;
   align-items: center;
   gap: 6px;
   color: var(--choice-accent);
@@ -1638,14 +1640,21 @@
 }
 
 .room-choice-category-tag {
-  max-width: 58%;
+  flex: 1 1 auto;
+  justify-content: center;
+  min-width: 0;
+  max-width: none;
   padding: 4px 7px;
-  overflow: hidden;
+  overflow: visible;
   color: color-mix(in srgb, var(--choice-accent) 78%, #25313a);
   border-color: color-mix(in srgb, var(--choice-accent) 40%, transparent);
   background: color-mix(in srgb, var(--choice-soft) 80%, #fff);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-size: 8px;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+  text-align: center;
+  text-overflow: clip;
+  white-space: normal;
 }
 
 .room-choice-word-container {
@@ -1702,7 +1711,7 @@
 .room-choice-footer {
   padding: 14px 22px 18px;
   border-top: 1px solid rgba(52, 105, 135, 0.13);
-  background: rgba(255, 255, 255, 0.46);
+  background: transparent;
 }
 
 .room-choice-progress {
@@ -1753,7 +1762,7 @@
   gap: 4px;
   padding: 17px 22px 15px;
   border-bottom: 1px solid rgba(52, 105, 135, 0.15);
-  background: linear-gradient(135deg, #dceef1, #f7e4c4);
+  background: transparent;
 }
 
 .room-results-header h2 {
@@ -1782,6 +1791,7 @@
 .room-results-body {
   gap: 11px;
   padding: 14px 18px 12px;
+  background: transparent;
 }
 
 .room-results-feedback-bar {
@@ -1907,7 +1917,7 @@
   min-height: 46px;
   padding: 9px 18px 11px;
   border-top: 1px solid rgba(52, 105, 135, 0.15);
-  background: rgba(255, 255, 255, 0.48);
+  background: transparent;
 }
 
 @media (max-width: 720px) {

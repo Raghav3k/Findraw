@@ -812,14 +812,13 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       {room?.phase === "choosing" ? (
         <div className="room-choice-layer" role="presentation">
           <div className="room-choice-backdrop" />
-          <section aria-label="Word vote" aria-modal="true" className="room-choice-dialog" role="dialog">
+          <section aria-label="Word selection" aria-modal="true" className="room-choice-dialog" role="dialog" style={{ "--room-dialog-canvas": canvasColor } as CSSProperties}>
             <header className="room-choice-header">
-              <span className="source-eyebrow">Word vote</span>
-              <h2>{isDrawer ? "Words on the table" : "Pick a mystery slot"}</h2>
+              <h2>{isDrawer ? "Words on the table" : "Pick a word"}</h2>
               <p>
                 {isDrawer
                   ? "Players vote without seeing the words. The top slot becomes your drawing prompt."
-                  : `${drawer?.name ?? "Drawer"} can see the words. You only choose a slot.`}
+                  : `${drawer?.name ?? "Drawer"} can see the words. Pick the one you want them to draw.`}
               </p>
             </header>
             <div className="room-choice-list" role="list">
@@ -875,7 +874,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       {room?.phase === "results" ? (
         <div className="room-choice-layer room-results-layer" role="presentation">
           <div className="room-choice-backdrop" />
-          <section aria-label="Round results" aria-modal="true" className="room-choice-dialog room-results-dialog" role="dialog">
+          <section aria-label="Round results" aria-modal="true" className="room-choice-dialog room-results-dialog" role="dialog" style={{ "--room-dialog-canvas": canvasColor } as CSSProperties}>
             <header className="room-results-header">
               <span className="source-eyebrow">Round Over</span>
               <h2>The word was</h2>
