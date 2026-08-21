@@ -1395,23 +1395,6 @@
   scrollbar-color: rgba(133, 139, 158, 0.45) transparent;
 }
 
-.room-results-score-list::-webkit-scrollbar {
-  width: 5px;
-}
-
-.room-results-score-list::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.room-results-score-list::-webkit-scrollbar-thumb {
-  background: rgba(133, 139, 158, 0.4);
-  border-radius: 999px;
-}
-
-.room-results-score-list::-webkit-scrollbar-thumb:hover {
-  background: rgba(133, 139, 158, 0.6);
-}
-
 .room-results-player-item {
   display: flex;
   align-items: center;
@@ -1528,6 +1511,461 @@
 .room-results-skip-button:active {
   transform: translateY(1px);
   box-shadow: 1px 1px 0 rgba(61, 55, 45, 0.18);
+}
+
+/* Voting and results windows: color carries meaning while the paper texture stays familiar. */
+.room-choice-dialog {
+  --ink: #25313a;
+  gap: 0;
+  overflow: hidden;
+  padding: 0;
+  color: var(--ink);
+  border-color: rgba(38, 55, 64, 0.34);
+  border-radius: 18px;
+  background-color: #f9f4e8;
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 30px, rgba(67, 132, 179, 0.065) 30px 31px),
+    linear-gradient(115deg, rgba(255, 255, 255, 0.7), transparent 48%);
+  box-shadow: 7px 9px 0 rgba(43, 55, 60, 0.13), 0 28px 80px rgba(24, 30, 34, 0.3);
+}
+
+.room-choice-header {
+  gap: 7px;
+  padding: 25px 26px 21px;
+  border-bottom: 1px solid rgba(52, 105, 135, 0.16);
+  background: linear-gradient(135deg, rgba(219, 238, 242, 0.9), rgba(240, 232, 201, 0.32));
+}
+
+.room-choice-header .source-eyebrow,
+.room-results-header .source-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  min-height: 23px;
+  padding: 0 10px;
+  color: #8d3e45;
+  border: 1px solid rgba(169, 76, 75, 0.25);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.room-choice-header h2 {
+  color: var(--ink);
+}
+
+.room-choice-header p {
+  color: #56646c;
+}
+
+.room-choice-list {
+  gap: 13px;
+  margin: 0;
+  padding: 20px 22px 18px;
+}
+
+.room-choice-list button,
+.room-choice-card {
+  --choice-accent: #d9665b;
+  --choice-soft: #fff0e7;
+  min-height: 182px;
+  padding: 0 13px 12px;
+  border-color: color-mix(in srgb, var(--choice-accent) 42%, #48535a);
+  border-radius: 13px;
+  background: linear-gradient(155deg, #fff 0 44%, var(--choice-soft) 100%);
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--choice-accent) 22%, transparent), 0 9px 24px rgba(44, 54, 58, 0.08);
+}
+
+.room-choice-card:nth-child(2) {
+  --choice-accent: #367fa0;
+  --choice-soft: #e4f3f7;
+}
+
+.room-choice-card:nth-child(3) {
+  --choice-accent: #735aa5;
+  --choice-soft: #efe9fa;
+}
+
+.room-choice-card::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 6px;
+  background: var(--choice-accent);
+  content: "";
+}
+
+.room-choice-list button:hover:not(:disabled),
+.room-choice-card:hover:not(:disabled) {
+  border-color: var(--choice-accent);
+  background: linear-gradient(155deg, #fff 0 35%, var(--choice-soft) 100%);
+  box-shadow: 0 5px 0 color-mix(in srgb, var(--choice-accent) 28%, transparent), 0 13px 28px rgba(44, 54, 58, 0.13);
+}
+
+.room-choice-list button.selected,
+.room-choice-card.selected {
+  border-color: var(--choice-accent);
+  background: linear-gradient(155deg, #fff 0 28%, var(--choice-soft) 100%);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--choice-accent) 18%, transparent), 0 6px 0 color-mix(in srgb, var(--choice-accent) 30%, transparent), 0 15px 30px rgba(44, 54, 58, 0.14);
+}
+
+.room-choice-card.selected .room-choice-card-header {
+  padding-right: 27px;
+}
+
+.room-choice-card-header {
+  min-height: 47px;
+  padding-top: 9px;
+  border-bottom: 1px dashed color-mix(in srgb, var(--choice-accent) 28%, transparent);
+}
+
+.room-choice-slot {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--choice-accent);
+}
+
+.room-choice-slot b {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  color: #fff;
+  border-radius: 50%;
+  background: var(--choice-accent);
+  font: 900 12px/1 Inter, sans-serif;
+  box-shadow: 1px 2px 0 color-mix(in srgb, var(--choice-accent) 36%, transparent);
+}
+
+.room-choice-category-tag {
+  max-width: 58%;
+  padding: 4px 7px;
+  overflow: hidden;
+  color: color-mix(in srgb, var(--choice-accent) 78%, #25313a);
+  border-color: color-mix(in srgb, var(--choice-accent) 40%, transparent);
+  background: color-mix(in srgb, var(--choice-soft) 80%, #fff);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.room-choice-word-container {
+  min-height: 72px;
+  padding: 8px 2px 4px;
+}
+
+.room-choice-word {
+  color: var(--ink);
+}
+
+.room-choice-mystery-cover {
+  border-color: color-mix(in srgb, var(--choice-accent) 42%, transparent);
+  background: color-mix(in srgb, var(--choice-soft) 72%, #fff);
+}
+
+.room-choice-mystery-cover .mystery-icon {
+  color: var(--choice-accent);
+}
+
+.room-choice-votes-badge {
+  gap: 4px;
+  min-height: 25px;
+  padding: 0 9px;
+  color: color-mix(in srgb, var(--choice-accent) 80%, #25313a);
+  border: 1px solid color-mix(in srgb, var(--choice-accent) 25%, transparent);
+  background: color-mix(in srgb, var(--choice-soft) 70%, #fff);
+}
+
+.room-choice-votes-badge .material-symbols-outlined {
+  font-size: 14px;
+}
+
+.room-choice-selected-mark {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  color: #fff;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--choice-accent);
+  box-shadow: 0 2px 5px rgba(31, 44, 50, 0.2);
+}
+
+.room-choice-selected-mark .material-symbols-outlined {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.room-choice-footer {
+  padding: 14px 22px 18px;
+  border-top: 1px solid rgba(52, 105, 135, 0.13);
+  background: rgba(255, 255, 255, 0.46);
+}
+
+.room-choice-progress {
+  width: min(390px, 100%);
+  display: grid;
+  gap: 7px;
+  color: #56646c;
+  font: 700 12px/1 var(--font-sketch, "Shantell Sans", cursive);
+}
+
+.room-choice-progress-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.room-choice-progress-copy .material-symbols-outlined {
+  color: #367fa0;
+  font-size: 17px;
+}
+
+.room-choice-progress-copy strong {
+  color: #25313a;
+}
+
+.room-choice-progress-track {
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #d8dedc;
+}
+
+.room-choice-progress-track span {
+  display: block;
+  width: var(--vote-progress);
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #367fa0, #4fa87a);
+  transition: width 220ms ease;
+}
+
+.room-results-dialog {
+  width: min(620px, calc(100vw - 32px));
+}
+
+.room-results-header {
+  gap: 4px;
+  padding: 17px 22px 15px;
+  border-bottom: 1px solid rgba(52, 105, 135, 0.15);
+  background: linear-gradient(135deg, #dceef1, #f7e4c4);
+}
+
+.room-results-header h2 {
+  color: #526169;
+  font-size: 15px;
+}
+
+.room-results-word-card {
+  min-width: min(330px, 80%);
+  margin-top: 3px;
+  padding: 8px 22px 9px;
+  border: 0;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 3px 0 rgba(55, 92, 108, 0.14), 0 8px 20px rgba(55, 92, 108, 0.09);
+}
+
+.room-results-word-card .category-pill {
+  color: #367fa0;
+}
+
+.room-results-word-card .revealed-word {
+  color: #9a3f46;
+}
+
+.room-results-body {
+  gap: 11px;
+  padding: 14px 18px 12px;
+}
+
+.room-results-feedback-bar {
+  gap: 12px;
+  padding: 9px 11px;
+  border-color: rgba(54, 127, 160, 0.27);
+  border-radius: 11px;
+  background: #edf7f8;
+  box-shadow: 0 3px 0 rgba(54, 127, 160, 0.1);
+}
+
+.feedback-bar-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+}
+
+.feedback-bar-title > .material-symbols-outlined {
+  color: #367fa0;
+  font-size: 22px;
+}
+
+.feedback-bar-title > span:last-child {
+  display: grid;
+  gap: 3px;
+}
+
+.feedback-bar-title strong {
+  color: #30434c;
+}
+
+.feedback-bar-title small {
+  color: #718089;
+  font: 600 9px/1 Inter, sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.rating-pill {
+  min-height: 32px;
+  padding: 0 11px;
+  border-color: transparent;
+}
+
+.rating-pill.pill-good {
+  color: #25653a;
+  background: #e4f3e8;
+  border-color: #acd5b7;
+}
+
+.rating-pill.pill-mid {
+  color: #8a5b08;
+  background: #fff1c9;
+  border-color: #e8cb75;
+}
+
+.rating-pill.pill-bad {
+  color: #943c43;
+  background: #fbe4e4;
+  border-color: #e1aaaa;
+}
+
+.room-results-score-list {
+  gap: 7px;
+  max-height: 218px;
+}
+
+.room-results-player-item {
+  min-height: 51px;
+  padding: 7px 11px;
+  border-color: rgba(78, 91, 98, 0.18);
+  border-left: 5px solid #9aa5aa;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 2px 0 rgba(67, 79, 84, 0.08);
+}
+
+.room-results-player-item.solved {
+  border-color: rgba(55, 139, 78, 0.32);
+  border-left-color: #3a9b58;
+  background: #e9f5e9;
+}
+
+.room-results-player-item.drawer {
+  border-color: rgba(203, 141, 31, 0.35);
+  border-left-color: #dd941f;
+  background: #fff3d7;
+}
+
+.room-results-player-item .player-rank-icon {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.room-results-player-item .player-name {
+  display: grid;
+  gap: 3px;
+  text-align: left;
+}
+
+.room-results-player-item .player-name small {
+  color: #738087;
+  font: 700 9px/1 Inter, sans-serif;
+}
+
+.room-results-player-item .score-meta {
+  padding-left: 12px;
+  border-left: 1px solid rgba(76, 91, 98, 0.15);
+}
+
+.room-results-player-item .total-badge {
+  padding: 4px 6px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.room-results-footer {
+  min-height: 46px;
+  padding: 9px 18px 11px;
+  border-top: 1px solid rgba(52, 105, 135, 0.15);
+  background: rgba(255, 255, 255, 0.48);
+}
+
+@media (max-width: 720px) {
+  .room-choice-layer {
+    padding: 10px;
+  }
+
+  .room-choice-dialog,
+  .room-results-dialog {
+    width: min(100%, 560px);
+    max-height: calc(100dvh - 20px);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .room-choice-header {
+    padding: 18px 16px 15px;
+  }
+
+  .room-choice-header h2 {
+    font-size: clamp(25px, 8vw, 34px);
+  }
+
+  .room-choice-list {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 14px;
+  }
+
+  .room-choice-list button,
+  .room-choice-card {
+    min-height: 142px;
+  }
+
+  .room-results-feedback-bar,
+  .room-results-footer {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .feedback-rating-pills {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .rating-pill {
+    justify-content: center;
+  }
+
+  .room-results-player-item .score-meta {
+    align-items: flex-end;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .room-results-skip-button {
+    justify-content: center;
+  }
 }
 
 .room-guess-card {

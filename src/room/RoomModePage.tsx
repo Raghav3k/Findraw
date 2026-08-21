@@ -839,7 +839,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                     type="button"
                   >
                     <div className="room-choice-card-header">
-                      <span className="room-choice-slot">Slot {index + 1}</span>
+                      <span className="room-choice-slot"><b>{index + 1}</b> Slot {index + 1}</span>
                       <span className="room-choice-category-tag">{categoryName}</span>
                     </div>
 
@@ -855,16 +855,19 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                     </div>
 
                     <span className="room-choice-votes-badge">
+                      <span className="material-symbols-outlined">how_to_vote</span>
                       {voteCount} vote{voteCount === 1 ? "" : "s"}
                     </span>
+                    {selected ? <span aria-hidden="true" className="room-choice-selected-mark"><span className="material-symbols-outlined">check</span></span> : null}
                   </button>
                 );
               })}
             </div>
             <footer className="room-choice-footer">
-              <span className="room-choice-progress">
-                {submittedChoiceVotes}/{eligibleChoiceVoters.length} players voted
-              </span>
+              <div className="room-choice-progress" style={{ "--vote-progress": `${eligibleChoiceVoters.length ? (submittedChoiceVotes / eligibleChoiceVoters.length) * 100 : 0}%` } as CSSProperties}>
+                <span className="room-choice-progress-copy"><span className="material-symbols-outlined">groups</span><strong>{submittedChoiceVotes} of {eligibleChoiceVoters.length}</strong> players voted</span>
+                <span aria-hidden="true" className="room-choice-progress-track"><span /></span>
+              </div>
             </footer>
           </section>
         </div>
@@ -883,7 +886,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
             </header>
             <div className="room-results-body">
               <div className="room-results-feedback-bar">
-                <span className="feedback-bar-title">Word rating</span>
+                <span className="feedback-bar-title"><span className="material-symbols-outlined">reviews</span><span><strong>Rate this word</strong><small>How did this prompt play?</small></span></span>
                 <div className="feedback-rating-pills">
                   <button
                     className={`rating-pill pill-good ${currentRoundRating === "very_good" ? "active" : ""}`}
@@ -933,7 +936,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                           <span className="player-rank-icon">
                             {isPlayerDrawer ? "🎨" : solveRank === 1 ? "🥇" : solveRank === 2 ? "🥈" : solveRank === 3 ? "🥉" : solvedEntry ? "✅" : "❌"}
                           </span>
-                          <b>{player.name}</b>
+                          <span className="player-name"><b>{player.name}</b><small>{isPlayerDrawer ? "Made the drawing" : solvedEntry ? `${solveRank}${solveRank === 1 ? "st" : solveRank === 2 ? "nd" : solveRank === 3 ? "rd" : "th"} to solve` : "Didn't solve"}</small></span>
                           {isPlayerDrawer && <small className="role-tag">Drawer</small>}
                         </div>
                         <div className="score-meta">
