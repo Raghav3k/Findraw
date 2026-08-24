@@ -280,7 +280,7 @@ app.get("/auth/twitch/start", (request, response) => {
   }
   const state = crypto.randomBytes(24).toString("hex");
   const requestedReturnTo = String(request.query.returnTo || "");
-  const returnTo = ["/auto-draw", "/draw"].includes(requestedReturnTo) ? requestedReturnTo : "/draw";
+  const returnTo = ["/auto-draw", "/draw", "/room"].includes(requestedReturnTo) ? requestedReturnTo : "/draw";
   oauthStates.set(state, { expiresAt: Date.now() + 10 * 60 * 1000, returnTo });
   for (const [key, entry] of oauthStates) {
     if (entry.expiresAt < Date.now()) oauthStates.delete(key);

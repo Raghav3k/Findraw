@@ -9,6 +9,7 @@ import {
   type SolvedViewer,
   type TwitchSession,
 } from "../twitch/twitchApi";
+import { TWITCH_SOLVER_PREVIEW } from "../twitch/twitchSolverPreview";
 import { usePersistentState } from "../ui/usePersistentState";
 import { WorkspaceIdentity } from "../ui/WorkspaceIdentity";
 import { CategoryPickerWindow } from "../ui/CategoryPickerWindow";
@@ -31,6 +32,7 @@ import {
 type Props = { onNavigate: (path: string) => void };
 type Status = "idle" | "playing" | "paused" | "complete";
 type GuessFeedback = "idle" | "wrong" | "correct";
+type TwitchPanel = "chat" | "correct";
 type ResizeState = { panel: "source" | "side"; startX: number; startWidth: number };
 
 const TRANSITION_MS = 900;
@@ -96,6 +98,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
   const pendingFeedbackActionRef = useRef<(() => void) | null>(null);
   const [chatMessages, setChatMessages] = useState<LiveChatMessage[]>([]);
   const [solvers, setSolvers] = useState<SolvedViewer[]>([]);
+  const [twitchPanel, setTwitchPanel] = useState<TwitchPanel>("chat");
   const frame = useRef<number | null>(null);
   const previous = useRef<number | null>(null);
   const transitionProgressRef = useRef(1);
@@ -108,6 +111,8 @@ export function AutoDrawPage({ onNavigate }: Props) {
   assetRef.current = asset;
   const aliases = useMemo(() => asset ? [asset.answer, ...(asset.aliases ?? [])].map(normalize) : [], [asset]);
   const twitchLive = twitchSession.authenticated && twitchSession.eventSubStatus === "connected";
+  const solversForDisplay = solvers.length > 0 ? solvers : import.meta.env.DEV ? TWITCH_SOLVER_PREVIEW : [];
+  const showingSolverPreview = import.meta.env.DEV && solvers.length === 0;
 
   const closeLiveRound = async () => {
     if (!activeRoundId.current) return;
@@ -455,11 +460,23 @@ export function AutoDrawPage({ onNavigate }: Props) {
           <div className="camera-preview auto-camera-preview"><span className="material-symbols-outlined">videocam</span><strong>Camera window</strong><small>Place your camera source over this frame in OBS.</small></div>
         </section>
         <section className="source-card chat-source-card auto-chat-source-card">
-          <header className="source-card-header"><div><span className="source-eyebrow">Audience notes</span><h2>Twitch live chat</h2></div><span className={`source-status ${twitchLive ? "ready" : ""}`}><i/>{twitchLive ? "Live" : "Offline"}</span></header>
-          <div className="source-chat-list" aria-live="polite">
-            {chatMessages.length ? chatMessages.map((message) => <div className="source-chat-message" key={message.id}><span>{message.name.slice(0, 1)}</span><p><strong>{message.name}</strong>{message.message}</p></div>) : <div className="source-empty-state"><span className="material-symbols-outlined">forum</span><strong>Chat appears here</strong><small>{twitchLive ? "Start a drawing and audience guesses will arrive live." : "Connect Twitch from your profile to receive chat."}</small></div>}
-            {solvers.map((solver) => <div className="auto-chat-solver" key={solver.userId}><span className="material-symbols-outlined">workspace_premium</span>{solver.name} solved it first</div>)}
+          <header className="source-card-header"><div><span className="source-eyebrow">Audience notes</span><h2>Twitch audience</h2></div><span className={`source-status ${twitchLive ? "ready" : ""}`}><i/>{twitchLive ? "Live" : "Offline"}</span></header>
+          <div className="auto-twitch-tabs" role="tablist" aria-label="Twitch audience views">
+            <button aria-selected={twitchPanel === "chat"} className={twitchPanel === "chat" ? "active" : ""} onClick={() => setTwitchPanel("chat")} role="tab" type="button"><span className="material-symbols-outlined">forum</span>Live chat</button>
+            <button aria-selected={twitchPanel === "correct"} className={twitchPanel === "correct" ? "active" : ""} onClick={() => setTwitchPanel("correct")} role="tab" type="button"><span className="material-symbols-outlined">check_circle</span>Correct guesses</button>
           </div>
+          {twitchPanel === "chat" ? (
+            <div className="source-chat-list" aria-live="polite" role="tabpanel">
+              {chatMessages.length ? chatMessages.map((message) => <div className="source-chat-message" key={message.id}><span>{message.name.slice(0, 1)}</span><p><strong>{message.name}</strong>{message.message}</p></div>) : <div className="source-empty-state"><span className="material-symbols-outlined">forum</span><strong>Chat appears here</strong><small>{twitchLive ? "Start a drawing and audience guesses will arrive live." : "Connect Twitch from your profile to receive chat."}</small></div>}
+            </div>
+          ) : (
+            <div className="auto-correct-panel" role="tabpanel">
+              <div className="auto-correct-summary"><div><strong>Correct from chat</strong>{showingSolverPreview ? <small>Test preview</small> : null}</div><span><b>{solversForDisplay.length}</b><small>total</small></span></div>
+              <div className="auto-correct-list scrollable" aria-live="polite">
+                {solversForDisplay.length ? solversForDisplay.map((solver) => <div className="auto-correct-solver" key={solver.userId}><span>{solver.position <= 3 ? ["🥇", "🥈", "🥉"][solver.position - 1] : `#${solver.position}`}</span><strong>{solver.name}</strong></div>) : <p>No correct guesses yet</p>}
+              </div>
+            </div>
+          )}
         </section>
       </aside>
 

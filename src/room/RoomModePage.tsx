@@ -17,12 +17,23 @@ import { CategoryPickerWindow } from "../ui/CategoryPickerWindow";
 import { WorkspaceIdentity } from "../ui/WorkspaceIdentity";
 import { usePersistentState } from "../ui/usePersistentState";
 import {
+  connectLiveEvents,
+  disconnectTwitch,
+  endServerRound,
+  fetchTwitchSession,
+  reconnectTwitchChat,
+  startServerRound,
+  type SolvedViewer,
+  type TwitchSession,
+} from "../twitch/twitchApi";
+import { TWITCH_SOLVER_PREVIEW } from "../twitch/twitchSolverPreview";
+import {
   recordWordFeedback,
   type WordFeedbackMap,
   type WordFeedbackRating,
   type WordFeedbackTarget,
 } from "../feedback/wordFeedback";
-import { hasApiBaseUrl } from "../apiUrls";
+import { hasApiBaseUrl, twitchAuthStartUrl } from "../apiUrls";
 import {
   createClientId,
   createEmptyRoom,
@@ -56,6 +67,12 @@ type ResizeState = {
 
 const DEFAULT_ROOM_CODE = "";
 type RoomEntryMode = "create" | "join";
+const EMPTY_TWITCH_SESSION: TwitchSession = {
+  configured: false,
+  authenticated: false,
+  eventSubStatus: "disconnected",
+  user: null,
+};
 
 const createPlayer = (id: string, name: string): RoomPlayer => ({
   id,
@@ -96,6 +113,10 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const [liveDrawingOperation, setLiveDrawingOperation] = useState<DrawingOperation | null>(null);
   const [notice, setNotice] = useState("");
   const [categoriesOpen, setCategoriesOpen] = useState(false);
+  const [twitchPanelOpen, setTwitchPanelOpen] = useState(false);
+  const [twitchSession, setTwitchSession] = useState<TwitchSession>(EMPTY_TWITCH_SESSION);
+  const [twitchSolvers, setTwitchSolvers] = useState<SolvedViewer[]>([]);
+  const [twitchNotice, setTwitchNotice] = useState("");
   const [confirmExitOpen, setConfirmExitOpen] = useState(false);
   const [timerNow, setTimerNow] = useState(() => Date.now());
   const [skipRoomExitConfirm, setSkipRoomExitConfirm] = usePersistentState("room.exit.skipConfirm", false);
@@ -108,6 +129,9 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const resizeStateRef = useRef<ResizeState | null>(null);
   const onlineRoomRef = useRef<OnlineRoomClient | null>(null);
   const chatScrollRef = useRef<HTMLDivElement | null>(null);
+  const activeTwitchRoundIdRef = useRef<string | null>(null);
+  const startedTwitchRoundKeyRef = useRef<string | null>(null);
+  const roomRoundRef = useRef({ phase: "", turnIndex: -1 });
 
   const roomPlayers = room?.players ?? [];
   const roomChoices = room?.choices ?? [];
@@ -144,6 +168,11 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     Object.values(roomChoiceVotes).filter((vote) => vote === index).length
   ));
   const submittedChoiceVotes = Object.keys(roomChoiceVotes).filter((playerId) => eligibleChoiceVoters.some((player) => player.id === playerId)).length;
+  const twitchLive = twitchSession.authenticated && twitchSession.eventSubStatus === "connected";
+  const twitchSolversForDisplay = twitchSolvers.length > 0
+    ? twitchSolvers
+    : import.meta.env.DEV ? TWITCH_SOLVER_PREVIEW : [];
+  const showingTwitchPreview = import.meta.env.DEV && twitchSolvers.length === 0;
 
   const leaveLocalRoom = useCallback((roomToLeave: RoomState) => {
     const players = roomToLeave.players.filter((player) => player.id !== clientId);
@@ -331,6 +360,68 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   };
 
   useEffect(() => () => onlineRoomRef.current?.close(), []);
+
+  useEffect(() => {
+    roomRoundRef.current = { phase: room?.phase ?? "", turnIndex: room?.turnIndex ?? -1 };
+  }, [room?.phase, room?.turnIndex]);
+
+  useEffect(() => {
+    let active = true;
+    fetchTwitchSession()
+      .then((session) => { if (active) setTwitchSession(session); })
+      .catch(() => { if (active) setTwitchSession(EMPTY_TWITCH_SESSION); });
+    const closeLiveEvents = connectLiveEvents((event) => {
+      if (event.type === "twitch-session") setTwitchSession(event.payload);
+      if (event.type === "round-started" && roomRoundRef.current.phase === "drawing") {
+        activeTwitchRoundIdRef.current = event.payload.roundId;
+      }
+      if (event.type === "correct-guess" && event.payload.roundId === activeTwitchRoundIdRef.current) {
+        setTwitchSolvers((current) => current.some((viewer) => viewer.userId === event.payload.solver.userId)
+          ? current
+          : [...current, event.payload.solver]);
+      }
+    }, () => {
+      setTwitchSession((current) => current.authenticated ? { ...current, eventSubStatus: "reconnecting" } : current);
+    });
+    return () => {
+      active = false;
+      closeLiveEvents();
+    };
+  }, []);
+
+  useEffect(() => {
+    setTwitchSolvers([]);
+    setTwitchNotice("");
+    activeTwitchRoundIdRef.current = null;
+  }, [room?.code, room?.turnIndex]);
+
+  useEffect(() => {
+    if (!room || room.phase !== "drawing" || !isDrawer || !roomAnswerText || !twitchLive) return;
+    const roundKey = `${room.code}:${room.turnIndex}`;
+    if (startedTwitchRoundKeyRef.current === roundKey) return;
+    startedTwitchRoundKeyRef.current = roundKey;
+    setTwitchNotice("");
+    void startServerRound(roomAnswerText, 100, room.answer?.aliases ?? [], false)
+      .then(({ roundId }) => {
+        if (startedTwitchRoundKeyRef.current !== roundKey || roomRoundRef.current.phase !== "drawing") {
+          void endServerRound();
+          return;
+        }
+        activeTwitchRoundIdRef.current = roundId;
+        setTwitchNotice("");
+      })
+      .catch((error) => {
+        if (startedTwitchRoundKeyRef.current === roundKey) startedTwitchRoundKeyRef.current = null;
+        setTwitchNotice(error instanceof Error ? error.message : "Twitch guesses could not start.");
+      });
+  }, [isDrawer, room, roomAnswerText, twitchLive]);
+
+  useEffect(() => {
+    if (room?.phase === "drawing" || !startedTwitchRoundKeyRef.current) return;
+    startedTwitchRoundKeyRef.current = null;
+    activeTwitchRoundIdRef.current = null;
+    void endServerRound().catch(() => undefined);
+  }, [room?.phase]);
 
   useEffect(() => {
     setTimerNow(Date.now());
@@ -606,7 +697,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   return (
     <div className="dashboard-layout room-mode-page" style={{ "--source-rail-width": `${sourceRailWidth}px`, "--side-panel-width": `${sidePanelWidth}px` } as CSSProperties}>
       <aside className="stream-sidebar room-sidebar" aria-label="Room setup">
-        <WorkspaceIdentity connected={roomConnectionStatus === "connected"} configured={hasApiBaseUrl} displayName={playerName} onModes={requestExitToHome} returnTo="/room" subtitle={hasApiBaseUrl ? "Online room beta" : "Local room fallback"} />
+        <WorkspaceIdentity connected={twitchSession.authenticated} configured={twitchSession.configured || hasApiBaseUrl} displayName={twitchSession.user?.displayName ?? playerName} onDisconnectTwitch={() => { void disconnectTwitch().then(() => setTwitchSession(EMPTY_TWITCH_SESSION)); }} onModes={requestExitToHome} returnTo="/room" subtitle={hasApiBaseUrl ? "Online room beta" : "Local room fallback"} />
 
         <section className="source-card room-player-card">
           <header className="source-card-header">
@@ -742,7 +833,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
           <div className="main-column room-main-column">
             <section className="prompt-board room-prompt-board">
               <div className="round-word-mask">
-                {room?.phase === "drawing" && isDrawer ? roomAnswerText.toUpperCase() : room?.answer?.mask ?? maskedAnswer(roomAnswerText || null)}
+                {room?.answer?.mask ?? maskedAnswer(roomAnswerText || null)}
               </div>
             </section>
 
@@ -780,11 +871,15 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
           <div aria-label="Resize room activity panel" aria-orientation="vertical" aria-valuemax={460} aria-valuemin={250} aria-valuenow={sidePanelWidth} className="layout-resizer side-panel-resizer" onPointerDown={(event) => startResize("side", event)} role="separator" />
 
           <aside className="side-column room-side-column" aria-label="Room activity">
-            <section className={`feed-card support-card room-category-card ${categoriesOpen ? "" : "collapsed"}`}>
-              <div className="support-tabs" role="tablist" aria-label="Room categories">
-                <button aria-expanded={categoriesOpen} aria-selected="true" className="active" onClick={() => setCategoriesOpen((current) => !current)} role="tab" type="button">
+            <section className={`feed-card support-card room-category-card ${categoriesOpen || twitchPanelOpen ? "" : "collapsed"}`}>
+              <div className="support-tabs" role="tablist" aria-label="Room categories and Twitch guesses">
+                <button aria-expanded={categoriesOpen} aria-selected={categoriesOpen} className={categoriesOpen ? "active" : ""} onClick={() => { setCategoriesOpen((current) => !current); setTwitchPanelOpen(false); }} role="tab" type="button">
                   <span className="material-symbols-outlined">category</span>Categories
                   <span className="material-symbols-outlined">{categoriesOpen ? "expand_less" : "expand_more"}</span>
+                </button>
+                <button aria-expanded={twitchPanelOpen} aria-selected={twitchPanelOpen} className={twitchPanelOpen ? "active twitch" : "twitch"} onClick={() => { setTwitchPanelOpen((current) => !current); setCategoriesOpen(false); }} role="tab" type="button">
+                  <span className="material-symbols-outlined">live_tv</span>Twitch chat
+                  <span className={`room-twitch-live-dot ${twitchLive ? "live" : ""}`} aria-hidden="true" />
                 </button>
               </div>
               {categoriesOpen ? <div className="support-panel-content category-panel" role="tabpanel">
@@ -808,6 +903,32 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                   <CategorySelectionTools chips={activeSelectionChips} disabled={!room || !isHost || room.phase !== "lobby"} mode="room" onRemoveChip={removeSelectionChip} />
                 </div>
               </div> : null}
+              {twitchPanelOpen ? (
+                <div className="support-panel-content room-twitch-panel" role="tabpanel">
+                  <header>
+                    <div><strong>Correct from chat</strong>{showingTwitchPreview ? <small>Test preview</small> : null}</div>
+                    <span className={`room-twitch-total ${twitchSolversForDisplay.length ? "live" : ""}`}><b>{twitchSolversForDisplay.length}</b><small>total</small></span>
+                  </header>
+                  <div className="room-twitch-solvers scrollable" aria-live="polite">
+                    {twitchSolversForDisplay.length ? twitchSolversForDisplay.map((solver) => (
+                      <div className="room-twitch-solver" key={solver.userId}>
+                        <span>{solver.position <= 3 ? ["🥇", "🥈", "🥉"][solver.position - 1] : `#${solver.position}`}</span>
+                        <strong>{solver.name}</strong>
+                      </div>
+                    )) : <p className="room-twitch-empty">No correct guesses yet</p>}
+                  </div>
+                  {twitchNotice ? <p className="room-twitch-notice">{twitchNotice}</p> : null}
+                  {!twitchSession.authenticated ? (
+                    <button className="room-twitch-action" onClick={() => window.open(twitchAuthStartUrl("/room"), "_blank", "noopener,noreferrer")} type="button">
+                      <span className="material-symbols-outlined">link</span>Connect Twitch
+                    </button>
+                  ) : !twitchLive ? (
+                    <button className="room-twitch-action" onClick={() => { void reconnectTwitchChat().then(setTwitchSession).catch((error) => setTwitchNotice(error instanceof Error ? error.message : "Could not reconnect Twitch.")); }} type="button">
+                      <span className="material-symbols-outlined">refresh</span>Reconnect chat
+                    </button>
+                  ) : null}
+                </div>
+              ) : null}
             </section>
 
             <section className="feed-card room-guess-card">

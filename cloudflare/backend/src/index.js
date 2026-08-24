@@ -976,7 +976,7 @@ export class FindrawSession {
     if (!this.configured()) return new Response("Twitch is not configured.", { status: 503, headers: corsHeaders(request) });
     const state = randomToken();
     const requestedReturnTo = String(url.searchParams.get("returnTo") || "");
-    const returnTo = ["/auto-draw", "/draw"].includes(requestedReturnTo) ? requestedReturnTo : "/draw";
+    const returnTo = ["/auto-draw", "/draw", "/room"].includes(requestedReturnTo) ? requestedReturnTo : "/draw";
     const states = await this.state.storage.get("oauthStates") || {};
     const now = Date.now();
     for (const [key, entry] of Object.entries(states)) {
