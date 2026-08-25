@@ -15,6 +15,8 @@ import {
   type ShortcutAction,
 } from "./keyboardShortcuts";
 import { usePersistentState } from "../ui/usePersistentState";
+import { DockLayout, DockPanel, DockSlot, ResizableSurface } from "../ui/DockLayout";
+import { resizeDockBoundary } from "../ui/dockRailResize";
 import {
   adjustViewerPoints,
   disconnectTwitch,
@@ -55,6 +57,7 @@ type ResizeState = {
   panel: "source" | "side";
   startX: number;
   startWidth: number;
+  lastWidth: number;
 };
 
 const mixChannel = (start: number, end: number, amount: number) => Math.round(start + (end - start) * amount);
@@ -175,9 +178,15 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       if (!resize) return;
       const delta = event.clientX - resize.startX;
       if (resize.panel === "source") {
-        setSourceRailWidth(Math.max(280, Math.min(520, resize.startWidth + delta)));
+        const nextWidth = Math.max(280, Math.min(520, resize.startWidth + delta));
+        resizeDockBoundary("right", resize.lastWidth, nextWidth);
+        resize.lastWidth = nextWidth;
+        setSourceRailWidth(nextWidth);
       } else {
-        setSidePanelWidth(Math.max(230, Math.min(420, resize.startWidth - delta)));
+        const nextWidth = Math.max(230, Math.min(420, resize.startWidth - delta));
+        resizeDockBoundary("left", resize.lastWidth, nextWidth);
+        resize.lastWidth = nextWidth;
+        setSidePanelWidth(nextWidth);
       }
     };
     const stopResize = () => {
@@ -518,6 +527,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       panel,
       startX: event.clientX,
       startWidth: panel === "source" ? sourceRailWidth : sidePanelWidth,
+      lastWidth: panel === "source" ? sourceRailWidth : sidePanelWidth,
     };
     document.body.classList.add("resizing-panels");
   };
@@ -534,6 +544,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   };
 
   return (
+    <DockLayout panelIds={["artist-camera", "artist-chat", "artist-support", "artist-solved", "artist-leaderboard"]} slotIds={["artist-left-1", "artist-left-2", "artist-right-1", "artist-right-2", "artist-right-3"]} storageKey="artist.dock.v2">
     <div
       className="dashboard-layout"
       style={{
@@ -558,6 +569,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
 
         <section className="dashboard-grid">
           <div className="main-column">
+            <ResizableSurface className="fixed-prompt-surface" label="guess bar" storageKey="artist.guessBar.v2">
             <div className="prompt-bar-row">
               <section
                 className={`prompt-board ${solvedViewers.length > 0 ? "has-correct-guess" : ""}`}
@@ -626,7 +638,9 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                 </div>
               </div>
             </div>
+            </ResizableSurface>
 
+            <ResizableSurface className="fixed-canvas-surface" label="drawing canvas" storageKey="artist.canvas.v2">
             <section className="canvas-card">
               <div className="solve-bar"><span style={{ width: `${Math.min(100, (solvedViewers.length / correctGuessTarget) * 100)}%` }} /></div>
               <div className="canvas-header simplified-canvas-header">
@@ -634,6 +648,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
               </div>
               <ExcalidrawStage canvasColor={canvasColor} gridSize={gridSize} hoverMenuDelay={hoverMenuDelay} hoverMenusEnabled={hoverMenusEnabled} onCanvasColorChange={setCanvasColor} onGridSizeChange={setGridSize} onOperationsChange={(ops) => { strokeCountRef.current = ops.length; }} shortcuts={shortcuts} />
             </section>
+            </ResizableSurface>
 
             <section className="round-controls" aria-label="Round controls">
               <button className="control primary" disabled={roundActive} onClick={startRound} type="button"><span className="material-symbols-outlined">play_arrow</span>{roundStatus === "ended" ? "Next Word" : "Start Word"}</button>
@@ -645,7 +660,11 @@ export function Dashboard({ onNavigate }: DashboardProps) {
 
           <div aria-label="Resize help panel" className="layout-resizer side-panel-resizer" onPointerDown={(event) => startResize("side", event)} role="separator" />
 
-          <aside className="side-column" aria-label="Live game data">
+          <aside className="side-column dock-rail" data-dock-boundary="left" aria-label="Live game data">
+            <DockSlot id="artist-right-1" />
+            <DockSlot id="artist-right-2" />
+            <DockSlot id="artist-right-3" />
+            <DockPanel id="artist-support" label="categories and settings">
             <SupportPanel
               onCategoryChange={selectCategory}
               onCategoryChipRemove={removeCategoryChip}
@@ -667,7 +686,9 @@ export function Dashboard({ onNavigate }: DashboardProps) {
               onConnectTwitch={connectTwitch}
               onDisconnectTwitch={() => void disconnectFromTwitch()}
             />
+            </DockPanel>
 
+            <DockPanel id="artist-solved" label="solved guesses">
             <section className="feed-card solved-card">
               <div className="card-title gold-title"><h3><span className="material-symbols-outlined">check_circle</span>Solved</h3><b>{solvedViewers.length}/{correctGuessTarget}</b></div>
               <div className="solver-list">
@@ -676,7 +697,9 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                   : <p className="solver-empty">No correct guesses yet.</p>}
               </div>
             </section>
+            </DockPanel>
 
+            <DockPanel id="artist-leaderboard" label="leaderboard">
             <section className="feed-card leaderboard-card">
               <div className="card-title"><h3>Leaderboard</h3><span className="material-symbols-outlined trophy">emoji_events</span></div>
               <ol className="leaderboard">
@@ -685,6 +708,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                 ))}
               </ol>
             </section>
+            </DockPanel>
           </aside>
         </section>
       </main>
@@ -696,5 +720,6 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         target={feedbackTarget}
       />
     </div>
+    </DockLayout>
   );
 }

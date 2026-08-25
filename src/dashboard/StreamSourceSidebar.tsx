@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { EventSubStatus } from "../twitch/twitchApi";
 import { WorkspaceIdentity } from "../ui/WorkspaceIdentity";
+import { DockControls, DockPanel, DockSlot } from "../ui/DockLayout";
 import { AUTO_DRAW_ASSETS } from "../autoDraw/autoDrawAssets";
 
 export type ChatMessage = {
@@ -61,9 +62,13 @@ export function StreamSourceSidebar({ configured, connected, displayName, messag
   };
 
   return (
-    <aside className="stream-sidebar" aria-label="Stream sources">
+    <aside className="stream-sidebar dock-rail" data-dock-boundary="right" aria-label="Stream sources">
       <WorkspaceIdentity connected={connected} configured={configured} displayName={displayName} onDisconnectTwitch={onDisconnectTwitch} onModes={onModes} returnTo="/draw" subtitle="Artist sketchbook" />
+      <DockControls />
+      <DockSlot id="artist-left-1" />
+      <DockSlot id="artist-left-2" />
 
+      <DockPanel id="artist-camera" label="camera">
       <section className="source-card camera-source-card">
         <header className="source-card-header">
           <div>
@@ -139,7 +144,9 @@ export function StreamSourceSidebar({ configured, connected, displayName, messag
           )}
         </div>
       </section>
+      </DockPanel>
 
+      <DockPanel id="artist-chat" label="guess feed">
       <section className="source-card chat-source-card">
         <header className="source-card-header">
           <div>
@@ -166,6 +173,7 @@ export function StreamSourceSidebar({ configured, connected, displayName, messag
           )}
         </div>
       </section>
+      </DockPanel>
     </aside>
   );
 }

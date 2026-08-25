@@ -12,6 +12,8 @@ import {
 import { TWITCH_SOLVER_PREVIEW } from "../twitch/twitchSolverPreview";
 import { usePersistentState } from "../ui/usePersistentState";
 import { WorkspaceIdentity } from "../ui/WorkspaceIdentity";
+import { DockControls, DockLayout, DockPanel, DockSlot, ResizableSurface } from "../ui/DockLayout";
+import { resizeDockBoundary } from "../ui/dockRailResize";
 import { CategoryPickerWindow } from "../ui/CategoryPickerWindow";
 import { AutoDrawCanvas } from "./AutoDrawCanvas";
 import { AUTO_DRAW_ASSETS } from "./autoDrawAssets";
@@ -33,7 +35,7 @@ type Props = { onNavigate: (path: string) => void };
 type Status = "idle" | "playing" | "paused" | "complete";
 type GuessFeedback = "idle" | "wrong" | "correct";
 type TwitchPanel = "chat" | "correct";
-type ResizeState = { panel: "source" | "side"; startX: number; startWidth: number };
+type ResizeState = { panel: "source" | "side"; startX: number; startWidth: number; lastWidth: number };
 
 const TRANSITION_MS = 900;
 const EMPTY_TWITCH_SESSION: TwitchSession = { authenticated: false, configured: false, eventSubStatus: "disconnected", user: null };
@@ -172,8 +174,17 @@ export function AutoDrawPage({ onNavigate }: Props) {
       const resize = resizeStateRef.current;
       if (!resize) return;
       const delta = event.clientX - resize.startX;
-      if (resize.panel === "source") setSourceRailWidth(Math.max(280, Math.min(520, resize.startWidth + delta)));
-      else setSidePanelWidth(Math.max(230, Math.min(420, resize.startWidth - delta)));
+      if (resize.panel === "source") {
+        const nextWidth = Math.max(280, Math.min(520, resize.startWidth + delta));
+        resizeDockBoundary("right", resize.lastWidth, nextWidth);
+        resize.lastWidth = nextWidth;
+        setSourceRailWidth(nextWidth);
+      } else {
+        const nextWidth = Math.max(230, Math.min(420, resize.startWidth - delta));
+        resizeDockBoundary("left", resize.lastWidth, nextWidth);
+        resize.lastWidth = nextWidth;
+        setSidePanelWidth(nextWidth);
+      }
     };
     const stopResize = () => { resizeStateRef.current = null; document.body.classList.remove("resizing-panels"); };
     window.addEventListener("pointermove", handlePointerMove);
@@ -407,7 +418,8 @@ export function AutoDrawPage({ onNavigate }: Props) {
 
   const startResize = (panel: ResizeState["panel"], event: ReactPointerEvent<HTMLDivElement>) => {
     event.preventDefault();
-    resizeStateRef.current = { panel, startX: event.clientX, startWidth: panel === "source" ? sourceRailWidth : sidePanelWidth };
+    const startWidth = panel === "source" ? sourceRailWidth : sidePanelWidth;
+    resizeStateRef.current = { panel, startX: event.clientX, startWidth, lastWidth: startWidth };
     document.body.classList.add("resizing-panels");
   };
 
@@ -452,13 +464,20 @@ export function AutoDrawPage({ onNavigate }: Props) {
   };
 
   return (
+    <DockLayout panelIds={["auto-camera", "auto-twitch", "auto-categories", "auto-reserved"]} slotIds={["auto-left-1", "auto-left-2", "auto-right-1", "auto-right-2"]} storageKey="autoDraw.dock.v2">
     <div className="dashboard-layout auto-draw-page auto-workspace" style={{ "--source-rail-width": `${sourceRailWidth}px`, "--side-panel-width": `${sidePanelWidth}px` } as CSSProperties}>
-      <aside className="stream-sidebar auto-stream-sidebar" aria-label="Stream sources">
+      <aside className="stream-sidebar auto-stream-sidebar dock-rail" data-dock-boundary="right" aria-label="Stream sources">
         <WorkspaceIdentity connected={twitchSession.authenticated} configured={twitchSession.configured} displayName={twitchSession.user?.displayName ?? null} onDisconnectTwitch={() => void disconnectFromTwitch()} onModes={() => onNavigate("/")} returnTo="/auto-draw" subtitle="Auto Draw sketchbook" />
+        <DockControls />
+        <DockSlot id="auto-left-1" />
+        <DockSlot id="auto-left-2" />
+        <DockPanel id="auto-camera" label="camera">
         <section className="source-card camera-source-card">
           <header className="source-card-header"><div><span className="source-eyebrow">Camera frame</span><h2>Streamer camera</h2></div><span className="source-status ready"><i/>OBS</span></header>
           <div className="camera-preview auto-camera-preview"><span className="material-symbols-outlined">videocam</span><strong>Camera window</strong><small>Place your camera source over this frame in OBS.</small></div>
         </section>
+        </DockPanel>
+        <DockPanel id="auto-twitch" label="Twitch audience">
         <section className="source-card chat-source-card auto-chat-source-card">
           <header className="source-card-header"><div><span className="source-eyebrow">Audience notes</span><h2>Twitch audience</h2></div><span className={`source-status ${twitchLive ? "ready" : ""}`}><i/>{twitchLive ? "Live" : "Offline"}</span></header>
           <div className="auto-twitch-tabs" role="tablist" aria-label="Twitch audience views">
@@ -478,6 +497,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
             </div>
           )}
         </section>
+        </DockPanel>
       </aside>
 
       <div aria-label="Resize camera and chat panels" aria-orientation="vertical" aria-valuemax={520} aria-valuemin={280} aria-valuenow={sourceRailWidth} className="layout-resizer source-rail-resizer" onPointerDown={(event) => startResize("source", event)} role="separator"/>
@@ -485,6 +505,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
       <main className="dashboard-shell auto-dashboard-shell">
         <section className="dashboard-grid auto-dashboard-grid">
           <div className="main-column auto-main-column">
+            <ResizableSurface className="fixed-prompt-surface" label="guess bar" storageKey="autoDraw.guessBar.v2">
             <div className={`prompt-board auto-guess-bar ${guessFeedback}${guessFocused ? " selected" : ""}${status === "idle" ? " disabled" : ""}`} onClick={() => { if (status === "playing" || status === "paused") guessInputRef.current?.focus(); }}>
               <div aria-hidden="true" className="auto-guess-letters" style={{ fontSize: `clamp(14px, ${45 / Math.max(1, status === "idle" ? 5 : asset.answer.length)}vw, 34px)` }}>
                 {status === "idle" ? (
@@ -506,13 +527,16 @@ export function AutoDrawPage({ onNavigate }: Props) {
               </button>
               <input aria-label="Type your AutoDraw answer" autoComplete="off" disabled={status === "idle" || status === "complete"} maxLength={80} onBlur={() => setGuessFocused(false)} onChange={(event) => { setGuess(event.target.value); if (guessFeedback === "wrong") setGuessFeedback("idle"); }} onFocus={() => setGuessFocused(true)} onKeyDown={(event) => { if (event.key === "Enter") { event.preventDefault(); submitGuess(); } }} ref={guessInputRef} value={guess}/>
             </div>
+            </ResizableSurface>
             <span aria-live="polite" className="auto-guess-announcement">{notice}</span>
 
+            <ResizableSurface className="fixed-canvas-surface" label="drawing canvas" storageKey="autoDraw.canvas.v2">
             <section className="auto-canvas-card"><span className="auto-canvas-tape tape-left"/><span className="auto-canvas-tape tape-right"/>
               <div className="auto-stage-timer"><span>{obscurity}% obscured</span><strong>{status === "playing" ? `${obscurity}%` : status === "paused" ? "Paused" : status === "complete" ? "Revealed" : "Ready"}</strong></div>
               <div className="auto-canvas-wrap"><AutoDrawCanvas active={status !== "idle"} asset={asset} paused={status === "paused"} resetToken={canvasResetToken} stageIndex={status === "complete" ? asset.stages.length - 1 : stageIndex} stageProgress={status === "complete" ? 1 : transitionProgress}/>{status === "idle" && <div className="auto-canvas-empty"><span className="material-symbols-outlined">edit_note</span><strong>The page is waiting</strong><small>Start the round to cover the sketch in clouds.</small></div>}</div>
               <div aria-label={`${revealPercent} percent of the full reveal`} aria-valuemax={100} aria-valuemin={0} aria-valuenow={revealPercent} className="auto-stage-progress" role="progressbar"><span style={{ width: `${revealPercent}%` }}/></div>
             </section>
+            </ResizableSurface>
 
             <section className="auto-controls" aria-label="AutoDraw controls">
               <button className="primary" onClick={() => status === "idle" ? void startDrawing() : void nextDrawing()} type="button">
@@ -536,7 +560,10 @@ export function AutoDrawPage({ onNavigate }: Props) {
 
           <div aria-label="Resize right panels" aria-orientation="vertical" aria-valuemax={420} aria-valuemin={230} aria-valuenow={sidePanelWidth} className="layout-resizer side-panel-resizer" onPointerDown={(event) => startResize("side", event)} role="separator"/>
 
-          <aside className="side-column auto-right-rail" aria-label="Round setup">
+          <aside className="side-column auto-right-rail dock-rail" data-dock-boundary="left" aria-label="Round setup">
+            <DockSlot id="auto-right-1" />
+            <DockSlot id="auto-right-2" />
+            <DockPanel id="auto-categories" label="categories">
             <section className="feed-card support-card auto-category-card artist-category-copy">
               <div className="support-tabs" role="tablist" aria-label="AutoDraw categories"><button aria-selected="true" className="active" role="tab" type="button"><span className="material-symbols-outlined">category</span>Categories</button></div>
               <div className="support-panel-content category-panel" role="tabpanel">
@@ -567,7 +594,10 @@ export function AutoDrawPage({ onNavigate }: Props) {
                 </div>
               </div>
             </section>
+            </DockPanel>
+            <DockPanel id="auto-reserved" label="reserved panel">
             <section aria-label="Reserved panel" className="feed-card auto-blank-panel"/>
+            </DockPanel>
           </aside>
         </section>
       </main>
@@ -579,5 +609,6 @@ export function AutoDrawPage({ onNavigate }: Props) {
         target={feedbackTarget}
       />
     </div>
+    </DockLayout>
   );
 }

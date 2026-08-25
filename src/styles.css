@@ -42,6 +42,237 @@
 *::-webkit-scrollbar-thumb { background: rgba(133, 139, 158, 0.48); background-clip: padding-box; border: 2px solid transparent; border-radius: 999px; min-height: 36px; }
 *::-webkit-scrollbar-thumb:hover { background: rgba(173, 181, 201, 0.68); background-clip: padding-box; }
 *::-webkit-scrollbar-corner { background: transparent; }
+
+/* In-flow dock layout: panels stay inside their rails, so resizing and swapping
+   cannot cover the canvas or neighboring panels. */
+.dock-rail {
+  display: flex !important;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+  overflow-x: hidden !important;
+  overflow-y: hidden !important;
+}
+
+.dock-slot {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  border: 1px dashed transparent;
+  border-radius: 8px;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.dock-slot::after {
+  position: absolute;
+  z-index: 24;
+  content: "";
+  pointer-events: none;
+  inset: 5px;
+  border: 2px solid transparent;
+  border-radius: 7px;
+  opacity: 0;
+  transform: scale(.975);
+  transition: opacity 110ms ease, transform 150ms cubic-bezier(.2,.8,.2,1), border-color 110ms ease, box-shadow 110ms ease;
+}
+
+.dock-slot.drop-target {
+  border-color: rgba(63, 130, 159, .58);
+  background: rgba(131, 197, 230, .16);
+}
+
+.dock-slot.drop-target::after {
+  border-color: rgba(63, 130, 159, .72);
+  box-shadow: inset 0 0 0 3px rgba(131,197,230,.13), 0 0 16px rgba(63,130,159,.18);
+  opacity: 1;
+  transform: scale(1);
+}
+
+.dock-slot.drop-target > .dock-panel-shell:not(.dragging) {
+  filter: saturate(.92);
+  transform: scale(.972);
+}
+
+.dock-panel-shell {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  max-width: 100%;
+  overflow: visible;
+  transition: filter 120ms ease, opacity 120ms ease, transform 120ms ease;
+}
+
+.dock-panel-shell.dragging {
+  opacity: .9;
+  pointer-events: none;
+  filter: drop-shadow(0 18px 24px rgba(45, 38, 29, .26));
+  transform: rotate(-.25deg) scale(1.012);
+}
+
+.dock-panel-shell.snapping {
+  animation: dock-panel-snap 300ms cubic-bezier(.2, .9, .25, 1.18) both;
+}
+
+.dock-panel-shell.resize-snap,
+.resizable-surface.resize-snap {
+  outline: 2px solid rgba(63,130,159,.72);
+  outline-offset: 2px;
+}
+
+.dock-panel-shell.resize-snap::before,
+.resizable-surface.resize-snap::before {
+  position: absolute;
+  z-index: 45;
+  top: 7px;
+  left: 50%;
+  content: "SNAP";
+  pointer-events: none;
+  padding: 2px 7px;
+  border: 1px solid rgba(63,130,159,.5);
+  border-radius: 999px;
+  background: #e9f5f4;
+  color: #315e6d;
+  box-shadow: 0 3px 8px rgba(45,38,29,.12);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  line-height: 1;
+  transform: translateX(-50%);
+  animation: dock-resize-snap 150ms cubic-bezier(.2,.9,.25,1.2) both;
+}
+
+@keyframes dock-resize-snap {
+  from { opacity: 0; transform: translateX(-50%) scale(.76); }
+  to { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+
+@keyframes dock-panel-snap {
+  0% { filter: drop-shadow(0 12px 18px rgba(45,38,29,.22)); transform: scale(.955); }
+  58% { filter: drop-shadow(0 5px 9px rgba(45,38,29,.13)); transform: scale(1.018); }
+  100% { filter: none; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dock-panel-shell.snapping { animation: none; }
+  .dock-panel-shell.resize-snap::before,
+  .resizable-surface.resize-snap::before { animation: none; }
+  .dock-slot::after,
+  .dock-panel-shell { transition-duration: 0ms; }
+}
+
+.dock-panel-shell > .source-card,
+.dock-panel-shell > .feed-card,
+.dock-panel-shell > .support-card {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+  resize: none;
+}
+
+.dock-panel-shell .source-card-header,
+.dock-panel-shell .card-title,
+.dock-panel-shell [data-dock-drag-handle] {
+  user-select: none;
+}
+
+.dock-panel-shell.layout-editing .source-card-header,
+.dock-panel-shell.layout-editing .card-title,
+.dock-panel-shell.layout-editing [data-dock-drag-handle] { cursor: grab; }
+
+.dock-panel-shell.dragging .source-card-header,
+.dock-panel-shell.dragging .card-title { cursor: grabbing; }
+
+.dock-layout-controls {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 6px;
+  min-width: 0;
+}
+
+.dock-layout-controls button {
+  min-height: 30px;
+  border: 1px solid rgba(78,67,45,.28);
+  border-radius: 7px;
+  background: rgba(255,250,240,.72);
+  color: #4b4437;
+  box-shadow: 0 2px 0 rgba(78,67,45,.1);
+  cursor: pointer;
+}
+
+.dock-layout-edit-button {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: .02em;
+}
+
+.dock-layout-controls .material-symbols-outlined { font-size: 17px; }
+.dock-layout-controls.editing .dock-layout-edit-button {
+  border-color: rgba(63,130,159,.55);
+  background: #dcefed;
+  color: #315e6d;
+}
+.dock-layout-reset-button { display: grid; flex: 0 0 34px; place-items: center; padding: 0; }
+.dock-layout-controls button:hover { border-color: rgba(63,130,159,.5); background: #eef6ef; }
+
+.dock-panel-shell.layout-editing {
+  outline: 1px dashed rgba(63,130,159,.25);
+  outline-offset: 2px;
+}
+.dock-panel-shell.layout-editing:hover {
+  outline-color: rgba(63,130,159,.6);
+}
+
+.dock-resize-handle {
+  position: absolute;
+  z-index: 30;
+  touch-action: none;
+}
+.dock-resize-handle.e { top: 16px; right: -5px; bottom: 16px; width: 10px; cursor: ew-resize; }
+.dock-resize-handle.w { top: 16px; bottom: 16px; left: -5px; width: 10px; cursor: ew-resize; }
+.dock-resize-handle.n { top: -5px; right: 16px; left: 16px; height: 10px; cursor: ns-resize; }
+.dock-resize-handle.s { right: 16px; bottom: -5px; left: 16px; height: 10px; cursor: ns-resize; }
+.dock-resize-handle.corner { width: 16px; height: 16px; border-color: rgba(78,67,45,.42); border-style: solid; border-width: 0; opacity: .5; transition: opacity 120ms ease, border-color 120ms ease; }
+.dock-resize-handle.nw { top: -5px; left: -5px; border-top-width: 3px; border-left-width: 3px; border-radius: 7px 0 0; cursor: nwse-resize; }
+.dock-resize-handle.ne { top: -5px; right: -5px; border-top-width: 3px; border-right-width: 3px; border-radius: 0 7px 0 0; cursor: nesw-resize; }
+.dock-resize-handle.se { right: -5px; bottom: -5px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 0 0 7px; cursor: nwse-resize; }
+.dock-resize-handle.sw { bottom: -5px; left: -5px; border-bottom-width: 3px; border-left-width: 3px; border-radius: 0 0 0 7px; cursor: nesw-resize; }
+.dock-panel-shell:hover .dock-resize-handle.corner,
+.resizable-surface:hover .dock-resize-handle.corner,
+.dock-panel-shell.resizing .dock-resize-handle.corner,
+.resizable-surface.resizing .dock-resize-handle.corner { border-color: #3f829f; opacity: 1; }
+
+.resizable-surface {
+  position: relative;
+  min-width: 0;
+  justify-self: center;
+}
+.resizable-surface > .prompt-bar-row,
+.resizable-surface > .prompt-board,
+.resizable-surface > .canvas-card,
+.resizable-surface > .auto-canvas-card {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+}
+.fixed-prompt-surface { width: 100%; min-height: 64px; }
+.fixed-canvas-surface { width: 100%; min-height: 260px; flex: 1 1 auto; align-self: stretch; }
+
+body.resizing-dock-panel,
+body.resizing-dock-panel * { user-select: none !important; }
+body.resizing-dock-panel[data-dock-resize-direction="e"], body.resizing-dock-panel[data-dock-resize-direction="e"] *, body.resizing-dock-panel[data-dock-resize-direction="w"], body.resizing-dock-panel[data-dock-resize-direction="w"] * { cursor: ew-resize !important; }
+body.resizing-dock-panel[data-dock-resize-direction="n"], body.resizing-dock-panel[data-dock-resize-direction="n"] *, body.resizing-dock-panel[data-dock-resize-direction="s"], body.resizing-dock-panel[data-dock-resize-direction="s"] * { cursor: ns-resize !important; }
+body.resizing-dock-panel[data-dock-resize-direction="ne"], body.resizing-dock-panel[data-dock-resize-direction="ne"] *, body.resizing-dock-panel[data-dock-resize-direction="sw"], body.resizing-dock-panel[data-dock-resize-direction="sw"] * { cursor: nesw-resize !important; }
+body.resizing-dock-panel[data-dock-resize-direction="nw"], body.resizing-dock-panel[data-dock-resize-direction="nw"] *, body.resizing-dock-panel[data-dock-resize-direction="se"], body.resizing-dock-panel[data-dock-resize-direction="se"] * { cursor: nwse-resize !important; }
 html, body { min-height: 100%; }
 body {
   margin: 0;

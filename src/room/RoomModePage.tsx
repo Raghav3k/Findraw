@@ -16,6 +16,8 @@ import { CategorySelectionTools } from "../dashboard/CategorySelectionTools";
 import { CategoryPickerWindow } from "../ui/CategoryPickerWindow";
 import { WorkspaceIdentity } from "../ui/WorkspaceIdentity";
 import { usePersistentState } from "../ui/usePersistentState";
+import { DockControls, DockLayout, DockPanel, DockSlot, ResizableSurface } from "../ui/DockLayout";
+import { resizeDockBoundary } from "../ui/dockRailResize";
 import {
   connectLiveEvents,
   disconnectTwitch,
@@ -63,6 +65,7 @@ type ResizeState = {
   panel: "source" | "side";
   startX: number;
   startWidth: number;
+  lastWidth: number;
 };
 
 const DEFAULT_ROOM_CODE = "";
@@ -508,9 +511,15 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       if (!resize) return;
       const delta = event.clientX - resize.startX;
       if (resize.panel === "source") {
-        setSourceRailWidth(Math.max(260, Math.min(520, resize.startWidth + delta)));
+        const nextWidth = Math.max(260, Math.min(520, resize.startWidth + delta));
+        resizeDockBoundary("right", resize.lastWidth, nextWidth);
+        resize.lastWidth = nextWidth;
+        setSourceRailWidth(nextWidth);
       } else {
-        setSidePanelWidth(Math.max(250, Math.min(460, resize.startWidth - delta)));
+        const nextWidth = Math.max(250, Math.min(460, resize.startWidth - delta));
+        resizeDockBoundary("left", resize.lastWidth, nextWidth);
+        resize.lastWidth = nextWidth;
+        setSidePanelWidth(nextWidth);
       }
     };
     const stopResize = () => {
@@ -533,6 +542,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       panel,
       startX: event.clientX,
       startWidth: panel === "source" ? sourceRailWidth : sidePanelWidth,
+      lastWidth: panel === "source" ? sourceRailWidth : sidePanelWidth,
     };
     document.body.classList.add("resizing-panels");
   };
@@ -695,10 +705,15 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   };
 
   return (
+    <DockLayout panelIds={["room-players", "room-control", "room-support", "room-chat"]} slotIds={["room-left-1", "room-left-2", "room-right-1", "room-right-2"]} storageKey="room.dock.v2">
     <div className="dashboard-layout room-mode-page" style={{ "--source-rail-width": `${sourceRailWidth}px`, "--side-panel-width": `${sidePanelWidth}px` } as CSSProperties}>
-      <aside className="stream-sidebar room-sidebar" aria-label="Room setup">
+      <aside className="stream-sidebar room-sidebar dock-rail" data-dock-boundary="right" aria-label="Room setup">
         <WorkspaceIdentity connected={twitchSession.authenticated} configured={twitchSession.configured || hasApiBaseUrl} displayName={twitchSession.user?.displayName ?? playerName} onDisconnectTwitch={() => { void disconnectTwitch().then(() => setTwitchSession(EMPTY_TWITCH_SESSION)); }} onModes={requestExitToHome} returnTo="/room" subtitle={hasApiBaseUrl ? "Online room beta" : "Local room fallback"} />
+        <DockControls />
+        <DockSlot id="room-left-1" />
+        <DockSlot id="room-left-2" />
 
+        <DockPanel id="room-players" label="players">
         <section className="source-card room-player-card">
           <header className="source-card-header">
             <div><span className="source-eyebrow">Players</span><h2>{room ? "Room lobby" : "No room"}</h2></div>
@@ -721,7 +736,9 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
             )) : <p>No players yet.</p>}
           </div>
         </section>
+        </DockPanel>
 
+        <DockPanel id="room-control" label="room controls">
         {!room ? (
           <section className="source-card room-join-card">
             <header className="source-card-header"><div><span className="source-eyebrow">Room desk</span><h2>Room</h2></div><span className="source-status ready"><i />{hasApiBaseUrl ? "Online" : "Local"}</span></header>
@@ -807,6 +824,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
             </div>
           </section>
         )}
+        </DockPanel>
       </aside>
       {confirmExitOpen ? (
         <div className="room-exit-backdrop" role="presentation">
@@ -831,12 +849,15 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       <main className="dashboard-shell room-shell">
         <section className="dashboard-grid room-grid">
           <div className="main-column room-main-column">
+            <ResizableSurface className="fixed-prompt-surface" label="guess bar" storageKey="room.guessBar.v2">
             <section className="prompt-board room-prompt-board">
               <div className="round-word-mask">
                 {room?.answer?.mask ?? maskedAnswer(roomAnswerText || null)}
               </div>
             </section>
+            </ResizableSurface>
 
+            <ResizableSurface className="fixed-canvas-surface" label="drawing canvas" storageKey="room.canvas.v2">
             <section className="canvas-card room-canvas-card">
               <header className="room-canvas-header">
                 <span className="room-round-indicator">Round {room ? Math.min(room.roundsPerPlayer, room.roundIndex + 1) : 1}/{room?.roundsPerPlayer ?? 3}</span>
@@ -866,11 +887,15 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                 </div>
               ) : null}
             </section>
+            </ResizableSurface>
           </div>
 
           <div aria-label="Resize room activity panel" aria-orientation="vertical" aria-valuemax={460} aria-valuemin={250} aria-valuenow={sidePanelWidth} className="layout-resizer side-panel-resizer" onPointerDown={(event) => startResize("side", event)} role="separator" />
 
-          <aside className="side-column room-side-column" aria-label="Room activity">
+          <aside className="side-column room-side-column dock-rail" data-dock-boundary="left" aria-label="Room activity">
+            <DockSlot id="room-right-1" />
+            <DockSlot id="room-right-2" />
+            <DockPanel id="room-support" label="categories and Twitch">
             <section className={`feed-card support-card room-category-card ${categoriesOpen || twitchPanelOpen ? "" : "collapsed"}`}>
               <div className="support-tabs" role="tablist" aria-label="Room categories and Twitch guesses">
                 <button aria-expanded={categoriesOpen} aria-selected={categoriesOpen} className={categoriesOpen ? "active" : ""} onClick={() => { setCategoriesOpen((current) => !current); setTwitchPanelOpen(false); }} role="tab" type="button">
@@ -930,7 +955,9 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                 </div>
               ) : null}
             </section>
+            </DockPanel>
 
+            <DockPanel id="room-chat" label="room chat">
             <section className="feed-card room-guess-card">
               <div className="card-title"><h3><span className="material-symbols-outlined">forum</span>Room chat</h3><b>{roomGuesses.length}</b></div>
               <div className="room-guess-list scrollable" ref={chatScrollRef}>
@@ -943,6 +970,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                 <button disabled={!guess.trim()} type="submit"><span className="material-symbols-outlined">send</span></button>
               </form>
             </section>
+            </DockPanel>
           </aside>
         </section>
       </main>
@@ -1138,5 +1166,6 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
         </div>
       ) : null}
     </div>
+    </DockLayout>
   );
 }
