@@ -6,6 +6,7 @@ import { DOCK_RAIL_RESIZE_EVENT, type DockBoundary } from "./dockRailResize";
 type Direction = "n" | "ne" | "e" | "se" | "s" | "sw" | "w" | "nw";
 type PanelSize = { width?: number; height?: number; anchor?: "left" | "center" | "right"; boundary?: DockBoundary };
 type ResizeState = { direction: Direction; pointerId: number; startX: number; startY: number; startWidth: number; startHeight: number; maxWidth: number; widthSnapPoints: number[]; heightSnapPoints: number[] };
+type DragState = { active: boolean; pointerId: number; startX: number; startY: number; left: number; top: number; width: number; height: number };
 type SnapAxis = "width" | "height" | "both" | null;
 
 const handles: Array<{ direction: Direction; label: string }> = [
@@ -15,6 +16,7 @@ const handles: Array<{ direction: Direction; label: string }> = [
   { direction: "w", label: "left" }, { direction: "nw", label: "top left" },
 ];
 const MIN_DOCK_PANEL_HEIGHT = 88;
+const DRAG_START_DISTANCE = 5;
 
 type DockContextValue = {
   draggingId: string | null;
@@ -152,6 +154,15 @@ export function DockLayout({ children, panelIds, slotIds, storageKey }: { childr
     const displacedId = order[targetIndex];
     const next = [...order];
     [next[sourceIndex], next[targetIndex]] = [next[targetIndex], next[sourceIndex]];
+    setSizes((current) => {
+      const resized = { ...current };
+      stableSlotIds.forEach((currentSlotId, index) => {
+        const slotHeight = slotsRef.current.get(currentSlotId)?.getBoundingClientRect().height;
+        const nextPanelId = next[index];
+        if (nextPanelId && slotHeight) resized[nextPanelId] = { ...current[nextPanelId], height: slotHeight };
+      });
+      return resized;
+    });
     setStoredOrder(next);
     setSnappingIds([panelId, displacedId].filter(Boolean));
     if (snapTimerRef.current !== null) window.clearTimeout(snapTimerRef.current);
@@ -159,7 +170,7 @@ export function DockLayout({ children, panelIds, slotIds, storageKey }: { childr
       setSnappingIds([]);
       snapTimerRef.current = null;
     }, 320);
-  }, [order, setStoredOrder, stableSlotIds]);
+  }, [order, setSizes, setStoredOrder, stableSlotIds]);
 
   const isSnapping = useCallback((panelId: string) => snappingIds.includes(panelId), [snappingIds]);
   const resetLayout = useCallback(() => {
@@ -221,8 +232,13 @@ function useResize({ currentSize, heightSnapPoints = () => [], maxWidth, minHeig
   useEffect(() => { onChangeRef.current = onChange; }, [onChange]);
   useEffect(() => {
     if (!resize) return;
-    const move = (event: PointerEvent) => {
-      if (event.pointerId !== resize.pointerId) return;
+    let frame: number | null = null;
+    let pendingEvent: PointerEvent | null = null;
+    const applyMove = () => {
+      frame = null;
+      const event = pendingEvent;
+      pendingEvent = null;
+      if (!event || event.pointerId !== resize.pointerId) return;
       const deltaX = event.clientX - resize.startX;
       const deltaY = event.clientY - resize.startY;
       const next: PanelSize = { ...currentSizeRef.current };
@@ -244,8 +260,17 @@ function useResize({ currentSize, heightSnapPoints = () => [], maxWidth, minHeig
       setSnapAxis(widthSnapped && heightSnapped ? "both" : widthSnapped ? "width" : heightSnapped ? "height" : null);
       onChangeRef.current(next);
     };
+    const move = (event: PointerEvent) => {
+      if (event.pointerId !== resize.pointerId) return;
+      pendingEvent = event;
+      if (frame === null) frame = window.requestAnimationFrame(applyMove);
+    };
     const end = (event: PointerEvent) => {
       if (event.pointerId !== resize.pointerId) return;
+      if (frame !== null) {
+        window.cancelAnimationFrame(frame);
+        applyMove();
+      }
       setResize(null);
       setSnapAxis(null);
       document.body.classList.remove("resizing-dock-panel");
@@ -255,6 +280,7 @@ function useResize({ currentSize, heightSnapPoints = () => [], maxWidth, minHeig
     window.addEventListener("pointerup", end, true);
     window.addEventListener("pointercancel", end, true);
     return () => {
+      if (frame !== null) window.cancelAnimationFrame(frame);
       window.removeEventListener("pointermove", move, true);
       window.removeEventListener("pointerup", end, true);
       window.removeEventListener("pointercancel", end, true);
@@ -283,7 +309,8 @@ export function DockPanel({ children, id, label }: { children: ReactNode; id: st
   const size = context.getPanelSize(id);
   const shellRef = useRef<HTMLDivElement | null>(null);
   const hoverSlotRef = useRef<string | null>(null);
-  const [drag, setDrag] = useState<{ pointerId: number; grabX: number; grabY: number; left: number; top: number; width: number; height: number } | null>(null);
+  const [drag, setDrag] = useState<DragState | null>(null);
+  useEffect(() => () => document.body.classList.remove("dragging-dock-panel"), []);
   const updateSize = useCallback((next: PanelSize) => {
     const boundary = target?.closest<HTMLElement>("[data-dock-boundary]")?.dataset.dockBoundary as DockBoundary | undefined;
     const attached = Boolean(boundary && next.width && (next.anchor === boundary || next.width >= (target?.clientWidth ?? Infinity) - 2));
@@ -302,30 +329,54 @@ export function DockPanel({ children, id, label }: { children: ReactNode; id: st
 
   useEffect(() => {
     if (!drag) return;
+    let frame: number | null = null;
+    let pendingPoint: { x: number; y: number } | null = null;
+    const applyMove = () => {
+      frame = null;
+      const point = pendingPoint;
+      pendingPoint = null;
+      if (!point || !shellRef.current) return;
+      shellRef.current.style.setProperty("--dock-drag-x", `${point.x - drag.startX}px`);
+      shellRef.current.style.setProperty("--dock-drag-y", `${point.y - drag.startY}px`);
+    };
     const move = (event: PointerEvent) => {
       if (event.pointerId !== drag.pointerId) return;
-      setDrag((current) => current ? { ...current, left: event.clientX - current.grabX, top: event.clientY - current.grabY } : null);
+      if (!drag.active) {
+        if (Math.hypot(event.clientX - drag.startX, event.clientY - drag.startY) < DRAG_START_DISTANCE) return;
+        setDrag((current) => current ? { ...current, active: true } : null);
+        context.setDraggingId(id);
+        document.body.classList.add("dragging-dock-panel");
+      }
+      pendingPoint = { x: event.clientX, y: event.clientY };
+      if (frame === null) frame = window.requestAnimationFrame(applyMove);
       const slotId = document.elementFromPoint(event.clientX, event.clientY)?.closest<HTMLElement>("[data-dock-slot-id]")?.dataset.dockSlotId ?? null;
-      hoverSlotRef.current = slotId;
-      context.setHoveredSlotId(slotId);
+      if (slotId !== hoverSlotRef.current) {
+        hoverSlotRef.current = slotId;
+        context.setHoveredSlotId(slotId);
+      }
     };
     const end = (event: PointerEvent) => {
       if (event.pointerId !== drag.pointerId) return;
-      if (hoverSlotRef.current) context.swapIntoSlot(id, hoverSlotRef.current);
+      if (drag.active && hoverSlotRef.current) context.swapIntoSlot(id, hoverSlotRef.current);
+      if (frame !== null) window.cancelAnimationFrame(frame);
+      shellRef.current?.style.removeProperty("--dock-drag-x");
+      shellRef.current?.style.removeProperty("--dock-drag-y");
       hoverSlotRef.current = null;
       context.setHoveredSlotId(null);
       context.setDraggingId(null);
+      document.body.classList.remove("dragging-dock-panel");
       setDrag(null);
     };
     window.addEventListener("pointermove", move, true);
     window.addEventListener("pointerup", end, true);
     window.addEventListener("pointercancel", end, true);
     return () => {
+      if (frame !== null) window.cancelAnimationFrame(frame);
       window.removeEventListener("pointermove", move, true);
       window.removeEventListener("pointerup", end, true);
       window.removeEventListener("pointercancel", end, true);
     };
-  }, [context.setDraggingId, context.setHoveredSlotId, context.swapIntoSlot, drag?.pointerId, id]);
+  }, [context.setDraggingId, context.setHoveredSlotId, context.swapIntoSlot, drag?.active, drag?.pointerId, id]);
 
   if (!target) return null;
   const style = {
@@ -333,7 +384,7 @@ export function DockPanel({ children, id, label }: { children: ReactNode; id: st
     height: "100%",
     marginLeft: size.anchor === "right" ? "auto" : size.anchor === "center" ? "auto" : 0,
     marginRight: size.anchor === "left" ? "auto" : size.anchor === "center" ? "auto" : 0,
-    ...(drag ? { position: "fixed", left: `${drag.left}px`, top: `${drag.top}px`, width: `${drag.width}px`, maxWidth: "none", height: `${drag.height}px`, margin: 0, zIndex: 220 } : {}),
+    ...(drag?.active ? { position: "fixed", left: `${drag.left}px`, top: `${drag.top}px`, width: `${drag.width}px`, maxWidth: "none", height: `${drag.height}px`, margin: 0, zIndex: 220 } : {}),
   } as CSSProperties;
   const onPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     if (!context.editing) return;
@@ -345,8 +396,7 @@ export function DockPanel({ children, id, label }: { children: ReactNode; id: st
     const rectangle = event.currentTarget.getBoundingClientRect();
     event.preventDefault();
     hoverSlotRef.current = null;
-    setDrag({ pointerId: event.pointerId, grabX: event.clientX - rectangle.left, grabY: event.clientY - rectangle.top, left: rectangle.left, top: rectangle.top, width: rectangle.width, height: rectangle.height });
-    context.setDraggingId(id);
+    setDrag({ active: false, pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, left: rectangle.left, top: rectangle.top, width: rectangle.width, height: rectangle.height });
   };
 
   return createPortal(<div aria-label={`${label} dock panel`} className={`dock-panel-shell ${context.editing ? "layout-editing" : ""} ${context.draggingId === id ? "dragging" : ""} ${context.isSnapping(id) ? "snapping" : ""} ${resizing ? "resizing" : ""} ${snapAxis ? `resize-snap resize-snap-${snapAxis}` : ""}`} onPointerDownCapture={onPointerDown} ref={shellRef} style={style}>{children}{context.editing ? <ResizeHandles label={label} onBegin={(direction, event) => { const rectangle = shellRef.current?.getBoundingClientRect(); if (rectangle) beginResize(direction, event, rectangle); }} /> : null}</div>, target, id);

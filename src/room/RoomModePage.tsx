@@ -17,7 +17,7 @@ import { CategoryPickerWindow } from "../ui/CategoryPickerWindow";
 import { WorkspaceIdentity } from "../ui/WorkspaceIdentity";
 import { usePersistentState } from "../ui/usePersistentState";
 import { DockControls, DockLayout, DockPanel, DockSlot, ResizableSurface } from "../ui/DockLayout";
-import { resizeDockBoundary } from "../ui/dockRailResize";
+import { resizeDockBoundary, SIDE_RAIL_SNAP_POINTS, snapDockRailWidth, SOURCE_RAIL_SNAP_POINTS } from "../ui/dockRailResize";
 import {
   connectLiveEvents,
   disconnectTwitch,
@@ -62,6 +62,7 @@ type RoomModePageProps = {
 };
 
 type ResizeState = {
+  element: HTMLDivElement;
   panel: "source" | "side";
   startX: number;
   startWidth: number;
@@ -511,18 +512,23 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       if (!resize) return;
       const delta = event.clientX - resize.startX;
       if (resize.panel === "source") {
-        const nextWidth = Math.max(260, Math.min(520, resize.startWidth + delta));
+        const snapped = snapDockRailWidth(Math.max(260, Math.min(520, resize.startWidth + delta)), SOURCE_RAIL_SNAP_POINTS);
+        const nextWidth = snapped.width;
+        resize.element.classList.toggle("divider-snap", snapped.snapped);
         resizeDockBoundary("right", resize.lastWidth, nextWidth);
         resize.lastWidth = nextWidth;
         setSourceRailWidth(nextWidth);
       } else {
-        const nextWidth = Math.max(250, Math.min(460, resize.startWidth - delta));
+        const snapped = snapDockRailWidth(Math.max(250, Math.min(460, resize.startWidth - delta)), SIDE_RAIL_SNAP_POINTS);
+        const nextWidth = snapped.width;
+        resize.element.classList.toggle("divider-snap", snapped.snapped);
         resizeDockBoundary("left", resize.lastWidth, nextWidth);
         resize.lastWidth = nextWidth;
         setSidePanelWidth(nextWidth);
       }
     };
     const stopResize = () => {
+      resizeStateRef.current?.element.classList.remove("divider-snap");
       resizeStateRef.current = null;
       document.body.classList.remove("resizing-panels");
     };
@@ -539,6 +545,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const startResize = (panel: ResizeState["panel"], event: ReactPointerEvent<HTMLDivElement>) => {
     event.preventDefault();
     resizeStateRef.current = {
+      element: event.currentTarget,
       panel,
       startX: event.clientX,
       startWidth: panel === "source" ? sourceRailWidth : sidePanelWidth,

@@ -13,7 +13,7 @@ import { TWITCH_SOLVER_PREVIEW } from "../twitch/twitchSolverPreview";
 import { usePersistentState } from "../ui/usePersistentState";
 import { WorkspaceIdentity } from "../ui/WorkspaceIdentity";
 import { DockControls, DockLayout, DockPanel, DockSlot, ResizableSurface } from "../ui/DockLayout";
-import { resizeDockBoundary } from "../ui/dockRailResize";
+import { resizeDockBoundary, SIDE_RAIL_SNAP_POINTS, snapDockRailWidth, SOURCE_RAIL_SNAP_POINTS } from "../ui/dockRailResize";
 import { CategoryPickerWindow } from "../ui/CategoryPickerWindow";
 import { AutoDrawCanvas } from "./AutoDrawCanvas";
 import { AUTO_DRAW_ASSETS } from "./autoDrawAssets";
@@ -35,7 +35,7 @@ type Props = { onNavigate: (path: string) => void };
 type Status = "idle" | "playing" | "paused" | "complete";
 type GuessFeedback = "idle" | "wrong" | "correct";
 type TwitchPanel = "chat" | "correct";
-type ResizeState = { panel: "source" | "side"; startX: number; startWidth: number; lastWidth: number };
+type ResizeState = { element: HTMLDivElement; panel: "source" | "side"; startX: number; startWidth: number; lastWidth: number };
 
 const TRANSITION_MS = 900;
 const EMPTY_TWITCH_SESSION: TwitchSession = { authenticated: false, configured: false, eventSubStatus: "disconnected", user: null };
@@ -175,18 +175,22 @@ export function AutoDrawPage({ onNavigate }: Props) {
       if (!resize) return;
       const delta = event.clientX - resize.startX;
       if (resize.panel === "source") {
-        const nextWidth = Math.max(280, Math.min(520, resize.startWidth + delta));
+        const snapped = snapDockRailWidth(Math.max(280, Math.min(520, resize.startWidth + delta)), SOURCE_RAIL_SNAP_POINTS);
+        const nextWidth = snapped.width;
+        resize.element.classList.toggle("divider-snap", snapped.snapped);
         resizeDockBoundary("right", resize.lastWidth, nextWidth);
         resize.lastWidth = nextWidth;
         setSourceRailWidth(nextWidth);
       } else {
-        const nextWidth = Math.max(230, Math.min(420, resize.startWidth - delta));
+        const snapped = snapDockRailWidth(Math.max(230, Math.min(420, resize.startWidth - delta)), SIDE_RAIL_SNAP_POINTS);
+        const nextWidth = snapped.width;
+        resize.element.classList.toggle("divider-snap", snapped.snapped);
         resizeDockBoundary("left", resize.lastWidth, nextWidth);
         resize.lastWidth = nextWidth;
         setSidePanelWidth(nextWidth);
       }
     };
-    const stopResize = () => { resizeStateRef.current = null; document.body.classList.remove("resizing-panels"); };
+    const stopResize = () => { resizeStateRef.current?.element.classList.remove("divider-snap"); resizeStateRef.current = null; document.body.classList.remove("resizing-panels"); };
     window.addEventListener("pointermove", handlePointerMove);
     window.addEventListener("pointerup", stopResize);
     window.addEventListener("pointercancel", stopResize);
@@ -419,7 +423,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
   const startResize = (panel: ResizeState["panel"], event: ReactPointerEvent<HTMLDivElement>) => {
     event.preventDefault();
     const startWidth = panel === "source" ? sourceRailWidth : sidePanelWidth;
-    resizeStateRef.current = { panel, startX: event.clientX, startWidth, lastWidth: startWidth };
+    resizeStateRef.current = { element: event.currentTarget, panel, startX: event.clientX, startWidth, lastWidth: startWidth };
     document.body.classList.add("resizing-panels");
   };
 

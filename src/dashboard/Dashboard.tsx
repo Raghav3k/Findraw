@@ -16,7 +16,7 @@ import {
 } from "./keyboardShortcuts";
 import { usePersistentState } from "../ui/usePersistentState";
 import { DockLayout, DockPanel, DockSlot, ResizableSurface } from "../ui/DockLayout";
-import { resizeDockBoundary } from "../ui/dockRailResize";
+import { resizeDockBoundary, SIDE_RAIL_SNAP_POINTS, snapDockRailWidth, SOURCE_RAIL_SNAP_POINTS } from "../ui/dockRailResize";
 import {
   adjustViewerPoints,
   disconnectTwitch,
@@ -54,6 +54,7 @@ type RoundStatus = "idle" | "playing" | "ended";
 type RevealMode = "random" | "sequence";
 
 type ResizeState = {
+  element: HTMLDivElement;
   panel: "source" | "side";
   startX: number;
   startWidth: number;
@@ -178,18 +179,23 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       if (!resize) return;
       const delta = event.clientX - resize.startX;
       if (resize.panel === "source") {
-        const nextWidth = Math.max(280, Math.min(520, resize.startWidth + delta));
+        const snapped = snapDockRailWidth(Math.max(280, Math.min(520, resize.startWidth + delta)), SOURCE_RAIL_SNAP_POINTS);
+        const nextWidth = snapped.width;
+        resize.element.classList.toggle("divider-snap", snapped.snapped);
         resizeDockBoundary("right", resize.lastWidth, nextWidth);
         resize.lastWidth = nextWidth;
         setSourceRailWidth(nextWidth);
       } else {
-        const nextWidth = Math.max(230, Math.min(420, resize.startWidth - delta));
+        const snapped = snapDockRailWidth(Math.max(230, Math.min(420, resize.startWidth - delta)), SIDE_RAIL_SNAP_POINTS);
+        const nextWidth = snapped.width;
+        resize.element.classList.toggle("divider-snap", snapped.snapped);
         resizeDockBoundary("left", resize.lastWidth, nextWidth);
         resize.lastWidth = nextWidth;
         setSidePanelWidth(nextWidth);
       }
     };
     const stopResize = () => {
+      resizeStateRef.current?.element.classList.remove("divider-snap");
       resizeStateRef.current = null;
       document.body.classList.remove("resizing-panels");
     };
@@ -524,6 +530,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   const startResize = (panel: ResizeState["panel"], event: ReactPointerEvent<HTMLDivElement>) => {
     event.preventDefault();
     resizeStateRef.current = {
+      element: event.currentTarget,
       panel,
       startX: event.clientX,
       startWidth: panel === "source" ? sourceRailWidth : sidePanelWidth,
