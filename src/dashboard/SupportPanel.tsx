@@ -4,31 +4,16 @@ import {
   type KeyboardShortcuts,
   type ShortcutAction,
 } from "./keyboardShortcuts";
-import {
-  getActiveSelectionChips,
-  getCategory,
-  getCategoryDomains,
-  getSelectionTokens,
-  isCategorySelectionOptionActive,
-  type CategorySelection,
-  type WordCategory,
-} from "./gameData";
 import { usePersistentState } from "../ui/usePersistentState";
 import type { TwitchSession } from "../twitch/twitchApi";
-import { CategoryPickerWindow } from "../ui/CategoryPickerWindow";
-import { CategorySelectionTools } from "./CategorySelectionTools";
+import { getArtistMixLabel, getArtistMixPacks, getArtistMixWordCount, type ArtistWordMix } from "./artistWordPacks";
 
-type SupportTab = "categories" | "settings";
+type SupportTab = "word-mix" | "settings";
 
 type SupportPanelProps = {
-  selectedCategoryId: CategorySelection;
-  randomCategory: WordCategory;
+  wordMix: ArtistWordMix;
   roundActive: boolean;
-  onCategoryChange: (categoryId: string) => void;
-  onCategoryChipRemove: (chipId: string) => void;
-  onCategorySelectionApply: (selectionId: CategorySelection) => void;
-  onSelectAll: () => void;
-  onResetCategories: () => void;
+  onOpenWordMix: () => void;
   hoverMenuDelay: number;
   hoverMenusEnabled: boolean;
   onHoverMenuDelayChange: (delay: number) => void;
@@ -43,14 +28,9 @@ type SupportPanelProps = {
 };
 
 export function SupportPanel({
-  selectedCategoryId,
-  randomCategory,
+  wordMix,
   roundActive,
-  onCategoryChange,
-  onCategoryChipRemove,
-  onCategorySelectionApply,
-  onSelectAll,
-  onResetCategories,
+  onOpenWordMix,
   hoverMenuDelay,
   hoverMenusEnabled,
   onHoverMenuDelayChange,
@@ -63,64 +43,44 @@ export function SupportPanel({
   onConnectTwitch,
   onDisconnectTwitch,
 }: SupportPanelProps) {
-  const [activeTab, setActiveTab] = useState<SupportTab>("categories");
+  const [activeTab, setActiveTab] = useState<SupportTab>("word-mix");
   const [showTimer, setShowTimer] = usePersistentState("settings.showTimer", true);
   const [chatSounds, setChatSounds] = usePersistentState("settings.chatSounds", false);
   const [confirmEnd, setConfirmEnd] = usePersistentState("settings.confirmEnd", true);
   const shortcutActions = Object.keys(shortcuts) as ShortcutAction[];
 
-  const selectedTokens = getSelectionTokens(selectedCategoryId);
-  const isCategoryOptionActive = (optionId: string) => (
-    isCategorySelectionOptionActive(selectedCategoryId, optionId, "artist")
-  );
-  const selectedCategory = selectedCategoryId === "random" || selectedTokens.length > 1
-    ? randomCategory
-    : getCategory(selectedCategoryId) ?? randomCategory;
-  const activeSelectionChips = getActiveSelectionChips(selectedCategoryId, "artist");
+  const selectedPacks = getArtistMixPacks(wordMix);
 
   return (
     <section className="feed-card support-card">
-      <div className="support-tabs" role="tablist" aria-label="Categories and settings">
-        <button aria-selected={activeTab === "categories"} className={activeTab === "categories" ? "active" : ""} onClick={() => setActiveTab("categories")} role="tab" type="button">
-          <span className="material-symbols-outlined">category</span>Categories
+      <div className="support-tabs" role="tablist" aria-label="Word mix and settings">
+        <button aria-selected={activeTab === "word-mix"} className={activeTab === "word-mix" ? "active" : ""} onClick={() => setActiveTab("word-mix")} role="tab" type="button">
+          <span className="material-symbols-outlined">style</span>Word Mix
         </button>
         <button aria-selected={activeTab === "settings"} className={activeTab === "settings" ? "active" : ""} onClick={() => setActiveTab("settings")} role="tab" type="button">
           <span className="material-symbols-outlined">settings</span>Settings
         </button>
       </div>
 
-      {activeTab === "categories" ? (
-        <div className="support-panel-content category-panel" role="tabpanel">
-          <div className="active-categories-panel">
-            <CategoryPickerWindow
-              currentSelection={selectedCategoryId}
-              disabled={roundActive}
-              domains={getCategoryDomains("artist")}
-              isOptionActive={isCategoryOptionActive}
-              lockedNote="Finish or end the current word to change decks."
-              onApplySelection={(selectionId) => onCategorySelectionApply(selectionId as CategorySelection)}
-              onChange={(categoryId) => onCategoryChange(categoryId as CategorySelection)}
-              onRemoveChip={onCategoryChipRemove}
-              onReset={onResetCategories}
-              onSelectAll={onSelectAll}
-              profileStorageKey="artist"
-              selectedId={selectedTokens.length === 1 ? selectedTokens[0] : selectedTokens.length === 0 ? "empty" : ""}
-              selectedChips={activeSelectionChips}
-              selectedOption={{
-                id: selectedTokens.length === 0 ? "empty" : (selectedCategory?.id ?? "custom"),
-                label: selectedTokens.length === 0 ? "No Decks Selected" : selectedTokens.length > 1 ? `${selectedTokens.length} Decks Selected` : (selectedCategory?.name ?? "Custom Mix"),
-                description: selectedTokens.length === 0 ? "Please select at least one deck." : selectedTokens.length > 1 ? "Custom deck mix" : (selectedCategory?.description ?? ""),
-                icon: selectedTokens.length === 0 ? "warning" : (selectedCategory?.icon ?? "category"),
-                accent: selectedTokens.length === 0 ? "#e6a283" : (selectedCategory?.accent ?? "#83c5e6"),
-              }}
-            />
-            <CategorySelectionTools
-              chips={activeSelectionChips}
-              disabled={roundActive}
-              mode="artist"
-              onRemoveChip={onCategoryChipRemove}
-            />
+      {activeTab === "word-mix" ? (
+        <div className="support-panel-content artist-word-mix-panel" role="tabpanel">
+          <div className="artist-word-mix-summary">
+            <div className="artist-word-mix-summary-heading">
+              <span className="material-symbols-outlined">{wordMix.kind === "game" ? "sports_esports" : "auto_awesome"}</span>
+              <div><small>{wordMix.kind === "game" ? "Gaming worlds" : "General fun"}</small><strong>{getArtistMixLabel(wordMix)}</strong></div>
+            </div>
+            <div className="artist-word-mix-meta"><span>{getArtistMixWordCount(wordMix)} words</span><span>Familiar only</span></div>
+            <div className="artist-word-mix-chips">
+              {wordMix.kind === "general" && wordMix.packIds.includes("general-mixed")
+                ? <span>All general interests</span>
+                : selectedPacks.map((pack) => <span key={pack.id}>{pack.label}</span>)}
+            </div>
           </div>
+          <button className="artist-word-mix-change" disabled={roundActive} onClick={onOpenWordMix} type="button">
+            <span className="material-symbols-outlined">tune</span>
+            {roundActive ? "Finish this word to change" : "Change word mix"}
+          </button>
+          <p className="artist-word-mix-note">The queue stays recognizable and rotates evenly between your selected interests.</p>
         </div>
       ) : (
         <div className="support-panel-content settings-panel" role="tabpanel">

@@ -9,6 +9,7 @@ import {
 import { ExcalidrawStage } from "../canvas/ExcalidrawStage";
 import { StreamSourceSidebar, type ChatMessage } from "./StreamSourceSidebar";
 import { SupportPanel } from "./SupportPanel";
+import { ArtistWordMixPicker } from "./ArtistWordMixPicker";
 import { twitchAuthStartUrl } from "../apiUrls";
 import {
   DEFAULT_KEYBOARD_SHORTCUTS,
@@ -32,14 +33,15 @@ import {
 import {
   DEFAULT_WORD_SECONDS,
   MAX_CORRECT_GUESSERS,
-  RANDOM_CATEGORY,
-  getPromptKey,
-  pickNextPrompt,
-  removeCategorySelectionChip,
-  toggleCategorySelectionOption,
-  type CategoryPrompt,
-  type CategorySelection,
 } from "./gameData";
+import {
+  DEFAULT_ARTIST_WORD_MIX,
+  getArtistPromptKey,
+  normalizeArtistWordMix,
+  pickArtistPrompt,
+  type ArtistPackPrompt,
+  type ArtistWordMix,
+} from "./artistWordPacks";
 import { WordFeedbackModal } from "../feedback/WordFeedbackModal";
 import {
   recordWordFeedback,
@@ -90,17 +92,19 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   const [correctGuessTarget, setCorrectGuessTarget] = usePersistentState("round.correctGuessTarget", 10);
   const [revealAnswerOnTimeout, setRevealAnswerOnTimeout] = usePersistentState("round.revealOnTimeout", true);
   const [testBotsEnabled, setTestBotsEnabled] = usePersistentState("round.testBotsEnabled", true);
-  const [selectedCategoryId, setSelectedCategoryId] = usePersistentState<CategorySelection>("round.category", "domain:general");
+  const [wordMix, setWordMix] = usePersistentState<ArtistWordMix>("artist.wordMix.v2", DEFAULT_ARTIST_WORD_MIX);
+  const [wordMixOnboarded, setWordMixOnboarded] = usePersistentState("artist.wordMixOnboarded.v2", false);
   const [wordFeedback, setWordFeedback] = usePersistentState<WordFeedbackMap>("feedback.artist.words", {});
   const [roundStatus, setRoundStatus] = useState<RoundStatus>("idle");
-  const [currentPrompt, setCurrentPrompt] = useState<CategoryPrompt>(() => pickNextPrompt(selectedCategoryId, [], { feedback: wordFeedback, mode: "artist" }));
+  const [currentPrompt, setCurrentPrompt] = useState<ArtistPackPrompt>(() => pickArtistPrompt(normalizeArtistWordMix(wordMix), []));
+  const [wordMixOpen, setWordMixOpen] = useState(() => !wordMixOnboarded);
   const [feedbackTarget, setFeedbackTarget] = useState<WordFeedbackTarget | null>(null);
   const [feedbackContext, setFeedbackContext] = useState<WordFeedbackContext>("experience");
   const feedbackRoundsSinceAutoRef = useRef(0);
   const pendingFeedbackActionRef = useRef<(() => void) | null>(null);
   const roundStartTimeRef = useRef(Date.now());
   const strokeCountRef = useRef(0);
-  const recentPromptKeysRef = useRef<string[]>([getPromptKey(currentPrompt)]);
+  const recentPromptKeysRef = useRef<string[]>([getArtistPromptKey(currentPrompt)]);
   const [secondsRemaining, setSecondsRemaining] = useState(wordDurationSeconds);
   const [revealedLetters, setRevealedLetters] = useState<number[]>([]);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
@@ -289,16 +293,16 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     };
   }, []);
 
-  const rememberPrompt = (prompt: CategoryPrompt) => {
-    recentPromptKeysRef.current = [...recentPromptKeysRef.current, getPromptKey(prompt)].slice(-24);
+  const rememberPrompt = (prompt: ArtistPackPrompt) => {
+    recentPromptKeysRef.current = [...recentPromptKeysRef.current, getArtistPromptKey(prompt)].slice(-24);
     return prompt;
   };
 
-  const chooseNextPrompt = (selection: CategorySelection = selectedCategoryId) => {
-    return rememberPrompt(pickNextPrompt(selection, recentPromptKeysRef.current, { feedback: wordFeedback, mode: "artist" }));
+  const chooseNextPrompt = (mix: ArtistWordMix = wordMix) => {
+    return rememberPrompt(pickArtistPrompt(normalizeArtistWordMix(mix), recentPromptKeysRef.current));
   };
 
-  const openWordFeedback = (prompt: CategoryPrompt = currentPrompt) => {
+  const openWordFeedback = (prompt: ArtistPackPrompt = currentPrompt) => {
     if (prompt.categoryId === "custom" || prompt.answer.startsWith("Error:")) return;
     setFeedbackContext("experience");
     setFeedbackTarget({
@@ -324,7 +328,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     pendingAction?.();
   };
 
-  const maybeOpenAutomaticFeedback = (prompt: CategoryPrompt = currentPrompt, afterFeedback?: () => void) => {
+  const maybeOpenAutomaticFeedback = (prompt: ArtistPackPrompt = currentPrompt, afterFeedback?: () => void) => {
     if (prompt.categoryId === "custom" || prompt.answer.startsWith("Error:")) return false;
     feedbackRoundsSinceAutoRef.current += 1;
     const target: WordFeedbackTarget = {
@@ -351,7 +355,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     return true;
   };
 
-  const preparePrompt = (prompt: CategoryPrompt) => {
+  const preparePrompt = (prompt: ArtistPackPrompt) => {
     setCurrentPrompt(prompt);
     setRevealedLetters([]);
     setChatMessages([]);
@@ -359,7 +363,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     setSecondsRemaining(wordDurationSeconds);
   };
 
-  const beginPrompt = async (prompt: CategoryPrompt) => {
+  const beginPrompt = async (prompt: ArtistPackPrompt) => {
     activeRoundIdRef.current = null;
     roundStartTimeRef.current = Date.now();
     strokeCountRef.current = 0;
@@ -427,53 +431,12 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     }
   };
 
-  const selectCategory = (categoryId: string) => {
-    if (categoryId === "random") {
-      setSelectedCategoryId("random");
-      if (!roundActive) {
-        preparePrompt(chooseNextPrompt("random"));
-        setRoundStatus("idle");
-      }
-      return;
-    }
-    
-    const nextSelection = toggleCategorySelectionOption(selectedCategoryId, categoryId, "artist", "");
-    setSelectedCategoryId(nextSelection);
+  const applyWordMix = (nextMix: ArtistWordMix) => {
+    const normalized = normalizeArtistWordMix(nextMix);
+    setWordMix(normalized);
+    setWordMixOnboarded(true);
     if (!roundActive) {
-      preparePrompt(chooseNextPrompt(nextSelection));
-      setRoundStatus("idle");
-    }
-  };
-
-  const removeCategoryChip = (chipId: string) => {
-    const nextSelection = removeCategorySelectionChip(selectedCategoryId, chipId, "artist", "");
-    setSelectedCategoryId(nextSelection);
-    if (!roundActive) {
-      preparePrompt(chooseNextPrompt(nextSelection));
-      setRoundStatus("idle");
-    }
-  };
-
-  const applyCategorySelection = (selectionId: CategorySelection) => {
-    setSelectedCategoryId(selectionId);
-    if (!roundActive) {
-      preparePrompt(chooseNextPrompt(selectionId || "all"));
-      setRoundStatus("idle");
-    }
-  };
-
-  const selectAllCategories = () => {
-    const allGameTokens = "all"; // or we could specify all the tokens, but let's use "all" to match AutoDraw's logic if possible, or just "random"
-    setSelectedCategoryId("all");
-    if (!roundActive) {
-      preparePrompt(chooseNextPrompt("all"));
-      setRoundStatus("idle");
-    }
-  };
-
-  const resetMixCategories = () => {
-    setSelectedCategoryId("");
-    if (!roundActive) {
+      preparePrompt(chooseNextPrompt(normalized));
       setRoundStatus("idle");
     }
   };
@@ -484,13 +447,13 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     const answer = value.trim().replace(/\s+/g, " ").slice(0, 60);
     if (!answer) {
       if (!roundActive && currentPrompt.categoryId === "custom") {
-        preparePrompt(chooseNextPrompt(selectedCategoryId || "all"));
+        preparePrompt(chooseNextPrompt());
         setRoundStatus("idle");
       }
       return true;
     }
     if (roundActive) return false;
-    const prompt = rememberPrompt({ answer, categoryId: "custom" });
+    const prompt = rememberPrompt({ answer, categoryId: "custom", difficulty: "easy" });
     preparePrompt(prompt);
     setRoundStatus("idle");
     setConnectionNotice("Custom word is ready for the next round.");
@@ -671,16 +634,11 @@ export function Dashboard({ onNavigate }: DashboardProps) {
             <DockSlot id="artist-right-1" />
             <DockSlot id="artist-right-2" />
             <DockSlot id="artist-right-3" />
-            <DockPanel id="artist-support" label="categories and settings">
+            <DockPanel id="artist-support" label="word mix and settings">
             <SupportPanel
-              onCategoryChange={selectCategory}
-              onCategoryChipRemove={removeCategoryChip}
-              onCategorySelectionApply={applyCategorySelection}
-              onSelectAll={selectAllCategories}
-              onResetCategories={resetMixCategories}
-              randomCategory={RANDOM_CATEGORY}
               roundActive={roundActive}
-              selectedCategoryId={selectedCategoryId}
+              wordMix={wordMix}
+              onOpenWordMix={() => setWordMixOpen(true)}
               hoverMenuDelay={hoverMenuDelay}
               hoverMenusEnabled={hoverMenusEnabled}
               onHoverMenuDelayChange={setHoverMenuDelay}
@@ -725,6 +683,13 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         onClose={closeWordFeedback}
         onSubmit={submitWordFeedback}
         target={feedbackTarget}
+      />
+      <ArtistWordMixPicker
+        initialMix={wordMix}
+        onApply={applyWordMix}
+        onClose={() => setWordMixOpen(false)}
+        open={wordMixOpen}
+        required={!wordMixOnboarded}
       />
     </div>
     </DockLayout>
