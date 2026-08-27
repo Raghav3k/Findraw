@@ -11,6 +11,7 @@ import { StreamSourceSidebar, type ChatMessage } from "./StreamSourceSidebar";
 import { SupportPanel } from "./SupportPanel";
 import { ArtistWordMixPicker } from "./ArtistWordMixPicker";
 import { twitchAuthStartUrl } from "../apiUrls";
+import type { CommunityPack } from "../community/communityPacksApi";
 import {
   DEFAULT_KEYBOARD_SHORTCUTS,
   type ShortcutAction,
@@ -94,9 +95,15 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   const [testBotsEnabled, setTestBotsEnabled] = usePersistentState("round.testBotsEnabled", true);
   const [wordMix, setWordMix] = usePersistentState<ArtistWordMix>("artist.wordMix.v2", DEFAULT_ARTIST_WORD_MIX);
   const [wordMixOnboarded, setWordMixOnboarded] = usePersistentState("artist.wordMixOnboarded.v2", false);
+  const [communityPacks, setCommunityPacks] = usePersistentState<CommunityPack[]>("artist.communityPacks.v1", []);
+  const [communityEditTokens, setCommunityEditTokens] = usePersistentState<Record<string, string>>("artist.communityEditTokens.v1", {});
+  const [reportedCommunityPackIds, setReportedCommunityPackIds] = usePersistentState<string[]>("artist.reportedCommunityPacks.v1", []);
+  const [communityReporterKey, setCommunityReporterKey] = usePersistentState("artist.communityReporterKey.v1", "");
+  const [communityCreatorName] = usePersistentState("room.playerName", "Streamer");
+  const activeCommunityPacks = communityPacks.filter((pack) => pack.status === "published" && !reportedCommunityPackIds.includes(pack.id));
   const [wordFeedback, setWordFeedback] = usePersistentState<WordFeedbackMap>("feedback.artist.words", {});
   const [roundStatus, setRoundStatus] = useState<RoundStatus>("idle");
-  const [currentPrompt, setCurrentPrompt] = useState<ArtistPackPrompt>(() => pickArtistPrompt(normalizeArtistWordMix(wordMix), []));
+  const [currentPrompt, setCurrentPrompt] = useState<ArtistPackPrompt>(() => pickArtistPrompt(normalizeArtistWordMix(wordMix, activeCommunityPacks), [], activeCommunityPacks));
   const [wordMixOpen, setWordMixOpen] = useState(() => !wordMixOnboarded);
   const [feedbackTarget, setFeedbackTarget] = useState<WordFeedbackTarget | null>(null);
   const [feedbackContext, setFeedbackContext] = useState<WordFeedbackContext>("experience");
@@ -122,6 +129,11 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   const resizeStateRef = useRef<ResizeState | null>(null);
   const roundSettingsRef = useRef<HTMLDivElement | null>(null);
   const roundActive = roundStatus === "playing";
+
+  useEffect(() => {
+    if (communityReporterKey) return;
+    setCommunityReporterKey(typeof window.crypto?.randomUUID === "function" ? window.crypto.randomUUID() : `browser-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+  }, [communityReporterKey, setCommunityReporterKey]);
 
   useEffect(() => {
     try {
@@ -298,8 +310,8 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     return prompt;
   };
 
-  const chooseNextPrompt = (mix: ArtistWordMix = wordMix) => {
-    return rememberPrompt(pickArtistPrompt(normalizeArtistWordMix(mix), recentPromptKeysRef.current));
+  const chooseNextPrompt = (mix: ArtistWordMix = wordMix, availableCommunityPacks: CommunityPack[] = activeCommunityPacks) => {
+    return rememberPrompt(pickArtistPrompt(normalizeArtistWordMix(mix, availableCommunityPacks), recentPromptKeysRef.current, availableCommunityPacks));
   };
 
   const openWordFeedback = (prompt: ArtistPackPrompt = currentPrompt) => {
@@ -431,13 +443,22 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     }
   };
 
-  const applyWordMix = (nextMix: ArtistWordMix) => {
-    const normalized = normalizeArtistWordMix(nextMix);
+  const applyWordMix = (nextMix: ArtistWordMix, availableCommunityPacks: CommunityPack[] = activeCommunityPacks) => {
+    const normalized = normalizeArtistWordMix(nextMix, availableCommunityPacks);
     setWordMix(normalized);
     setWordMixOnboarded(true);
     if (!roundActive) {
       preparePrompt(chooseNextPrompt(normalized));
       setRoundStatus("idle");
+    }
+  };
+
+  const markCommunityPackReported = (packId: string) => {
+    const nextReportedIds = [...new Set([...reportedCommunityPackIds, packId])];
+    const remainingPacks = communityPacks.filter((pack) => pack.id !== packId && pack.status === "published");
+    setReportedCommunityPackIds(nextReportedIds);
+    if (wordMix.packIds.includes(`community-${packId}`)) {
+      applyWordMix({ ...wordMix, packIds: wordMix.packIds.filter((id) => id !== `community-${packId}`) }, remainingPacks);
     }
   };
 
@@ -636,6 +657,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
             <DockSlot id="artist-right-3" />
             <DockPanel id="artist-support" label="word mix and settings">
             <SupportPanel
+              communityPacks={activeCommunityPacks}
               roundActive={roundActive}
               wordMix={wordMix}
               onOpenWordMix={() => setWordMixOpen(true)}
@@ -685,10 +707,18 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         target={feedbackTarget}
       />
       <ArtistWordMixPicker
+        communityEditTokens={communityEditTokens}
+        communityPacks={communityPacks}
+        creatorName={communityCreatorName}
         initialMix={wordMix}
         onApply={applyWordMix}
         onClose={() => setWordMixOpen(false)}
+        onCommunityEditTokensChange={setCommunityEditTokens}
+        onCommunityPacksChange={setCommunityPacks}
+        onCommunityPackReported={markCommunityPackReported}
         open={wordMixOpen}
+        reportedCommunityPackIds={reportedCommunityPackIds}
+        reporterKey={communityReporterKey}
         required={!wordMixOnboarded}
       />
     </div>

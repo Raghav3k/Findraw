@@ -11,6 +11,10 @@ class_name = "FindrawSession"
 name = "FINDRAW_ROOM"
 class_name = "FindrawRoom"
 
+[[durable_objects.bindings]]
+name = "FINDRAW_COMMUNITY"
+class_name = "FindrawCommunity"
+
 [[migrations]]
 tag = "v1"
 new_sqlite_classes = ["FindrawSession"]
@@ -18,6 +22,10 @@ new_sqlite_classes = ["FindrawSession"]
 [[migrations]]
 tag = "v2"
 new_sqlite_classes = ["FindrawRoom"]
+
+[[migrations]]
+tag = "v3"
+new_sqlite_classes = ["FindrawCommunity"]
 
 [vars]
 FRONTEND_URL = "https://findraw.pages.dev"

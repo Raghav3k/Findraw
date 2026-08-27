@@ -14,6 +14,10 @@ It exposes the same routes:
 - `POST /api/round/start`
 - `POST /api/round/end`
 - `POST /api/points/adjust`
+- `POST /api/community-packs`
+- `GET /api/community-packs/:shareCode`
+- `PUT /api/community-packs/:id`
+- `POST /api/community-packs/:id/report`
 
 ## Cloudflare secrets
 
@@ -26,6 +30,8 @@ wrangler secret put SESSION_SECRET
 ```
 
 `SESSION_SECRET` should be a long random value. Twitch tokens are encrypted before being stored in Durable Object storage.
+
+Community packs launch as unlisted share-code packs. Creation returns a one-time edit token that the frontend must keep on the creator's device. Tags use an open vocabulary, with up to eight normalized tags attached to one pack. Set the optional `COMMUNITY_BLOCKED_TERMS` secret to a comma-separated list of additional high-confidence terms rejected during submission.
 
 ## URLs
 

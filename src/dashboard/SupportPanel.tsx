@@ -6,12 +6,14 @@ import {
 } from "./keyboardShortcuts";
 import { usePersistentState } from "../ui/usePersistentState";
 import type { TwitchSession } from "../twitch/twitchApi";
-import { getArtistMixLabel, getArtistMixPacks, getArtistMixWordCount, type ArtistWordMix } from "./artistWordPacks";
+import { getArtistMixPacks, type ArtistWordMix } from "./artistWordPacks";
+import type { CommunityPack } from "../community/communityPacksApi";
 
 type SupportTab = "word-mix" | "settings";
 
 type SupportPanelProps = {
   wordMix: ArtistWordMix;
+  communityPacks: CommunityPack[];
   roundActive: boolean;
   onOpenWordMix: () => void;
   hoverMenuDelay: number;
@@ -29,6 +31,7 @@ type SupportPanelProps = {
 
 export function SupportPanel({
   wordMix,
+  communityPacks,
   roundActive,
   onOpenWordMix,
   hoverMenuDelay,
@@ -49,7 +52,12 @@ export function SupportPanel({
   const [confirmEnd, setConfirmEnd] = usePersistentState("settings.confirmEnd", true);
   const shortcutActions = Object.keys(shortcuts) as ShortcutAction[];
 
-  const selectedPacks = getArtistMixPacks(wordMix);
+  const selectedPacks = getArtistMixPacks(wordMix, communityPacks);
+  const selectedChips = wordMix.packIds.flatMap((id) => {
+    if (id === "general-mixed") return [{ id, kind: "general", label: "All general interests" }];
+    const pack = selectedPacks.find((candidate) => candidate.id === id);
+    return pack ? [{ id, kind: pack.kind, label: pack.label }] : [];
+  });
 
   return (
     <section className="feed-card support-card">
@@ -64,23 +72,14 @@ export function SupportPanel({
 
       {activeTab === "word-mix" ? (
         <div className="support-panel-content artist-word-mix-panel" role="tabpanel">
-          <div className="artist-word-mix-summary">
-            <div className="artist-word-mix-summary-heading">
-              <span className="material-symbols-outlined">{wordMix.kind === "game" ? "sports_esports" : "auto_awesome"}</span>
-              <div><small>{wordMix.kind === "game" ? "Gaming worlds" : "General fun"}</small><strong>{getArtistMixLabel(wordMix)}</strong></div>
-            </div>
-            <div className="artist-word-mix-meta"><span>{getArtistMixWordCount(wordMix)} words</span><span>Familiar only</span></div>
-            <div className="artist-word-mix-chips">
-              {wordMix.kind === "general" && wordMix.packIds.includes("general-mixed")
-                ? <span>All general interests</span>
-                : selectedPacks.map((pack) => <span key={pack.id}>{pack.label}</span>)}
-            </div>
+          <div className="artist-word-mix-chips compact">
+            {selectedChips.map((chip) => <span className={chip.kind} key={chip.id}>{chip.label}</span>)}
           </div>
           <button className="artist-word-mix-change" disabled={roundActive} onClick={onOpenWordMix} type="button">
             <span className="material-symbols-outlined">tune</span>
-            {roundActive ? "Finish this word to change" : "Change word mix"}
+            <strong>{roundActive ? "Finish this word to change" : "Change word mix"}</strong>
+            <span className="material-symbols-outlined">arrow_forward</span>
           </button>
-          <p className="artist-word-mix-note">The queue stays recognizable and rotates evenly between your selected interests.</p>
         </div>
       ) : (
         <div className="support-panel-content settings-panel" role="tabpanel">

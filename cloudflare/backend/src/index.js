@@ -1,3 +1,11 @@
+import {
+  COMMUNITY_REPORT_QUARANTINE_THRESHOLD,
+  CommunityPackValidationError,
+  publicCommunityPack,
+  validateCommunityPackInput,
+  validateCommunityReportInput,
+} from "../../../shared/communityPacks.mjs";
+
 const TWITCH_SCOPES = ["user:read:chat"];
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
@@ -27,8 +35,8 @@ const corsHeaders = (request) => {
   const origin = request?.headers?.get("Origin") || "*";
   return {
     "Access-Control-Allow-Origin": origin,
-    "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "GET,POST,PUT,OPTIONS",
+    "Access-Control-Allow-Headers": "Authorization,Content-Type",
     "Vary": "Origin",
   };
 };
@@ -190,6 +198,130 @@ const createEmptyRoomState = (code, host) => ({
   drawingOperations: [],
   updatedAt: Date.now(),
 });
+
+const communityShareAlphabet = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+const randomCommunityToken = (byteLength = 32) => {
+  const bytes = crypto.getRandomValues(new Uint8Array(byteLength));
+  return btoa(String.fromCharCode(...bytes)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+};
+const randomCommunityShareCode = () => Array.from(
+  crypto.getRandomValues(new Uint8Array(10)),
+  (byte) => communityShareAlphabet[byte % communityShareAlphabet.length],
+).join("");
+const hashCommunityToken = async (value) => {
+  const digest = await crypto.subtle.digest("SHA-256", encoder.encode(String(value || "")));
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+};
+
+export class FindrawCommunity {
+  constructor(state, env) {
+    this.state = state;
+    this.env = env;
+  }
+
+  async fetch(request) {
+    if (request.method === "OPTIONS") return new Response(null, { headers: corsHeaders(request) });
+    const url = new URL(request.url);
+    try {
+      if (url.pathname === "/api/community-packs" && request.method === "POST") return this.createPack(request);
+      const reportMatch = url.pathname.match(/^\/api\/community-packs\/([^/]+)\/report$/);
+      if (reportMatch && request.method === "POST") return this.reportPack(request, reportMatch[1]);
+      const packMatch = url.pathname.match(/^\/api\/community-packs\/([^/]+)$/);
+      if (packMatch && request.method === "GET") return this.getPack(request, packMatch[1]);
+      if (packMatch && request.method === "PUT") return this.updatePack(request, packMatch[1]);
+      return json({ error: "Community pack route not found." }, { status: 404, request });
+    } catch (error) {
+      if (error instanceof CommunityPackValidationError) {
+        return json({ error: error.message, field: error.field }, { status: error.status, request });
+      }
+      console.error("Community pack request failed", error);
+      return json({ error: "Community pack request failed." }, { status: 500, request });
+    }
+  }
+
+  async createPack(request) {
+    const body = await request.json().catch(() => ({}));
+    const input = validateCommunityPackInput(body, { extraBlockedTerms: this.env.COMMUNITY_BLOCKED_TERMS });
+    const editToken = randomCommunityToken();
+    const editTokenHash = await hashCommunityToken(editToken);
+    let pack;
+    await this.state.storage.transaction(async (storage) => {
+      let shareCode = randomCommunityShareCode();
+      while (await storage.get(`community-share:${shareCode}`)) shareCode = randomCommunityShareCode();
+      const now = new Date().toISOString();
+      pack = {
+        id: crypto.randomUUID(),
+        ...input,
+        visibility: "unlisted",
+        status: "published",
+        shareCode,
+        editTokenHash,
+        reportCount: 0,
+        createdAt: now,
+        updatedAt: now,
+      };
+      await storage.put(`community-pack:${pack.id}`, pack);
+      await storage.put(`community-share:${shareCode}`, pack.id);
+    });
+    return json({ pack: publicCommunityPack(pack), editToken }, { status: 201, request });
+  }
+
+  async getPack(request, shareCodeValue) {
+    const shareCode = String(shareCodeValue || "").trim().toUpperCase();
+    const id = await this.state.storage.get(`community-share:${shareCode}`);
+    const pack = id ? await this.state.storage.get(`community-pack:${id}`) : null;
+    if (!pack || pack.status !== "published") return json({ error: "Community pack not found." }, { status: 404, request });
+    return json({ pack: publicCommunityPack(pack) }, { request });
+  }
+
+  async updatePack(request, id) {
+    const pack = await this.state.storage.get(`community-pack:${id}`);
+    if (!pack) return json({ error: "Community pack not found." }, { status: 404, request });
+    const editToken = String(request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "");
+    if (await hashCommunityToken(editToken) !== pack.editTokenHash) {
+      return json({ error: "The edit token is invalid." }, { status: 403, request });
+    }
+    const body = await request.json().catch(() => ({}));
+    const input = validateCommunityPackInput(body, { extraBlockedTerms: this.env.COMMUNITY_BLOCKED_TERMS });
+    Object.assign(pack, input, { updatedAt: new Date().toISOString() });
+    await this.state.storage.put(`community-pack:${id}`, pack);
+    return json({ pack: publicCommunityPack(pack) }, { request });
+  }
+
+  async reportPack(request, id) {
+    const body = await request.json().catch(() => ({}));
+    const input = validateCommunityReportInput(body);
+    const reporterScope = request.headers.get("CF-Connecting-IP") || input.reporterKey;
+    const reportKeyHash = await hashCommunityToken(`${this.env.SESSION_SECRET || "findraw-worker"}:community-report:${reporterScope}`);
+    let result;
+    await this.state.storage.transaction(async (storage) => {
+      const pack = await storage.get(`community-pack:${id}`);
+      if (!pack) {
+        result = { type: "not-found" };
+        return;
+      }
+      const reportStorageKey = `community-report:${id}:${reportKeyHash}`;
+      if (await storage.get(reportStorageKey)) {
+        result = { type: "ok", duplicate: true, status: pack.status };
+        return;
+      }
+      await storage.put(reportStorageKey, {
+        id: crypto.randomUUID(),
+        reason: input.reason,
+        details: input.details,
+        reporterKeyHash,
+        createdAt: new Date().toISOString(),
+      });
+      pack.reportCount = Number(pack.reportCount || 0) + 1;
+      if (pack.reportCount >= COMMUNITY_REPORT_QUARANTINE_THRESHOLD) pack.status = "quarantined";
+      pack.updatedAt = new Date().toISOString();
+      await storage.put(`community-pack:${id}`, pack);
+      result = { type: "ok", duplicate: false, status: pack.status };
+    });
+    if (result.type === "not-found") return json({ error: "Community pack not found." }, { status: 404, request });
+    return json({ ok: true, duplicate: result.duplicate, status: result.status }, { request });
+  }
+}
 
 export class FindrawRoom {
   constructor(state, env) {
@@ -1187,6 +1319,10 @@ export class FindrawSession {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    if (url.pathname.startsWith("/api/community-packs")) {
+      const id = env.FINDRAW_COMMUNITY.idFromName("catalog");
+      return env.FINDRAW_COMMUNITY.get(id).fetch(request);
+    }
     const roomMatch = url.pathname.match(/^\/api\/room\/([A-Za-z0-9]{6})\/(live|state)$/);
     if (roomMatch) {
       const id = env.FINDRAW_ROOM.idFromName(normalizeRoomCode(roomMatch[1]));

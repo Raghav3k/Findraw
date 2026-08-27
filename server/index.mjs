@@ -5,10 +5,19 @@ import WebSocket from "ws";
 import {
   adjustPoints,
   clearTwitchSession,
+  createCommunityPack,
+  getCommunityPackByShareCode,
   getLeaderboard,
   loadTwitchSession,
+  reportCommunityPack,
   saveTwitchSession,
+  updateCommunityPack,
 } from "./storage.mjs";
+import {
+  CommunityPackValidationError,
+  validateCommunityPackInput,
+  validateCommunityReportInput,
+} from "../shared/communityPacks.mjs";
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
@@ -347,6 +356,60 @@ app.get("/auth/twitch/callback", async (request, response) => {
 });
 
 app.get("/api/twitch/session", (_request, response) => response.json(sessionSummary()));
+
+const communityError = (response, error) => {
+  if (error instanceof CommunityPackValidationError) {
+    return response.status(error.status).json({ error: error.message, field: error.field });
+  }
+  console.error("Community pack request failed:", error);
+  return response.status(500).json({ error: "Community pack request failed." });
+};
+
+app.post("/api/community-packs", async (request, response) => {
+  try {
+    const input = validateCommunityPackInput(request.body, { extraBlockedTerms: process.env.COMMUNITY_BLOCKED_TERMS });
+    response.status(201).json(await createCommunityPack(input));
+  } catch (error) {
+    communityError(response, error);
+  }
+});
+
+app.get("/api/community-packs/:shareCode", async (request, response) => {
+  try {
+    const pack = await getCommunityPackByShareCode(request.params.shareCode);
+    if (!pack) return response.status(404).json({ error: "Community pack not found." });
+    response.json({ pack });
+  } catch (error) {
+    communityError(response, error);
+  }
+});
+
+app.put("/api/community-packs/:id", async (request, response) => {
+  try {
+    const editToken = String(request.headers.authorization || "").replace(/^Bearer\s+/i, "");
+    const input = validateCommunityPackInput(request.body, { extraBlockedTerms: process.env.COMMUNITY_BLOCKED_TERMS });
+    const result = await updateCommunityPack(request.params.id, editToken, input);
+    if (result.type === "not-found") return response.status(404).json({ error: "Community pack not found." });
+    if (result.type === "forbidden") return response.status(403).json({ error: "The edit token is invalid." });
+    response.json({ pack: result.pack });
+  } catch (error) {
+    communityError(response, error);
+  }
+});
+
+app.post("/api/community-packs/:id/report", async (request, response) => {
+  try {
+    const input = validateCommunityReportInput(request.body);
+    const result = await reportCommunityPack(request.params.id, {
+      ...input,
+      reporterScope: request.ip || request.socket.remoteAddress,
+    });
+    if (result.type === "not-found") return response.status(404).json({ error: "Community pack not found." });
+    response.json({ ok: true, duplicate: result.duplicate, status: result.status });
+  } catch (error) {
+    communityError(response, error);
+  }
+});
 
 app.post("/api/twitch/disconnect", async (_request, response) => {
   twitchSession = null;

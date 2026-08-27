@@ -1,4 +1,7 @@
-export type ArtistPackKind = "general" | "game";
+import type { CommunityPack } from "../community/communityPacksApi";
+
+export type ArtistPackKind = "general" | "game" | "community";
+export type ArtistWordMixKind = ArtistPackKind | "mixed";
 
 export type ArtistWord = {
   answer: string;
@@ -13,10 +16,16 @@ export type ArtistWordPack = {
   icon: string;
   accent: string;
   words: ArtistWord[];
+  community?: {
+    creatorName: string;
+    reportCount: number;
+    shareCode: string;
+    tags: Array<{ key: string; label: string }>;
+  };
 };
 
 export type ArtistWordMix = {
-  kind: ArtistPackKind;
+  kind: ArtistWordMixKind;
   packIds: string[];
 };
 
@@ -349,36 +358,62 @@ export const ARTIST_GAME_PACKS = ARTIST_WORD_PACKS.filter((pack) => pack.kind ==
 
 const packById = new Map(ARTIST_WORD_PACKS.map((pack) => [pack.id, pack]));
 
-export function normalizeArtistWordMix(mix?: Partial<ArtistWordMix> | null): ArtistWordMix {
-  const kind: ArtistPackKind = mix?.kind === "game" ? "game" : "general";
-  const validIds = [...new Set(mix?.packIds ?? [])].filter((id) => packById.get(id)?.kind === kind);
-  if (kind === "general" && (mix?.packIds?.includes(GENERAL_MIXED_PACK_ID) || validIds.length === 0)) {
-    return { kind, packIds: [GENERAL_MIXED_PACK_ID] };
+export function communityPackToArtistPack(pack: CommunityPack): ArtistWordPack {
+  return {
+    id: `community-${pack.id}`,
+    label: pack.title,
+    description: pack.description || `${pack.words.length} community-created words.`,
+    kind: "community",
+    icon: "diversity_3",
+    accent: "#d8c7e8",
+    words: pack.words,
+    community: {
+      creatorName: pack.creatorName,
+      reportCount: pack.reportCount,
+      shareCode: pack.shareCode,
+      tags: pack.tags,
+    },
+  };
+}
+
+export function normalizeArtistWordMix(mix?: Partial<ArtistWordMix> | null, communityPacks: CommunityPack[] = []): ArtistWordMix {
+  const communityPackIds = new Set(communityPacks.filter((pack) => pack.status === "published").map((pack) => `community-${pack.id}`));
+  let validIds = [...new Set(mix?.packIds ?? [])].filter((id) => id === GENERAL_MIXED_PACK_ID || communityPackIds.has(id) || packById.has(id));
+  if (validIds.includes(GENERAL_MIXED_PACK_ID)) {
+    validIds = validIds.filter((id) => id === GENERAL_MIXED_PACK_ID || packById.get(id)?.kind !== "general");
   }
-  if (kind === "game" && validIds.length === 0) return { kind: "general", packIds: [GENERAL_MIXED_PACK_ID] };
-  return { kind, packIds: validIds };
+  if (validIds.length === 0) return DEFAULT_ARTIST_WORD_MIX;
+  const kinds = new Set<ArtistPackKind>(validIds.map((id) => (
+    id === GENERAL_MIXED_PACK_ID ? "general" : communityPackIds.has(id) ? "community" : packById.get(id)?.kind ?? "general"
+  )));
+  return { kind: kinds.size === 1 ? [...kinds][0] : "mixed", packIds: validIds };
 }
 
-export function getArtistMixPacks(mix: ArtistWordMix): ArtistWordPack[] {
-  const normalized = normalizeArtistWordMix(mix);
-  if (normalized.kind === "general" && normalized.packIds.includes(GENERAL_MIXED_PACK_ID)) return ARTIST_GENERAL_PACKS;
-  return normalized.packIds.flatMap((id) => packById.get(id) ?? []);
+export function getArtistMixPacks(mix: ArtistWordMix, communityPacks: CommunityPack[] = []): ArtistWordPack[] {
+  const normalized = normalizeArtistWordMix(mix, communityPacks);
+  const communityById = new Map(communityPacks.map((pack) => [`community-${pack.id}`, communityPackToArtistPack(pack)]));
+  const selected = normalized.packIds.flatMap((id) => (
+    id === GENERAL_MIXED_PACK_ID ? ARTIST_GENERAL_PACKS : communityById.get(id) ?? packById.get(id) ?? []
+  ));
+  return [...new Map(selected.map((pack) => [pack.id, pack])).values()];
 }
 
-export function getArtistMixLabel(mix: ArtistWordMix) {
-  const normalized = normalizeArtistWordMix(mix);
-  if (normalized.kind === "general" && normalized.packIds.includes(GENERAL_MIXED_PACK_ID)) return "General Mix";
-  const labels = getArtistMixPacks(normalized).map((pack) => pack.label);
+export function getArtistMixLabel(mix: ArtistWordMix, communityPacks: CommunityPack[] = []) {
+  const normalized = normalizeArtistWordMix(mix, communityPacks);
+  if (normalized.kind === "general" && normalized.packIds.includes(GENERAL_MIXED_PACK_ID)) return "All General";
+  const labels = normalized.packIds.map((id) => id === GENERAL_MIXED_PACK_ID
+    ? "All General"
+    : communityPacks.find((pack) => `community-${pack.id}` === id)?.title ?? packById.get(id)?.label ?? "").filter(Boolean);
   if (labels.length <= 3) return labels.join(" + ");
   return `${labels.slice(0, 2).join(" + ")} + ${labels.length - 2} more`;
 }
 
-export function getArtistMixWordCount(mix: ArtistWordMix) {
-  return new Set(getArtistMixPacks(mix).flatMap((pack) => pack.words.map((word) => word.answer.toLocaleLowerCase("en")))).size;
+export function getArtistMixWordCount(mix: ArtistWordMix, communityPacks: CommunityPack[] = []) {
+  return new Set(getArtistMixPacks(mix, communityPacks).flatMap((pack) => pack.words.map((word) => word.answer.toLocaleLowerCase("en")))).size;
 }
 
-export function getArtistMixSamples(mix: ArtistWordMix, count = 6) {
-  const packs = getArtistMixPacks(mix);
+export function getArtistMixSamples(mix: ArtistWordMix, count = 6, communityPacks: CommunityPack[] = []) {
+  const packs = getArtistMixPacks(mix, communityPacks);
   const samples: ArtistWord[] = [];
   let index = 0;
   while (samples.length < count && packs.some((pack) => pack.words[index])) {
@@ -393,8 +428,8 @@ export function getArtistMixSamples(mix: ArtistWordMix, count = 6) {
 
 export const getArtistPromptKey = (prompt: ArtistPackPrompt) => `${prompt.categoryId}:${prompt.answer.toLocaleLowerCase("en")}`;
 
-export function pickArtistPrompt(mix: ArtistWordMix, recentKeys: string[]): ArtistPackPrompt {
-  const packs = getArtistMixPacks(mix);
+export function pickArtistPrompt(mix: ArtistWordMix, recentKeys: string[], communityPacks: CommunityPack[] = []): ArtistPackPrompt {
+  const packs = getArtistMixPacks(mix, communityPacks);
   const recent = new Set(recentKeys.slice(-32));
   const recentPackIds = recentKeys.slice(-Math.max(4, packs.length * 2)).map((key) => key.split(":")[0]);
   const packCounts = new Map(packs.map((pack) => [pack.id, recentPackIds.filter((id) => id === `pack-${pack.id}`).length]));
