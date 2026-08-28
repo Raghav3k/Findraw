@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import {
-  disconnectTwitch,
   endServerRound,
   fetchTwitchSession,
   connectLiveEvents,
@@ -120,19 +119,6 @@ export function AutoDrawPage({ onNavigate }: Props) {
     if (!activeRoundId.current) return;
     activeRoundId.current = null;
     try { await endServerRound(); } catch { /* Local play remains available. */ }
-  };
-
-  const disconnectFromTwitch = async () => {
-    await closeLiveRound();
-    try {
-      await disconnectTwitch();
-      setTwitchSession(await fetchTwitchSession());
-      setChatMessages([]);
-      setSolvers([]);
-      setNotice("Twitch disconnected. Drawing locally is still available.");
-    } catch {
-      setNotice("Could not disconnect Twitch.");
-    }
   };
 
   useEffect(() => {
@@ -471,7 +457,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
     <DockLayout panelIds={["auto-camera", "auto-twitch", "auto-categories", "auto-reserved"]} slotIds={["auto-left-1", "auto-left-2", "auto-right-1", "auto-right-2"]} storageKey="autoDraw.dock.v2">
     <div className="dashboard-layout auto-draw-page auto-workspace" style={{ "--source-rail-width": `${sourceRailWidth}px`, "--side-panel-width": `${sidePanelWidth}px` } as CSSProperties}>
       <aside className="stream-sidebar auto-stream-sidebar dock-rail" data-dock-boundary="right" aria-label="Stream sources">
-        <WorkspaceIdentity connected={twitchSession.authenticated} configured={twitchSession.configured} displayName={twitchSession.user?.displayName ?? null} onDisconnectTwitch={() => void disconnectFromTwitch()} onModes={() => onNavigate("/")} returnTo="/auto-draw" subtitle="Auto Draw sketchbook" />
+        <WorkspaceIdentity onModes={() => onNavigate("/")} subtitle="Auto Draw sketchbook" />
         <DockControls />
         <DockSlot id="auto-left-1" />
         <DockSlot id="auto-left-2" />
@@ -490,7 +476,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
           </div>
           {twitchPanel === "chat" ? (
             <div className="source-chat-list" aria-live="polite" role="tabpanel">
-              {chatMessages.length ? chatMessages.map((message) => <div className="source-chat-message" key={message.id}><span>{message.name.slice(0, 1)}</span><p><strong>{message.name}</strong>{message.message}</p></div>) : <div className="source-empty-state"><span className="material-symbols-outlined">forum</span><strong>Chat appears here</strong><small>{twitchLive ? "Start a drawing and audience guesses will arrive live." : "Connect Twitch from your profile to receive chat."}</small></div>}
+              {chatMessages.length ? chatMessages.map((message) => <div className="source-chat-message" key={message.id}><p><strong style={{ color: /^#[0-9a-f]{6}$/i.test(message.color || "") ? message.color || undefined : undefined }}>{message.name}</strong><span>: {message.message}</span></p></div>) : <div className="source-empty-state"><span className="material-symbols-outlined">forum</span><strong>Chat appears here</strong><small>{twitchLive ? "Start a drawing and audience guesses will arrive live." : "Connect Twitch from your profile to receive chat."}</small></div>}
             </div>
           ) : (
             <div className="auto-correct-panel" role="tabpanel">

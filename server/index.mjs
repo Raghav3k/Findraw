@@ -33,7 +33,30 @@ const configured = () => Boolean(
 app.use(express.json({ limit: "32kb" }));
 
 const sseClients = new Set();
-const oauthStates = new Map();
+const allowedOAuthReturnPaths = new Set(["/", "/auto-draw", "/draw", "/room"]);
+const createOAuthState = (returnTo) => {
+  const payload = Buffer.from(JSON.stringify({
+    returnTo,
+    expiresAt: Date.now() + 10 * 60 * 1000,
+    nonce: crypto.randomBytes(16).toString("base64url"),
+  })).toString("base64url");
+  const signature = crypto.createHmac("sha256", process.env.SESSION_SECRET).update(payload).digest("base64url");
+  return `${payload}.${signature}`;
+};
+const readOAuthState = (state) => {
+  try {
+    const [payload, signature] = String(state || "").split(".");
+    if (!payload || !signature) return null;
+    const expected = crypto.createHmac("sha256", process.env.SESSION_SECRET).update(payload).digest();
+    const actual = Buffer.from(signature, "base64url");
+    if (expected.length !== actual.length || !crypto.timingSafeEqual(expected, actual)) return null;
+    const value = JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
+    if (!allowedOAuthReturnPaths.has(value.returnTo) || value.expiresAt < Date.now()) return null;
+    return value;
+  } catch {
+    return null;
+  }
+};
 const sendEvent = (response, event) => {
   response.write(`data: ${JSON.stringify(event)}\n\n`);
 };
@@ -57,6 +80,7 @@ const sessionSummary = () => ({
     id: twitchSession.userId,
     login: twitchSession.login,
     displayName: twitchSession.displayName,
+    profileImageUrl: twitchSession.profileImageUrl || null,
   } : null,
 });
 
@@ -98,14 +122,21 @@ const refreshSession = async () => {
 const validSession = async () => {
   if (!twitchSession) return null;
   if (twitchSession.expiresAt < Date.now() + 60_000) await refreshSession();
-  if (Date.now() - (twitchSession.validatedAt || 0) > 60 * 60 * 1000) {
+  const shouldValidate = Date.now() - (twitchSession.validatedAt || 0) > 60 * 60 * 1000;
+  if (shouldValidate || !twitchSession.profileImageUrl) {
     const validation = await twitchFetch("https://id.twitch.tv/oauth2/validate", {
       headers: { Authorization: `OAuth ${twitchSession.accessToken}` },
     });
+    const users = await twitchFetch(`https://api.twitch.tv/helix/users?id=${validation.user_id}`, {
+      headers: { Authorization: `Bearer ${twitchSession.accessToken}`, "Client-Id": process.env.TWITCH_CLIENT_ID },
+    });
+    const user = users.data?.[0];
     twitchSession = {
       ...twitchSession,
       userId: validation.user_id,
       login: validation.login,
+      displayName: user?.display_name || validation.login,
+      profileImageUrl: user?.profile_image_url || null,
       expiresAt: Date.now() + validation.expires_in * 1000,
       validatedAt: Date.now(),
     };
@@ -287,13 +318,9 @@ app.get("/auth/twitch/start", (request, response) => {
     response.status(503).send("Twitch is not configured. Add the required values to .env.");
     return;
   }
-  const state = crypto.randomBytes(24).toString("hex");
   const requestedReturnTo = String(request.query.returnTo || "");
-  const returnTo = ["/auto-draw", "/draw", "/room"].includes(requestedReturnTo) ? requestedReturnTo : "/draw";
-  oauthStates.set(state, { expiresAt: Date.now() + 10 * 60 * 1000, returnTo });
-  for (const [key, entry] of oauthStates) {
-    if (entry.expiresAt < Date.now()) oauthStates.delete(key);
-  }
+  const returnTo = allowedOAuthReturnPaths.has(requestedReturnTo) ? requestedReturnTo : "/";
+  const state = createOAuthState(returnTo);
 
   const url = new URL("https://id.twitch.tv/oauth2/authorize");
   url.search = new URLSearchParams({
@@ -302,6 +329,7 @@ app.get("/auth/twitch/start", (request, response) => {
     redirect_uri: twitchRedirectUri,
     scope: twitchScopes.join(" "),
     state,
+    ...(request.query.switch === "1" ? { force_verify: "true" } : {}),
   });
   response.redirect(url.toString());
 });
@@ -309,9 +337,8 @@ app.get("/auth/twitch/start", (request, response) => {
 app.get("/auth/twitch/callback", async (request, response) => {
   try {
     const state = String(request.query.state || "");
-    const stateEntry = oauthStates.get(state);
-    oauthStates.delete(state);
-    if (!request.query.code || !state || !stateEntry || stateEntry.expiresAt < Date.now()) {
+    const stateEntry = readOAuthState(state);
+    if (!request.query.code || !stateEntry) {
       response.status(400).send("The Twitch sign-in state was invalid or expired.");
       return;
     }
@@ -344,6 +371,7 @@ app.get("/auth/twitch/callback", async (request, response) => {
       userId: validation.user_id,
       login: validation.login,
       displayName: users.data?.[0]?.display_name || validation.login,
+      profileImageUrl: users.data?.[0]?.profile_image_url || null,
     };
     await saveTwitchSession(twitchSession);
     await connectEventSub();

@@ -726,11 +726,39 @@ export class FindrawRoom {
 }
 
 const base64Url = (bytes) => btoa(String.fromCharCode(...bytes)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const fromBase64Url = (value) => Uint8Array.from(atob(String(value).replace(/-/g, "+").replace(/_/g, "/")), (char) => char.charCodeAt(0));
 const randomToken = (bytes = 24) => {
   const data = new Uint8Array(bytes);
   crypto.getRandomValues(data);
   return base64Url(data);
 };
+const OAUTH_RETURN_PATHS = new Set(["/", "/auto-draw", "/draw", "/room"]);
+
+async function oauthStateKey(secret) {
+  return crypto.subtle.importKey("raw", encoder.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign", "verify"]);
+}
+
+async function createOAuthState(secret, returnTo) {
+  const payload = base64Url(encoder.encode(JSON.stringify({ returnTo, expiresAt: Date.now() + 10 * 60 * 1000, nonce: randomToken(16) })));
+  const key = await oauthStateKey(secret);
+  const signature = new Uint8Array(await crypto.subtle.sign("HMAC", key, encoder.encode(payload)));
+  return `${payload}.${base64Url(signature)}`;
+}
+
+async function readOAuthState(secret, state) {
+  try {
+    const [payload, encodedSignature] = String(state || "").split(".");
+    if (!payload || !encodedSignature) return null;
+    const key = await oauthStateKey(secret);
+    const valid = await crypto.subtle.verify("HMAC", key, fromBase64Url(encodedSignature), encoder.encode(payload));
+    if (!valid) return null;
+    const value = JSON.parse(decoder.decode(fromBase64Url(payload)));
+    if (!OAUTH_RETURN_PATHS.has(value.returnTo) || value.expiresAt < Date.now()) return null;
+    return value;
+  } catch {
+    return null;
+  }
+}
 
 async function encryptionKey(secret) {
   const digest = await crypto.subtle.digest("SHA-256", encoder.encode(secret));
@@ -836,6 +864,7 @@ export class FindrawSession {
         id: this.twitchSession.userId,
         login: this.twitchSession.login,
         displayName: this.twitchSession.displayName,
+        profileImageUrl: this.twitchSession.profileImageUrl || null,
       } : null,
     };
   }
@@ -895,6 +924,7 @@ export class FindrawSession {
         id: this.twitchSession.userId,
         login: this.twitchSession.login,
         displayName: this.twitchSession.displayName,
+        profileImageUrl: this.twitchSession.profileImageUrl || null,
       } : null,
     };
   }
@@ -931,14 +961,21 @@ export class FindrawSession {
   async validSession() {
     if (!this.twitchSession) return null;
     if (this.twitchSession.expiresAt < Date.now() + 60_000) await this.refreshSession();
-    if (Date.now() - (this.twitchSession.validatedAt || 0) > 60 * 60 * 1000) {
+    const shouldValidate = Date.now() - (this.twitchSession.validatedAt || 0) > 60 * 60 * 1000;
+    if (shouldValidate || !this.twitchSession.profileImageUrl) {
       const validation = await twitchFetch("https://id.twitch.tv/oauth2/validate", {
         headers: { Authorization: `OAuth ${this.twitchSession.accessToken}` },
       });
+      const users = await twitchFetch(`https://api.twitch.tv/helix/users?id=${validation.user_id}`, {
+        headers: { Authorization: `Bearer ${this.twitchSession.accessToken}`, "Client-Id": this.env.TWITCH_CLIENT_ID },
+      });
+      const user = users.data?.[0];
       this.twitchSession = {
         ...this.twitchSession,
         userId: validation.user_id,
         login: validation.login,
+        displayName: user?.display_name || validation.login,
+        profileImageUrl: user?.profile_image_url || null,
         expiresAt: Date.now() + validation.expires_in * 1000,
         validatedAt: Date.now(),
       };
@@ -1106,16 +1143,9 @@ export class FindrawSession {
 
   async startTwitchAuth(request, url) {
     if (!this.configured()) return new Response("Twitch is not configured.", { status: 503, headers: corsHeaders(request) });
-    const state = randomToken();
     const requestedReturnTo = String(url.searchParams.get("returnTo") || "");
-    const returnTo = ["/auto-draw", "/draw", "/room"].includes(requestedReturnTo) ? requestedReturnTo : "/draw";
-    const states = await this.state.storage.get("oauthStates") || {};
-    const now = Date.now();
-    for (const [key, entry] of Object.entries(states)) {
-      if (entry.expiresAt < now) delete states[key];
-    }
-    states[state] = { expiresAt: now + 10 * 60 * 1000, returnTo };
-    await this.state.storage.put("oauthStates", states);
+    const returnTo = OAUTH_RETURN_PATHS.has(requestedReturnTo) ? requestedReturnTo : "/";
+    const state = await createOAuthState(this.env.SESSION_SECRET, returnTo);
 
     const authUrl = new URL("https://id.twitch.tv/oauth2/authorize");
     authUrl.search = new URLSearchParams({
@@ -1124,6 +1154,7 @@ export class FindrawSession {
       redirect_uri: this.env.TWITCH_REDIRECT_URI,
       scope: TWITCH_SCOPES.join(" "),
       state,
+      ...(url.searchParams.get("switch") === "1" ? { force_verify: "true" } : {}),
     });
     return Response.redirect(authUrl.toString(), 302);
   }
@@ -1131,11 +1162,8 @@ export class FindrawSession {
   async finishTwitchAuth(request, url) {
     const state = String(url.searchParams.get("state") || "");
     const code = String(url.searchParams.get("code") || "");
-    const states = await this.state.storage.get("oauthStates") || {};
-    const stateEntry = states[state];
-    delete states[state];
-    await this.state.storage.put("oauthStates", states);
-    if (!code || !state || !stateEntry || stateEntry.expiresAt < Date.now()) {
+    const stateEntry = await readOAuthState(this.env.SESSION_SECRET, state);
+    if (!code || !stateEntry) {
       return new Response("The Twitch sign-in state was invalid or expired.", { status: 400, headers: corsHeaders(request) });
     }
 
@@ -1165,6 +1193,7 @@ export class FindrawSession {
       userId: validation.user_id,
       login: validation.login,
       displayName: users.data?.[0]?.display_name || validation.login,
+      profileImageUrl: users.data?.[0]?.profile_image_url || null,
     };
     await this.saveTwitchSession(this.twitchSession);
     await this.connectEventSub();

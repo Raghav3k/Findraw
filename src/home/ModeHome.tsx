@@ -4,12 +4,15 @@ import { AutoDrawCanvas } from "../autoDraw/AutoDrawCanvas";
 import { AUTO_DRAW_ASSETS } from "../autoDraw/autoDrawAssets";
 import { ColorPickerPanel } from "../ui/ColorPickerPanel";
 import { usePersistentState } from "../ui/usePersistentState";
+import { TwitchProfileMenu } from "../ui/WorkspaceIdentity";
+import { connectLiveEvents, disconnectTwitch, fetchTwitchSession, type TwitchSession } from "../twitch/twitchApi";
 
 type ModeHomeProps = { onNavigate: (path: string) => void };
 
 type AvatarColorTarget = "headColor" | "headAccent" | "bodyColor" | "bodyAccent";
 
 export function ModeHome({ onNavigate }: ModeHomeProps) {
+  const [twitchSession, setTwitchSession] = useState<TwitchSession>({ authenticated: false, configured: false, eventSubStatus: "disconnected", user: null });
   const [playerName, setPlayerName] = usePersistentState("room.playerName", "Streamer");
   const [avatarHeadColor, setAvatarHeadColor] = usePersistentState("room.avatar.headColor", "#f0ccd3");
   const [avatarHeadAccent, setAvatarHeadAccent] = usePersistentState("room.avatar.headAccent", "#ffe4a8");
@@ -39,6 +42,20 @@ export function ModeHome({ onNavigate }: ModeHomeProps) {
   const activeColor = avatarColorTarget ? avatarColorMap[avatarColorTarget] : null;
 
   useEffect(() => {
+    let mounted = true;
+    fetchTwitchSession().then((session) => {
+      if (!mounted) return;
+      setTwitchSession(session);
+    }).catch(() => undefined);
+    const stopEvents = connectLiveEvents((event) => {
+      if (event.type !== "twitch-session") return;
+      setTwitchSession(event.payload);
+    });
+    if (new URLSearchParams(window.location.search).has("twitch")) window.history.replaceState({}, "", "/");
+    return () => { mounted = false; stopEvents(); };
+  }, []);
+
+  useEffect(() => {
     if (!avatarColorTarget) return;
     const closeColorPanel = (event: PointerEvent) => {
       const target = event.target as HTMLElement;
@@ -62,6 +79,15 @@ export function ModeHome({ onNavigate }: ModeHomeProps) {
   return <main className="mode-home"><div className="mode-home-paper">
     <header className="mode-home-header">
       <div className="mode-home-brand"><h1>Findraw</h1></div>
+      <TwitchProfileMenu
+        chatStatus={twitchSession.eventSubStatus}
+        configured={twitchSession.configured}
+        connected={twitchSession.authenticated}
+        displayName={twitchSession.user?.displayName ?? null}
+        profileImageUrl={twitchSession.user?.profileImageUrl ?? null}
+        onDisconnectTwitch={() => { void disconnectTwitch().then(() => setTwitchSession({ authenticated: false, configured: twitchSession.configured, eventSubStatus: "disconnected", user: null })); }}
+        returnTo="/"
+      />
     </header>
     <section className="mode-grid" aria-label="Game modes">
       <button className="mode-card room-mode-card" onClick={() => onNavigate("/room")} type="button">
@@ -77,9 +103,9 @@ export function ModeHome({ onNavigate }: ModeHomeProps) {
         <span className="mode-card-number">03</span><div className="mode-card-copy"><span className="mode-card-label">New game</span><h2>Auto Draw</h2><p>Findraw draws in timed stages. The streamer and chat guess together.</p><span className="mode-card-action">Try the practical proof <span className="material-symbols-outlined">arrow_forward</span></span></div>
       </button>
     </section>
-    <section className="mode-temp-profile" aria-label="Temporary player profile">
+    {!twitchSession.authenticated ? <section className="mode-temp-profile" aria-label="Guest player profile">
       <button className="mode-temp-avatar" onClick={() => setAvatarEditorOpen((current) => !current)} style={avatarStyle} title="Edit avatar" type="button"><i/><b/></button>
-      <label><span>Temp name</span><input maxLength={20} onChange={(event) => setPlayerName(event.target.value)} placeholder="Player" value={playerName} /></label>
+      <label><span>Guest name</span><input maxLength={20} onChange={(event) => setPlayerName(event.target.value)} placeholder="Player" value={playerName} /></label>
       {avatarEditorOpen ? (
         <div className="mode-avatar-popover">
           <div className="mode-avatar-editor-row">
@@ -99,6 +125,6 @@ export function ModeHome({ onNavigate }: ModeHomeProps) {
           ) : null}
         </div>
       ) : null}
-    </section>
+    </section> : null}
   </div></main>;
 }

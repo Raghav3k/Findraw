@@ -18,7 +18,10 @@ export function apiWebSocketUrl(path: string): string | null {
   return url.toString();
 }
 
-export function twitchAuthStartUrl(returnTo?: string): string {
-  const query = returnTo ? `?returnTo=${encodeURIComponent(returnTo)}` : "";
-  return apiUrl(`/auth/twitch/start${query}`);
+export function twitchAuthStartUrl(returnTo?: string, switchAccount = false): string {
+  const query = new URLSearchParams();
+  if (returnTo) query.set("returnTo", returnTo);
+  if (switchAccount) query.set("switch", "1");
+  const suffix = query.size ? `?${query.toString()}` : "";
+  return apiUrl(`/auth/twitch/start${suffix}`);
 }

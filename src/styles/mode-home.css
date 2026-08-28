@@ -26,7 +26,14 @@
 .auto-draw-page input { font: inherit; }
 
 .mode-home-paper { max-width: 1240px; min-height: 100%; margin: 0 auto; padding: clamp(30px, 5vw, 76px); }
-.mode-home-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; margin-bottom: clamp(34px, 5vw, 64px); }
+.mode-home-header { position: relative; z-index: 30; display: flex; align-items: center; justify-content: space-between; gap: 32px; margin-bottom: clamp(34px, 5vw, 64px); }
+.mode-home-header > .workspace-profile-menu-wrap { position: absolute; top: 0; right: 0; }
+.mode-home-header .workspace-profile { min-width: 218px; min-height: 62px; padding: 9px 11px 9px 9px; border-radius: 16px 8px 14px 10px; background: rgba(255,250,240,.94); box-shadow: 3px 4px 0 rgba(76,64,45,.14), 0 10px 24px rgba(67,62,53,.07); }
+.mode-home-header .workspace-profile:hover { background: #fffaf0; box-shadow: 4px 6px 0 rgba(76,64,45,.13), 0 14px 28px rgba(67,62,53,.1); }
+.mode-home-header .workspace-profile-avatar { width: 42px; height: 42px; flex-basis: 42px; font-size: 23px; }
+.mode-home-header .workspace-profile-copy strong { max-width: 125px; font-size: 15px; }
+.mode-home-header .workspace-profile-copy > span { max-width: 125px; font-size: 9px; }
+.mode-home-header .workspace-profile-menu { position: absolute; top: calc(100% + 9px); right: 0; left: auto; width: 240px; }
 .mode-home-brand h1 { position: relative; margin: 3px 0 0; font-size: clamp(56px, 7vw, 92px); line-height: .86; letter-spacing: -5px; transform: rotate(-1deg); }
 .mode-home-brand h1::after { content: ""; position: absolute; left: 4px; bottom: -10px; width: 120px; height: 4px; border-radius: 50%; background: var(--mode-red); transform: rotate(-3deg); }
 .mode-home-brand p { margin: 23px 0 0; color: #6b665d; font-size: 18px; }

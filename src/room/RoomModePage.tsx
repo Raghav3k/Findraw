@@ -20,7 +20,6 @@ import { DockControls, DockLayout, DockPanel, DockSlot, ResizableSurface } from 
 import { resizeDockBoundary, SIDE_RAIL_SNAP_POINTS, snapDockRailWidth, SOURCE_RAIL_SNAP_POINTS } from "../ui/dockRailResize";
 import {
   connectLiveEvents,
-  disconnectTwitch,
   endServerRound,
   fetchTwitchSession,
   reconnectTwitchChat,
@@ -35,7 +34,7 @@ import {
   type WordFeedbackRating,
   type WordFeedbackTarget,
 } from "../feedback/wordFeedback";
-import { hasApiBaseUrl, twitchAuthStartUrl } from "../apiUrls";
+import { hasApiBaseUrl } from "../apiUrls";
 import {
   createClientId,
   createEmptyRoom,
@@ -715,7 +714,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     <DockLayout panelIds={["room-players", "room-control", "room-support", "room-chat"]} slotIds={["room-left-1", "room-left-2", "room-right-1", "room-right-2"]} storageKey="room.dock.v2">
     <div className="dashboard-layout room-mode-page" style={{ "--source-rail-width": `${sourceRailWidth}px`, "--side-panel-width": `${sidePanelWidth}px` } as CSSProperties}>
       <aside className="stream-sidebar room-sidebar dock-rail" data-dock-boundary="right" aria-label="Room setup">
-        <WorkspaceIdentity connected={twitchSession.authenticated} configured={twitchSession.configured || hasApiBaseUrl} displayName={twitchSession.user?.displayName ?? playerName} onDisconnectTwitch={() => { void disconnectTwitch().then(() => setTwitchSession(EMPTY_TWITCH_SESSION)); }} onModes={requestExitToHome} returnTo="/room" subtitle={hasApiBaseUrl ? "Online room beta" : "Local room fallback"} />
+        <WorkspaceIdentity onModes={requestExitToHome} subtitle={hasApiBaseUrl ? "Online room beta" : "Local room fallback"} />
         <DockControls />
         <DockSlot id="room-left-1" />
         <DockSlot id="room-left-2" />
@@ -951,9 +950,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                   </div>
                   {twitchNotice ? <p className="room-twitch-notice">{twitchNotice}</p> : null}
                   {!twitchSession.authenticated ? (
-                    <button className="room-twitch-action" onClick={() => window.open(twitchAuthStartUrl("/room"), "_blank", "noopener,noreferrer")} type="button">
-                      <span className="material-symbols-outlined">link</span>Connect Twitch
-                    </button>
+                    <p className="room-twitch-notice">Connect Twitch from the home profile.</p>
                   ) : !twitchLive ? (
                     <button className="room-twitch-action" onClick={() => { void reconnectTwitchChat().then(setTwitchSession).catch((error) => setTwitchNotice(error instanceof Error ? error.message : "Could not reconnect Twitch.")); }} type="button">
                       <span className="material-symbols-outlined">refresh</span>Reconnect chat

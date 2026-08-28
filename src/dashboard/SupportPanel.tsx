@@ -25,8 +25,6 @@ type SupportPanelProps = {
   onShortcutsReset: () => void;
   twitchSession: TwitchSession;
   connectionNotice: string;
-  onConnectTwitch: () => void;
-  onDisconnectTwitch: () => void;
 };
 
 export function SupportPanel({
@@ -43,8 +41,6 @@ export function SupportPanel({
   onShortcutsReset,
   twitchSession,
   connectionNotice,
-  onConnectTwitch,
-  onDisconnectTwitch,
 }: SupportPanelProps) {
   const [activeTab, setActiveTab] = useState<SupportTab>("word-mix");
   const [showTimer, setShowTimer] = usePersistentState("settings.showTimer", true);
@@ -88,16 +84,8 @@ export function SupportPanel({
               <strong>Twitch chat</strong>
               <p>{twitchSession.authenticated
                 ? `Connected as ${twitchSession.user?.displayName ?? "streamer"}. Chat is ${twitchSession.eventSubStatus}.`
-                : "Connect the streamer's account to receive live guesses."}</p>
+                : "Connect the streamer's account from the home profile to receive live guesses."}</p>
             </div>
-            <button
-              className={`twitch-connect-button ${twitchSession.authenticated ? "disconnect" : ""}`}
-              onClick={twitchSession.authenticated ? onDisconnectTwitch : onConnectTwitch}
-              type="button"
-            >
-              <span className="material-symbols-outlined">{twitchSession.authenticated ? "link_off" : "link"}</span>
-              {twitchSession.authenticated ? "Disconnect" : "Connect Twitch"}
-            </button>
             {connectionNotice ? <p className="connection-notice">{connectionNotice}</p> : null}
           </div>
           <div className="setting-row">

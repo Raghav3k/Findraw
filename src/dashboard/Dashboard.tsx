@@ -10,7 +10,6 @@ import { ExcalidrawStage } from "../canvas/ExcalidrawStage";
 import { StreamSourceSidebar, type ChatMessage } from "./StreamSourceSidebar";
 import { SupportPanel } from "./SupportPanel";
 import { ArtistWordMixPicker } from "./ArtistWordMixPicker";
-import { twitchAuthStartUrl } from "../apiUrls";
 import type { CommunityPack } from "../community/communityPacksApi";
 import {
   DEFAULT_KEYBOARD_SHORTCUTS,
@@ -21,7 +20,6 @@ import { DockLayout, DockPanel, DockSlot, ResizableSurface } from "../ui/DockLay
 import { resizeDockBoundary, SIDE_RAIL_SNAP_POINTS, snapDockRailWidth, SOURCE_RAIL_SNAP_POINTS } from "../ui/dockRailResize";
 import {
   adjustViewerPoints,
-  disconnectTwitch,
   endServerRound,
   fetchLeaderboard,
   fetchTwitchSession,
@@ -488,19 +486,6 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     setRoundStatus("ended");
   };
 
-  const connectTwitch = () => window.location.assign(twitchAuthStartUrl());
-
-  const disconnectFromTwitch = async () => {
-    try {
-      await disconnectTwitch();
-      setTwitchSession(await fetchTwitchSession());
-      setLeaderboard([]);
-      setConnectionNotice("Twitch disconnected.");
-    } catch (error) {
-      setConnectionNotice(error instanceof Error ? error.message : "Could not disconnect Twitch.");
-    }
-  };
-
   const rewardViewer = async (viewer: SolvedViewer) => {
     try {
       const result = await adjustViewerPoints(viewer, 25);
@@ -552,7 +537,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
         </div>
       </header>
 
-      <StreamSourceSidebar category={currentPrompt.categoryId} chatStatus={twitchSession.eventSubStatus} configured={twitchSession.configured} connected={twitchSession.authenticated} displayName={twitchSession.user?.displayName ?? null} messages={chatMessages} onDisconnectTwitch={() => void disconnectFromTwitch()} onModes={() => onNavigate("/")} onUseCustomWord={useCustomWord} preparedCustomWord={currentPrompt.categoryId === "custom" ? currentPrompt.answer : null} roundActive={roundActive} word={currentPrompt.answer} />
+      <StreamSourceSidebar category={currentPrompt.categoryId} chatStatus={twitchSession.eventSubStatus} messages={chatMessages} onModes={() => onNavigate("/")} onUseCustomWord={useCustomWord} preparedCustomWord={currentPrompt.categoryId === "custom" ? currentPrompt.answer : null} roundActive={roundActive} word={currentPrompt.answer} />
       <div aria-label="Resize source panel" className="layout-resizer source-rail-resizer" onPointerDown={(event) => startResize("source", event)} role="separator" />
 
       <main className="dashboard-shell">
@@ -670,8 +655,6 @@ export function Dashboard({ onNavigate }: DashboardProps) {
               shortcuts={shortcuts}
               twitchSession={twitchSession}
               connectionNotice={connectionNotice}
-              onConnectTwitch={connectTwitch}
-              onDisconnectTwitch={() => void disconnectFromTwitch()}
             />
             </DockPanel>
 

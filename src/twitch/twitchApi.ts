@@ -6,7 +6,7 @@ export type TwitchSession = {
   configured: boolean;
   authenticated: boolean;
   eventSubStatus: EventSubStatus;
-  user: null | { id: string; login: string; displayName: string };
+  user: null | { id: string; login: string; displayName: string; profileImageUrl: string | null };
 };
 
 export type LiveChatMessage = {

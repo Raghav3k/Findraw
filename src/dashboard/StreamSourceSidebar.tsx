@@ -5,18 +5,15 @@ import { DockControls, DockPanel, DockSlot } from "../ui/DockLayout";
 import { AUTO_DRAW_ASSETS } from "../autoDraw/autoDrawAssets";
 
 export type ChatMessage = {
+  color?: string | null;
   id: string;
   message: string;
   name: string;
 };
 
 type StreamSourceSidebarProps = {
-  configured: boolean;
-  connected: boolean;
-  displayName: string | null;
   messages: ChatMessage[];
   onModes: () => void;
-  onDisconnectTwitch?: () => void;
   roundActive: boolean;
   word: string;
   category?: string;
@@ -25,7 +22,7 @@ type StreamSourceSidebarProps = {
   preparedCustomWord: string | null;
 };
 
-export function StreamSourceSidebar({ configured, connected, displayName, messages, onModes, onDisconnectTwitch, roundActive, word, category, chatStatus, onUseCustomWord, preparedCustomWord }: StreamSourceSidebarProps) {
+export function StreamSourceSidebar({ messages, onModes, roundActive, word, category, chatStatus, onUseCustomWord, preparedCustomWord }: StreamSourceSidebarProps) {
   const [customWord, setCustomWord] = useState("");
   const [customWordError, setCustomWordError] = useState("");
   const [showAssetImage, setShowAssetImage] = useState(false);
@@ -63,7 +60,7 @@ export function StreamSourceSidebar({ configured, connected, displayName, messag
 
   return (
     <aside className="stream-sidebar dock-rail" data-dock-boundary="right" aria-label="Stream sources">
-      <WorkspaceIdentity connected={connected} configured={configured} displayName={displayName} onDisconnectTwitch={onDisconnectTwitch} onModes={onModes} returnTo="/draw" subtitle="Artist sketchbook" />
+      <WorkspaceIdentity onModes={onModes} subtitle="Artist sketchbook" />
       <DockControls />
       <DockSlot id="artist-left-1" />
       <DockSlot id="artist-left-2" />
@@ -159,16 +156,15 @@ export function StreamSourceSidebar({ configured, connected, displayName, messag
         </header>
 
         <div className="source-chat-list" aria-live="polite" ref={chatListRef}>
-          {messages.length > 0 ? messages.map(({ id, message, name }) => (
+          {messages.length > 0 ? messages.map(({ color, id, message, name }) => (
             <div className="source-chat-message" key={id}>
-              <span>{name.slice(0, 1)}</span>
-              <p><strong>{name}</strong>{message}</p>
+              <p><strong style={{ color: /^#[0-9a-f]{6}$/i.test(color || "") ? color || undefined : undefined }}>{name}</strong><span>: {message}</span></p>
             </div>
           )) : (
             <div className="source-empty-state">
               <span className="material-symbols-outlined">forum</span>
               <strong>Guesses land here</strong>
-              <small>{chatConnected ? "Start a word and watch the page fill up." : "Connect Twitch from Settings to receive chat."}</small>
+              <small>{chatConnected ? "Start a word and watch the page fill up." : "Connect Twitch from the home profile to receive chat."}</small>
             </div>
           )}
         </div>

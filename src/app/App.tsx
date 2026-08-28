@@ -7,9 +7,6 @@ import { RoomModePage } from "../room/RoomModePage";
 export function App() {
   const [path, setPath] = useState(() => window.location.pathname);
   useEffect(() => {
-    if (window.location.pathname === "/" && new URLSearchParams(window.location.search).get("twitch") === "connected") {
-      window.history.replaceState({}, "", `/draw${window.location.search}`); setPath("/draw"); return;
-    }
     const sync = () => setPath(window.location.pathname);
     window.addEventListener("popstate", sync);
     return () => window.removeEventListener("popstate", sync);

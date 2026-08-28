@@ -284,15 +284,8 @@ button:focus-visible, input:focus-visible, [tabindex]:focus-visible {
 .source-chat-list { padding: 12px; gap: 10px; }
 .source-chat-message { transform: rotate(-0.25deg); }
 .source-chat-message:nth-child(even) { transform: rotate(0.35deg); }
-.source-chat-message > span {
-  color: #523f14;
-  background: #f3d76f;
-  border: 1px solid #b99a2e;
-  border-radius: 48% 52% 45% 55%;
-  font-family: "Shantell Sans", cursive;
-}
 .source-chat-message p { color: #3b3832; font-size: 12px; }
-.source-chat-message p strong { color: #27689d; font-family: "Shantell Sans", cursive; font-size: 11px; }
+.source-chat-message p strong { color: #27689d; font-family: "Shantell Sans", cursive; font-size: 12px; font-weight: 800; }
 .source-empty-state { color: #756f63; }
 .source-empty-state .material-symbols-outlined { color: rgba(69,65,57,0.36); }
 
@@ -1358,7 +1351,6 @@ body.resizing-panels .layout-resizer::after {
   border-style: dashed;
 }
 .source-chat-message p,
-.source-chat-message p strong,
 .support-intro strong,
 .help-steps strong,
 .setting-row strong,
