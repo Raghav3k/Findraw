@@ -3,6 +3,7 @@ import type { EventSubStatus } from "../twitch/twitchApi";
 import { WorkspaceIdentity } from "../ui/WorkspaceIdentity";
 import { DockControls, DockPanel, DockSlot } from "../ui/DockLayout";
 import { AUTO_DRAW_ASSETS } from "../autoDraw/autoDrawAssets";
+import { getFindrawChatterColor } from "../twitch/chatColors";
 
 export type ChatMessage = {
   color?: string | null;
@@ -156,9 +157,9 @@ export function StreamSourceSidebar({ messages, onModes, roundActive, word, cate
         </header>
 
         <div className="source-chat-list" aria-live="polite" ref={chatListRef}>
-          {messages.length > 0 ? messages.map(({ color, id, message, name }) => (
+          {messages.length > 0 ? messages.map(({ id, message, name }) => (
             <div className="source-chat-message" key={id}>
-              <p><strong style={{ color: /^#[0-9a-f]{6}$/i.test(color || "") ? color || undefined : undefined }}>{name}</strong><span>: {message}</span></p>
+              <p><strong style={{ color: getFindrawChatterColor(name) }}>{name}</strong><span>: {message}</span></p>
             </div>
           )) : (
             <div className="source-empty-state">

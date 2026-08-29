@@ -74,6 +74,8 @@ const EMPTY_TWITCH_SESSION: TwitchSession = {
   configured: false,
   authenticated: false,
   eventSubStatus: "disconnected",
+  canSendChat: false,
+  chatCommandsEnabled: true,
   user: null,
 };
 

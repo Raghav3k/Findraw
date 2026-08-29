@@ -6,11 +6,17 @@ import {
   adjustPoints,
   clearTwitchSession,
   createCommunityPack,
+  endArtistSession,
+  getArtistSession,
+  getArtistSessionHistory,
   getCommunityPackByShareCode,
   getLeaderboard,
+  getViewerStanding,
   loadTwitchSession,
   reportCommunityPack,
   saveTwitchSession,
+  setArtistSessionRewardFulfilled,
+  startArtistSession,
   updateCommunityPack,
 } from "./storage.mjs";
 import {
@@ -23,7 +29,7 @@ const app = express();
 const port = Number(process.env.PORT || 3000);
 const frontendUrl = process.env.FRONTEND_URL || "http://127.0.0.1:5173";
 const twitchRedirectUri = process.env.TWITCH_REDIRECT_URI || "http://localhost:3000/auth/twitch/callback";
-const twitchScopes = ["user:read:chat"];
+const twitchScopes = ["user:read:chat", "user:write:chat"];
 const configured = () => Boolean(
   process.env.TWITCH_CLIENT_ID
   && process.env.TWITCH_CLIENT_SECRET
@@ -71,11 +77,24 @@ let keepaliveTimer = null;
 let reconnectTimer = null;
 let processedMessageIds = new Set();
 let currentRound = null;
+const commandUserCooldowns = new Map();
+let commandResponseQueue = Promise.resolve();
+let pendingCommandResponses = 0;
+let lastCommandResponseAt = 0;
+const commandUserCooldownMs = 15_000;
+const commandResponseGapMs = 1_100;
+const maximumPendingCommandResponses = 20;
+const twitchChatCommands = new Set(["!finpoints", "!finsession", "!finrewards"]);
+const logTwitchCommand = (stage, details = {}) => {
+  console.info(`[Twitch command] ${stage}`, { at: new Date().toISOString(), ...details });
+};
 
 const sessionSummary = () => ({
   configured: configured(),
   authenticated: Boolean(twitchSession),
   eventSubStatus,
+  canSendChat: Boolean(twitchSession?.scopes?.includes("user:write:chat")),
+  chatCommandsEnabled: twitchSession?.chatCommandsEnabled !== false,
   user: twitchSession ? {
     id: twitchSession.userId,
     login: twitchSession.login,
@@ -112,6 +131,7 @@ const refreshSession = async () => {
     ...twitchSession,
     accessToken: token.access_token,
     refreshToken: token.refresh_token || twitchSession.refreshToken,
+    scopes: Array.isArray(token.scope) ? token.scope : twitchSession.scopes,
     expiresAt: Date.now() + token.expires_in * 1000,
     validatedAt: Date.now(),
   };
@@ -123,7 +143,7 @@ const validSession = async () => {
   if (!twitchSession) return null;
   if (twitchSession.expiresAt < Date.now() + 60_000) await refreshSession();
   const shouldValidate = Date.now() - (twitchSession.validatedAt || 0) > 60 * 60 * 1000;
-  if (shouldValidate || !twitchSession.profileImageUrl) {
+  if (shouldValidate || !twitchSession.profileImageUrl || !Array.isArray(twitchSession.scopes)) {
     const validation = await twitchFetch("https://id.twitch.tv/oauth2/validate", {
       headers: { Authorization: `OAuth ${twitchSession.accessToken}` },
     });
@@ -137,6 +157,7 @@ const validSession = async () => {
       login: validation.login,
       displayName: user?.display_name || validation.login,
       profileImageUrl: user?.profile_image_url || null,
+      scopes: Array.isArray(validation.scopes) ? validation.scopes : [],
       expiresAt: Date.now() + validation.expires_in * 1000,
       validatedAt: Date.now(),
     };
@@ -204,6 +225,118 @@ const pointsForPosition = (position) => {
   return 50;
 };
 
+const ordinal = (position) => {
+  const remainder = position % 100;
+  if (remainder >= 11 && remainder <= 13) return `${position}th`;
+  if (position % 10 === 1) return `${position}st`;
+  if (position % 10 === 2) return `${position}nd`;
+  if (position % 10 === 3) return `${position}rd`;
+  return `${position}th`;
+};
+
+const sendTwitchChatMessage = async (message, replyParentMessageId) => {
+  const session = await validSession();
+  if (!session?.scopes?.includes("user:write:chat")) throw new Error("Reconnect Twitch to enable chat command replies.");
+  logTwitchCommand("sending reply", {
+    broadcaster: session.login,
+    replyParentMessageId: replyParentMessageId || null,
+    message: String(message).slice(0, 500),
+  });
+  const result = await twitchFetch("https://api.twitch.tv/helix/chat/messages", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${session.accessToken}`,
+      "Client-Id": process.env.TWITCH_CLIENT_ID,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      broadcaster_id: session.userId,
+      sender_id: session.userId,
+      message: String(message).slice(0, 500),
+      ...(replyParentMessageId ? { reply_parent_message_id: replyParentMessageId } : {}),
+    }),
+  });
+  const status = result.data?.[0];
+  if (!status) throw new Error("Twitch returned no send status for the chat reply.");
+  if (status.is_sent === false) {
+    throw new Error(`${status.drop_reason?.code || "dropped"}: ${status.drop_reason?.message || "Twitch did not send the chat reply."}`);
+  }
+  logTwitchCommand("reply accepted by Twitch", { messageId: status.message_id || null });
+  return status;
+};
+
+const enqueueCommandResponse = (message, replyParentMessageId) => {
+  if (pendingCommandResponses >= maximumPendingCommandResponses) {
+    logTwitchCommand("reply dropped before sending", { reason: "queue-full", pendingCommandResponses });
+    return Promise.resolve();
+  }
+  pendingCommandResponses += 1;
+  logTwitchCommand("reply queued", { replyParentMessageId, pendingCommandResponses });
+  commandResponseQueue = commandResponseQueue
+    .then(async () => {
+      const delay = Math.max(0, lastCommandResponseAt + commandResponseGapMs - Date.now());
+      if (delay) await new Promise((resolve) => setTimeout(resolve, delay));
+      await sendTwitchChatMessage(message, replyParentMessageId);
+      lastCommandResponseAt = Date.now();
+    })
+    .catch((error) => console.error("[Twitch command] reply failed", {
+      at: new Date().toISOString(),
+      replyParentMessageId,
+      error: error.message,
+    }))
+    .finally(() => { pendingCommandResponses -= 1; });
+  return commandResponseQueue;
+};
+
+const handleChatCommand = async (message) => {
+  const command = message.message.trim().toLocaleLowerCase("en").split(/\s+/)[0];
+  if (!twitchChatCommands.has(command)) return;
+  logTwitchCommand("recognized", {
+    command,
+    user: message.name,
+    messageId: message.id,
+    enabled: twitchSession?.chatCommandsEnabled !== false,
+    scopes: Array.isArray(twitchSession?.scopes) ? twitchSession.scopes : [],
+  });
+  if (twitchSession?.chatCommandsEnabled === false) {
+    logTwitchCommand("ignored", { command, user: message.name, reason: "commands-disabled" });
+    return;
+  }
+  if (!twitchSession?.scopes?.includes("user:write:chat")) {
+    logTwitchCommand("ignored", { command, user: message.name, reason: "missing-user:write:chat" });
+    return;
+  }
+  const cooldownKey = `${twitchSession.userId}:${message.userId}`;
+  const cooldownUntil = commandUserCooldowns.get(cooldownKey) || 0;
+  if (cooldownUntil > Date.now()) {
+    logTwitchCommand("ignored", { command, user: message.name, reason: "cooldown", retryInMs: cooldownUntil - Date.now() });
+    return;
+  }
+  commandUserCooldowns.set(cooldownKey, Date.now() + commandUserCooldownMs);
+
+  let reply;
+  if (command === "!finpoints") {
+    const standing = await getViewerStanding(twitchSession.userId, message.userId);
+    reply = standing.rank
+      ? `[Findraw] @${message.name} You have ${standing.score} points and are ${ordinal(standing.rank)} overall.`
+      : `[Findraw] @${message.name} You have no Findraw points yet.`;
+  } else {
+    const session = await getArtistSession(twitchSession.userId);
+    if (!session) {
+      reply = `[Findraw] @${message.name} No reward session is active right now.`;
+    } else if (command === "!finsession") {
+      const index = session.standings.findIndex((entry) => entry.userId === message.userId);
+      reply = index >= 0
+        ? `[Findraw] @${message.name} You have ${session.standings[index].score} session points and are ${ordinal(index + 1)}.`
+        : `[Findraw] @${message.name} You have no points in this session yet.`;
+    } else {
+      const rewards = session.rewards.map((reward) => `${ordinal(reward.position)}: ${reward.reward}`).join(" | ");
+      reply = `[Findraw] @${message.name} ${rewards || "No rewards are listed for this session."}`;
+    }
+  }
+  return enqueueCommandResponse(reply, message.id);
+};
+
 const processChatMessage = async (event) => {
   const message = {
     id: event.message_id,
@@ -212,7 +345,14 @@ const processChatMessage = async (event) => {
     message: event.message?.text || "",
     color: event.color || null,
   };
+  console.info("[Twitch chat] received", {
+    at: new Date().toISOString(),
+    user: message.name,
+    messageId: message.id,
+    message: message.message.slice(0, 200),
+  });
   broadcast({ type: "chat-message", payload: message });
+  await handleChatCommand(message);
 
   if (!currentRound || currentRound.status !== "playing") return;
   if (currentRound.solvedUserIds.has(message.userId)) return;
@@ -237,6 +377,7 @@ const processChatMessage = async (event) => {
     roundId: currentRound.id,
   });
   broadcast({ type: "correct-guess", payload: { roundId: currentRound.id, solver } });
+  broadcast({ type: "artist-session", payload: await getArtistSession(twitchSession.userId) });
   broadcast({
     type: "leaderboard",
     payload: await getLeaderboard(twitchSession.userId),
@@ -372,6 +513,8 @@ app.get("/auth/twitch/callback", async (request, response) => {
       login: validation.login,
       displayName: users.data?.[0]?.display_name || validation.login,
       profileImageUrl: users.data?.[0]?.profile_image_url || null,
+      scopes: Array.isArray(validation.scopes) ? validation.scopes : (Array.isArray(token.scope) ? token.scope : []),
+      chatCommandsEnabled: true,
     };
     await saveTwitchSession(twitchSession);
     await connectEventSub();
@@ -384,6 +527,14 @@ app.get("/auth/twitch/callback", async (request, response) => {
 });
 
 app.get("/api/twitch/session", (_request, response) => response.json(sessionSummary()));
+
+app.post("/api/twitch/chat-commands", async (request, response) => {
+  if (!twitchSession) return response.status(401).json({ error: "Connect Twitch first." });
+  twitchSession = { ...twitchSession, chatCommandsEnabled: Boolean(request.body.enabled) };
+  await saveTwitchSession(twitchSession);
+  publishSession();
+  response.json(sessionSummary());
+});
 
 const communityError = (response, error) => {
   if (error instanceof CommunityPackValidationError) {
@@ -465,6 +616,62 @@ app.get("/api/leaderboard", async (_request, response) => {
   response.json(await getLeaderboard(twitchSession.userId));
 });
 
+const normalizeSessionRewards = (value) => {
+  const positions = new Set();
+  return (Array.isArray(value) ? value : []).slice(0, 5).flatMap((entry) => {
+    const position = Math.trunc(Number(entry?.position));
+    const reward = String(entry?.reward || "").trim().replace(/\s+/g, " ").slice(0, 100);
+    if (position < 1 || position > 5 || !reward || positions.has(position)) return [];
+    positions.add(position);
+    return [{ position, reward, fulfilled: false }];
+  }).sort((first, second) => first.position - second.position);
+};
+
+app.get("/api/artist-session", async (_request, response) => {
+  if (!twitchSession) return response.json({ active: null, history: [] });
+  response.json({
+    active: await getArtistSession(twitchSession.userId),
+    history: await getArtistSessionHistory(twitchSession.userId),
+  });
+});
+
+app.post("/api/artist-session/start", async (request, response) => {
+  if (!twitchSession) return response.status(401).json({ error: "Connect Twitch before starting a hosted session." });
+  try {
+    const rewards = normalizeSessionRewards(request.body.rewards);
+    if (!rewards.some((reward) => reward.position === 1)) return response.status(400).json({ error: "Add a first-place reward before starting the session." });
+    const session = await startArtistSession({
+      channelId: twitchSession.userId,
+      name: String(request.body.name || "Hosted session").trim().replace(/\s+/g, " ").slice(0, 60) || "Hosted session",
+      rewards,
+    });
+    broadcast({ type: "artist-session", payload: session });
+    response.json({ session });
+  } catch (error) {
+    response.status(409).json({ error: error.message || "A session is already active." });
+  }
+});
+
+app.post("/api/artist-session/end", async (_request, response) => {
+  if (!twitchSession) return response.status(401).json({ error: "Connect Twitch first." });
+  const session = await endArtistSession(twitchSession.userId);
+  if (!session) return response.status(404).json({ error: "No hosted session is active." });
+  broadcast({ type: "artist-session", payload: null });
+  response.json({ session });
+});
+
+app.post("/api/artist-session/reward", async (request, response) => {
+  if (!twitchSession) return response.status(401).json({ error: "Connect Twitch first." });
+  const session = await setArtistSessionRewardFulfilled({
+    channelId: twitchSession.userId,
+    sessionId: String(request.body.sessionId || ""),
+    position: Math.trunc(Number(request.body.position)),
+    fulfilled: Boolean(request.body.fulfilled),
+  });
+  if (!session) return response.status(404).json({ error: "Session result not found." });
+  response.json({ session });
+});
+
 app.post("/api/round/start", (request, response) => {
   const answer = String(request.body.answer || "").trim();
   const aliases = Array.isArray(request.body.aliases) ? request.body.aliases : [];
@@ -532,6 +739,7 @@ app.post("/api/points/adjust", async (request, response) => {
   });
   const leaderboard = await getLeaderboard(twitchSession.userId);
   broadcast({ type: "leaderboard", payload: leaderboard });
+  broadcast({ type: "artist-session", payload: await getArtistSession(twitchSession.userId) });
   response.json({ viewer, leaderboard });
 });
 

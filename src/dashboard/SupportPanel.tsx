@@ -4,10 +4,10 @@ import {
   type KeyboardShortcuts,
   type ShortcutAction,
 } from "./keyboardShortcuts";
-import { usePersistentState } from "../ui/usePersistentState";
 import type { TwitchSession } from "../twitch/twitchApi";
 import { getArtistMixPacks, type ArtistWordMix } from "./artistWordPacks";
 import type { CommunityPack } from "../community/communityPacksApi";
+import { twitchAuthStartUrl } from "../apiUrls";
 
 type SupportTab = "word-mix" | "settings";
 
@@ -25,6 +25,7 @@ type SupportPanelProps = {
   onShortcutsReset: () => void;
   twitchSession: TwitchSession;
   connectionNotice: string;
+  onChatCommandsEnabledChange: (enabled: boolean) => Promise<void>;
 };
 
 export function SupportPanel({
@@ -41,11 +42,10 @@ export function SupportPanel({
   onShortcutsReset,
   twitchSession,
   connectionNotice,
+  onChatCommandsEnabledChange,
 }: SupportPanelProps) {
   const [activeTab, setActiveTab] = useState<SupportTab>("word-mix");
-  const [showTimer, setShowTimer] = usePersistentState("settings.showTimer", true);
-  const [chatSounds, setChatSounds] = usePersistentState("settings.chatSounds", false);
-  const [confirmEnd, setConfirmEnd] = usePersistentState("settings.confirmEnd", true);
+  const [chatCommandsBusy, setChatCommandsBusy] = useState(false);
   const shortcutActions = Object.keys(shortcuts) as ShortcutAction[];
 
   const selectedPacks = getArtistMixPacks(wordMix, communityPacks);
@@ -88,17 +88,38 @@ export function SupportPanel({
             </div>
             {connectionNotice ? <p className="connection-notice">{connectionNotice}</p> : null}
           </div>
-          <div className="setting-row">
-            <div><strong>Show round timer</strong><p>Keep the countdown above the canvas.</p></div>
-            <label className="switch"><input checked={showTimer} onChange={(event) => setShowTimer(event.target.checked)} type="checkbox" /><span /></label>
-          </div>
-          <div className="setting-row">
-            <div><strong>Chat sounds</strong><p>Play a cue for new guesses.</p></div>
-            <label className="switch"><input checked={chatSounds} onChange={(event) => setChatSounds(event.target.checked)} type="checkbox" /><span /></label>
-          </div>
-          <div className="setting-row">
-            <div><strong>Confirm end round</strong><p>Prevent accidental round endings.</p></div>
-            <label className="switch"><input checked={confirmEnd} onChange={(event) => setConfirmEnd(event.target.checked)} type="checkbox" /><span /></label>
+          <div className="setting-row chat-command-setting">
+            <div className="chat-command-copy">
+              <strong>Allow command replies in Twitch chat</strong>
+              <p>{!twitchSession.authenticated
+                ? "Connect Twitch first to let viewers check their scores in chat."
+                : twitchSession.canSendChat
+                  ? twitchSession.chatCommandsEnabled
+                    ? "On by default. Findraw replies through your streamer account, with one reply per viewer every 15 seconds."
+                    : "Command replies are off. Viewers can still send normal guesses."
+                  : "Reconnect Twitch once to allow Findraw to send command replies."}</p>
+              <div className="chat-command-tags" aria-label="Available Twitch commands">
+                <code>!finpoints</code><code>!finsession</code><code>!finrewards</code>
+              </div>
+              {twitchSession.authenticated && !twitchSession.canSendChat ? (
+                <button className="twitch-connect-button" onClick={() => window.location.assign(twitchAuthStartUrl("/draw", true))} type="button">
+                  <span className="material-symbols-outlined">sync</span>Reconnect to enable
+                </button>
+              ) : null}
+            </div>
+            <label className="switch">
+              <input
+                aria-label="Allow Twitch command replies"
+                checked={twitchSession.canSendChat && twitchSession.chatCommandsEnabled}
+                disabled={!twitchSession.authenticated || !twitchSession.canSendChat || chatCommandsBusy}
+                onChange={async (event) => {
+                  setChatCommandsBusy(true);
+                  try { await onChatCommandsEnabledChange(event.target.checked); } finally { setChatCommandsBusy(false); }
+                }}
+                type="checkbox"
+              />
+              <span />
+            </label>
           </div>
           <div className={`setting-row hover-options-setting ${hoverMenusEnabled ? "" : "disabled"}`}>
             <div><strong>Hover options</strong><p>Open tool panels after a custom delay.</p></div>

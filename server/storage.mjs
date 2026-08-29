@@ -86,20 +86,52 @@ export async function clearTwitchSession() {
   await fs.rm(tokenPath, { force: true });
 }
 
-const emptyPoints = () => ({ version: 1, channels: {}, ledger: [] });
+const emptyPoints = () => ({ version: 2, channels: {}, ledger: [], activeSessions: {}, sessionHistory: [] });
+
+const normalizePoints = (value) => ({
+  ...emptyPoints(),
+  ...(value && typeof value === "object" ? value : {}),
+  version: 2,
+  channels: value?.channels && typeof value.channels === "object" ? value.channels : {},
+  ledger: Array.isArray(value?.ledger) ? value.ledger : [],
+  activeSessions: value?.activeSessions && typeof value.activeSessions === "object" ? value.activeSessions : {},
+  sessionHistory: Array.isArray(value?.sessionHistory) ? value.sessionHistory : [],
+});
+
+const publicArtistSession = (session) => session ? {
+  id: session.id,
+  name: session.name,
+  status: session.status,
+  startedAt: session.startedAt,
+  endedAt: session.endedAt ?? null,
+  rewards: session.rewards,
+  standings: Object.entries(session.participants || {})
+    .map(([userId, value]) => ({ userId, ...value }))
+    .sort((first, second) => second.score - first.score || first.displayName.localeCompare(second.displayName)),
+} : null;
 
 export async function loadPoints() {
   try {
-    return JSON.parse(await fs.readFile(pointsPath, "utf8"));
+    return normalizePoints(JSON.parse(await fs.readFile(pointsPath, "utf8")));
   } catch (error) {
     if (error?.code === "ENOENT") return emptyPoints();
     throw error;
   }
 }
 
-export function adjustPoints({ channelId, userId, displayName, delta, reason, roundId }) {
-  const operation = pointsQueue.then(async () => {
+const mutatePoints = (operation) => {
+  const queued = pointsQueue.then(async () => {
     const data = await loadPoints();
+    const result = await operation(data);
+    await writeJsonAtomic(pointsPath, data);
+    return result;
+  });
+  pointsQueue = queued.catch(() => undefined);
+  return queued;
+};
+
+export function adjustPoints({ channelId, userId, displayName, delta, reason, roundId }) {
+  return mutatePoints(async (data) => {
     const channel = data.channels[channelId] ?? {};
     const current = channel[userId] ?? { displayName, score: 0 };
     channel[userId] = {
@@ -118,11 +150,16 @@ export function adjustPoints({ channelId, userId, displayName, delta, reason, ro
       createdAt: new Date().toISOString(),
     });
     data.ledger = data.ledger.slice(-5000);
-    await writeJsonAtomic(pointsPath, data);
+    const activeSession = data.activeSessions[channelId];
+    if (activeSession?.status === "active") {
+      const participant = activeSession.participants[userId] ?? { displayName, score: 0 };
+      activeSession.participants[userId] = {
+        displayName,
+        score: Math.max(0, participant.score + delta),
+      };
+    }
     return channel[userId];
   });
-  pointsQueue = operation.catch(() => undefined);
-  return operation;
 }
 
 export async function getLeaderboard(channelId) {
@@ -131,6 +168,67 @@ export async function getLeaderboard(channelId) {
     .map(([userId, value]) => ({ userId, ...value }))
     .sort((first, second) => second.score - first.score)
     .slice(0, 100);
+}
+
+export async function getViewerStanding(channelId, userId) {
+  const data = await loadPoints();
+  const standings = Object.entries(data.channels[channelId] ?? {})
+    .map(([entryUserId, value]) => ({ userId: entryUserId, ...value }))
+    .sort((first, second) => second.score - first.score);
+  const index = standings.findIndex((entry) => entry.userId === userId);
+  return index < 0 ? { userId, displayName: null, score: 0, rank: null } : { ...standings[index], rank: index + 1 };
+}
+
+export async function getArtistSession(channelId) {
+  const data = await loadPoints();
+  return publicArtistSession(data.activeSessions[channelId]);
+}
+
+export async function getArtistSessionHistory(channelId) {
+  const data = await loadPoints();
+  return data.sessionHistory.filter((session) => session.channelId === channelId).slice(-20).reverse().map(publicArtistSession);
+}
+
+export function startArtistSession({ channelId, name, rewards }) {
+  return mutatePoints(async (data) => {
+    if (data.activeSessions[channelId]?.status === "active") throw new Error("End the current session before starting another one.");
+    const session = {
+      id: crypto.randomUUID(),
+      channelId,
+      name,
+      status: "active",
+      startedAt: new Date().toISOString(),
+      endedAt: null,
+      rewards,
+      participants: {},
+    };
+    data.activeSessions[channelId] = session;
+    return publicArtistSession(session);
+  });
+}
+
+export function endArtistSession(channelId) {
+  return mutatePoints(async (data) => {
+    const session = data.activeSessions[channelId];
+    if (!session) return null;
+    session.status = "completed";
+    session.endedAt = new Date().toISOString();
+    data.sessionHistory.push(session);
+    data.sessionHistory = data.sessionHistory.slice(-200);
+    delete data.activeSessions[channelId];
+    return publicArtistSession(session);
+  });
+}
+
+export function setArtistSessionRewardFulfilled({ channelId, sessionId, position, fulfilled }) {
+  return mutatePoints(async (data) => {
+    const session = data.sessionHistory.find((entry) => entry.channelId === channelId && entry.id === sessionId);
+    if (!session) return null;
+    const reward = session.rewards.find((entry) => entry.position === position);
+    if (!reward) return publicArtistSession(session);
+    reward.fulfilled = fulfilled;
+    return publicArtistSession(session);
+  });
 }
 
 const emptyCommunityPacks = () => ({ version: 1, packs: {}, shareCodes: {} });

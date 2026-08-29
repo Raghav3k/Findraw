@@ -12,7 +12,7 @@ type ModeHomeProps = { onNavigate: (path: string) => void };
 type AvatarColorTarget = "headColor" | "headAccent" | "bodyColor" | "bodyAccent";
 
 export function ModeHome({ onNavigate }: ModeHomeProps) {
-  const [twitchSession, setTwitchSession] = useState<TwitchSession>({ authenticated: false, configured: false, eventSubStatus: "disconnected", user: null });
+  const [twitchSession, setTwitchSession] = useState<TwitchSession>({ authenticated: false, configured: false, eventSubStatus: "disconnected", canSendChat: false, chatCommandsEnabled: true, user: null });
   const [playerName, setPlayerName] = usePersistentState("room.playerName", "Streamer");
   const [avatarHeadColor, setAvatarHeadColor] = usePersistentState("room.avatar.headColor", "#f0ccd3");
   const [avatarHeadAccent, setAvatarHeadAccent] = usePersistentState("room.avatar.headAccent", "#ffe4a8");
@@ -85,7 +85,7 @@ export function ModeHome({ onNavigate }: ModeHomeProps) {
         connected={twitchSession.authenticated}
         displayName={twitchSession.user?.displayName ?? null}
         profileImageUrl={twitchSession.user?.profileImageUrl ?? null}
-        onDisconnectTwitch={() => { void disconnectTwitch().then(() => setTwitchSession({ authenticated: false, configured: twitchSession.configured, eventSubStatus: "disconnected", user: null })); }}
+        onDisconnectTwitch={() => { void disconnectTwitch().then(() => setTwitchSession({ authenticated: false, configured: twitchSession.configured, eventSubStatus: "disconnected", canSendChat: false, chatCommandsEnabled: true, user: null })); }}
         returnTo="/"
       />
     </header>

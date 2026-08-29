@@ -1092,6 +1092,103 @@ body,
 }
 .reveal-mode-toggle button { font-size: 11px; min-height: 34px; }
 .prompt-settings-note { font-size: 10px; line-height: 15px; }
+.side-column .leaderboard li.artist-session-empty { justify-content: center; color: #81796c; font-size: 9px; }
+.artist-score-tabs { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 7px; padding: 6px; border-bottom: 1px solid #b89a3f; background: #f2d98b; }
+.artist-score-tabs button { min-height: 44px; display: flex; align-items: center; justify-content: center; gap: 7px; padding: 6px 8px; color: #171814; border: 1px solid rgba(72,72,56,.42); border-radius: 6px 9px 6px 8px; cursor: pointer; font-size: 12px; font-weight: 850; transition: transform .14s ease, box-shadow .14s ease, filter .14s ease; }
+.artist-score-tabs button:first-child { background: #83c5e6; border-color: #527f91; }
+.artist-score-tabs button:last-child { background: #cfe5c6; border-color: #76946b; }
+.artist-score-tabs button:hover { color: #111713; filter: brightness(1.04); transform: translateY(-1px); }
+.artist-score-tabs button.active { border-color: #495e58; box-shadow: 2px 3px 0 rgba(66,65,48,.28), inset 0 0 0 1px rgba(255,255,255,.34); transform: translateY(-1px); }
+.artist-score-tabs button.active:first-child { background: #70bce2; border-color: #3f7185; }
+.artist-score-tabs button.active:last-child { background: #b9dca9; border-color: #63805a; }
+.artist-score-tabs .material-symbols-outlined { font-size: 19px; }
+.artist-session-start-panel { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 13px 10px 10px; overflow-x: hidden; overflow-y: auto; text-align: center; }
+.artist-session-first-guide { width: 100%; display: grid; justify-items: center; }
+.artist-session-first-guide > .material-symbols-outlined { width: 34px; height: 34px; display: grid; place-items: center; color: #8e6a18; border: 1px solid #b28e35; border-radius: 50%; background: #f2d98b; font-size: 20px; }
+.artist-session-first-guide > strong { margin-top: 7px; font-size: 11px; }
+.artist-session-first-guide ol { width: 100%; display: grid; gap: 5px; margin: 9px 0 0; padding: 8px 0 0; border-top: 1px dashed rgba(92,75,42,.25); list-style: none; text-align: left; }
+.artist-session-first-guide li { display: grid; grid-template-columns: 20px minmax(0,1fr); align-items: center; gap: 6px; color: #6f685d; font-size: 8px; line-height: 1.3; }
+.artist-session-first-guide li b { width: 18px; height: 18px; display: grid; place-items: center; color: #8d4a42; border: 1px solid #b86459; border-radius: 50%; font-size: 7px; }
+.artist-points-panel > p, .artist-session-live-panel > p { margin: 4px 0 9px; color: #756e62; font-size: 8px; line-height: 1.4; }
+.artist-session-primary-action { width: 100%; min-height: 34px; padding: 6px 10px; color: #2e312f; border: 1px solid #548095; border-radius: 6px 9px 6px 8px; background: #9fd3e6; box-shadow: 2px 3px 0 rgba(73,61,43,.16); cursor: pointer; font-size: 9px; font-weight: 900; }
+.artist-session-primary-action:hover { background: #b7deeb; }
+.artist-session-primary-action.danger { margin: 8px; width: calc(100% - 16px); color: #66362f; border-color: #a75b51; background: #efa69c; }
+.artist-session-primary-action:disabled { cursor: not-allowed; opacity: .45; box-shadow: none; }
+.artist-session-start-panel > .artist-session-primary-action { position: sticky; bottom: 0; margin-top: auto; }
+.artist-session-overview { width: 100%; display: grid; gap: 7px; padding-bottom: 9px; text-align: left; }
+.artist-session-overview-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 7px; }
+.artist-session-overview-heading > span { min-width: 0; display: grid; gap: 2px; }
+.artist-session-overview-heading small, .artist-session-last-winner small, .artist-session-overview-stats small { color: #a44e46; font: 800 7px/1 "Inter", sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+.artist-session-overview-heading strong { overflow: hidden; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.artist-session-overview-heading time { flex: 0 0 auto; color: #766f64; font-size: 8px; }
+.artist-session-last-winner { display: grid; grid-template-columns: 29px minmax(0,1fr) auto; align-items: center; gap: 7px; padding: 7px 8px; border: 1px solid #b89a3f; border-radius: 7px 10px 6px 9px; background: #f4dda0; }
+.artist-session-last-winner > .material-symbols-outlined { width: 27px; height: 27px; display: grid; place-items: center; color: #805f12; border: 1px solid #aa842a; border-radius: 50%; font-size: 16px; }
+.artist-session-last-winner > span { min-width: 0; display: grid; gap: 2px; }
+.artist-session-last-winner > span strong { overflow: hidden; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.artist-session-last-winner > b { display: flex; align-items: baseline; gap: 2px; color: #5e4812; font-size: 13px; }
+.artist-session-last-winner > b small { color: inherit; font-size: 6px; }
+.artist-session-overview-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.artist-session-overview-stats > span { display: flex; align-items: center; justify-content: space-between; gap: 5px; padding: 5px 7px; border: 1px dashed rgba(92,75,42,.28); border-radius: 5px; background: rgba(255,255,255,.22); }
+.artist-session-overview-stats strong { color: #39362f; font-size: 10px; }
+.artist-session-view-result { min-height: 27px; display: flex; align-items: center; justify-content: center; gap: 5px; color: #394d55; border: 1px solid #7798a5; border-radius: 5px; background: #c7e1e9; cursor: pointer; font-size: 8px; font-weight: 800; }
+.artist-session-view-result .material-symbols-outlined { font-size: 14px; }
+.artist-session-panel-history { width: 100%; display: grid; gap: 2px; margin-top: 10px; padding-top: 8px; border-top: 1px dashed rgba(92,75,42,.25); text-align: left; }
+.artist-session-panel-history > small { padding: 0 3px 3px; color: #a44e46; font: 800 7px/1 "Inter", sans-serif; letter-spacing: .1em; text-transform: uppercase; }
+.artist-session-panel-history > button { display: flex; justify-content: space-between; gap: 8px; padding: 5px 3px; overflow: hidden; color: #5f594f; border: 0; border-bottom: 1px dotted rgba(92,75,42,.2); background: transparent; cursor: pointer; font-size: 8px; text-align: left; }
+.artist-session-panel-history > button span, .artist-session-panel-history > button b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.artist-session-panel-history > button b { color: #39362f; }
+.artist-session-live-panel, .artist-points-panel { min-height: 0; flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+.artist-session-live-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 10px 0; }
+.artist-session-live-heading > span { min-width: 0; display: grid; gap: 2px; text-align: left; }
+.artist-session-live-heading small { color: #a44e46; font: 800 7px/1 "Inter", sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+.artist-session-live-heading strong { overflow: hidden; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+.artist-session-live-heading > b { flex: 0 0 auto; color: #4c744f; font-size: 8px; }
+.artist-session-live-panel > p, .artist-points-panel > p { padding: 0 10px; }
+.artist-session-standings { flex: 1; }
+.artist-points-panel > .leaderboard { flex: 1; }
+
+.artist-session-modal-backdrop { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 20px; background: rgba(39,42,42,.5); backdrop-filter: blur(3px); }
+.artist-session-modal { width: min(520px, 100%); max-height: min(720px, calc(100vh - 40px)); padding: 18px; overflow-x: hidden; overflow-y: auto; color: #34312c; border: 1px solid rgba(75,66,51,.65); border-radius: 10px 15px 9px 13px; background: #fff2cf; box-shadow: 8px 11px 0 rgba(55,48,37,.18), 0 24px 70px rgba(35,31,26,.3); }
+.artist-session-modal > header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding-bottom: 13px; border-bottom: 1px dashed rgba(75,66,51,.3); }
+.artist-session-modal > header div { display: grid; gap: 3px; }
+.artist-session-modal > header small { color: #a44e46; font: 800 8px/1 "Inter", sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+.artist-session-modal > header h2 { margin: 0; font-size: 25px; line-height: 1.1; }
+.artist-session-modal > header > button { width: 30px; height: 30px; display: grid; place-items: center; padding: 0; color: #655f55; border: 0; border-radius: 6px; background: transparent; cursor: pointer; }
+.artist-session-modal > header > button:hover { background: rgba(82,71,52,.08); }
+.artist-session-modal > header .material-symbols-outlined { font-size: 20px; }
+.artist-session-intro { margin: 13px 0; color: #6f685d; font-size: 11px; line-height: 1.5; }
+.artist-session-name-field { display: grid; gap: 5px; }
+.artist-session-name-field > span { color: #5f594f; font-size: 10px; font-weight: 800; }
+.artist-session-name-field input, .artist-session-reward-fields input { width: 100%; min-width: 0; height: 38px; padding: 7px 10px; color: #34312c; border: 1px solid rgba(75,66,51,.48); border-radius: 6px 9px 6px 8px; outline: none; background: #fffaf0; font-size: 11px; }
+.artist-session-name-field input:focus, .artist-session-reward-fields input:focus { border-color: #4f879e; box-shadow: 0 0 0 2px rgba(79,135,158,.18); }
+.artist-session-rewards-heading { display: flex; margin-top: 13px; padding: 10px 11px; border: 1px dashed rgba(75,66,51,.32); border-radius: 7px; background: rgba(255,255,255,.22); }
+.artist-session-rewards-heading > span { display: grid; gap: 3px; }
+.artist-session-rewards-heading strong { font-size: 11px; }
+.artist-session-rewards-heading small { color: #766f64; font-size: 9px; line-height: 1.35; }
+.artist-session-reward-fields { display: grid; gap: 7px; margin-top: 10px; }
+.artist-session-reward-fields label { display: grid; grid-template-columns: 38px minmax(0,1fr); align-items: center; gap: 8px; }
+.artist-session-reward-fields b { width: 34px; height: 34px; display: grid; place-items: center; color: #8d4a42; border: 1px solid #b86459; border-radius: 50%; font-size: 10px; transform: rotate(-4deg); }
+.artist-session-error { margin: 10px 0 0; color: #9b4038; font-size: 10px; line-height: 1.4; }
+.artist-session-modal > footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 15px; padding-top: 12px; border-top: 1px dashed rgba(75,66,51,.25); }
+.artist-session-modal > footer button { min-height: 37px; padding: 7px 13px; color: #34312c; border: 1px solid rgba(75,66,51,.48); border-radius: 6px 9px 6px 8px; cursor: pointer; font-size: 10px; font-weight: 800; }
+.artist-session-modal > footer button.secondary { background: #fffaf0; }
+.artist-session-modal > footer button.primary { background: #83c6df; }
+.artist-session-modal > footer button:disabled { cursor: not-allowed; opacity: .45; }
+.artist-session-results-note { display: flex; align-items: center; gap: 9px; margin: 13px 0; padding: 10px; color: #3c6543; border: 1px dashed #8cac83; border-radius: 7px; background: #dcebd5; }
+.artist-session-results-note > span { font-size: 24px; }
+.artist-session-results-note p, .artist-session-results-note strong, .artist-session-results-note small { display: block; margin: 0; }
+.artist-session-results-note strong { font-size: 11px; }
+.artist-session-results-note small { margin-top: 2px; color: #58705c; font-size: 9px; }
+.artist-session-podium { display: grid; gap: 7px; margin: 0; padding: 0; list-style: none; }
+.artist-session-podium li { display: grid; grid-template-columns: 36px minmax(0,1fr) auto; align-items: center; gap: 9px; padding: 9px 10px; border: 1px solid rgba(75,66,51,.3); border-radius: 7px 10px 6px 9px; background: rgba(255,250,240,.68); }
+.artist-session-podium li.winner { border-color: #b18b2e; background: #f4dda0; }
+.artist-session-podium li > b { width: 29px; height: 29px; display: grid; place-items: center; border: 1px solid currentColor; border-radius: 50%; color: #a44e46; font-size: 10px; }
+.artist-session-podium li > span { min-width: 0; display: grid; gap: 2px; }
+.artist-session-podium li > span strong { overflow: hidden; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.artist-session-podium li > span small { color: #716a5f; font-size: 9px; }
+.artist-session-podium li > span em { margin-top: 3px; color: #775a17; font-size: 9px; font-style: normal; font-weight: 800; }
+.artist-session-podium li > label { display: flex; align-items: center; gap: 4px; color: #5f594f; font-size: 9px; font-weight: 800; }
+.artist-session-podium li.empty { display: block; color: #766f64; text-align: center; }
 /* One continuous notebook sheet beneath the complete workspace */
 html,
 body,
@@ -1396,6 +1493,32 @@ body.resizing-panels .layout-resizer::after {
   color: #8b4a42 !important;
   margin: 0 !important;
   overflow-wrap: anywhere;
+}
+.chat-command-setting {
+  align-items: flex-start;
+  gap: 12px;
+}
+.chat-command-copy {
+  min-width: 0;
+}
+.chat-command-copy .twitch-connect-button {
+  margin-top: 9px;
+}
+.chat-command-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+.chat-command-tags code {
+  background: rgba(159, 209, 228, 0.36);
+  border: 1px dashed rgba(47, 78, 87, 0.44);
+  border-radius: 999px;
+  color: #34484d;
+  font-family: "Inter", sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  padding: 4px 7px;
 }
 .solver-list > span > span {
   align-items: center;

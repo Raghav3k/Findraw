@@ -9,6 +9,7 @@ import {
   type TwitchSession,
 } from "../twitch/twitchApi";
 import { TWITCH_SOLVER_PREVIEW } from "../twitch/twitchSolverPreview";
+import { getFindrawChatterColor } from "../twitch/chatColors";
 import { usePersistentState } from "../ui/usePersistentState";
 import { WorkspaceIdentity } from "../ui/WorkspaceIdentity";
 import { DockControls, DockLayout, DockPanel, DockSlot, ResizableSurface } from "../ui/DockLayout";
@@ -37,7 +38,7 @@ type TwitchPanel = "chat" | "correct";
 type ResizeState = { element: HTMLDivElement; panel: "source" | "side"; startX: number; startWidth: number; lastWidth: number };
 
 const TRANSITION_MS = 900;
-const EMPTY_TWITCH_SESSION: TwitchSession = { authenticated: false, configured: false, eventSubStatus: "disconnected", user: null };
+const EMPTY_TWITCH_SESSION: TwitchSession = { authenticated: false, configured: false, eventSubStatus: "disconnected", canSendChat: false, chatCommandsEnabled: true, user: null };
 const normalize = (value: string) => value.trim().toLowerCase().replace(/[^a-z0-9]+/g, "");
 
 const getAutoDrawFeedbackWeight = (feedback: WordFeedbackMap, asset: typeof AUTO_DRAW_ASSETS[number]) => {
@@ -476,7 +477,7 @@ export function AutoDrawPage({ onNavigate }: Props) {
           </div>
           {twitchPanel === "chat" ? (
             <div className="source-chat-list" aria-live="polite" role="tabpanel">
-              {chatMessages.length ? chatMessages.map((message) => <div className="source-chat-message" key={message.id}><p><strong style={{ color: /^#[0-9a-f]{6}$/i.test(message.color || "") ? message.color || undefined : undefined }}>{message.name}</strong><span>: {message.message}</span></p></div>) : <div className="source-empty-state"><span className="material-symbols-outlined">forum</span><strong>Chat appears here</strong><small>{twitchLive ? "Start a drawing and audience guesses will arrive live." : "Connect Twitch from your profile to receive chat."}</small></div>}
+              {chatMessages.length ? chatMessages.map((message) => <div className="source-chat-message" key={message.id}><p><strong style={{ color: getFindrawChatterColor(message.name) }}>{message.name}</strong><span>: {message.message}</span></p></div>) : <div className="source-empty-state"><span className="material-symbols-outlined">forum</span><strong>Chat appears here</strong><small>{twitchLive ? "Start a drawing and audience guesses will arrive live." : "Connect Twitch from your profile to receive chat."}</small></div>}
             </div>
           ) : (
             <div className="auto-correct-panel" role="tabpanel">

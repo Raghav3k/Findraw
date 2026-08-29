@@ -20,11 +20,17 @@ import { DockLayout, DockPanel, DockSlot, ResizableSurface } from "../ui/DockLay
 import { resizeDockBoundary, SIDE_RAIL_SNAP_POINTS, snapDockRailWidth, SOURCE_RAIL_SNAP_POINTS } from "../ui/dockRailResize";
 import {
   adjustViewerPoints,
+  endArtistSession,
   endServerRound,
+  fetchArtistSessions,
   fetchLeaderboard,
   fetchTwitchSession,
   connectLiveEvents,
+  setTwitchChatCommands,
+  setArtistSessionReward,
+  startArtistSession,
   startServerRound,
+  type ArtistSession,
   type LeaderboardEntry,
   type SolvedViewer,
   type TwitchSession,
@@ -53,6 +59,7 @@ import {
 
 type RoundStatus = "idle" | "playing" | "ended";
 type RevealMode = "random" | "sequence";
+type LeaderboardView = "session" | "points";
 
 type ResizeState = {
   element: HTMLDivElement;
@@ -115,10 +122,21 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [solvedViewers, setSolvedViewers] = useState<SolvedViewer[]>([]);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [artistSession, setArtistSession] = useState<ArtistSession | null>(null);
+  const [sessionHistory, setSessionHistory] = useState<ArtistSession[]>([]);
+  const [leaderboardView, setLeaderboardView] = useState<LeaderboardView>("session");
+  const [sessionSetupOpen, setSessionSetupOpen] = useState(false);
+  const [sessionResult, setSessionResult] = useState<ArtistSession | null>(null);
+  const [sessionName, setSessionName] = useState("Community session");
+  const [sessionRewards, setSessionRewards] = useState<string[]>(["", "", "", "", ""]);
+  const [sessionBusy, setSessionBusy] = useState(false);
+  const [sessionError, setSessionError] = useState("");
   const [twitchSession, setTwitchSession] = useState<TwitchSession>({
     configured: false,
     authenticated: false,
     eventSubStatus: "disconnected",
+    canSendChat: false,
+    chatCommandsEnabled: true,
     user: null,
   });
   const [connectionNotice, setConnectionNotice] = useState("");
@@ -267,11 +285,13 @@ export function Dashboard({ onNavigate }: DashboardProps) {
 
   useEffect(() => {
     let active = true;
-    Promise.all([fetchTwitchSession(), fetchLeaderboard()])
-      .then(([session, entries]) => {
+    Promise.all([fetchTwitchSession(), fetchLeaderboard(), fetchArtistSessions()])
+      .then(([session, entries, sessions]) => {
         if (!active) return;
         setTwitchSession(session);
         setLeaderboard(entries);
+        setArtistSession(sessions.active);
+        setSessionHistory(sessions.history);
       })
       .catch((error: Error) => {
         if (active) setConnectionNotice(`Local server unavailable: ${error.message}`);
@@ -288,6 +308,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           : [...current, event.payload.solver]);
       }
       if (event.type === "leaderboard") setLeaderboard(Array.isArray(event.payload) ? event.payload : []);
+      if (event.type === "artist-session") setArtistSession(event.payload);
       if (event.type === "round-started") activeRoundIdRef.current = event.payload.roundId;
       if (event.type === "round-ended" && event.payload.roundId === activeRoundIdRef.current) {
         setRoundStatus("ended");
@@ -496,6 +517,77 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     }
   };
 
+  const beginArtistSession = async () => {
+    if (!twitchSession.authenticated) {
+      setSessionError("Connect Twitch from the home profile before starting a hosted session.");
+      return;
+    }
+    if (roundActive) {
+      setSessionError("Finish the current word before starting a hosted session.");
+      return;
+    }
+    setSessionBusy(true);
+    setSessionError("");
+    try {
+      if (!sessionRewards[0].trim()) {
+        setSessionError("Add a reward for first place before starting the session.");
+        setSessionBusy(false);
+        return;
+      }
+      const rewards = sessionRewards.flatMap((reward, index) => reward.trim() ? [{ position: index + 1, reward: reward.trim() }] : []);
+      const result = await startArtistSession(sessionName.trim() || "Hosted session", rewards);
+      setArtistSession(result.session);
+      setLeaderboardView("session");
+      setSessionSetupOpen(false);
+      setConnectionNotice(`${result.session.name} is live. Session points also count toward Findraw Points.`);
+    } catch (error) {
+      setSessionError(error instanceof Error ? error.message : "The session could not be started.");
+    } finally {
+      setSessionBusy(false);
+    }
+  };
+
+  const finishArtistSession = async () => {
+    setSessionBusy(true);
+    setSessionError("");
+    try {
+      const result = await endArtistSession();
+      setArtistSession(null);
+      setLeaderboardView("session");
+      setSessionHistory((current) => [result.session, ...current.filter((session) => session.id !== result.session.id)].slice(0, 20));
+      setSessionResult(result.session);
+      setConnectionNotice("Hosted session ended. Findraw Points were kept.");
+    } catch (error) {
+      setSessionError(error instanceof Error ? error.message : "The session could not be ended.");
+    } finally {
+      setSessionBusy(false);
+    }
+  };
+
+  const updateSessionReward = async (session: ArtistSession, position: number, fulfilled: boolean) => {
+    try {
+      const result = await setArtistSessionReward(session.id, position, fulfilled);
+      setSessionResult(result.session);
+      setSessionHistory((current) => current.map((entry) => entry.id === result.session.id ? result.session : entry));
+    } catch (error) {
+      setSessionError(error instanceof Error ? error.message : "The reward status could not be saved.");
+    }
+  };
+
+  const copySessionResults = async (session: ArtistSession) => {
+    const lines = session.standings.slice(0, 5).map((entry, index) => {
+      const reward = session.rewards.find((item) => item.position === index + 1);
+      return `${index + 1}. ${entry.displayName} — ${entry.score} pts${reward ? ` — ${reward.reward}` : ""}`;
+    });
+    const text = [`${session.name} results`, ...lines].join("\n");
+    try {
+      await navigator.clipboard.writeText(text);
+      setConnectionNotice("Session results copied.");
+    } catch {
+      setConnectionNotice("Results are ready, but the browser blocked copying.");
+    }
+  };
+
   const startResize = (panel: ResizeState["panel"], event: ReactPointerEvent<HTMLDivElement>) => {
     event.preventDefault();
     resizeStateRef.current = {
@@ -655,6 +747,15 @@ export function Dashboard({ onNavigate }: DashboardProps) {
               shortcuts={shortcuts}
               twitchSession={twitchSession}
               connectionNotice={connectionNotice}
+              onChatCommandsEnabledChange={async (enabled) => {
+                try {
+                  const session = await setTwitchChatCommands(enabled);
+                  setTwitchSession(session);
+                  setConnectionNotice(enabled ? "Chat point commands are on." : "Chat point commands are off.");
+                } catch (error) {
+                  setConnectionNotice(error instanceof Error ? error.message : "Could not update chat commands.");
+                }
+              }}
             />
             </DockPanel>
 
@@ -671,17 +772,103 @@ export function Dashboard({ onNavigate }: DashboardProps) {
 
             <DockPanel id="artist-leaderboard" label="leaderboard">
             <section className="feed-card leaderboard-card">
-              <div className="card-title"><h3>Leaderboard</h3><span className="material-symbols-outlined trophy">emoji_events</span></div>
-              <ol className="leaderboard">
-                {leaderboard.map(({ userId, displayName, score }, index) => (
-                  <li key={userId}><span><b>{index + 1}</b>{displayName}</span><strong>{score.toLocaleString()}</strong></li>
-                ))}
-              </ol>
+              <div aria-label="Score view" className="artist-score-tabs" role="tablist">
+                <button aria-selected={leaderboardView === "session"} className={leaderboardView === "session" ? "active" : ""} onClick={() => setLeaderboardView("session")} role="tab" type="button"><span className="material-symbols-outlined">emoji_events</span>Session</button>
+                <button aria-selected={leaderboardView === "points"} className={leaderboardView === "points" ? "active" : ""} onClick={() => setLeaderboardView("points")} role="tab" type="button"><span className="material-symbols-outlined">stars</span>Points</button>
+              </div>
+              {leaderboardView === "session" ? (
+                artistSession ? (
+                  <div className="artist-session-live-panel">
+                    <div className="artist-session-live-heading"><span><small>Hosted session</small><strong>{artistSession.name}</strong></span><b>{artistSession.standings.length} players</b></div>
+                    <p>Session scores also add to permanent Findraw Points.</p>
+                    <ol className="leaderboard artist-session-standings">
+                      {artistSession.standings.map(({ userId, displayName, score }, index) => <li key={userId}><span><b>{index + 1}</b>{displayName}</span><strong>{score.toLocaleString()}</strong></li>)}
+                      {!artistSession.standings.length ? <li className="artist-session-empty">Waiting for the first correct guess</li> : null}
+                    </ol>
+                    <button className="artist-session-primary-action danger" disabled={sessionBusy || roundActive} onClick={() => void finishArtistSession()} title={roundActive ? "Finish the current word first" : "End hosted session"} type="button">End session</button>
+                  </div>
+                ) : (
+                  <div className="artist-session-start-panel">
+                    {sessionHistory.length ? (
+                      <div className="artist-session-overview">
+                        <div className="artist-session-overview-heading"><span><small>Last session</small><strong>{sessionHistory[0].name}</strong></span><time>{sessionHistory[0].endedAt ? new Date(sessionHistory[0].endedAt).toLocaleDateString(undefined, { month: "short", day: "numeric" }) : "Finished"}</time></div>
+                        <div className="artist-session-last-winner"><span className="material-symbols-outlined">emoji_events</span><span><small>Winner</small><strong>{sessionHistory[0].standings[0]?.displayName || "No winner"}</strong></span><b>{sessionHistory[0].standings[0]?.score.toLocaleString() || "0"}<small>pts</small></b></div>
+                        <div className="artist-session-overview-stats"><span><small>Players</small><strong>{sessionHistory[0].standings.length}</strong></span><span><small>Rewards given</small><strong>{sessionHistory[0].rewards.filter((reward) => reward.fulfilled).length}/{sessionHistory[0].rewards.length}</strong></span></div>
+                        <button className="artist-session-view-result" onClick={() => setSessionResult(sessionHistory[0])} type="button">View results <span className="material-symbols-outlined">arrow_forward</span></button>
+                        {sessionHistory.length > 1 ? <div className="artist-session-panel-history"><small>Earlier sessions</small>{sessionHistory.slice(1, 3).map((session) => <button key={session.id} onClick={() => setSessionResult(session)} type="button"><span>{session.name}</span><b>{session.standings[0]?.displayName || "No winner"}</b></button>)}</div> : null}
+                      </div>
+                    ) : (
+                      <div className="artist-session-first-guide">
+                        <span className="material-symbols-outlined">workspace_premium</span>
+                        <strong>Run your first reward session</strong>
+                        <ol><li><b>1</b><span>Set rewards for the winning places.</span></li><li><b>2</b><span>Start playing and let chat earn session points.</span></li><li><b>3</b><span>End the session, announce winners, and mark rewards given.</span></li></ol>
+                      </div>
+                    )}
+                    <button className="artist-session-primary-action" disabled={!twitchSession.authenticated || roundActive} onClick={() => { setSessionError(""); setSessionSetupOpen(true); }} title={roundActive ? "Finish the current word first" : "Set up a hosted session"} type="button">Set up session</button>
+                  </div>
+                )
+              ) : (
+                <div className="artist-points-panel">
+                  <ol className="leaderboard">
+                    {leaderboard.map(({ userId, displayName, score }, index) => <li key={userId}><span><b>{index + 1}</b>{displayName}</span><strong>{score.toLocaleString()}</strong></li>)}
+                    {!leaderboard.length ? <li className="artist-session-empty">No Findraw Points yet</li> : null}
+                  </ol>
+                </div>
+              )}
             </section>
             </DockPanel>
           </aside>
         </section>
       </main>
+      {sessionSetupOpen ? (
+        <div className="artist-session-modal-backdrop" role="presentation">
+          <section aria-labelledby="artist-session-setup-title" aria-modal="true" className="artist-session-modal" role="dialog">
+            <header>
+              <div><small>Artist Mode</small><h2 id="artist-session-setup-title">Start a hosted session</h2></div>
+              <button aria-label="Close session setup" onClick={() => setSessionSetupOpen(false)} type="button"><span className="material-symbols-outlined">close</span></button>
+            </header>
+            <p className="artist-session-intro">Create the rewards before going live. Correct guesses count toward both the session standings and permanent Findraw Points.</p>
+            <label className="artist-session-name-field">
+              <span>Session name</span>
+              <input maxLength={60} onChange={(event) => setSessionName(event.target.value)} placeholder="Community session" value={sessionName} />
+            </label>
+            <div className="artist-session-rewards-heading"><span><strong>Placement rewards</strong><small>First place is required. Add rewards for the other placements only when needed.</small></span></div>
+            <div className="artist-session-reward-fields">
+              {sessionRewards.map((reward, index) => (
+                <label key={index}><b>{["1st", "2nd", "3rd", "4th", "5th"][index]}</b><input aria-required={index === 0} maxLength={100} onChange={(event) => setSessionRewards((current) => current.map((item, itemIndex) => itemIndex === index ? event.target.value : item))} placeholder={index === 0 ? "Required — e.g. Gift a subscription" : "Optional reward"} value={reward} /></label>
+              ))}
+            </div>
+            {sessionError ? <p className="artist-session-error" role="alert">{sessionError}</p> : null}
+            <footer>
+              <button className="secondary" onClick={() => setSessionSetupOpen(false)} type="button">Cancel</button>
+              <button className="primary" disabled={sessionBusy} onClick={() => void beginArtistSession()} type="button">{sessionBusy ? "Starting…" : "Start session"}</button>
+            </footer>
+          </section>
+        </div>
+      ) : null}
+      {sessionResult ? (
+        <div className="artist-session-modal-backdrop" role="presentation">
+          <section aria-labelledby="artist-session-results-title" aria-modal="true" className="artist-session-modal artist-session-results" role="dialog">
+            <header>
+              <div><small>Session complete</small><h2 id="artist-session-results-title">{sessionResult.name}</h2></div>
+              <button aria-label="Close session results" onClick={() => setSessionResult(null)} type="button"><span className="material-symbols-outlined">close</span></button>
+            </header>
+            <div className="artist-session-results-note"><span className="material-symbols-outlined">verified</span><p><strong>Permanent points are saved</strong><small>These results are the session ranking only.</small></p></div>
+            <ol className="artist-session-podium">
+              {sessionResult.standings.slice(0, 5).map((entry, index) => {
+                const reward = sessionResult.rewards.find((item) => item.position === index + 1);
+                return <li className={index === 0 ? "winner" : ""} key={entry.userId}><b>{index + 1}</b><span><strong>{entry.displayName}</strong><small>{entry.score.toLocaleString()} session points</small>{reward ? <em>{reward.reward}</em> : null}</span>{reward ? <label><input checked={reward.fulfilled} onChange={(event) => void updateSessionReward(sessionResult, index + 1, event.target.checked)} type="checkbox" />Given</label> : null}</li>;
+              })}
+              {sessionResult.standings.length === 0 ? <li className="empty">No one scored during this session.</li> : null}
+            </ol>
+            {sessionError ? <p className="artist-session-error" role="alert">{sessionError}</p> : null}
+            <footer>
+              <button className="secondary" disabled={!sessionResult.standings.length} onClick={() => void copySessionResults(sessionResult)} type="button">Copy results</button>
+              <button className="primary" onClick={() => setSessionResult(null)} type="button">Back to Chill</button>
+            </footer>
+          </section>
+        </div>
+      ) : null}
       <WordFeedbackModal
         context={feedbackContext}
         modeLabel="Artist Mode"
