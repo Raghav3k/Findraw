@@ -1,12 +1,10 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import {
   endServerRound,
-  fetchTwitchSession,
   connectLiveEvents,
   startServerRound,
   type LiveChatMessage,
   type SolvedViewer,
-  type TwitchSession,
 } from "../twitch/twitchApi";
 import { TWITCH_SOLVER_PREVIEW } from "../twitch/twitchSolverPreview";
 import { getFindrawChatterColor } from "../twitch/chatColors";
@@ -30,6 +28,7 @@ import {
   type WordFeedbackRating,
   type WordFeedbackTarget,
 } from "../feedback/wordFeedback";
+import { useSiteIdentity } from "../identity/SiteIdentity";
 
 type Props = { onNavigate: (path: string) => void };
 type Status = "idle" | "playing" | "paused" | "complete";
@@ -38,7 +37,6 @@ type TwitchPanel = "chat" | "correct";
 type ResizeState = { element: HTMLDivElement; panel: "source" | "side"; startX: number; startWidth: number; lastWidth: number };
 
 const TRANSITION_MS = 900;
-const EMPTY_TWITCH_SESSION: TwitchSession = { authenticated: false, configured: false, eventSubStatus: "disconnected", canSendChat: false, chatCommandsEnabled: true, user: null };
 const normalize = (value: string) => value.trim().toLowerCase().replace(/[^a-z0-9]+/g, "");
 
 const getAutoDrawFeedbackWeight = (feedback: WordFeedbackMap, asset: typeof AUTO_DRAW_ASSETS[number]) => {
@@ -69,6 +67,7 @@ const weightedAutoDrawIndexes = (indexes: number[], feedback: WordFeedbackMap) =
 };
 
 export function AutoDrawPage({ onNavigate }: Props) {
+  const { twitchSession } = useSiteIdentity();
   const [sourceRailWidth, setSourceRailWidth] = usePersistentState("autoDraw.layout.leftRailWidth.artistAligned", 380);
   const [sidePanelWidth, setSidePanelWidth] = usePersistentState("autoDraw.layout.rightRailWidth.artistAligned", 280);
   const [selectedCategory, setSelectedCategory] = usePersistentState("autoDraw.category", "all");
@@ -93,7 +92,6 @@ export function AutoDrawPage({ onNavigate }: Props) {
   const [guessFeedback, setGuessFeedback] = useState<GuessFeedback>("idle");
   const [notice, setNotice] = useState("Press start when everyone is ready.");
   const [canvasResetToken, setCanvasResetToken] = useState(0);
-  const [twitchSession, setTwitchSession] = useState<TwitchSession>(EMPTY_TWITCH_SESSION);
   const [feedbackTarget, setFeedbackTarget] = useState<WordFeedbackTarget | null>(null);
   const [feedbackContext, setFeedbackContext] = useState<WordFeedbackContext>("experience");
   const feedbackRoundsSinceAutoRef = useRef(0);
@@ -123,11 +121,14 @@ export function AutoDrawPage({ onNavigate }: Props) {
   };
 
   useEffect(() => {
-    let mounted = true;
-    fetchTwitchSession().then((session) => { if (mounted) setTwitchSession(session); }).catch(() => undefined);
+    if (!twitchSession.authenticated) return;
     const disconnectLiveEvents = connectLiveEvents((event) => {
-      if (event.type === "twitch-session") setTwitchSession(event.payload);
       if (event.type === "chat-message") setChatMessages((current) => [...current.slice(-20), event.payload]);
+      if (event.type === "round-ended" && event.payload.roundId === activeRoundId.current && event.payload.reason === "taken-over") {
+        activeRoundId.current = null;
+        setStatus("complete");
+        setNotice("Live scoring moved to another browser or game. Your channel points are safe.");
+      }
       if (event.type === "correct-guess" && event.payload.roundId === activeRoundId.current) {
         activeRoundId.current = null;
         setSolvers((current) => [...current, event.payload.solver]);
@@ -138,9 +139,9 @@ export function AutoDrawPage({ onNavigate }: Props) {
         setStatus("complete");
         setNotice(`${event.payload.solver.name} solved it in chat.`);
       }
-    }, () => setTwitchSession((current) => current.authenticated ? { ...current, eventSubStatus: "reconnecting" } : current));
-    return () => { mounted = false; disconnectLiveEvents(); if (activeRoundId.current) void closeLiveRound(); };
-  }, []);
+    });
+    return () => { disconnectLiveEvents(); if (activeRoundId.current) void closeLiveRound(); };
+  }, [twitchSession.authenticated, twitchSession.user?.id]);
 
   useEffect(() => {
     if (status !== "playing" || transitionProgressRef.current >= 1) { previous.current = null; return; }
@@ -211,7 +212,12 @@ export function AutoDrawPage({ onNavigate }: Props) {
       const result = await startServerRound(asset.answer, 1, asset.aliases);
       activeRoundId.current = result.roundId;
       setNotice("Drawing live. Twitch chat can guess now.");
-    } catch { setNotice("Drawing locally. Live chat could not start."); }
+    } catch (error) {
+      if ((error as { code?: string }).code === "ROUND_OWNED") {
+        setStatus("idle");
+        setNotice("Scoring remains in the other browser or game. Start again to take over.");
+      } else setNotice(`Drawing locally. ${error instanceof Error ? error.message : "Live chat could not start."}`);
+    }
   };
 
   const performNextDrawing = async () => {
@@ -229,7 +235,12 @@ export function AutoDrawPage({ onNavigate }: Props) {
       const result = await startServerRound(nextAsset.answer, 1, nextAsset.aliases);
       activeRoundId.current = result.roundId;
       setNotice("Drawing live. Twitch chat can guess now.");
-    } catch { setNotice("Drawing locally. Live chat could not start."); }
+    } catch (error) {
+      if ((error as { code?: string }).code === "ROUND_OWNED") {
+        setStatus("idle");
+        setNotice("Scoring remains in the other browser or game. Start again to take over.");
+      } else setNotice(`Drawing locally. ${error instanceof Error ? error.message : "Live chat could not start."}`);
+    }
   };
 
   const nextDrawing = async () => {

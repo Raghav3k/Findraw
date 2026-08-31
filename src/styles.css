@@ -2084,3 +2084,7 @@ html, body, #root, .dashboard-layout { height: 100%; overflow: hidden; }
 .hover-delay-control { align-items: center; display: grid; gap: 7px; grid-column: 1 / -1; grid-row: 2; grid-template-columns: minmax(44px, 1fr) 48px; min-width: 0; width: 100%; }
 .hover-delay-control input { min-width: 0; width: 100%; }
 .hover-delay-control b { color: var(--cyan); font-family: "JetBrains Mono", monospace; font-size: 8px; text-align: right; white-space: nowrap; }
+/* Public access verification uses the shared typography and scrollbar rules. */
+.security-verification { position: fixed; inset: 0; z-index: 10000; display: grid; place-items: center; background: #24282488; padding: 1rem; }
+.security-verification-panel { background: #fff3cf; color: #302e27; border: 1px solid #b8a787; border-radius: 12px; padding: 24px; max-width: 100%; max-height: 90vh; overflow-y: auto; overflow-x: hidden; box-shadow: 5px 6px #302e2733; }
+.security-verification-panel button { margin-top: 1rem; }

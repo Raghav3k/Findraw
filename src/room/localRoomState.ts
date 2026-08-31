@@ -1,12 +1,14 @@
+import type { CategoryPrompt } from "../dashboard/gameData";
 import {
-  getPromptsForMode,
-  matchesCategorySelection,
-  pickBalancedPrompts,
-  type CategoryPrompt,
-  type CategorySelection,
-} from "../dashboard/gameData";
+  DEFAULT_ARTIST_WORD_MIX,
+  normalizeArtistWordMix,
+  pickWordMixPrompts,
+  type ArtistWordMix,
+} from "../dashboard/artistWordPacks";
+import type { CommunityPack } from "../community/communityPacksApi";
 import type { WordFeedbackMap } from "../feedback/wordFeedback";
 import type { DrawingOperation } from "../canvas/drawingTypes";
+import type { SolvedViewer } from "../twitch/twitchApi";
 
 export type RoomPhase = "lobby" | "choosing" | "drawing" | "results" | "finished";
 
@@ -15,6 +17,7 @@ export type RoomPlayer = {
   name: string;
   score: number;
   connectedAt: number;
+  disconnectedAt?: number | null;
 };
 
 export type RoomGuess = {
@@ -39,10 +42,18 @@ export type RoomAnswer = CategoryPrompt & {
 
 export type RoomState = {
   code: string;
+  visibility?: "private" | "public";
+  testBots?: boolean;
   hostId: string;
   players: RoomPlayer[];
   phase: RoomPhase;
-  categorySelection: CategorySelection;
+  wordMix: ArtistWordMix;
+  wordMixReady?: boolean;
+  wordMixPacks?: Array<{ id: string; label: string; kind: string; wordCount: number }>;
+  twitchOwnerName?: string;
+  twitchOwnerConnected?: boolean;
+  twitchScoringConflict?: boolean;
+  twitchSolvers?: SolvedViewer[];
   roundSeconds: number;
   maxPlayers: number;
   choices: CategoryPrompt[];
@@ -56,7 +67,10 @@ export type RoomState = {
   guesses: RoomGuess[];
   solved: RoomSolved[];
   recentPromptKeys: string[];
+  recentChoiceKeys: string[];
   drawingOperations?: DrawingOperation[];
+  drawingEpoch?: string;
+  drawingRevision?: number;
 };
 
 export const ROOM_STORAGE_PREFIX = "findraw.room.v1.";
@@ -66,12 +80,23 @@ const ROOM_CODE_NUMBERS = "23456789";
 const ROOM_CODE_CHARACTERS = `${ROOM_CODE_LETTERS}${ROOM_CODE_NUMBERS}`;
 
 export const createClientId = () => {
-  const key = "findraw.room.clientId";
-  const existing = window.sessionStorage.getItem(key);
+  const key = "findraw.room.clientId.v2";
+  const existing = window.localStorage.getItem(key);
   if (existing) return existing;
-  const id = `player-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
-  window.sessionStorage.setItem(key, id);
+  const id = typeof window.crypto?.randomUUID === "function" ? `player-${window.crypto.randomUUID()}` : `player-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 14)}`;
+  window.localStorage.setItem(key, id);
   return id;
+};
+
+export const createRoomReconnectToken = () => {
+  const key = "findraw.room.reconnectToken.v1";
+  const existing = window.localStorage.getItem(key);
+  if (existing) return existing;
+  const token = typeof window.crypto?.randomUUID === "function"
+    ? `${window.crypto.randomUUID()}-${window.crypto.randomUUID()}`
+    : `${Date.now()}-${Math.random().toString(36).slice(2)}-${Math.random().toString(36).slice(2)}`;
+  window.localStorage.setItem(key, token);
+  return token;
 };
 
 export const normalizeRoomCode = (value: string) => (
@@ -105,7 +130,8 @@ export const createEmptyRoom = (code: string, host: RoomPlayer, initialBots: Roo
   hostId: host.id,
   players: [host, ...initialBots],
   phase: "lobby",
-  categorySelection: "domain:general",
+  wordMix: DEFAULT_ARTIST_WORD_MIX,
+  wordMixReady: true,
   roundSeconds: 90,
   maxPlayers: Math.max(8, 1 + initialBots.length),
   choices: [],
@@ -119,6 +145,7 @@ export const createEmptyRoom = (code: string, host: RoomPlayer, initialBots: Roo
   guesses: [],
   solved: [],
   recentPromptKeys: [],
+  recentChoiceKeys: [],
 });
 
 export const readRoom = (code: string): RoomState | null => {
@@ -140,11 +167,8 @@ export const deleteRoom = (code: string) => {
 
 export const roomPromptKey = (prompt: CategoryPrompt) => `${prompt.categoryId}:${prompt.answer.toLowerCase()}`;
 
-export const pickRoomChoices = (selection: CategorySelection, recentKeys: string[], count = 3, feedback?: WordFeedbackMap): CategoryPrompt[] => {
-  const pool = getPromptsForMode("room")
-    .filter((prompt) => matchesCategorySelection(prompt.category, selection));
-
-  const choices = pickBalancedPrompts(pool, recentKeys, count, { feedback, mode: "room" });
+export const pickRoomChoices = (mix: ArtistWordMix, recentKeys: string[], count = 3, communityPacks: CommunityPack[] = [], feedback?: WordFeedbackMap): CategoryPrompt[] => {
+  const choices = pickWordMixPrompts(normalizeArtistWordMix(mix, communityPacks), recentKeys, count, communityPacks, feedback);
   for (let index = choices.length - 1; index > 0; index -= 1) {
     const swapIndex = Math.floor(Math.random() * (index + 1));
     [choices[index], choices[swapIndex]] = [choices[swapIndex], choices[index]];
@@ -165,10 +189,14 @@ export const normalizeRoomState = (room: Partial<RoomState> | null): RoomState |
   if (!room?.code || !room.hostId) return null;
   return {
     code: room.code,
+    visibility: room.visibility,
+    testBots: Boolean(room.testBots),
     hostId: room.hostId,
     players: Array.isArray(room.players) ? room.players : [],
     phase: room.phase ?? "lobby",
-    categorySelection: room.categorySelection ?? "domain:general",
+    wordMix: normalizeArtistWordMix(room.wordMix ?? DEFAULT_ARTIST_WORD_MIX),
+    wordMixReady: room.wordMixReady ?? true,
+    wordMixPacks: Array.isArray(room.wordMixPacks) ? room.wordMixPacks : undefined,
     roundSeconds: room.roundSeconds ?? 90,
     maxPlayers: room.maxPlayers ?? 8,
     choices: Array.isArray(room.choices) ? room.choices : [],
@@ -182,6 +210,7 @@ export const normalizeRoomState = (room: Partial<RoomState> | null): RoomState |
     guesses: Array.isArray(room.guesses) ? room.guesses : [],
     solved: Array.isArray(room.solved) ? room.solved : [],
     recentPromptKeys: Array.isArray(room.recentPromptKeys) ? room.recentPromptKeys : [],
+    recentChoiceKeys: Array.isArray(room.recentChoiceKeys) ? room.recentChoiceKeys : [],
     drawingOperations: Array.isArray(room.drawingOperations) ? room.drawingOperations : [],
   };
 };

@@ -1,5 +1,7 @@
 # Findraw Cloudflare backend
 
+**Security migration:** before deploying, follow [the security release checklist](../../docs/SECURITY_CHECKLIST_2026-09-01.md). Production now uses HttpOnly cookie sessions through a Pages service binding, not direct browser requests to workers.dev. The Twitch callback must use the frontend origin. Turnstile keys and the Pages binding require configuration; missing protection fails closed. Older direct-worker setup examples below are historical and do not override that checklist.
+
 This Worker is the Cloudflare replacement for `server/index.mjs`.
 
 It exposes the same routes:
@@ -11,6 +13,8 @@ It exposes the same routes:
 - `POST /api/twitch/disconnect`
 - `GET /api/events`
 - `GET /api/leaderboard`
+- `GET /api/channel/status`
+- `GET /api/channel/legacy-backups` (authenticated, own channel only)
 - `POST /api/round/start`
 - `POST /api/round/end`
 - `POST /api/points/adjust`
@@ -20,6 +24,10 @@ It exposes the same routes:
 - `POST /api/community-packs/:id/report`
 
 ## Cloudflare secrets
+
+Channel records are stored in `FindrawChannel` (`FINDRAW_CHANNEL`, migration v5),
+separately from browser-specific encrypted OAuth sessions. See
+[channel persistence](../../docs/CHANNEL_PERSISTENCE.md) before deploying this change.
 
 Set these secrets on the Worker:
 

@@ -5,15 +5,14 @@ import { AUTO_DRAW_ASSETS } from "../autoDraw/autoDrawAssets";
 import { ColorPickerPanel } from "../ui/ColorPickerPanel";
 import { usePersistentState } from "../ui/usePersistentState";
 import { TwitchProfileMenu } from "../ui/WorkspaceIdentity";
-import { connectLiveEvents, disconnectTwitch, fetchTwitchSession, type TwitchSession } from "../twitch/twitchApi";
+import { useSiteIdentity } from "../identity/SiteIdentity";
 
 type ModeHomeProps = { onNavigate: (path: string) => void };
 
 type AvatarColorTarget = "headColor" | "headAccent" | "bodyColor" | "bodyAccent";
 
 export function ModeHome({ onNavigate }: ModeHomeProps) {
-  const [twitchSession, setTwitchSession] = useState<TwitchSession>({ authenticated: false, configured: false, eventSubStatus: "disconnected", canSendChat: false, chatCommandsEnabled: true, user: null });
-  const [playerName, setPlayerName] = usePersistentState("room.playerName", "Streamer");
+  const { disconnect, guestName: playerName, setGuestName: setPlayerName, twitchSession } = useSiteIdentity();
   const [avatarHeadColor, setAvatarHeadColor] = usePersistentState("room.avatar.headColor", "#f0ccd3");
   const [avatarHeadAccent, setAvatarHeadAccent] = usePersistentState("room.avatar.headAccent", "#ffe4a8");
   const [avatarBodyColor, setAvatarBodyColor] = usePersistentState("room.avatar.bodyColor", "#83c5e6");
@@ -40,20 +39,6 @@ export function ModeHome({ onNavigate }: ModeHomeProps) {
     bodyAccent: { defaultColor: "#d7e8c9", label: "Body blend", setColor: setAvatarBodyAccent, value: avatarBodyAccent },
   };
   const activeColor = avatarColorTarget ? avatarColorMap[avatarColorTarget] : null;
-
-  useEffect(() => {
-    let mounted = true;
-    fetchTwitchSession().then((session) => {
-      if (!mounted) return;
-      setTwitchSession(session);
-    }).catch(() => undefined);
-    const stopEvents = connectLiveEvents((event) => {
-      if (event.type !== "twitch-session") return;
-      setTwitchSession(event.payload);
-    });
-    if (new URLSearchParams(window.location.search).has("twitch")) window.history.replaceState({}, "", "/");
-    return () => { mounted = false; stopEvents(); };
-  }, []);
 
   useEffect(() => {
     if (!avatarColorTarget) return;
@@ -85,14 +70,14 @@ export function ModeHome({ onNavigate }: ModeHomeProps) {
         connected={twitchSession.authenticated}
         displayName={twitchSession.user?.displayName ?? null}
         profileImageUrl={twitchSession.user?.profileImageUrl ?? null}
-        onDisconnectTwitch={() => { void disconnectTwitch().then(() => setTwitchSession({ authenticated: false, configured: twitchSession.configured, eventSubStatus: "disconnected", canSendChat: false, chatCommandsEnabled: true, user: null })); }}
+        onDisconnectTwitch={() => { void disconnect(); }}
         returnTo="/"
       />
     </header>
     <section className="mode-grid" aria-label="Game modes">
       <button className="mode-card room-mode-card" onClick={() => onNavigate("/room")} type="button">
         <span className="mode-card-tape"/><div className="mode-card-preview room-preview" aria-hidden="true"><span className="room-preview-avatar one">A</span><span className="room-preview-avatar two">B</span><span className="room-preview-avatar three">C</span><span className="room-preview-board"><i/><i/><i/></span><span className="material-symbols-outlined room-preview-icon">groups</span></div>
-        <span className="mode-card-number">01</span><div className="mode-card-copy"><span className="mode-card-label">Local prototype</span><h2>Room Mode</h2><p>Friends join a room, take turns drawing, guess fast, and climb the leaderboard.</p><span className="mode-card-action">Open room table <span className="material-symbols-outlined">arrow_forward</span></span></div>
+        <span className="mode-card-number">01</span><div className="mode-card-copy"><span className="mode-card-label">Online multiplayer</span><h2>Room Mode</h2><p>Join a public table or create a private room for friends.</p><span className="mode-card-action">Choose a table <span className="material-symbols-outlined">arrow_forward</span></span></div>
       </button>
       <button className="mode-card artist-mode-card" onClick={() => onNavigate("/draw")} type="button">
         <span className="mode-card-tape"/><div className="mode-card-preview artist-preview" aria-hidden="true"><span className="material-symbols-outlined artist-preview-hand">stylus_note</span><span className="artist-preview-line line-one"/><span className="artist-preview-line line-two"/><span className="artist-preview-line line-three"/><span className="artist-preview-star">&#9733;</span></div>

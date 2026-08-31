@@ -9,4 +9,4 @@
 
 Do not commit or share `.env`. Twitch tokens are encrypted before being stored in `.findraw-data`, and both paths are ignored by Git.
 
-Findraw points are local and independent of Twitch Channel Points. Correct guesses award 100, 80, 60, then 50 points. The streamer can add a 25-point bonus beside a solved viewer. Scores and a small audit ledger are stored in `.findraw-data/points.json`.
+Findraw Points are local and independent of Twitch Channel Points. Correct guesses award 100, 80, 60, then 50 points toward a Monday-to-Monday weekly leaderboard (UTC). Hosted-session guesses count toward both the hosted session and the current weekly placement. Hosted sessions start with five reward slots, and the streamer can add or delete positions as needed (up to 20). Completed weeks are archived, optional placement rewards can be fulfilled manually, and the streamer can add a 25-point weekly bonus beside a solved viewer. Scores and a small audit ledger are stored in `.findraw-data/points.json`.

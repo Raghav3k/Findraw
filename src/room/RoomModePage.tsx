@@ -2,18 +2,16 @@ import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, 
 import { ExcalidrawStage } from "../canvas/ExcalidrawStage";
 import type { DrawingOperation } from "../canvas/drawingTypes";
 import { DEFAULT_KEYBOARD_SHORTCUTS } from "../dashboard/keyboardShortcuts";
+import type { CategoryPrompt } from "../dashboard/gameData";
 import {
-  getActiveSelectionChips,
-  getCategoryDomains,
-  getSelectionTokens,
-  isCategorySelectionOptionActive,
-  removeCategorySelectionChip,
-  toggleCategorySelectionOption,
-  type CategoryPrompt,
-  type CategorySelection,
-} from "../dashboard/gameData";
-import { CategorySelectionTools } from "../dashboard/CategorySelectionTools";
-import { CategoryPickerWindow } from "../ui/CategoryPickerWindow";
+  DEFAULT_ARTIST_WORD_MIX,
+  getArtistMixLabel,
+  getArtistMixWordCount,
+  getWordMixPackSnapshots,
+  normalizeArtistWordMix,
+  type ArtistWordMix,
+} from "../dashboard/artistWordPacks";
+import type { CommunityPack } from "../community/communityPacksApi";
 import { WorkspaceIdentity } from "../ui/WorkspaceIdentity";
 import { usePersistentState } from "../ui/usePersistentState";
 import { DockControls, DockLayout, DockPanel, DockSlot, ResizableSurface } from "../ui/DockLayout";
@@ -21,11 +19,9 @@ import { resizeDockBoundary, SIDE_RAIL_SNAP_POINTS, snapDockRailWidth, SOURCE_RA
 import {
   connectLiveEvents,
   endServerRound,
-  fetchTwitchSession,
   reconnectTwitchChat,
   startServerRound,
   type SolvedViewer,
-  type TwitchSession,
 } from "../twitch/twitchApi";
 import { TWITCH_SOLVER_PREVIEW } from "../twitch/twitchSolverPreview";
 import {
@@ -37,6 +33,7 @@ import {
 import { hasApiBaseUrl } from "../apiUrls";
 import {
   createClientId,
+  createRoomReconnectToken,
   createEmptyRoom,
   createRoomCode,
   deleteRoom,
@@ -55,6 +52,9 @@ import {
   type RoomState,
 } from "./localRoomState";
 import { connectOnlineRoom, type OnlineRoomClient } from "./onlineRoomClient";
+import { useSiteIdentity } from "../identity/SiteIdentity";
+import { clearRoomLaunch, readRoomLaunch, type RoomLaunchIntent } from "./roomLaunch";
+import { createRoomTestBots, isRoomTestBot, useLocalRoomTestBots } from "./roomTestBots";
 
 type RoomModePageProps = {
   onNavigate: (path: string) => void;
@@ -68,17 +68,7 @@ type ResizeState = {
   lastWidth: number;
 };
 
-const DEFAULT_ROOM_CODE = "";
 type RoomEntryMode = "create" | "join";
-const EMPTY_TWITCH_SESSION: TwitchSession = {
-  configured: false,
-  authenticated: false,
-  eventSubStatus: "disconnected",
-  canSendChat: false,
-  chatCommandsEnabled: true,
-  user: null,
-};
-
 const createPlayer = (id: string, name: string): RoomPlayer => ({
   id,
   name: name.trim().slice(0, 20) || "Player",
@@ -102,24 +92,22 @@ const getNextTurn = (room: RoomState) => {
 };
 
 export function RoomModePage({ onNavigate }: RoomModePageProps) {
+  const { displayName: playerName, ready: identityReady, setTwitchSession, twitchSession } = useSiteIdentity();
   const [clientId] = useState(createClientId);
+  const [roomReconnectToken] = useState(createRoomReconnectToken);
+  const [launchIntent] = useState(readRoomLaunch);
+  const [lastOnlineRoomCode, setLastOnlineRoomCode] = usePersistentState("room.lastOnlineCode.v1", "");
   const [sourceRailWidth, setSourceRailWidth] = usePersistentState("room.layout.leftRailWidth", 320);
   const [sidePanelWidth, setSidePanelWidth] = usePersistentState("room.layout.rightRailWidth", 300);
-  const [playerName, setPlayerName] = usePersistentState("room.playerName", "Streamer");
-  const [roomCodeInput, setRoomCodeInput] = useState(DEFAULT_ROOM_CODE);
   const [joinedCode, setJoinedCode] = useState("");
   const [room, setRoom] = useState<RoomState | null>(null);
   const [roomTransport, setRoomTransport] = useState<"none" | "online" | "local">("none");
   const [roomConnectionStatus, setRoomConnectionStatus] = useState<"connecting" | "connected" | "offline">("offline");
-  const [showRoomDetails, setShowRoomDetails] = useState(false);
-  const [roomCodeRevealed, setRoomCodeRevealed] = useState(false);
-  const [leaderPickerOpen, setLeaderPickerOpen] = useState(false);
   const [guess, setGuess] = useState("");
   const [liveDrawingOperation, setLiveDrawingOperation] = useState<DrawingOperation | null>(null);
   const [notice, setNotice] = useState("");
   const [categoriesOpen, setCategoriesOpen] = useState(false);
   const [twitchPanelOpen, setTwitchPanelOpen] = useState(false);
-  const [twitchSession, setTwitchSession] = useState<TwitchSession>(EMPTY_TWITCH_SESSION);
   const [twitchSolvers, setTwitchSolvers] = useState<SolvedViewer[]>([]);
   const [twitchNotice, setTwitchNotice] = useState("");
   const [confirmExitOpen, setConfirmExitOpen] = useState(false);
@@ -128,6 +116,9 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const [canvasColor, setCanvasColor] = usePersistentState("room.canvas.background", "#FFF2CF");
   const [gridSize, setGridSize] = usePersistentState("room.grid.size", 24);
   const [wordFeedback, setWordFeedback] = usePersistentState<WordFeedbackMap>("feedback.room.words", {});
+  const [roomWordMix] = usePersistentState<ArtistWordMix>("room.wordMix.v1", DEFAULT_ARTIST_WORD_MIX);
+  const [communityPacks] = usePersistentState<CommunityPack[]>("artist.communityPacks.v1", []);
+  const [reportedCommunityPackIds, setReportedCommunityPackIds] = usePersistentState<string[]>("artist.reportedCommunityPacks.v1", []);
   const [resultsEndAt, setResultsEndAt] = useState<number | null>(null);
   const [currentRoundRating, setCurrentRoundRating] = useState<WordFeedbackRating | null>(null);
   const [finishedSummaryDismissed, setFinishedSummaryDismissed] = useState(false);
@@ -137,8 +128,14 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const activeTwitchRoundIdRef = useRef<string | null>(null);
   const startedTwitchRoundKeyRef = useRef<string | null>(null);
   const roomRoundRef = useRef({ phase: "", turnIndex: -1 });
+  const roomTransportRef = useRef<"none" | "online" | "local">("none");
+  const createdOnlineRoomRef = useRef<string | null>(null);
+  const restoreAttemptedRef = useRef(false);
+  const pendingRoomSetupRef = useRef<RoomLaunchIntent | null>(null);
+  const localBotAutoStartRef = useRef<string | null>(null);
 
   const roomPlayers = room?.players ?? [];
+  const connectedRoomPlayers = roomPlayers.filter((player) => !player.disconnectedAt);
   const roomChoices = room?.choices ?? [];
   const roomGuesses = room?.guesses ?? [];
   const roomSolved = room?.solved ?? [];
@@ -150,8 +147,16 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const sortedPlayers = useMemo(() => (
     (room?.players ?? []).slice().sort((first, second) => second.score - first.score)
   ), [room?.players]);
-  const activeSelectionChips = useMemo(() => getActiveSelectionChips(room?.categorySelection ?? "all", "room"), [room?.categorySelection]);
-  const selectedTokens = getSelectionTokens(room?.categorySelection ?? "all");
+  const activeCommunityPacks = communityPacks.filter((pack) => pack.status === "published" && !reportedCommunityPackIds.includes(pack.id));
+  const activeRoomWordMix = normalizeArtistWordMix(room?.wordMix ?? roomWordMix, activeCommunityPacks);
+  const roomWordMixLabel = getArtistMixLabel(activeRoomWordMix, activeCommunityPacks);
+  const roomWordCount = getArtistMixWordCount(activeRoomWordMix, activeCommunityPacks);
+  const displayedRoomWordMixLabel = room?.wordMixPacks?.length
+    ? room.wordMixPacks.length <= 3 ? room.wordMixPacks.map((pack) => pack.label).join(" + ") : `${room.wordMixPacks.slice(0, 2).map((pack) => pack.label).join(" + ")} + ${room.wordMixPacks.length - 2} more`
+    : roomWordMixLabel;
+  const displayedRoomWordCount = room?.wordMixPacks?.reduce((sum, pack) => sum + pack.wordCount, 0) ?? roomWordCount;
+  const roomPackLabels = new Map((room?.wordMixPacks ?? []).map((pack) => [`pack-${pack.id}`, pack.label]));
+  const getRoomCategoryLabel = (categoryId?: string) => roomPackLabels.get(categoryId || "") || String(categoryId || "General").replace(/^pack-/, "").replace(/^[^:]+:/, "").replace(/[-_]/g, " ");
   const secondsRemaining = room?.phase === "drawing" && room.endAt
     ? Math.max(0, Math.ceil((room.endAt - timerNow) / 1000))
     : room?.roundSeconds ?? 90;
@@ -163,9 +168,6 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const winner = room?.phase === "finished" ? sortedPlayers[0] ?? null : null;
   const winningPlayers = winner ? sortedPlayers.filter((player) => player.score === winner.score) : [];
   const finishedTitle = winningPlayers.length > 1 ? "It's a tie!" : winner ? `${winner.name} wins!` : "Game complete";
-  const roomMaxPlayers = room?.maxPlayers ?? 8;
-  const roomLeader = roomPlayers.find((player) => player.id === room?.hostId) ?? null;
-  const canEditRoomDetails = Boolean(room && isHost && (room.phase === "lobby" || room.phase === "finished"));
   const roomChoiceVotes = room?.choiceVotes ?? {};
   const eligibleChoiceVoters = roomPlayers.filter((player) => player.id !== room?.drawerId);
   const localChoiceVote = localPlayer ? roomChoiceVotes[localPlayer.id] : undefined;
@@ -173,11 +175,14 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     Object.values(roomChoiceVotes).filter((vote) => vote === index).length
   ));
   const submittedChoiceVotes = Object.keys(roomChoiceVotes).filter((playerId) => eligibleChoiceVoters.some((player) => player.id === playerId)).length;
-  const twitchLive = twitchSession.authenticated && twitchSession.eventSubStatus === "connected";
-  const twitchSolversForDisplay = twitchSolvers.length > 0
-    ? twitchSolvers
+  const twitchLive = roomTransport === "online"
+    ? Boolean(room?.twitchOwnerConnected)
+    : twitchSession.authenticated && twitchSession.eventSubStatus === "connected";
+  const activeTwitchSolvers = roomTransport === "online" ? room?.twitchSolvers ?? [] : twitchSolvers;
+  const twitchSolversForDisplay = activeTwitchSolvers.length > 0
+    ? activeTwitchSolvers
     : import.meta.env.DEV ? TWITCH_SOLVER_PREVIEW : [];
-  const showingTwitchPreview = import.meta.env.DEV && twitchSolvers.length === 0;
+  const showingTwitchPreview = import.meta.env.DEV && activeTwitchSolvers.length === 0;
 
   const leaveLocalRoom = useCallback((roomToLeave: RoomState) => {
     const players = roomToLeave.players.filter((player) => player.id !== clientId);
@@ -216,13 +221,13 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     setJoinedCode("");
     setRoomTransport("none");
     setRoomConnectionStatus("offline");
-    setShowRoomDetails(false);
-    setRoomCodeRevealed(false);
+    setLastOnlineRoomCode("");
     setLiveDrawingOperation(null);
+    createdOnlineRoomRef.current = null;
     setGuess("");
     setNotice(roomToLeave ? `Left room ${roomToLeave.code}.` : "");
-    if (navigateHome) onNavigate("/");
-  }, [leaveLocalRoom, onNavigate, room, roomTransport]);
+    if (navigateHome) onNavigate("/room");
+  }, [leaveLocalRoom, onNavigate, room, roomTransport, setLastOnlineRoomCode]);
 
   const requestExitToHome = useCallback(() => {
     if (room && !skipRoomExitConfirm) {
@@ -249,22 +254,24 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       saveRoom({ ...currentRoom, phase: "finished", answer: null, choices: [], choiceVotes: {}, drawerId: null, endAt: null });
       return;
     }
+    const choices = pickRoomChoices(currentRoom.wordMix, [...currentRoom.recentPromptKeys, ...currentRoom.recentChoiceKeys], 3, activeCommunityPacks, wordFeedback);
     saveRoom({
       ...currentRoom,
       phase: "choosing",
       ...next,
       answer: null,
-      choices: pickRoomChoices(currentRoom.categorySelection, currentRoom.recentPromptKeys, 3, wordFeedback),
+      choices,
+      recentChoiceKeys: [...currentRoom.recentChoiceKeys, ...choices.map(roomPromptKey)].slice(-32),
       choiceVotes: {},
       guesses: [],
       solved: [],
       endAt: null,
     });
-  }, [isHost, room, wordFeedback]);
+  }, [activeCommunityPacks, isHost, room, wordFeedback]);
 
-  const enterRoom = (mode: RoomEntryMode, event?: FormEvent) => {
+  const enterRoom = (mode: RoomEntryMode, event?: FormEvent, restoredCode?: string, setup?: RoomLaunchIntent | null) => {
     event?.preventDefault();
-    let code = mode === "create" ? createRoomCode() : normalizeRoomCode(roomCodeInput);
+    let code = mode === "create" ? createRoomCode() : normalizeRoomCode(restoredCode ?? "");
     if (code.length !== ROOM_CODE_LENGTH) {
       setNotice(`Enter the full ${ROOM_CODE_LENGTH}-character room code to join.`);
       return;
@@ -275,18 +282,17 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     onlineRoomRef.current = null;
     if (hasApiBaseUrl) {
       let hasSyncedRoom = false;
-      setRoomCodeInput(mode === "create" ? "" : code);
+      pendingRoomSetupRef.current = mode === "create" ? setup ?? null : null;
+      createdOnlineRoomRef.current = mode === "create" ? code : null;
       setJoinedCode(code);
       setRoomTransport("online");
-      setShowRoomDetails(false);
-      setRoomCodeRevealed(false);
       setNotice(mode === "create" ? `Created online room ${code}.` : `Joining online room ${code}.`);
-      onlineRoomRef.current = connectOnlineRoom(code, player.id, player.name, {
+      onlineRoomRef.current = connectOnlineRoom(code, player.id, roomReconnectToken, player.name, {
         onState: (nextRoom) => {
           if (!nextRoom) return;
           hasSyncedRoom = true;
           setRoom(normalizeRoomState(nextRoom));
-          if ((nextRoom.drawingOperations?.length ?? 0) > 0) setLiveDrawingOperation(null);
+          setLastOnlineRoomCode(nextRoom.code);
           setNotice(`Online room ${nextRoom.code} is synced.`);
         },
         onDrawingPreview: setLiveDrawingOperation,
@@ -300,6 +306,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
           setJoinedCode("");
           setRoomTransport("none");
           setRoomConnectionStatus("offline");
+          setLastOnlineRoomCode("");
         },
       }, { create: mode === "create" });
       if (!onlineRoomRef.current) setNotice("Online room server is unavailable.");
@@ -326,57 +333,64 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
           ? existing.players.map((item) => item.id === player.id ? { ...item, name: player.name } : item)
           : [...existing.players, player],
       }
-      : createEmptyRoom(code, player);
-    setRoomCodeInput(mode === "create" ? "" : code);
+      : {
+        ...createEmptyRoom(code, player, setup?.kind === "public-bots" ? createRoomTestBots() : []),
+        visibility: setup?.kind === "public-bots" ? "public" as const : "private" as const,
+        testBots: setup?.kind === "public-bots",
+        wordMix: normalizeArtistWordMix(setup?.wordMix ?? roomWordMix, activeCommunityPacks),
+        maxPlayers: setup?.maxPlayers ?? 8,
+        roundSeconds: setup?.roundSeconds ?? 90,
+        roundsPerPlayer: setup?.roundsPerPlayer ?? 3,
+      };
     setJoinedCode(code);
     setRoomTransport("local");
-    setShowRoomDetails(false);
-    setRoomCodeRevealed(false);
     saveRoom(nextRoom);
     setNotice(mode === "create" ? `Created room ${code}.` : `Joined room ${code}.`);
   };
 
-  const createRoom = () => enterRoom("create");
-  const joinRoom = (event?: FormEvent) => enterRoom("join", event);
+  useEffect(() => {
+    if (!identityReady || restoreAttemptedRef.current) return;
+    restoreAttemptedRef.current = true;
+    if (launchIntent?.kind === "private-create") enterRoom("create", undefined, undefined, launchIntent);
+    else if (launchIntent?.kind === "public-bots") enterRoom("create", undefined, undefined, launchIntent);
+    else if (launchIntent?.code && (launchIntent.kind === "private-join" || launchIntent.kind === "public")) enterRoom("join", undefined, launchIntent.code, launchIntent);
+    else if (hasApiBaseUrl && normalizeRoomCode(lastOnlineRoomCode).length === ROOM_CODE_LENGTH) enterRoom("join", undefined, lastOnlineRoomCode);
+    clearRoomLaunch();
+  }, [identityReady, lastOnlineRoomCode, launchIntent]);
   const copyRoomCode = async () => {
     if (!room) return;
     await navigator.clipboard.writeText(room.code);
     setNotice(`Copied room code ${room.code}.`);
   };
-  const updateRoomSettings = (settings: { roundsPerPlayer?: number; maxPlayers?: number; roundSeconds?: number }) => {
-    if (!room || !canEditRoomDetails) return;
-    const nextRounds = Math.min(10, Math.max(1, Math.round(settings.roundsPerPlayer ?? room.roundsPerPlayer)));
-    const nextMaxPlayers = Math.min(16, Math.max(roomPlayers.length, Math.max(2, Math.round(settings.maxPlayers ?? roomMaxPlayers))));
-    const nextRoundSeconds = Math.min(300, Math.max(15, Math.round(settings.roundSeconds ?? room.roundSeconds)));
-    if (roomTransport === "online") {
-      onlineRoomRef.current?.sendRoomSettings({ roundsPerPlayer: nextRounds, maxPlayers: nextMaxPlayers, roundSeconds: nextRoundSeconds });
-      return;
-    }
-    saveRoom({ ...room, roundsPerPlayer: nextRounds, maxPlayers: nextMaxPlayers, roundSeconds: nextRoundSeconds });
-  };
-  const transferRoomLeader = (hostId: string) => {
-    if (!room || !canEditRoomDetails || !roomPlayers.some((player) => player.id === hostId)) return;
-    setLeaderPickerOpen(false);
-    if (roomTransport === "online") {
-      onlineRoomRef.current?.sendRoomLeader(hostId);
-      return;
-    }
-    saveRoom({ ...room, hostId });
-  };
-
   useEffect(() => () => onlineRoomRef.current?.close(), []);
+
+  useEffect(() => {
+    if (!room || roomTransport !== "online" || !isHost || createdOnlineRoomRef.current !== room.code) return;
+    const setup = pendingRoomSetupRef.current;
+    const mix = normalizeArtistWordMix(setup?.wordMix ?? roomWordMix, activeCommunityPacks);
+    onlineRoomRef.current?.sendWordMix(mix, getWordMixPackSnapshots(mix, activeCommunityPacks, wordFeedback));
+    onlineRoomRef.current?.sendRoomSettings({
+      maxPlayers: setup?.maxPlayers ?? 8,
+      roundsPerPlayer: setup?.roundsPerPlayer ?? 3,
+      roundSeconds: setup?.roundSeconds ?? 90,
+    });
+    pendingRoomSetupRef.current = null;
+    createdOnlineRoomRef.current = null;
+  }, [activeCommunityPacks, isHost, room, roomTransport, roomWordMix, wordFeedback]);
+
 
   useEffect(() => {
     roomRoundRef.current = { phase: room?.phase ?? "", turnIndex: room?.turnIndex ?? -1 };
   }, [room?.phase, room?.turnIndex]);
 
   useEffect(() => {
-    let active = true;
-    fetchTwitchSession()
-      .then((session) => { if (active) setTwitchSession(session); })
-      .catch(() => { if (active) setTwitchSession(EMPTY_TWITCH_SESSION); });
+    roomTransportRef.current = roomTransport;
+  }, [roomTransport]);
+
+  useEffect(() => {
+    if (roomTransport !== "local" || !twitchSession.authenticated) return;
     const closeLiveEvents = connectLiveEvents((event) => {
-      if (event.type === "twitch-session") setTwitchSession(event.payload);
+      if (roomTransportRef.current === "online") return;
       if (event.type === "round-started" && roomRoundRef.current.phase === "drawing") {
         activeTwitchRoundIdRef.current = event.payload.roundId;
       }
@@ -385,14 +399,11 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
           ? current
           : [...current, event.payload.solver]);
       }
-    }, () => {
-      setTwitchSession((current) => current.authenticated ? { ...current, eventSubStatus: "reconnecting" } : current);
     });
     return () => {
-      active = false;
       closeLiveEvents();
     };
-  }, []);
+  }, [roomTransport, twitchSession.authenticated, twitchSession.user?.id]);
 
   useEffect(() => {
     setTwitchSolvers([]);
@@ -401,6 +412,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   }, [room?.code, room?.turnIndex]);
 
   useEffect(() => {
+    if (roomTransport === "online") return;
     if (!room || room.phase !== "drawing" || !isDrawer || !roomAnswerText || !twitchLive) return;
     const roundKey = `${room.code}:${room.turnIndex}`;
     if (startedTwitchRoundKeyRef.current === roundKey) return;
@@ -419,14 +431,15 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
         if (startedTwitchRoundKeyRef.current === roundKey) startedTwitchRoundKeyRef.current = null;
         setTwitchNotice(error instanceof Error ? error.message : "Twitch guesses could not start.");
       });
-  }, [isDrawer, room, roomAnswerText, twitchLive]);
+  }, [isDrawer, room, roomAnswerText, roomTransport, twitchLive]);
 
   useEffect(() => {
+    if (roomTransport === "online") return;
     if (room?.phase === "drawing" || !startedTwitchRoundKeyRef.current) return;
     startedTwitchRoundKeyRef.current = null;
     activeTwitchRoundIdRef.current = null;
     void endServerRound().catch(() => undefined);
-  }, [room?.phase]);
+  }, [room?.phase, roomTransport]);
 
   useEffect(() => {
     setTimerNow(Date.now());
@@ -503,11 +516,6 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   }, [roomGuesses.length]);
 
   useEffect(() => {
-    if (roomTransport !== "online" || !room || !isHost || room.phase !== "choosing" || roomChoices.length > 0) return;
-    onlineRoomRef.current?.sendChoices(pickRoomChoices(room.categorySelection, room.recentPromptKeys, 3, wordFeedback));
-  }, [isHost, room, roomChoices.length, roomTransport, wordFeedback]);
-
-  useEffect(() => {
     const handlePointerMove = (event: PointerEvent) => {
       const resize = resizeStateRef.current;
       if (!resize) return;
@@ -555,43 +563,12 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     document.body.classList.add("resizing-panels");
   };
 
-  const updateSelection = (optionId: string) => {
-    if (!room || room.phase !== "lobby") return;
-    const nextSelection = optionId === "all"
-      ? "all"
-      : toggleCategorySelectionOption(room.categorySelection, optionId, "room", "");
-    if (roomTransport === "online") {
-      onlineRoomRef.current?.sendCategorySelection(nextSelection || "all");
-      return;
-    }
-    saveRoom({ ...room, categorySelection: nextSelection || "all" });
-  };
-
-  const removeSelectionChip = (chipId: string) => {
-    if (!room || room.phase !== "lobby") return;
-    const nextSelection = removeCategorySelectionChip(room.categorySelection, chipId, "room", "all");
-    if (roomTransport === "online") {
-      onlineRoomRef.current?.sendCategorySelection(nextSelection || "all");
-      return;
-    }
-    saveRoom({ ...room, categorySelection: nextSelection || "all" });
-  };
-
-  const applySelection = (selectionId: string) => {
-    if (!room || room.phase !== "lobby") return;
-    if (roomTransport === "online") {
-      onlineRoomRef.current?.sendCategorySelection(selectionId || "all");
-      return;
-    }
-    saveRoom({ ...room, categorySelection: selectionId || "all" });
-  };
-
   const startGame = () => {
     if (!room || !isHost || roomPlayers.length < 2) return;
     const drawerId = roomPlayers[0]?.id ?? null;
-    const choices = pickRoomChoices(room.categorySelection, room.recentPromptKeys, 3, wordFeedback);
+    const choices = pickRoomChoices(room.wordMix, [...room.recentPromptKeys, ...room.recentChoiceKeys], 3, activeCommunityPacks, wordFeedback);
     if (roomTransport === "online") {
-      onlineRoomRef.current?.sendStartGame(choices);
+      onlineRoomRef.current?.sendStartGame();
       setNotice("Game started. Players are voting on the word.");
       return;
     }
@@ -604,6 +581,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       roundsPerPlayer: room.roundsPerPlayer,
       answer: null,
       choices,
+      recentChoiceKeys: [...room.recentChoiceKeys, ...choices.map(roomPromptKey)].slice(-32),
       choiceVotes: {},
       guesses: [],
       solved: [],
@@ -611,6 +589,20 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
     });
     setNotice("Game started. Players are voting on the word.");
   };
+
+  useLocalRoomTestBots(room, saveRoom);
+
+  useEffect(() => {
+    if (!room?.testBots || room.visibility !== "public" || roomTransport !== "local" || !isHost || room.phase !== "lobby" || connectedRoomPlayers.length < 2) {
+      localBotAutoStartRef.current = null;
+      return;
+    }
+    const key = `${room.code}:${connectedRoomPlayers.length}`;
+    if (localBotAutoStartRef.current === key) return;
+    localBotAutoStartRef.current = key;
+    const timer = window.setTimeout(startGame, 1800);
+    return () => window.clearTimeout(timer);
+  }, [connectedRoomPlayers.length, isHost, room?.code, room?.phase, room?.testBots, room?.visibility, roomTransport]);
 
   const getWinningChoiceIndex = (votes: Record<string, number>) => {
     if (!roomChoices.length) return -1;
@@ -701,22 +693,18 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       categoryId: room.answer.categoryId,
       difficulty: room.answer.difficulty,
     };
-    setWordFeedback((current) => recordWordFeedback(current, target, rating));
-  };
-
-  const selectedOption = {
-    id: selectedTokens.length === 0 ? "empty" : room?.categorySelection ?? "all",
-    label: selectedTokens.length === 0 ? "No Decks Selected" : selectedTokens.length > 1 ? `${selectedTokens.length} Decks Selected` : activeSelectionChips[0]?.label ?? "All decks shuffled",
-    description: "Room mode word pool",
-    icon: "groups",
-    accent: activeSelectionChips[0]?.accent ?? "#83c5e6",
+    const nextFeedback = recordWordFeedback(wordFeedback, target, rating);
+    setWordFeedback(nextFeedback);
+    if (roomTransport === "online" && isHost) {
+      onlineRoomRef.current?.sendWordMix(activeRoomWordMix, getWordMixPackSnapshots(activeRoomWordMix, activeCommunityPacks, nextFeedback));
+    }
   };
 
   return (
     <DockLayout panelIds={["room-players", "room-control", "room-support", "room-chat"]} slotIds={["room-left-1", "room-left-2", "room-right-1", "room-right-2"]} storageKey="room.dock.v2">
-    <div className="dashboard-layout room-mode-page" style={{ "--source-rail-width": `${sourceRailWidth}px`, "--side-panel-width": `${sidePanelWidth}px` } as CSSProperties}>
+    <div className={`dashboard-layout room-mode-page ${room?.visibility === "public" ? "public-room-play" : "private-room-play"}`} style={{ "--source-rail-width": `${sourceRailWidth}px`, "--side-panel-width": `${sidePanelWidth}px` } as CSSProperties}>
       <aside className="stream-sidebar room-sidebar dock-rail" data-dock-boundary="right" aria-label="Room setup">
-        <WorkspaceIdentity onModes={requestExitToHome} subtitle={hasApiBaseUrl ? "Online room beta" : "Local room fallback"} />
+        <WorkspaceIdentity onModes={requestExitToHome} subtitle={room?.visibility === "public" ? "Public multiplayer" : hasApiBaseUrl ? "Private room" : "Local room fallback"} />
         <DockControls />
         <DockSlot id="room-left-1" />
         <DockSlot id="room-left-2" />
@@ -727,111 +715,47 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
             <div><span className="source-eyebrow">Players</span><h2>{room ? "Room lobby" : "No room"}</h2></div>
             <div className="room-player-header-actions">
               {room ? (
-                <button className="room-panel-exit-button" onClick={() => leaveCurrentRoom(false)} title="Leave this room" type="button">
-                  <span className="material-symbols-outlined">logout</span>
-                  <span>Exit room</span>
-                </button>
+                <>
+                  {room.visibility !== "public" ? <button className="room-panel-code-button" onClick={copyRoomCode} title="Copy room code" type="button"><span>{room.code}</span><span className="material-symbols-outlined">content_copy</span></button> : null}
+                  <button className="room-panel-exit-button" onClick={() => leaveCurrentRoom(true)} title="Leave this room" type="button"><span className="material-symbols-outlined">logout</span><span>Exit room</span></button>
+                </>
               ) : null}
               <span className="source-status">{roomPlayers.length}</span>
             </div>
           </header>
           <div className="room-player-list">
             {sortedPlayers.length ? sortedPlayers.map((player, index) => (
-              <span className={player.id === room?.drawerId ? "drawer" : ""} key={player.id}>
-                <b><i>{index + 1}</i>{player.name}</b>
-                <small>{player.id === room?.hostId ? `Host - ${player.score}` : player.id === room?.drawerId ? `Drawing - ${player.score}` : `${player.score} pts`}</small>
+              <span className={`${player.id === room?.drawerId ? "drawer" : ""}${player.disconnectedAt ? " reconnecting" : ""}${isRoomTestBot(player.id) ? " bot-player" : ""}`} key={player.id}>
+                <b><i>{index + 1}</i>{player.name}{isRoomTestBot(player.id) ? <em className="bot-tag">BOT</em> : null}</b>
+                <small>{player.disconnectedAt ? "Reconnecting…" : player.id === room?.hostId ? `Host - ${player.score}` : player.id === room?.drawerId ? `Drawing - ${player.score}` : `${player.score} pts`}</small>
               </span>
             )) : <p>No players yet.</p>}
           </div>
         </section>
         </DockPanel>
 
-        <DockPanel id="room-control" label="room controls">
-        {!room ? (
-          <section className="source-card room-join-card">
-            <header className="source-card-header"><div><span className="source-eyebrow">Room desk</span><h2>Room</h2></div><span className="source-status ready"><i />{hasApiBaseUrl ? "Online" : "Local"}</span></header>
-            <form className="room-join-form" onSubmit={joinRoom}>
-              <button onClick={createRoom} type="button"><span className="material-symbols-outlined">add_circle</span>Create room</button>
-              <button disabled={roomCodeInput.length !== ROOM_CODE_LENGTH} type="submit"><span className="material-symbols-outlined">login</span>Join room</button>
-              <label><span>Room code</span><input autoCapitalize="characters" autoComplete="off" inputMode="text" maxLength={ROOM_CODE_LENGTH} onChange={(event) => setRoomCodeInput(normalizeRoomCode(event.target.value))} placeholder="ABC123" spellCheck={false} value={roomCodeInput} /></label>
-            </form>
-            {notice ? <p className="room-note">{notice}</p> : null}
-          </section>
-        ) : (
+        <DockPanel id="room-control" label="camera and word">
           <section className="source-card camera-source-card room-camera-card">
             <header className="source-card-header">
-              <div>
-                <span className="source-eyebrow">Camera frame</span>
-                <h2>{showRoomDetails ? "Room details" : isDrawer ? "Word panel" : "Drawer on camera"}</h2>
-              </div>
-              <span className={`source-status ${room.phase === "drawing" ? "ready" : ""}`}><i />{room.phase === "drawing" ? "Round live" : room.phase}</span>
+              <div><span className="source-eyebrow">Camera frame</span><h2>{isDrawer ? "Word panel" : "Drawer on camera"}</h2></div>
+              <span className={`source-status ${room?.phase === "drawing" ? "ready" : ""}`}><i />{room?.phase === "drawing" ? "Round live" : room?.phase ?? roomConnectionStatus}</span>
             </header>
-            <div className={`camera-preview ${room.phase === "drawing" && isDrawer ? "source-selected round-prompt-visible" : "custom-word-position"}`}>
-              <button
-                className="asset-image-toggle room-details-toggle"
-                onClick={() => setShowRoomDetails((current) => !current)}
-                title={showRoomDetails ? "Show word panel" : "Show room details"}
-                type="button"
-              >
-                <span className="material-symbols-outlined">{showRoomDetails ? "visibility" : "meeting_room"}</span>
-              </button>
-              {showRoomDetails ? (
-                <div className="custom-word-card room-word-card room-details-card">
-                  <div className="room-code-share">
-                    <button className="room-code-cover" onClick={() => setRoomCodeRevealed((current) => !current)} type="button">
-                      {roomCodeRevealed ? <span className="room-code-text">{room.code}</span> : <span className="room-code-mask" aria-label="Room code hidden" />}
-                    </button>
-                    <button className="room-code-copy" onClick={copyRoomCode} title="Copy room code" type="button">
-                      <span className="material-symbols-outlined">content_copy</span>
-                    </button>
-                  </div>
-                  <div className="room-details-list">
-                    <label>
-                      <b>Players</b>
-                      <input disabled={!canEditRoomDetails} max={16} min={Math.max(2, roomPlayers.length)} onChange={(event) => updateRoomSettings({ maxPlayers: Number(event.target.value) })} type="number" value={roomMaxPlayers} />
-                    </label>
-                    <label>
-                      <b>Rounds/player</b>
-                      <input disabled={!canEditRoomDetails} max={10} min={1} onChange={(event) => updateRoomSettings({ roundsPerPlayer: Number(event.target.value) })} type="number" value={room.roundsPerPlayer} />
-                    </label>
-                    <label>
-                      <b>Seconds</b>
-                      <input disabled={!canEditRoomDetails} max={300} min={15} onChange={(event) => updateRoomSettings({ roundSeconds: Number(event.target.value) })} step={15} type="number" value={room.roundSeconds} />
-                    </label>
-                    <div className="room-leader-control">
-                      <button disabled={!canEditRoomDetails} onClick={() => setLeaderPickerOpen((current) => !current)} type="button">
-                        <b>Leader</b><strong>{roomLeader?.name ?? "Host"}</strong>
-                      </button>
-                      {leaderPickerOpen && canEditRoomDetails ? (
-                        <div className="room-leader-picker">
-                          {roomPlayers.map((player) => (
-                            <button className={player.id === room.hostId ? "active" : ""} key={player.id} onClick={() => transferRoomLeader(player.id)} type="button">
-                              <span>{player.name}</span><small>{player.id === room.hostId ? "Leader" : "Make leader"}</small>
-                            </button>
-                          ))}
-                        </div>
-                      ) : null}
-                    </div>
-                  </div>
-                </div>
-              ) : room.phase === "drawing" && isDrawer && room.answer ? (
-                <div className="camera-prompt-copy">
-                  <strong style={{ fontSize: Math.max(26, Math.min(60, 440 / Math.max(1, roomAnswerText.length))) + "px", lineHeight: 1.15 }}>{roomAnswerText}</strong>
-                </div>
+            <div className={`camera-preview ${room?.phase === "drawing" && isDrawer ? "source-selected round-prompt-visible" : "custom-word-position"}`}>
+              {room?.phase === "drawing" && isDrawer && room.answer ? (
+                <div className="camera-prompt-copy"><strong style={{ fontSize: Math.max(26, Math.min(60, 440 / Math.max(1, roomAnswerText.length))) + "px", lineHeight: 1.15 }}>{roomAnswerText}</strong></div>
               ) : (
                 <div className="custom-word-card room-word-card">
                   <small className="camera-instruction">Keep this area covered by your camera in OBS</small>
-                  <strong>{room.phase === "finished" && winner ? `${winner.name} wins` : room.phase === "choosing" ? "Players are voting" : "Waiting for the round"}</strong>
-                  {isHost && (room.phase === "lobby" || room.phase === "finished") ? (
-                    <button className="room-start-button room-lobby-start-button" disabled={roomPlayers.length < 2} onClick={startGame} type="button">
-                      <span className="material-symbols-outlined">play_arrow</span>{room.phase === "finished" ? "Start New Game" : "Start Game"}
-                    </button>
+                  <strong>{!room ? "Connecting to the table" : room.phase === "finished" && winner ? `${winner.name} wins` : room.phase === "choosing" ? "Players are voting" : room.visibility === "public" && room.phase === "lobby" ? connectedRoomPlayers.length < 2 ? "Waiting for public players" : "Match starting shortly" : "Waiting for the round"}</strong>
+                  {room?.visibility !== "public" && isHost && (room?.phase === "lobby" || room?.phase === "finished") ? (
+                    <button className="room-start-button room-lobby-start-button" disabled={roomPlayers.length < 2 || room.wordMixReady === false} onClick={startGame} type="button"><span className="material-symbols-outlined">play_arrow</span>{room.phase === "finished" ? "Start New Game" : "Start Game"}</button>
                   ) : null}
+                  {!room ? <button className="room-start-button room-lobby-start-button" onClick={() => onNavigate("/room")} type="button"><span className="material-symbols-outlined">arrow_back</span>Choose a room</button> : null}
                 </div>
               )}
             </div>
+            {notice ? <p className="room-note">{notice}</p> : null}
           </section>
-        )}
         </DockPanel>
       </aside>
       {confirmExitOpen ? (
@@ -903,11 +827,18 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
           <aside className="side-column room-side-column dock-rail" data-dock-boundary="left" aria-label="Room activity">
             <DockSlot id="room-right-1" />
             <DockSlot id="room-right-2" />
-            <DockPanel id="room-support" label="categories and Twitch">
-            <section className={`feed-card support-card room-category-card ${categoriesOpen || twitchPanelOpen ? "" : "collapsed"}`}>
+            <DockPanel id="room-support" label={room?.visibility === "public" ? "public table" : "categories and Twitch"}>
+            {room?.visibility === "public" ? (
+              <section className="feed-card room-public-table-card">
+                <header><span className="material-symbols-outlined">public</span><div><small>Public multiplayer</small><h3>Open table</h3></div><b>{connectedRoomPlayers.length}/{room.maxPlayers}</b></header>
+                <div className="room-public-table-status"><i className={roomConnectionStatus === "connected" ? "live" : ""}/><span><strong>{roomConnectionStatus === "connected" ? "Matched and connected" : "Reconnecting to match"}</strong><small>{room.phase === "lobby" ? connectedRoomPlayers.length < 2 ? "Waiting for another player" : "Starting automatically" : `Game ${room.phase}`}</small></span></div>
+                <div className="room-word-mix-summary"><span className="material-symbols-outlined">shuffle</span><div><small>Public Word Mix</small><strong>{displayedRoomWordMixLabel || "All General"}</strong><p>{displayedRoomWordCount.toLocaleString()} balanced prompts.</p></div></div>
+                <p className="room-public-safety"><span className="material-symbols-outlined">health_and_safety</span>Keep chat friendly. Leave the table if another player makes the room uncomfortable.</p>
+              </section>
+            ) : <section className={`feed-card support-card room-category-card ${categoriesOpen || twitchPanelOpen ? "" : "collapsed"}`}>
               <div className="support-tabs" role="tablist" aria-label="Room categories and Twitch guesses">
                 <button aria-expanded={categoriesOpen} aria-selected={categoriesOpen} className={categoriesOpen ? "active" : ""} onClick={() => { setCategoriesOpen((current) => !current); setTwitchPanelOpen(false); }} role="tab" type="button">
-                  <span className="material-symbols-outlined">category</span>Categories
+                  <span className="material-symbols-outlined">category</span>Word Mix
                   <span className="material-symbols-outlined">{categoriesOpen ? "expand_less" : "expand_more"}</span>
                 </button>
                 <button aria-expanded={twitchPanelOpen} aria-selected={twitchPanelOpen} className={twitchPanelOpen ? "active twitch" : "twitch"} onClick={() => { setTwitchPanelOpen((current) => !current); setCategoriesOpen(false); }} role="tab" type="button">
@@ -916,30 +847,16 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                 </button>
               </div>
               {categoriesOpen ? <div className="support-panel-content category-panel" role="tabpanel">
-                <div className="active-categories-panel">
-                  <CategoryPickerWindow
-                    currentSelection={room?.categorySelection ?? "all"}
-                    disabled={!room || !isHost || room.phase !== "lobby"}
-                    domains={getCategoryDomains("room")}
-                    isOptionActive={(optionId) => isCategorySelectionOptionActive(room?.categorySelection ?? "all", optionId, "room")}
-                    lockedNote="Only the host can change decks in the lobby."
-                    onApplySelection={applySelection}
-                    onChange={updateSelection}
-                    onRemoveChip={removeSelectionChip}
-                    onReset={() => room && saveRoom({ ...room, categorySelection: "" })}
-                    onSelectAll={() => room && saveRoom({ ...room, categorySelection: "all" })}
-                    profileStorageKey="room"
-                    selectedChips={activeSelectionChips}
-                    selectedId={selectedTokens.length === 1 ? selectedTokens[0] : selectedTokens.length === 0 ? "empty" : ""}
-                    selectedOption={selectedOption}
-                  />
-                  <CategorySelectionTools chips={activeSelectionChips} disabled={!room || !isHost || room.phase !== "lobby"} mode="room" onRemoveChip={removeSelectionChip} />
+                <div className="room-word-mix-summary">
+                  <span className="material-symbols-outlined">shuffle</span>
+                  <div><small>Current mix</small><strong>{displayedRoomWordMixLabel || "All General"}</strong><p>{displayedRoomWordCount.toLocaleString()} words balanced across the selected packs.</p></div>
+                  <small className="room-word-mix-lock">Chosen before the room opened.</small>
                 </div>
               </div> : null}
               {twitchPanelOpen ? (
                 <div className="support-panel-content room-twitch-panel" role="tabpanel">
                   <header>
-                    <div><strong>Correct from chat</strong>{showingTwitchPreview ? <small>Test preview</small> : null}</div>
+                    <div><strong>Correct from chat</strong>{showingTwitchPreview ? <small>Test preview</small> : roomTransport === "online" ? <small>via {room?.twitchOwnerName || "party leader"}</small> : null}</div>
                     <span className={`room-twitch-total ${twitchSolversForDisplay.length ? "live" : ""}`}><b>{twitchSolversForDisplay.length}</b><small>total</small></span>
                   </header>
                   <div className="room-twitch-solvers scrollable" aria-live="polite">
@@ -951,7 +868,15 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                     )) : <p className="room-twitch-empty">No correct guesses yet</p>}
                   </div>
                   {twitchNotice ? <p className="room-twitch-notice">{twitchNotice}</p> : null}
-                  {!twitchSession.authenticated ? (
+                  {room?.twitchScoringConflict ? <p className="room-twitch-notice">Another browser or game controls this channel's live scoring.</p> : null}
+                  {roomTransport === "online" && isHost && room?.twitchScoringConflict && room.phase === "drawing" ? (
+                    <button className="room-twitch-action" onClick={() => {
+                      if (window.confirm("End the other game's Twitch scoring round and take over here? Existing channel points and rewards will be kept.")) onlineRoomRef.current?.sendTwitchTakeover();
+                    }} type="button">Take over Twitch scoring</button>
+                  ) : null}
+                  {roomTransport === "online" && !isHost && !twitchLive ? (
+                    <p className="room-twitch-notice">The party leader needs to connect or reconnect Twitch.</p>
+                  ) : !twitchSession.authenticated ? (
                     <p className="room-twitch-notice">Connect Twitch from the home profile.</p>
                   ) : !twitchLive ? (
                     <button className="room-twitch-action" onClick={() => { void reconnectTwitchChat().then(setTwitchSession).catch((error) => setTwitchNotice(error instanceof Error ? error.message : "Could not reconnect Twitch.")); }} type="button">
@@ -960,7 +885,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
                   ) : null}
                 </div>
               ) : null}
-            </section>
+            </section>}
             </DockPanel>
 
             <DockPanel id="room-chat" label="room chat">
@@ -997,9 +922,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
               {roomChoices.map((choice, index) => {
                 const voteCount = choiceVoteCounts[index] ?? 0;
                 const selected = localChoiceVote === index;
-                const categoryName = choice.categoryId
-                  ? choice.categoryId.replace(/^[^:]+:/, "").replace(/[-_]/g, " ")
-                  : "General";
+                const categoryName = getRoomCategoryLabel(choice.categoryId);
 
                 return (
                   <button
@@ -1051,7 +974,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
               <span className="source-eyebrow">Round Over</span>
               <h2>The word was</h2>
               <div className="room-results-word-card">
-                <span className="category-pill">{room.answer?.categoryId ? room.answer.categoryId.replace(/^[^:]+:/, "") : "Prompt"}</span>
+                <span className="category-pill">{getRoomCategoryLabel(room.answer?.categoryId)}</span>
                 <strong className="revealed-word">{roomAnswerText.toUpperCase()}</strong>
               </div>
             </header>
@@ -1159,11 +1082,11 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
               })}
             </div>
             <footer className="room-finished-actions">
-              <button className="room-finished-room-button" onClick={() => { setFinishedSummaryDismissed(true); if (isHost) setShowRoomDetails(true); }} type="button">
-                <span className="material-symbols-outlined">tune</span>{isHost ? "Room settings" : "Back to room"}
+              <button className="room-finished-room-button" onClick={() => setFinishedSummaryDismissed(true)} type="button">
+                <span className="material-symbols-outlined">meeting_room</span>Back to room
               </button>
               {isHost ? (
-                <button className="room-results-skip-button" onClick={startGame} type="button">
+                <button className="room-results-skip-button" disabled={room.wordMixReady === false} onClick={startGame} type="button">
                   <span className="material-symbols-outlined">replay</span>Play Again
                 </button>
               ) : null}

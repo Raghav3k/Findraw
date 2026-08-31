@@ -1168,6 +1168,19 @@ body,
 .artist-session-reward-fields { display: grid; gap: 7px; margin-top: 10px; }
 .artist-session-reward-fields label { display: grid; grid-template-columns: 38px minmax(0,1fr); align-items: center; gap: 8px; }
 .artist-session-reward-fields b { width: 34px; height: 34px; display: grid; place-items: center; color: #8d4a42; border: 1px solid #b86459; border-radius: 50%; font-size: 10px; transform: rotate(-4deg); }
+.artist-session-reward-row { display: grid; grid-template-columns: 38px minmax(0,1fr) 30px; align-items: center; gap: 8px; }
+.artist-session-reward-row:nth-child(1) > b { color: #876315; border-color: #b48a25; background: rgba(231,194,92,.2); }
+.artist-session-reward-row:nth-child(2) > b { color: #54717c; border-color: #7895a0; background: rgba(161,190,199,.2); }
+.artist-session-reward-row:nth-child(3) > b { color: #985b3d; border-color: #b87553; background: rgba(210,139,103,.18); }
+.artist-session-reward-row:nth-child(n+4) > b { color: #6d665d; border-color: #928a7e; background: rgba(146,138,126,.1); }
+.artist-session-remove-reward { width: 30px; height: 30px; display: grid; place-items: center; padding: 0; color: #a44e46; border: 0; border-radius: 50%; background: transparent; cursor: pointer; }
+.artist-session-remove-reward:hover:not(:disabled) { background: rgba(164,78,70,.1); }
+.artist-session-remove-reward:disabled { cursor: not-allowed; opacity: .3; }
+.artist-session-remove-reward .material-symbols-outlined { font-size: 20px; }
+.artist-session-add-reward { display: inline-flex; align-items: center; gap: 5px; margin-top: 9px; padding: 6px 9px; color: #496d7c; border: 1px dashed rgba(79,135,158,.65); border-radius: 6px 9px 6px 8px; background: rgba(131,198,223,.15); cursor: pointer; font-size: 9px; font-weight: 800; }
+.artist-session-add-reward:hover:not(:disabled) { background: rgba(131,198,223,.28); }
+.artist-session-add-reward:disabled { cursor: not-allowed; opacity: .45; }
+.artist-session-add-reward .material-symbols-outlined { font-size: 16px; }
 .artist-session-error { margin: 10px 0 0; color: #9b4038; font-size: 10px; line-height: 1.4; }
 .artist-session-modal > footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 15px; padding-top: 12px; border-top: 1px dashed rgba(75,66,51,.25); }
 .artist-session-modal > footer button { min-height: 37px; padding: 7px 13px; color: #34312c; border: 1px solid rgba(75,66,51,.48); border-radius: 6px 9px 6px 8px; cursor: pointer; font-size: 10px; font-weight: 800; }

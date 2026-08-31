@@ -11,11 +11,14 @@ import {
   getArtistSessionHistory,
   getCommunityPackByShareCode,
   getLeaderboard,
+  getWeeklyPointsSummary,
   getViewerStanding,
   loadTwitchSession,
   reportCommunityPack,
   saveTwitchSession,
   setArtistSessionRewardFulfilled,
+  setWeeklyRewardFulfilled,
+  setWeeklyRewards,
   startArtistSession,
   updateCommunityPack,
 } from "./storage.mjs";
@@ -234,8 +237,9 @@ const ordinal = (position) => {
   return `${position}th`;
 };
 
-const sendTwitchChatMessage = async (message, replyParentMessageId) => {
+const sendTwitchChatMessage = async (message, replyParentMessageId, expectedChannelId = twitchSession?.userId) => {
   const session = await validSession();
+  if (session?.userId !== expectedChannelId) return;
   if (!session?.scopes?.includes("user:write:chat")) throw new Error("Reconnect Twitch to enable chat command replies.");
   logTwitchCommand("sending reply", {
     broadcaster: session.login,
@@ -265,7 +269,7 @@ const sendTwitchChatMessage = async (message, replyParentMessageId) => {
   return status;
 };
 
-const enqueueCommandResponse = (message, replyParentMessageId) => {
+const enqueueCommandResponse = (message, replyParentMessageId, expectedChannelId = twitchSession?.userId) => {
   if (pendingCommandResponses >= maximumPendingCommandResponses) {
     logTwitchCommand("reply dropped before sending", { reason: "queue-full", pendingCommandResponses });
     return Promise.resolve();
@@ -276,7 +280,7 @@ const enqueueCommandResponse = (message, replyParentMessageId) => {
     .then(async () => {
       const delay = Math.max(0, lastCommandResponseAt + commandResponseGapMs - Date.now());
       if (delay) await new Promise((resolve) => setTimeout(resolve, delay));
-      await sendTwitchChatMessage(message, replyParentMessageId);
+      await sendTwitchChatMessage(message, replyParentMessageId, expectedChannelId);
       lastCommandResponseAt = Date.now();
     })
     .catch((error) => console.error("[Twitch command] reply failed", {
@@ -289,6 +293,7 @@ const enqueueCommandResponse = (message, replyParentMessageId) => {
 };
 
 const handleChatCommand = async (message) => {
+  const channelId = twitchSession?.userId;
   const command = message.message.trim().toLocaleLowerCase("en").split(/\s+/)[0];
   if (!twitchChatCommands.has(command)) return;
   logTwitchCommand("recognized", {
@@ -318,11 +323,11 @@ const handleChatCommand = async (message) => {
   if (command === "!finpoints") {
     const standing = await getViewerStanding(twitchSession.userId, message.userId);
     reply = standing.rank
-      ? `[Findraw] @${message.name} You have ${standing.score} points and are ${ordinal(standing.rank)} overall.`
-      : `[Findraw] @${message.name} You have no Findraw points yet.`;
+      ? `[Findraw] @${message.name} You have ${standing.score} points and are ${ordinal(standing.rank)} this week. Weekly points reset Monday at 00:00 UTC.`
+      : `[Findraw] @${message.name} You have no weekly Findraw Points yet. Weekly points reset Monday at 00:00 UTC.`;
   } else {
     const session = await getArtistSession(twitchSession.userId);
-    if (!session) {
+    if (command === "!finsession" && !session) {
       reply = `[Findraw] @${message.name} No reward session is active right now.`;
     } else if (command === "!finsession") {
       const index = session.standings.findIndex((entry) => entry.userId === message.userId);
@@ -330,14 +335,19 @@ const handleChatCommand = async (message) => {
         ? `[Findraw] @${message.name} You have ${session.standings[index].score} session points and are ${ordinal(index + 1)}.`
         : `[Findraw] @${message.name} You have no points in this session yet.`;
     } else {
-      const rewards = session.rewards.map((reward) => `${ordinal(reward.position)}: ${reward.reward}`).join(" | ");
-      reply = `[Findraw] @${message.name} ${rewards || "No rewards are listed for this session."}`;
+      const weekly = await getWeeklyPointsSummary(twitchSession.userId);
+      const rewards = session?.rewards?.length ? session.rewards : weekly.current?.rewards || [];
+      const label = session?.rewards?.length ? `${session.name} rewards` : "Weekly rewards";
+      reply = `[Findraw] @${message.name} ${rewards.length ? `${label}: ${rewards.map((reward) => `${ordinal(reward.position)}: ${reward.reward}`).join(" | ")}` : "No hosted-session or weekly rewards are listed right now."}`;
     }
   }
-  return enqueueCommandResponse(reply, message.id);
+  if (twitchSession?.userId !== channelId) return;
+  return enqueueCommandResponse(reply, message.id, channelId);
 };
 
 const processChatMessage = async (event) => {
+  const channelId = twitchSession?.userId;
+  if (event.broadcaster_user_id && event.broadcaster_user_id !== channelId) return;
   const message = {
     id: event.message_id,
     userId: event.chatter_user_id,
@@ -354,6 +364,8 @@ const processChatMessage = async (event) => {
   broadcast({ type: "chat-message", payload: message });
   await handleChatCommand(message);
 
+  if (channelId !== twitchSession?.userId) return;
+
   if (!currentRound || currentRound.status !== "playing") return;
   if (currentRound.solvedUserIds.has(message.userId)) return;
   if (!currentRound.answers.has(normalizeGuess(message.message))) return;
@@ -368,20 +380,26 @@ const processChatMessage = async (event) => {
     position,
   };
   currentRound.solvers.push(solver);
-  await adjustPoints({
-    channelId: twitchSession.userId,
-    userId: message.userId,
-    displayName: message.name,
-    delta: points,
-    reason: `Correct guess (#${position})`,
-    roundId: currentRound.id,
-  });
+  const testMessage = event.findraw_test_bot === true;
+  if (!testMessage) {
+    await adjustPoints({
+      channelId: twitchSession.userId,
+      userId: message.userId,
+      displayName: message.name,
+      delta: points,
+      reason: `Correct guess (#${position})`,
+      roundId: currentRound.id,
+    });
+  }
   broadcast({ type: "correct-guess", payload: { roundId: currentRound.id, solver } });
-  broadcast({ type: "artist-session", payload: await getArtistSession(twitchSession.userId) });
-  broadcast({
-    type: "leaderboard",
-    payload: await getLeaderboard(twitchSession.userId),
-  });
+  if (!testMessage) {
+    broadcast({ type: "artist-session", payload: await getArtistSession(twitchSession.userId) });
+    broadcast({
+      type: "leaderboard",
+      payload: await getLeaderboard(twitchSession.userId),
+    });
+    broadcast({ type: "weekly-points", payload: await getWeeklyPointsSummary(twitchSession.userId) });
+  }
   if (currentRound.solvers.length >= currentRound.target) {
     currentRound.status = "ended";
     broadcast({ type: "round-ended", payload: { roundId: currentRound.id, reason: "target-reached" } });
@@ -504,6 +522,9 @@ app.get("/auth/twitch/callback", async (request, response) => {
         "Client-Id": process.env.TWITCH_CLIENT_ID,
       },
     });
+    if (currentRound) broadcast({ type: "round-ended", payload: { roundId: currentRound.id, reason: "account-switched" } });
+    currentRound = null;
+    if (global.testBotTimer) clearInterval(global.testBotTimer);
     twitchSession = {
       accessToken: token.access_token,
       refreshToken: token.refresh_token,
@@ -527,6 +548,10 @@ app.get("/auth/twitch/callback", async (request, response) => {
 });
 
 app.get("/api/twitch/session", (_request, response) => response.json(sessionSummary()));
+// The Express launcher is a single-streamer development server. Its points file
+// is already keyed by Twitch channel, but it is not a multi-user auth deployment.
+app.get("/api/channel/status", (_request, response) => response.json({ authenticated: Boolean(twitchSession), shared: false, migrationConflicts: 0 }));
+app.get("/api/channel/legacy-backups", (_request, response) => response.status(404).json({ error: "Legacy browser migration applies to Cloudflare only." }));
 
 app.post("/api/twitch/chat-commands", async (request, response) => {
   if (!twitchSession) return response.status(401).json({ error: "Connect Twitch first." });
@@ -616,12 +641,44 @@ app.get("/api/leaderboard", async (_request, response) => {
   response.json(await getLeaderboard(twitchSession.userId));
 });
 
+app.get("/api/weekly-points", async (_request, response) => {
+  if (!twitchSession) return response.json({ current: null, history: [] });
+  response.json(await getWeeklyPointsSummary(twitchSession.userId));
+});
+
+app.post("/api/weekly-points/rewards", async (request, response) => {
+  if (!twitchSession) return response.status(401).json({ error: "Connect Twitch first." });
+  const season = await setWeeklyRewards({
+    channelId: twitchSession.userId,
+    weekId: String(request.body.weekId || ""),
+    rewards: request.body.rewards,
+  });
+  if (!season) return response.status(404).json({ error: "Weekly result not found." });
+  const summary = await getWeeklyPointsSummary(twitchSession.userId);
+  broadcast({ type: "weekly-points", payload: summary });
+  response.json({ season, summary });
+});
+
+app.post("/api/weekly-points/reward", async (request, response) => {
+  if (!twitchSession) return response.status(401).json({ error: "Connect Twitch first." });
+  const season = await setWeeklyRewardFulfilled({
+    channelId: twitchSession.userId,
+    weekId: String(request.body.weekId || ""),
+    position: Math.trunc(Number(request.body.position)),
+    fulfilled: Boolean(request.body.fulfilled),
+  });
+  if (!season) return response.status(404).json({ error: "Weekly result not found." });
+  const summary = await getWeeklyPointsSummary(twitchSession.userId);
+  broadcast({ type: "weekly-points", payload: summary });
+  response.json({ season, summary });
+});
+
 const normalizeSessionRewards = (value) => {
   const positions = new Set();
-  return (Array.isArray(value) ? value : []).slice(0, 5).flatMap((entry) => {
+  return (Array.isArray(value) ? value : []).slice(0, 20).flatMap((entry) => {
     const position = Math.trunc(Number(entry?.position));
     const reward = String(entry?.reward || "").trim().replace(/\s+/g, " ").slice(0, 100);
-    if (position < 1 || position > 5 || !reward || positions.has(position)) return [];
+    if (position < 1 || position > 20 || !reward || positions.has(position)) return [];
     positions.add(position);
     return [{ position, reward, fulfilled: false }];
   }).sort((first, second) => first.position - second.position);
@@ -673,10 +730,16 @@ app.post("/api/artist-session/reward", async (request, response) => {
 });
 
 app.post("/api/round/start", (request, response) => {
+  const controllerId = String(request.body.controllerId || "legacy").slice(0, 100);
+  if (currentRound?.status === "playing" && currentRound.controllerId !== controllerId &&
+      Date.now() - currentRound.startedAt < 15 * 60_000 && request.body.takeover !== true) {
+    return response.status(409).json({ error: "Another tab is scoring. Take over to end its round and start here.", code: "ROUND_OWNED" });
+  }
   const answer = String(request.body.answer || "").trim();
   const aliases = Array.isArray(request.body.aliases) ? request.body.aliases : [];
   const target = Math.min(100, Math.max(1, Number(request.body.target) || 10));
   if (!answer) return response.status(400).json({ error: "An answer is required." });
+  if (currentRound?.status === "playing") broadcast({ type: "round-ended", payload: { roundId: currentRound.id, reason: "taken-over" } });
   currentRound = {
     id: crypto.randomUUID(),
     status: "playing",
@@ -686,8 +749,9 @@ app.post("/api/round/start", (request, response) => {
     solvers: [],
     solvedUserIds: new Set(),
     startedAt: Date.now(),
+    controllerId,
   };
-  broadcast({ type: "round-started", payload: { roundId: currentRound.id, target } });
+  broadcast({ type: "round-started", payload: { roundId: currentRound.id, target, controllerId } });
 
   if (global.testBotTimer) clearInterval(global.testBotTimer);
   if (request.body.testBots) {
@@ -705,7 +769,8 @@ app.post("/api/round/start", (request, response) => {
         chatter_user_id: "bot_" + name,
         chatter_user_name: name,
         message: { text: guessText },
-        color: ["#FF5733", "#33FF57", "#3357FF", "#F033FF", "#33FFF0"][Math.floor(Math.random() * 5)]
+        color: ["#FF5733", "#33FF57", "#3357FF", "#F033FF", "#33FFF0"][Math.floor(Math.random() * 5)],
+        findraw_test_bot: true,
       }).catch(console.error);
     }, 400);
   }
@@ -713,7 +778,8 @@ app.post("/api/round/start", (request, response) => {
   response.json({ roundId: currentRound.id });
 });
 
-app.post("/api/round/end", (_request, response) => {
+app.post("/api/round/end", (request, response) => {
+  if (request.body?.controllerId && currentRound?.controllerId !== request.body.controllerId) return response.json({ ok: true });
   if (currentRound) {
     currentRound.status = "ended";
     broadcast({ type: "round-ended", payload: { roundId: currentRound.id, reason: "manual" } });
@@ -740,7 +806,9 @@ app.post("/api/points/adjust", async (request, response) => {
   const leaderboard = await getLeaderboard(twitchSession.userId);
   broadcast({ type: "leaderboard", payload: leaderboard });
   broadcast({ type: "artist-session", payload: await getArtistSession(twitchSession.userId) });
-  response.json({ viewer, leaderboard });
+  const weeklyPoints = await getWeeklyPointsSummary(twitchSession.userId);
+  broadcast({ type: "weekly-points", payload: weeklyPoints });
+  response.json({ viewer, leaderboard, weeklyPoints });
 });
 
 const start = async () => {

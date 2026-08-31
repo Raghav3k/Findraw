@@ -13,6 +13,12 @@
 .workspace-identity .source-brand h1 { font-size: 31px; }
 .workspace-identity .source-brand p { overflow: hidden; font-size: 8px; text-overflow: ellipsis; white-space: nowrap; }
 .workspace-identity-actions { display: flex; align-items: center; gap: 7px; }
+.workspace-current-identity { min-width: 0; max-width: 116px; display: flex; align-items: center; gap: 6px; padding: 4px 7px 4px 4px; color: #625b51; border: 1px solid rgba(75,66,51,.3); border-radius: 14px 7px 13px 9px; background: rgba(255,250,240,.58); }
+.workspace-current-identity > span { width: 24px; height: 24px; display: grid; place-items: center; flex: 0 0 24px; overflow: hidden; color: #315d70; border-radius: 50%; background: #b9dce8; font-size: 15px; }
+.workspace-current-identity > span.has-image { box-shadow: 0 0 0 1px rgba(70,105,118,.55); }
+.workspace-current-identity img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.workspace-current-identity strong { overflow: hidden; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+.workspace-current-identity.twitch { color: #3d6550; border-color: rgba(73,122,87,.42); background: rgba(215,232,201,.55); }
 .workspace-profile-menu-wrap { position: relative; }
 .workspace-profile,
 .workspace-mode-button {
@@ -66,3 +72,4 @@
 .workspace-profile-menu-actions button:first-child { background: #b9dce8; }
 .workspace-profile-menu-actions button:disabled { cursor: not-allowed; opacity: .48; }
 .workspace-profile-menu-actions .material-symbols-outlined { font-size: 17px; }
+.workspace-channel-note { color: #70685c; font: 500 11px/1.5 "Inter", sans-serif; margin: 4px 0 10px; overflow-wrap: anywhere; }

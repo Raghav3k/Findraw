@@ -1,7 +1,16 @@
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { prunePointsHistory } from "../shared/pointsRetention.mjs";
 import { COMMUNITY_REPORT_QUARANTINE_THRESHOLD, publicCommunityPack } from "../shared/communityPacks.mjs";
+import {
+  ensureWeeklySeason,
+  findWeeklySeason,
+  normalizePlacementRewards,
+  publicWeeklySeason,
+  weeklyPointsSummary,
+  weeklyStandings,
+} from "../shared/weeklyPoints.mjs";
 
 const dataDirectory = path.resolve(process.env.FINDRAW_DATA_DIRECTORY || ".findraw-data");
 const tokenPath = path.join(dataDirectory, "twitch-session.json");
@@ -86,13 +95,15 @@ export async function clearTwitchSession() {
   await fs.rm(tokenPath, { force: true });
 }
 
-const emptyPoints = () => ({ version: 2, channels: {}, ledger: [], activeSessions: {}, sessionHistory: [] });
+const emptyPoints = () => ({ version: 3, channels: {}, weeklyChannels: {}, weeklyHistory: [], ledger: [], activeSessions: {}, sessionHistory: [] });
 
 const normalizePoints = (value) => ({
   ...emptyPoints(),
   ...(value && typeof value === "object" ? value : {}),
-  version: 2,
+  version: 3,
   channels: value?.channels && typeof value.channels === "object" ? value.channels : {},
+  weeklyChannels: value?.weeklyChannels && typeof value.weeklyChannels === "object" ? value.weeklyChannels : {},
+  weeklyHistory: Array.isArray(value?.weeklyHistory) ? value.weeklyHistory : [],
   ledger: Array.isArray(value?.ledger) ? value.ledger : [],
   activeSessions: value?.activeSessions && typeof value.activeSessions === "object" ? value.activeSessions : {},
   sessionHistory: Array.isArray(value?.sessionHistory) ? value.sessionHistory : [],
@@ -122,8 +133,10 @@ export async function loadPoints() {
 const mutatePoints = (operation) => {
   const queued = pointsQueue.then(async () => {
     const data = await loadPoints();
+    const before = JSON.stringify(data);
+    prunePointsHistory(data);
     const result = await operation(data);
-    await writeJsonAtomic(pointsPath, data);
+    if (JSON.stringify(data) !== before) await writeJsonAtomic(pointsPath, data);
     return result;
   });
   pointsQueue = queued.catch(() => undefined);
@@ -132,13 +145,12 @@ const mutatePoints = (operation) => {
 
 export function adjustPoints({ channelId, userId, displayName, delta, reason, roundId }) {
   return mutatePoints(async (data) => {
-    const channel = data.channels[channelId] ?? {};
-    const current = channel[userId] ?? { displayName, score: 0 };
-    channel[userId] = {
+    const week = ensureWeeklySeason(data, channelId);
+    const current = week.participants[userId] ?? { displayName, score: 0 };
+    week.participants[userId] = {
       displayName,
       score: Math.max(0, current.score + delta),
     };
-    data.channels[channelId] = channel;
     data.ledger.push({
       id: crypto.randomUUID(),
       channelId,
@@ -147,6 +159,7 @@ export function adjustPoints({ channelId, userId, displayName, delta, reason, ro
       delta,
       reason,
       roundId: roundId ?? null,
+      weekId: week.weekId,
       createdAt: new Date().toISOString(),
     });
     data.ledger = data.ledger.slice(-5000);
@@ -158,25 +171,48 @@ export function adjustPoints({ channelId, userId, displayName, delta, reason, ro
         score: Math.max(0, participant.score + delta),
       };
     }
-    return channel[userId];
+    return week.participants[userId];
   });
 }
 
-export async function getLeaderboard(channelId) {
-  const data = await loadPoints();
-  return Object.entries(data.channels[channelId] ?? {})
-    .map(([userId, value]) => ({ userId, ...value }))
-    .sort((first, second) => second.score - first.score)
-    .slice(0, 100);
+export function getLeaderboard(channelId) {
+  return mutatePoints(async (data) => weeklyStandings(ensureWeeklySeason(data, channelId).participants));
 }
 
-export async function getViewerStanding(channelId, userId) {
-  const data = await loadPoints();
-  const standings = Object.entries(data.channels[channelId] ?? {})
-    .map(([entryUserId, value]) => ({ userId: entryUserId, ...value }))
-    .sort((first, second) => second.score - first.score);
-  const index = standings.findIndex((entry) => entry.userId === userId);
-  return index < 0 ? { userId, displayName: null, score: 0, rank: null } : { ...standings[index], rank: index + 1 };
+export function getViewerStanding(channelId, userId) {
+  return mutatePoints(async (data) => {
+    const season = ensureWeeklySeason(data, channelId);
+    const standings = weeklyStandings(season.participants, Number.MAX_SAFE_INTEGER);
+    const index = standings.findIndex((entry) => entry.userId === userId);
+    return index < 0
+      ? { userId, displayName: null, score: 0, rank: null, weekId: season.weekId, endsAt: season.endsAt }
+      : { ...standings[index], rank: index + 1, weekId: season.weekId, endsAt: season.endsAt };
+  });
+}
+
+export function getWeeklyPointsSummary(channelId) {
+  return mutatePoints(async (data) => weeklyPointsSummary(data, channelId));
+}
+
+export function setWeeklyRewards({ channelId, weekId, rewards }) {
+  return mutatePoints(async (data) => {
+    const season = findWeeklySeason(data, channelId, weekId);
+    if (!season) return null;
+    season.rewards = normalizePlacementRewards(rewards);
+    return publicWeeklySeason(season);
+  });
+}
+
+export function setWeeklyRewardFulfilled({ channelId, weekId, position, fulfilled }) {
+  return mutatePoints(async (data) => {
+    const season = findWeeklySeason(data, channelId, weekId);
+    if (!season) return null;
+    const reward = normalizePlacementRewards(season.rewards).find((entry) => entry.position === position);
+    if (!reward) return publicWeeklySeason(season);
+    reward.fulfilled = fulfilled;
+    season.rewards = normalizePlacementRewards(season.rewards).map((entry) => entry.position === position ? reward : entry);
+    return publicWeeklySeason(season);
+  });
 }
 
 export async function getArtistSession(channelId) {
@@ -186,7 +222,8 @@ export async function getArtistSession(channelId) {
 
 export async function getArtistSessionHistory(channelId) {
   const data = await loadPoints();
-  return data.sessionHistory.filter((session) => session.channelId === channelId).slice(-20).reverse().map(publicArtistSession);
+  prunePointsHistory(data);
+  return data.sessionHistory.filter((session) => session.channelId === channelId).reverse().map(publicArtistSession);
 }
 
 export function startArtistSession({ channelId, name, rewards }) {
@@ -214,7 +251,6 @@ export function endArtistSession(channelId) {
     session.status = "completed";
     session.endedAt = new Date().toISOString();
     data.sessionHistory.push(session);
-    data.sessionHistory = data.sessionHistory.slice(-200);
     delete data.activeSessions[channelId];
     return publicArtistSession(session);
   });

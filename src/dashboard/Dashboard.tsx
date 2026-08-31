@@ -23,17 +23,20 @@ import {
   endArtistSession,
   endServerRound,
   fetchArtistSessions,
-  fetchLeaderboard,
-  fetchTwitchSession,
+  fetchWeeklyPoints,
   connectLiveEvents,
   setTwitchChatCommands,
   setArtistSessionReward,
+  setWeeklyPointsRewardFulfilled,
+  setWeeklyPointsRewards,
   startArtistSession,
   startServerRound,
+  roundControllerId,
   type ArtistSession,
   type LeaderboardEntry,
   type SolvedViewer,
-  type TwitchSession,
+  type WeeklyPointsSeason,
+  type WeeklyPointsSummary,
 } from "../twitch/twitchApi";
 import {
   DEFAULT_WORD_SECONDS,
@@ -56,10 +59,35 @@ import {
   type WordFeedbackRating,
   type WordFeedbackTarget,
 } from "../feedback/wordFeedback";
+import { useSiteIdentity } from "../identity/SiteIdentity";
 
 type RoundStatus = "idle" | "playing" | "ended";
 type RevealMode = "random" | "sequence";
 type LeaderboardView = "session" | "points";
+
+const DEFAULT_HOSTED_REWARD_SLOTS = 5;
+const MAX_HOSTED_REWARD_SLOTS = 20;
+const HOSTED_REWARD_SUGGESTIONS = [
+  "Gift a subscription",
+  "VIP for one week",
+  "Choose the next word pack",
+  "Request a word for the next round",
+  "Shout-out on stream",
+];
+
+const getOrdinalLabel = (position: number) => {
+  const lastTwoDigits = position % 100;
+  if (lastTwoDigits >= 11 && lastTwoDigits <= 13) return `${position}th`;
+  if (position % 10 === 1) return `${position}st`;
+  if (position % 10 === 2) return `${position}nd`;
+  if (position % 10 === 3) return `${position}rd`;
+  return `${position}th`;
+};
+
+const getHostedResultLimit = (session: ArtistSession) => Math.min(
+  MAX_HOSTED_REWARD_SLOTS,
+  Math.max(DEFAULT_HOSTED_REWARD_SLOTS, ...session.rewards.map((reward) => reward.position)),
+);
 
 type ResizeState = {
   element: HTMLDivElement;
@@ -85,6 +113,7 @@ const getPromptBoardColor = (correctGuesses: number, target: number) => {
 type DashboardProps = { onNavigate: (path: string) => void };
 
 export function Dashboard({ onNavigate }: DashboardProps) {
+  const { displayName: communityCreatorName, setTwitchSession, twitchSession } = useSiteIdentity();
   const [sourceRailWidth, setSourceRailWidth] = usePersistentState("layout.sourceRailWidth", 380);
   const [sidePanelWidth, setSidePanelWidth] = usePersistentState("layout.sidePanelWidth", 280);
   const [canvasColor, setCanvasColor] = usePersistentState("canvas.background", "#FFF2CF");
@@ -104,7 +133,6 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   const [communityEditTokens, setCommunityEditTokens] = usePersistentState<Record<string, string>>("artist.communityEditTokens.v1", {});
   const [reportedCommunityPackIds, setReportedCommunityPackIds] = usePersistentState<string[]>("artist.reportedCommunityPacks.v1", []);
   const [communityReporterKey, setCommunityReporterKey] = usePersistentState("artist.communityReporterKey.v1", "");
-  const [communityCreatorName] = usePersistentState("room.playerName", "Streamer");
   const activeCommunityPacks = communityPacks.filter((pack) => pack.status === "published" && !reportedCommunityPackIds.includes(pack.id));
   const [wordFeedback, setWordFeedback] = usePersistentState<WordFeedbackMap>("feedback.artist.words", {});
   const [roundStatus, setRoundStatus] = useState<RoundStatus>("idle");
@@ -122,23 +150,20 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [solvedViewers, setSolvedViewers] = useState<SolvedViewer[]>([]);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [weeklyPoints, setWeeklyPoints] = useState<WeeklyPointsSummary>({ current: null, history: [] });
+  const [weeklyResult, setWeeklyResult] = useState<WeeklyPointsSeason | null>(null);
+  const [weeklyRewards, setWeeklyRewards] = useState<string[]>(["", "", "", "", ""]);
+  const [weeklyBusy, setWeeklyBusy] = useState(false);
+  const [weeklyError, setWeeklyError] = useState("");
   const [artistSession, setArtistSession] = useState<ArtistSession | null>(null);
   const [sessionHistory, setSessionHistory] = useState<ArtistSession[]>([]);
   const [leaderboardView, setLeaderboardView] = useState<LeaderboardView>("session");
   const [sessionSetupOpen, setSessionSetupOpen] = useState(false);
   const [sessionResult, setSessionResult] = useState<ArtistSession | null>(null);
   const [sessionName, setSessionName] = useState("Community session");
-  const [sessionRewards, setSessionRewards] = useState<string[]>(["", "", "", "", ""]);
+  const [sessionRewards, setSessionRewards] = useState<string[]>(() => Array(DEFAULT_HOSTED_REWARD_SLOTS).fill(""));
   const [sessionBusy, setSessionBusy] = useState(false);
   const [sessionError, setSessionError] = useState("");
-  const [twitchSession, setTwitchSession] = useState<TwitchSession>({
-    configured: false,
-    authenticated: false,
-    eventSubStatus: "disconnected",
-    canSendChat: false,
-    chatCommandsEnabled: true,
-    user: null,
-  });
   const [connectionNotice, setConnectionNotice] = useState("");
   const activeRoundIdRef = useRef<string | null>(null);
   const [roundSettingsOpen, setRoundSettingsOpen] = useState(false);
@@ -285,20 +310,38 @@ export function Dashboard({ onNavigate }: DashboardProps) {
 
   useEffect(() => {
     let active = true;
-    Promise.all([fetchTwitchSession(), fetchLeaderboard(), fetchArtistSessions()])
-      .then(([session, entries, sessions]) => {
+    let refreshing = false;
+    setWeeklyPoints({ current: null, history: [] });
+    setLeaderboard([]);
+    setArtistSession(null);
+    setSessionHistory([]);
+    if (!twitchSession.authenticated) return;
+    const refreshChannel = () => {
+      if (!active || refreshing) return;
+      refreshing = true;
+      void Promise.all([fetchWeeklyPoints(), fetchArtistSessions()])
+      .then(([points, sessions]) => {
         if (!active) return;
-        setTwitchSession(session);
-        setLeaderboard(entries);
+        setWeeklyPoints(points);
+        setLeaderboard(points.current?.standings || []);
         setArtistSession(sessions.active);
         setSessionHistory(sessions.history);
       })
       .catch((error: Error) => {
-        if (active) setConnectionNotice(`Local server unavailable: ${error.message}`);
-      });
+        if (active) setConnectionNotice(`Channel data unavailable: ${error.message}`);
+      }).finally(() => { refreshing = false; });
+    };
+    refreshChannel();
+    // Live events cover this browser's game; polling catches another browser's
+    // channel-wide score/reward changes without opening a second chat connection.
+    const refreshTimer = twitchSession.authenticated ? window.setInterval(() => {
+      if (document.visibilityState === "visible") refreshChannel();
+    }, 60_000) : null;
+    const refreshOnFocus = () => { if (document.visibilityState === "visible") refreshChannel(); };
+    document.addEventListener("visibilitychange", refreshOnFocus);
 
     const disconnectLiveEvents = connectLiveEvents((event) => {
-      if (event.type === "twitch-session") setTwitchSession(event.payload);
+      if (event.type === "twitch-session" && event.payload.eventSubStatus === "connected") refreshChannel();
       if (event.type === "chat-message") {
         setChatMessages((current) => [...current.slice(-49), event.payload]);
       }
@@ -308,10 +351,18 @@ export function Dashboard({ onNavigate }: DashboardProps) {
           : [...current, event.payload.solver]);
       }
       if (event.type === "leaderboard") setLeaderboard(Array.isArray(event.payload) ? event.payload : []);
+      if (event.type === "weekly-points") {
+        setWeeklyPoints(event.payload);
+        setLeaderboard(event.payload.current?.standings || []);
+        setWeeklyResult((current) => current
+          ? [event.payload.current, ...event.payload.history].find((season) => season?.weekId === current.weekId) || current
+          : null);
+      }
       if (event.type === "artist-session") setArtistSession(event.payload);
-      if (event.type === "round-started") activeRoundIdRef.current = event.payload.roundId;
+      if (event.type === "round-started" && event.payload.controllerId === roundControllerId) activeRoundIdRef.current = event.payload.roundId;
       if (event.type === "round-ended" && event.payload.roundId === activeRoundIdRef.current) {
         setRoundStatus("ended");
+        if (event.payload.reason === "taken-over") setConnectionNotice("Live scoring moved to another browser or game. Your channel points are safe.");
       }
     }, () => {
       setTwitchSession((current) => current.authenticated
@@ -320,9 +371,11 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     });
     return () => {
       active = false;
+      if (refreshTimer !== null) window.clearInterval(refreshTimer);
+      document.removeEventListener("visibilitychange", refreshOnFocus);
       disconnectLiveEvents();
     };
-  }, []);
+  }, [twitchSession.user?.id]);
 
   const rememberPrompt = (prompt: ArtistPackPrompt) => {
     recentPromptKeysRef.current = [...recentPromptKeysRef.current, getArtistPromptKey(prompt)].slice(-24);
@@ -411,6 +464,11 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       activeRoundIdRef.current = roundId;
       setConnectionNotice("");
     } catch (error) {
+      if ((error as { code?: string }).code === "ROUND_OWNED") {
+        setRoundStatus("idle");
+        setConnectionNotice("Scoring remains in the other browser or game. Start again if you want to take over.");
+        return;
+      }
       setConnectionNotice(error instanceof Error ? `Started locally. Live chat could not start: ${error.message}` : "Started locally. Live chat could not start.");
     }
   };
@@ -511,7 +569,8 @@ export function Dashboard({ onNavigate }: DashboardProps) {
     try {
       const result = await adjustViewerPoints(viewer, 25);
       setLeaderboard(result.leaderboard);
-      setConnectionNotice(`Added 25 Findraw points to ${viewer.name}.`);
+      setWeeklyPoints(result.weeklyPoints);
+      setConnectionNotice(`Added 25 weekly Findraw Points to ${viewer.name}.`);
     } catch (error) {
       setConnectionNotice(error instanceof Error ? error.message : "Could not update points.");
     }
@@ -539,7 +598,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       setArtistSession(result.session);
       setLeaderboardView("session");
       setSessionSetupOpen(false);
-      setConnectionNotice(`${result.session.name} is live. Session points also count toward Findraw Points.`);
+      setConnectionNotice(`${result.session.name} is live. Session points also count toward this week's Findraw Points.`);
     } catch (error) {
       setSessionError(error instanceof Error ? error.message : "The session could not be started.");
     } finally {
@@ -556,7 +615,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       setLeaderboardView("session");
       setSessionHistory((current) => [result.session, ...current.filter((session) => session.id !== result.session.id)].slice(0, 20));
       setSessionResult(result.session);
-      setConnectionNotice("Hosted session ended. Findraw Points were kept.");
+      setConnectionNotice("Hosted session ended. Its points remain in this week's Findraw leaderboard.");
     } catch (error) {
       setSessionError(error instanceof Error ? error.message : "The session could not be ended.");
     } finally {
@@ -575,7 +634,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   };
 
   const copySessionResults = async (session: ArtistSession) => {
-    const lines = session.standings.slice(0, 5).map((entry, index) => {
+    const lines = session.standings.slice(0, getHostedResultLimit(session)).map((entry, index) => {
       const reward = session.rewards.find((item) => item.position === index + 1);
       return `${index + 1}. ${entry.displayName} — ${entry.score} pts${reward ? ` — ${reward.reward}` : ""}`;
     });
@@ -585,6 +644,54 @@ export function Dashboard({ onNavigate }: DashboardProps) {
       setConnectionNotice("Session results copied.");
     } catch {
       setConnectionNotice("Results are ready, but the browser blocked copying.");
+    }
+  };
+
+  const openWeeklyResult = (season: WeeklyPointsSeason) => {
+    setWeeklyError("");
+    setWeeklyResult(season);
+    setWeeklyRewards(Array.from({ length: 5 }, (_, index) => season.rewards.find((reward) => reward.position === index + 1)?.reward || ""));
+  };
+
+  const saveWeeklyRewards = async () => {
+    if (!weeklyResult) return;
+    setWeeklyBusy(true);
+    setWeeklyError("");
+    try {
+      const rewards = weeklyRewards.flatMap((reward, index) => reward.trim()
+        ? [{ position: index + 1, reward: reward.trim() }]
+        : []);
+      const result = await setWeeklyPointsRewards(weeklyResult.weekId, rewards);
+      setWeeklyPoints(result.summary);
+      setWeeklyResult(result.season);
+      setConnectionNotice(rewards.length ? "Weekly placement rewards saved." : "Weekly placement rewards cleared.");
+    } catch (error) {
+      setWeeklyError(error instanceof Error ? error.message : "Weekly rewards could not be saved.");
+    } finally {
+      setWeeklyBusy(false);
+    }
+  };
+
+  const updateWeeklyReward = async (season: WeeklyPointsSeason, position: number, fulfilled: boolean) => {
+    try {
+      const result = await setWeeklyPointsRewardFulfilled(season.weekId, position, fulfilled);
+      setWeeklyPoints(result.summary);
+      setWeeklyResult(result.season);
+    } catch (error) {
+      setWeeklyError(error instanceof Error ? error.message : "Weekly reward status could not be saved.");
+    }
+  };
+
+  const copyWeeklyResults = async (season: WeeklyPointsSeason) => {
+    const lines = season.standings.slice(0, 5).map((entry, index) => {
+      const reward = season.rewards.find((item) => item.position === index + 1);
+      return `${index + 1}. ${entry.displayName} — ${entry.score} pts${reward ? ` — ${reward.reward}` : ""}`;
+    });
+    try {
+      await navigator.clipboard.writeText([`Findraw week of ${season.weekId}`, ...lines].join("\n"));
+      setConnectionNotice("Weekly results copied.");
+    } catch {
+      setConnectionNotice("Weekly results are ready, but the browser blocked copying.");
     }
   };
 
@@ -774,13 +881,13 @@ export function Dashboard({ onNavigate }: DashboardProps) {
             <section className="feed-card leaderboard-card">
               <div aria-label="Score view" className="artist-score-tabs" role="tablist">
                 <button aria-selected={leaderboardView === "session"} className={leaderboardView === "session" ? "active" : ""} onClick={() => setLeaderboardView("session")} role="tab" type="button"><span className="material-symbols-outlined">emoji_events</span>Session</button>
-                <button aria-selected={leaderboardView === "points"} className={leaderboardView === "points" ? "active" : ""} onClick={() => setLeaderboardView("points")} role="tab" type="button"><span className="material-symbols-outlined">stars</span>Points</button>
+                <button aria-selected={leaderboardView === "points"} className={leaderboardView === "points" ? "active" : ""} onClick={() => setLeaderboardView("points")} role="tab" type="button"><span className="material-symbols-outlined">stars</span>Weekly</button>
               </div>
               {leaderboardView === "session" ? (
                 artistSession ? (
                   <div className="artist-session-live-panel">
                     <div className="artist-session-live-heading"><span><small>Hosted session</small><strong>{artistSession.name}</strong></span><b>{artistSession.standings.length} players</b></div>
-                    <p>Session scores also add to permanent Findraw Points.</p>
+                    <p>Session scores also add to this week's Findraw Points.</p>
                     <ol className="leaderboard artist-session-standings">
                       {artistSession.standings.map(({ userId, displayName, score }, index) => <li key={userId}><span><b>{index + 1}</b>{displayName}</span><strong>{score.toLocaleString()}</strong></li>)}
                       {!artistSession.standings.length ? <li className="artist-session-empty">Waiting for the first correct guess</li> : null}
@@ -809,10 +916,19 @@ export function Dashboard({ onNavigate }: DashboardProps) {
                 )
               ) : (
                 <div className="artist-points-panel">
+                  {weeklyPoints.current ? (
+                    <div className="artist-session-live-heading">
+                      <span><small>Weekly Findraw Points</small><strong>Week of {new Date(weeklyPoints.current.startsAt).toLocaleDateString(undefined, { month: "short", day: "numeric" })}</strong></span>
+                      <b>Resets {new Date(weeklyPoints.current.endsAt).toLocaleString(undefined, { weekday: "short", hour: "numeric", minute: "2-digit" })}</b>
+                    </div>
+                  ) : null}
+                  <p>Correct guesses—including hosted-session guesses—count toward this weekly placement.</p>
                   <ol className="leaderboard">
                     {leaderboard.map(({ userId, displayName, score }, index) => <li key={userId}><span><b>{index + 1}</b>{displayName}</span><strong>{score.toLocaleString()}</strong></li>)}
-                    {!leaderboard.length ? <li className="artist-session-empty">No Findraw Points yet</li> : null}
+                    {!leaderboard.length ? <li className="artist-session-empty">No weekly Findraw Points yet</li> : null}
                   </ol>
+                  <button className="artist-session-primary-action" disabled={!twitchSession.authenticated || !weeklyPoints.current} onClick={() => weeklyPoints.current && openWeeklyResult(weeklyPoints.current)} type="button">Weekly rewards</button>
+                  {weeklyPoints.history[0] ? <button className="artist-session-view-result" onClick={() => openWeeklyResult(weeklyPoints.history[0])} type="button">View last week <span className="material-symbols-outlined">arrow_forward</span></button> : null}
                 </div>
               )}
             </section>
@@ -827,17 +943,21 @@ export function Dashboard({ onNavigate }: DashboardProps) {
               <div><small>Artist Mode</small><h2 id="artist-session-setup-title">Start a hosted session</h2></div>
               <button aria-label="Close session setup" onClick={() => setSessionSetupOpen(false)} type="button"><span className="material-symbols-outlined">close</span></button>
             </header>
-            <p className="artist-session-intro">Create the rewards before going live. Correct guesses count toward both the session standings and permanent Findraw Points.</p>
+            <p className="artist-session-intro">Create the rewards before going live. Correct guesses count toward both the session standings and this week's Findraw Points.</p>
             <label className="artist-session-name-field">
               <span>Session name</span>
               <input maxLength={60} onChange={(event) => setSessionName(event.target.value)} placeholder="Community session" value={sessionName} />
             </label>
-            <div className="artist-session-rewards-heading"><span><strong>Placement rewards</strong><small>First place is required. Add rewards for the other placements only when needed.</small></span></div>
-            <div className="artist-session-reward-fields">
+            <div className="artist-session-reward-fields hosted-reward-fields">
               {sessionRewards.map((reward, index) => (
-                <label key={index}><b>{["1st", "2nd", "3rd", "4th", "5th"][index]}</b><input aria-required={index === 0} maxLength={100} onChange={(event) => setSessionRewards((current) => current.map((item, itemIndex) => itemIndex === index ? event.target.value : item))} placeholder={index === 0 ? "Required — e.g. Gift a subscription" : "Optional reward"} value={reward} /></label>
+                <div className="artist-session-reward-row" key={index}>
+                  <b>{getOrdinalLabel(index + 1)}</b>
+                  <input aria-label={`${getOrdinalLabel(index + 1)} place reward`} aria-required={index === 0} maxLength={100} onChange={(event) => setSessionRewards((current) => current.map((item, itemIndex) => itemIndex === index ? event.target.value : item))} placeholder={HOSTED_REWARD_SUGGESTIONS[index] || "Optional reward"} value={reward} />
+                  <button aria-label={`Delete ${getOrdinalLabel(index + 1)} reward slot`} className="artist-session-remove-reward" disabled={sessionRewards.length === 1} onClick={() => setSessionRewards((current) => current.length === 1 ? current : current.filter((_, itemIndex) => itemIndex !== index))} title="Delete reward slot" type="button"><span className="material-symbols-outlined">remove_circle</span></button>
+                </div>
               ))}
             </div>
+            <button className="artist-session-add-reward" disabled={sessionRewards.length >= MAX_HOSTED_REWARD_SLOTS} onClick={() => setSessionRewards((current) => current.length >= MAX_HOSTED_REWARD_SLOTS ? current : [...current, ""])} type="button"><span className="material-symbols-outlined">add_circle</span>Add reward position</button>
             {sessionError ? <p className="artist-session-error" role="alert">{sessionError}</p> : null}
             <footer>
               <button className="secondary" onClick={() => setSessionSetupOpen(false)} type="button">Cancel</button>
@@ -853,9 +973,9 @@ export function Dashboard({ onNavigate }: DashboardProps) {
               <div><small>Session complete</small><h2 id="artist-session-results-title">{sessionResult.name}</h2></div>
               <button aria-label="Close session results" onClick={() => setSessionResult(null)} type="button"><span className="material-symbols-outlined">close</span></button>
             </header>
-            <div className="artist-session-results-note"><span className="material-symbols-outlined">verified</span><p><strong>Permanent points are saved</strong><small>These results are the session ranking only.</small></p></div>
+            <div className="artist-session-results-note"><span className="material-symbols-outlined">verified</span><p><strong>Weekly points are saved</strong><small>These results are the hosted-session ranking only.</small></p></div>
             <ol className="artist-session-podium">
-              {sessionResult.standings.slice(0, 5).map((entry, index) => {
+              {sessionResult.standings.slice(0, getHostedResultLimit(sessionResult)).map((entry, index) => {
                 const reward = sessionResult.rewards.find((item) => item.position === index + 1);
                 return <li className={index === 0 ? "winner" : ""} key={entry.userId}><b>{index + 1}</b><span><strong>{entry.displayName}</strong><small>{entry.score.toLocaleString()} session points</small>{reward ? <em>{reward.reward}</em> : null}</span>{reward ? <label><input checked={reward.fulfilled} onChange={(event) => void updateSessionReward(sessionResult, index + 1, event.target.checked)} type="checkbox" />Given</label> : null}</li>;
               })}
@@ -865,6 +985,36 @@ export function Dashboard({ onNavigate }: DashboardProps) {
             <footer>
               <button className="secondary" disabled={!sessionResult.standings.length} onClick={() => void copySessionResults(sessionResult)} type="button">Copy results</button>
               <button className="primary" onClick={() => setSessionResult(null)} type="button">Back to Chill</button>
+            </footer>
+          </section>
+        </div>
+      ) : null}
+      {weeklyResult ? (
+        <div className="artist-session-modal-backdrop" role="presentation">
+          <section aria-labelledby="weekly-points-results-title" aria-modal="true" className="artist-session-modal artist-session-results" role="dialog">
+            <header>
+              <div><small>{weeklyResult.status === "active" ? "Current week" : "Week complete"}</small><h2 id="weekly-points-results-title">Weekly Findraw Points</h2></div>
+              <button aria-label="Close weekly points" onClick={() => setWeeklyResult(null)} type="button"><span className="material-symbols-outlined">close</span></button>
+            </header>
+            <p className="artist-session-intro">Week of {new Date(weeklyResult.startsAt).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" })}. Rewards are optional and fulfilled manually by the streamer.</p>
+            <div className="artist-session-rewards-heading"><span><strong>Placement rewards</strong><small>{weeklyResult.status === "active" ? "Set these now or after the week closes." : "Add or update rewards for the completed weekly standings."}</small></span></div>
+            <div className="artist-session-reward-fields">
+              {weeklyRewards.map((reward, index) => (
+                <label key={index}><b>{["1st", "2nd", "3rd", "4th", "5th"][index]}</b><input maxLength={100} onChange={(event) => setWeeklyRewards((current) => current.map((item, itemIndex) => itemIndex === index ? event.target.value : item))} placeholder="Optional reward" value={reward} /></label>
+              ))}
+            </div>
+            <ol className="artist-session-podium">
+              {weeklyResult.standings.slice(0, 5).map((entry, index) => {
+                const reward = weeklyResult.rewards.find((item) => item.position === index + 1);
+                return <li className={index === 0 ? "winner" : ""} key={entry.userId}><b>{index + 1}</b><span><strong>{entry.displayName}</strong><small>{entry.score.toLocaleString()} weekly points</small>{reward ? <em>{reward.reward}</em> : null}</span>{reward && weeklyResult.status === "completed" ? <label><input checked={reward.fulfilled} onChange={(event) => void updateWeeklyReward(weeklyResult, index + 1, event.target.checked)} type="checkbox" />Given</label> : null}</li>;
+              })}
+              {!weeklyResult.standings.length ? <li className="empty">No one has scored in this week.</li> : null}
+            </ol>
+            {weeklyError ? <p className="artist-session-error" role="alert">{weeklyError}</p> : null}
+            <footer>
+              <button className="secondary" disabled={!weeklyResult.standings.length} onClick={() => void copyWeeklyResults(weeklyResult)} type="button">Copy standings</button>
+              <button className="secondary" onClick={() => setWeeklyResult(null)} type="button">Close</button>
+              <button className="primary" disabled={weeklyBusy} onClick={() => void saveWeeklyRewards()} type="button">{weeklyBusy ? "Saving…" : "Save rewards"}</button>
             </footer>
           </section>
         </div>

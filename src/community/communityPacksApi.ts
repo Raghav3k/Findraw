@@ -1,4 +1,5 @@
 import { apiUrl } from "../apiUrls";
+import { secureFetch } from "../security/browserSecurity";
 
 export type CommunityPackStatus = "published" | "quarantined" | "removed";
 export type CommunityReportReason = "offensive" | "hate-or-harassment" | "sexual-content" | "spam" | "incorrect-tags" | "other";
@@ -49,7 +50,7 @@ export class CommunityPackApiError extends Error {
 }
 
 async function communityRequest<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(apiUrl(path), init);
+  const response = await secureFetch(path, init, Boolean(init?.method && init.method !== "GET"));
   const body = await response.json().catch(() => ({}));
   if (!response.ok) throw new CommunityPackApiError(body.error || "Community pack request failed.", response.status, body.field);
   return body as T;

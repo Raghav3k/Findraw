@@ -4,6 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "check:production": "node scripts/check-channel-persistence.mjs && node scripts/check-room-lifecycle.mjs && node scripts/check-production-hardening.mjs && node scripts/check-live-connections.mjs && node scripts/check-drawing-deltas.mjs && node scripts/check-security.mjs && tsc --noEmit",
+    "check:security": "node scripts/check-security.mjs",
     "dev": "concurrently -k -n server,web -c yellow,cyan \"pnpm dev:server\" \"pnpm dev:web\"",
     "dev:web": "vite --host 127.0.0.1",
     "dev:server": "node server/index.mjs",
@@ -29,7 +31,13 @@
     "concurrently": "^10.0.4",
     "puppeteer": "^25.5.0",
     "typescript": "5.9.3",
-    "vite": "5.0.12"
+    "vite": "6.4.3"
   },
-  "packageManager": "pnpm@10.34.1"
+  "packageManager": "pnpm@10.34.1",
+  "pnpm": {
+    "overrides": {
+      "postcss": "^8.5.23",
+      "nanoid@3": "^3.3.18"
+    }
+  }
 }

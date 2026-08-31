@@ -32,6 +32,8 @@ type ArtistWordMixPickerProps = {
   reportedCommunityPackIds: string[];
   reporterKey: string;
   required?: boolean;
+  contextLabel?: string;
+  promptOwner?: string;
   onApply: (mix: ArtistWordMix) => void;
   onClose: () => void;
   onCommunityEditTokensChange: (tokens: Record<string, string>) => void;
@@ -57,6 +59,8 @@ export function ArtistWordMixPicker({
   reportedCommunityPackIds,
   reporterKey,
   required = false,
+  contextLabel = "Artist Mode",
+  promptOwner = "your stream",
 }: ArtistWordMixPickerProps) {
   const activeCommunityPacks = useMemo(
     () => communityPacks.filter((pack) => pack.status === "published" && !reportedCommunityPackIds.includes(pack.id)),
@@ -244,7 +248,7 @@ export function ArtistWordMixPicker({
   if (!open) return null;
 
   const heading = step === "kind"
-    ? "What should your stream draw?"
+    ? `What should ${promptOwner} draw?`
     : step === "community-form"
       ? editingPackId ? "Edit community pack" : "Create a community pack"
       : step === "community-report"
@@ -254,10 +258,10 @@ export function ArtistWordMixPicker({
   return createPortal(
     <div className="artist-word-mix-layer">
       <div className="artist-word-mix-backdrop" />
-      <section aria-label="Choose your Artist Mode word mix" aria-modal="true" className="artist-word-mix-window" role="dialog">
+      <section aria-label={`Choose your ${contextLabel} word mix`} aria-modal="true" className="artist-word-mix-window" role="dialog">
         <header className="artist-word-mix-header">
           <div>
-            <small>{browseKind === "community" ? "Community library" : "Artist Mode setup"}</small>
+            <small>{browseKind === "community" ? "Community library" : `${contextLabel} setup`}</small>
             <h2>{heading}</h2>
             {step !== "packs" ? <p>{step === "kind"
               ? "Start with any source, then combine packs from Games, General and Community."

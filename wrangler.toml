@@ -1,3 +1,7 @@
 name = "findraw"
 pages_build_output_dir = "dist"
 compatibility_date = "2026-08-07"
+
+[[services]]
+binding = "FINDRAW_BACKEND"
+service = "findraw-backend"

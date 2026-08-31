@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { twitchAuthStartUrl } from "../apiUrls";
+import { useSiteIdentity } from "../identity/SiteIdentity";
+import { downloadChannelBackups, fetchChannelStatus } from "../twitch/twitchApi";
 
 type TwitchProfileMenuProps = {
   connected: boolean;
@@ -19,7 +21,25 @@ type WorkspaceIdentityProps = {
 export function TwitchProfileMenu({ connected, configured, displayName, profileImageUrl, chatStatus = "disconnected", onDisconnectTwitch, returnTo }: TwitchProfileMenuProps) {
   const profileName = connected ? displayName?.trim() || "Streamer" : "Guest";
   const [open, setOpen] = useState(false);
+  const [channelNote, setChannelNote] = useState("");
+  const [hasLegacyConflict, setHasLegacyConflict] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let active = true;
+    setChannelNote("");
+    setHasLegacyConflict(false);
+    if (open && connected) {
+      fetchChannelStatus().then((status) => {
+        if (!active) return;
+        setHasLegacyConflict(Boolean(status.migrationConflicts));
+        setChannelNote(status.migrationConflicts
+          ? "Older browser records need review. They are backed up separately and have not been added to your scores."
+          : status.shared ? "Points and reward history are saved to your Twitch channel across browsers." : "Development data is saved on this local server.");
+      }).catch((error: Error) => { if (active) setChannelNote(`Channel storage: ${error.message}`); });
+    }
+    return () => { active = false; };
+  }, [open, connected, displayName]);
 
   useEffect(() => {
     if (!open) return;
@@ -59,6 +79,8 @@ export function TwitchProfileMenu({ connected, configured, displayName, profileI
                 </div>
               </div>
               <div className="workspace-profile-menu-actions">
+                {channelNote ? <p className="workspace-channel-note" role="status">{channelNote}</p> : null}
+                {hasLegacyConflict ? <button onClick={() => { void downloadChannelBackups().catch((error: Error) => setChannelNote(error.message)); }} type="button">Download preserved records</button> : null}
                 <button onClick={() => window.location.assign(twitchAuthStartUrl(returnTo, connected))} type="button">
                   <span className="material-symbols-outlined">link</span>
                   {connected ? "Switch Twitch Account" : "Connect Twitch"}
@@ -77,6 +99,7 @@ export function TwitchProfileMenu({ connected, configured, displayName, profileI
 }
 
 export function WorkspaceIdentity({ onModes, subtitle }: WorkspaceIdentityProps) {
+  const { displayName, profileImageUrl, source } = useSiteIdentity();
   return (
     <div className="workspace-identity">
       <div className="brand-block source-brand">
@@ -84,6 +107,10 @@ export function WorkspaceIdentity({ onModes, subtitle }: WorkspaceIdentityProps)
         <p>{subtitle}</p>
       </div>
       <div className="workspace-identity-actions">
+        <span className={`workspace-current-identity ${source}`} title={source === "twitch" ? `Twitch: ${displayName}` : `Guest: ${displayName}`}>
+          <span className={`${profileImageUrl ? "has-image" : "material-symbols-outlined"}`}>{profileImageUrl ? <img alt="" src={profileImageUrl} /> : "person"}</span>
+          <strong>{displayName}</strong>
+        </span>
         <button aria-label="Exit to game modes" className="workspace-mode-button workspace-exit-button" onClick={onModes} title="Exit" type="button">
           <span className="material-symbols-outlined">logout</span>
           <span>Exit</span>
