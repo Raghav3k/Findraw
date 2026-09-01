@@ -258,7 +258,7 @@ export function ArtistWordMixPicker({
   return createPortal(
     <div className="artist-word-mix-layer">
       <div className="artist-word-mix-backdrop" />
-      <section aria-label={`Choose your ${contextLabel} word mix`} aria-modal="true" className="artist-word-mix-window" role="dialog">
+      <section aria-label={`Choose your ${contextLabel} word mix`} aria-modal="true" className={`artist-word-mix-window ${step === "kind" ? "is-kind-step" : ""}`} role="dialog">
         <header className="artist-word-mix-header">
           <div>
             <small>{browseKind === "community" ? "Community library" : `${contextLabel} setup`}</small>

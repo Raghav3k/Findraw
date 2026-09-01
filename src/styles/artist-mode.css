@@ -1909,6 +1909,7 @@ body.resizing-panels .layout-resizer::after {
 
 /* Community Packs */
 .artist-word-mix-window { max-width: 940px; }
+.artist-word-mix-window.is-kind-step { height: auto; }
 .artist-word-kind-grid.three-options { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .artist-word-kind-grid.three-options .artist-word-kind-card { min-height: 270px; padding: 21px; }
 .artist-word-kind-card.community > .material-symbols-outlined { background: #d8c7e8; color: #59436c; }
@@ -1992,4 +1993,55 @@ body.resizing-panels .layout-resizer::after {
   .community-report-step { padding: 13px 17px 16px; }
   .community-form-grid { grid-template-columns: 1fr; }
   .community-form-field.full { grid-column: auto; }
+}
+
+/* Responsive foundation: stack panels instead of hiding controls when browser
+   zoom or a narrow device removes the room needed by the desktop rails. */
+@media (max-width: 900px) {
+  html, body, #root,
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) { height: auto; min-height: 100%; overflow-x: hidden; overflow-y: visible; }
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) { display: block; }
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .mobile-topbar { display: flex; height: 56px; position: sticky; top: 0; z-index: 90; }
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .stream-sidebar { display: flex; height: auto; margin: 10px; max-height: none; overflow-x: hidden; overflow-y: visible; padding: 0; position: static; width: auto; }
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .stream-sidebar > .workspace-identity .source-brand { display: none; }
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .stream-sidebar > .workspace-identity .workspace-identity-actions { margin-left: auto; }
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .dashboard-shell { height: auto; margin-left: 0; min-height: 0; overflow: visible; padding: 8px; }
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .dashboard-grid { display: flex; flex-direction: column; height: auto; min-height: 0; }
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .main-column,
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .side-column { display: grid; height: auto; min-height: 0; overflow: visible; }
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .side-column { grid-template-columns: 1fr; grid-template-rows: none; }
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .round-controls { display: grid; }
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .resizable-surface { height: auto !important; width: 100% !important; }
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .fixed-canvas-surface,
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .canvas-card { min-height: clamp(380px, 68dvh, 620px); }
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .support-card,
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .solved-card,
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .leaderboard-card,
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .source-card { min-height: 220px; resize: none; }
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .layout-resizer { display: none; }
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .dock-rail { overflow-y: visible !important; }
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .dock-slot { flex: 0 0 auto; }
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .dock-slot:not(:empty) { min-height: 220px; }
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .dock-panel-shell { height: 100%; }
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .dock-panel-shell > .source-card,
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .dock-panel-shell > .feed-card,
+  .dashboard-layout:not(.room-mode-page):not(.auto-workspace) .dock-panel-shell > .support-card { min-height: 220px; }
+  .prompt-settings-popover, .brush-flyout, .findraw-color-picker,
+  .fill-color-flyout, .canvas-color-flyout, .grid-flyout { max-height: calc(100dvh - 24px); max-width: calc(100vw - 24px); min-width: 0; overflow-x: hidden; overflow-y: auto; }
+}
+
+@media (max-width: 520px) {
+  .artist-word-mix-header { padding: 15px 14px 12px; }
+  .artist-word-mix-header h2 { font-size: clamp(19px, 6vw, 24px); }
+  .artist-word-mix-header p { font-size: 10px; line-height: 14px; }
+  .artist-word-kind-grid.three-options { padding: 12px 13px 14px; }
+  .artist-word-kind-grid.three-options .artist-word-kind-card { min-height: 150px; padding: 14px; }
+  .artist-word-kind-card > .material-symbols-outlined { margin-bottom: 9px; }
+  .artist-word-kind-card b { padding-top: 11px; }
+  .artist-word-selection-tray { grid-template-columns: 1fr auto; }
+  .artist-word-selection-tray > strong { grid-column: 1; }
+  .artist-word-selection-tray > div { grid-column: 1 / -1; grid-row: 2; }
+  .artist-word-selection-clear { grid-column: 2; grid-row: 1; }
+  .artist-word-kind-switch button .material-symbols-outlined { display: none; }
+  .round-controls { grid-template-columns: 1fr 1fr; }
 }

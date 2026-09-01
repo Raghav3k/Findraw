@@ -83,12 +83,21 @@
 .auto-blank-panel { min-height: 0; flex: 1 1 0; background-color: #fffaf0; background-image: repeating-linear-gradient(0deg, transparent 0 27px, rgba(76,133,174,.075) 27px 28px), linear-gradient(100deg, rgba(255,255,255,.5), transparent 45%); }
 
 @media (max-width: 1100px) {
-  .auto-workspace { height: auto; min-height: 100vh; overflow-y: auto; }
-  .auto-workspace .auto-stream-sidebar { position: static; width: 100%; padding: 12px; }
+  .auto-workspace { display: block; height: auto; min-height: 100vh; overflow-x: hidden; overflow-y: auto; }
+  .auto-workspace .mobile-topbar { display: none; }
+  .auto-workspace .auto-stream-sidebar { position: static; width: 100%; height: auto; max-height: none; margin: 0; padding: 12px; overflow: visible; }
   .auto-dashboard-shell { height: auto; min-height: 0; margin-left: 0; padding: 8px; overflow: visible; }
   .auto-dashboard-grid { height: auto; display: flex; flex-direction: column; }
+  .auto-main-column { height: auto; }
   .auto-workspace .source-rail-resizer,
   .auto-workspace .side-panel-resizer { display: none; }
+  .auto-workspace .dock-rail { overflow-y: visible !important; }
+  .auto-workspace .dock-slot { flex: 0 0 auto; }
+  .auto-workspace .dock-slot:not(:empty) { min-height: 220px; }
+  .auto-workspace .dock-panel-shell { height: 100%; }
+  .auto-workspace .dock-panel-shell > .source-card,
+  .auto-workspace .dock-panel-shell > .feed-card,
+  .auto-workspace .dock-panel-shell > .support-card { min-height: 220px; }
   .auto-right-rail { min-height: 700px; }
 }
 @media (max-width: 720px) {
@@ -169,4 +178,19 @@
 }
 .auto-guess-bar.wrong {
   box-shadow: inset 0 0 0 2px rgba(190, 92, 60, .15), 2px 3px 0 rgba(112, 65, 38, .16);
+}
+
+@media (max-width: 720px) {
+  .auto-workspace { overflow-x: hidden; }
+  .auto-workspace .auto-stream-sidebar,
+  .auto-dashboard-shell, .auto-dashboard-grid,
+  .auto-main-column, .auto-right-rail { min-width: 0; width: 100%; }
+  .auto-workspace .resizable-surface { height: auto !important; width: 100% !important; }
+  .auto-workspace .round-controls { display: grid; }
+  .auto-workspace .side-column { display: flex; }
+  .auto-workspace .fixed-canvas-surface,
+  .auto-workspace .auto-canvas-card { min-height: clamp(340px, 62dvh, 560px); }
+  .auto-right-rail { min-height: 0; overflow: visible; }
+  .auto-category-card, .auto-blank-panel,
+  .auto-chat-source-card, .auto-camera-preview { min-height: 220px; resize: none; }
 }
