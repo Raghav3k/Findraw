@@ -275,30 +275,9 @@ VITE_API_BASE_URL = https://findraw-backend.YOUR_SUBDOMAIN.workers.dev
 
 Then redeploy Pages.
 
-## Asset Storage Plan
+## Asset Storage Plan (superseded)
 
-Do not put assets in GitHub.
-
-Use Cloudflare R2 later for these local folders:
-
-```text
-public/auto-draw/
-public/category-art/
-```
-
-After assets are hosted, set this Pages environment variable:
-
-```text
-VITE_ASSET_BASE_URL = https://your-public-assets-url
-```
-
-The frontend already supports this through:
-
-```text
-src/assetUrls.ts
-```
-
-Until R2 is configured, the online frontend will load but asset-heavy image features may not display correctly unless assets are available at the expected URLs.
+The large experimental image library was moved out of the public project. The current Pages build includes its remaining small public assets directly and does not require R2.
 
 ## Recommended Remaining Order
 
@@ -313,11 +292,7 @@ Until R2 is configured, the online frontend will load but asset-heavy image feat
 9. Create Cloudflare Pages project for frontend.
 10. Set Pages variables: `PNPM_VERSION`, `VITE_API_BASE_URL`.
 11. Deploy frontend Pages.
-12. Create R2 bucket for assets.
-13. Upload `public/auto-draw` and `public/category-art` to R2/public asset host.
-14. Set Pages variable `VITE_ASSET_BASE_URL`.
-15. Redeploy frontend.
-16. Test Twitch connect, live chat, rounds, leaderboard, and Auto Draw assets.
+12. Test Twitch connect, live chat, rounds, leaderboard, Artist Mode, and Room Mode.
 
 ## Useful Commands
 

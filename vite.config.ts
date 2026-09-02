@@ -1,10 +1,8 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-const skipPublicCopy = process.env.CF_PAGES === "1" || process.env.FINDRAW_SKIP_PUBLIC === "1";
-
 export default defineConfig({
-  publicDir: skipPublicCopy ? false : "public",
+  publicDir: "public",
   plugins: [react()],
   server: {
     host: "127.0.0.1",

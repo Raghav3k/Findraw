@@ -2,7 +2,7 @@
 
 These changes target the Cloudflare production implementation. Local fixtures are
 verification of that implementation, not replacements for online multiplayer.
-No deployment, live-data cleanup, R2 deletion or Auto Draw removal was performed.
+This document records the August 31 checkpoint. The image-driven experimental mode was subsequently moved out of the public project; R2 cleanup still requires a deliberate dashboard operation after the replacement frontend is deployed.
 
 ## Implemented
 
@@ -10,7 +10,7 @@ No deployment, live-data cleanup, R2 deletion or Auto Draw removal was performed
   fetches identity on initial load and when the page becomes visible again.
 - Authenticated live modes share one ref-counted transport per page. Guests do
   not open Twitch feeds. Online rooms use their room socket, not an unused Twitch
-  event feed. Auto Draw remains available with authenticated chat connectivity.
+  event feed.
 - Cloudflare identity restoration no longer starts outgoing Twitch chat. Opening
   a live mode or starting private-room Twitch scoring activates it on demand.
   With no live viewers, chat shuts down after a 30-second grace period; active
@@ -82,7 +82,7 @@ records can continue to grow until fulfilled; retention is not a total-storage c
 - `node scripts/check-channel-runtime.mjs <wrangler-package.json>`: uses the
   installed Wrangler esbuild/Miniflare dependencies and isolated in-memory SQLite
   to test migration, concurrent adjustments, weekly/session totals and rewards.
-- `pnpm build:cloudflare`: deployable frontend build, retaining R2 asset URLs.
+- `pnpm build:cloudflare`: deployable frontend build. As of the later mode separation, it no longer requires R2 asset URLs.
 - `node scripts/audit-cloudflare-usage.mjs`: read-only synthetic operation audit.
   Its logical `get` count excludes rows returned by `list`; neither operation
   counts nor serialized bytes are metered Cloudflare billing or CPU measurements.
@@ -116,6 +116,6 @@ The channel domain handlers still share the existing session class implementatio
 storage and queue rules are separated, but a complete class/module refactor is not
 part of this change. Record loading still reconstructs channel data in memory;
 targeted SQL queries may be needed if measured large-channel read/CPU costs warrant
-it. Auto Draw/image delivery and the large home-page asset-catalog import remain
-until its separately planned removal. No claim of unlimited/free hosting capacity
+it. The experimental image library and its home-page catalog import were removed
+in the later private-mode separation. No claim of unlimited/free hosting capacity
 or readiness for 10,000 concurrent players follows from these checks.

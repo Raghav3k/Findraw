@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { EventSubStatus } from "../twitch/twitchApi";
 import { WorkspaceIdentity } from "../ui/WorkspaceIdentity";
 import { DockControls, DockPanel, DockSlot } from "../ui/DockLayout";
-import { AUTO_DRAW_ASSETS } from "../autoDraw/autoDrawAssets";
 import { getFindrawChatterColor } from "../twitch/chatColors";
 
 export type ChatMessage = {
@@ -26,20 +25,11 @@ type StreamSourceSidebarProps = {
 export function StreamSourceSidebar({ messages, onModes, roundActive, word, category, chatStatus, onUseCustomWord, preparedCustomWord }: StreamSourceSidebarProps) {
   const [customWord, setCustomWord] = useState("");
   const [customWordError, setCustomWordError] = useState("");
-  const [showAssetImage, setShowAssetImage] = useState(false);
   const chatConnected = chatStatus === "connected";
   const chatListRef = useRef<HTMLDivElement>(null);
   const categoryLabel = category
     ? category.replace(/^[^:]+:/, "").replace(/[-_]/g, " ")
     : "";
-
-  useEffect(() => {
-    setShowAssetImage(false);
-  }, [word, roundActive]);
-
-  const matchedAsset = roundActive 
-    ? AUTO_DRAW_ASSETS.find(asset => asset.answer.toLowerCase() === word.toLowerCase())
-    : undefined;
 
   useEffect(() => {
     if (chatListRef.current) {
@@ -82,28 +72,10 @@ export function StreamSourceSidebar({ messages, onModes, roundActive, word, cate
           {roundActive && categoryLabel && (
             <span className="camera-category-badge">{categoryLabel}</span>
           )}
-          {roundActive && matchedAsset && (
-            <button 
-              type="button" 
-              onClick={() => setShowAssetImage(!showAssetImage)} 
-              className="asset-image-toggle" 
-              title={showAssetImage ? "Hide reference image" : "Show reference image"}
-            >
-              <span className="material-symbols-outlined">
-                {showAssetImage ? 'visibility_off' : 'photo'}
-              </span>
-            </button>
-          )}
           {roundActive ? (
-            showAssetImage && matchedAsset ? (
-              <div className="camera-asset-image">
-                <img src={matchedAsset.imageUrl} alt={word} />
-              </div>
-            ) : (
-              <div className="camera-prompt-copy">
-                <strong style={{ fontSize: Math.max(26, Math.min(60, 440 / Math.max(1, word.length))) + 'px', lineHeight: 1.15 }}>{word}</strong>
-              </div>
-            )
+            <div className="camera-prompt-copy">
+              <strong style={{ fontSize: Math.max(26, Math.min(60, 440 / Math.max(1, word.length))) + 'px', lineHeight: 1.15 }}>{word}</strong>
+            </div>
           ) : (
             <div className="custom-word-card">
               <small className="camera-instruction">Keep this area covered by your camera in OBS</small>

@@ -1,7 +1,5 @@
 import type { CSSProperties } from "react";
 import { useEffect, useState } from "react";
-import { AutoDrawCanvas } from "../autoDraw/AutoDrawCanvas";
-import { AUTO_DRAW_ASSETS } from "../autoDraw/autoDrawAssets";
 import { ColorPickerPanel } from "../ui/ColorPickerPanel";
 import { usePersistentState } from "../ui/usePersistentState";
 import { TwitchProfileMenu } from "../ui/WorkspaceIdentity";
@@ -82,10 +80,6 @@ export function ModeHome({ onNavigate }: ModeHomeProps) {
       <button className="mode-card artist-mode-card" onClick={() => onNavigate("/draw")} type="button">
         <span className="mode-card-tape"/><div className="mode-card-preview artist-preview" aria-hidden="true"><span className="material-symbols-outlined artist-preview-hand">stylus_note</span><span className="artist-preview-line line-one"/><span className="artist-preview-line line-two"/><span className="artist-preview-line line-three"/><span className="artist-preview-star">&#9733;</span></div>
         <span className="mode-card-number">02</span><div className="mode-card-copy"><span className="mode-card-label">Classic game</span><h2>Artist Mode</h2><p>You draw the secret word while Twitch chat races to solve it.</p><span className="mode-card-action">Open artist desk <span className="material-symbols-outlined">arrow_forward</span></span></div>
-      </button>
-      <button className="mode-card auto-mode-card" onClick={() => onNavigate("/auto-draw")} type="button">
-        <span className="mode-card-tape"/><div className="mode-card-preview auto-preview" aria-hidden="true"><AutoDrawCanvas active asset={AUTO_DRAW_ASSETS[0]} stageIndex={2} stageProgress={0.72}/><span className="auto-preview-badge">3/6</span></div>
-        <span className="mode-card-number">03</span><div className="mode-card-copy"><span className="mode-card-label">New game</span><h2>Auto Draw</h2><p>Findraw draws in timed stages. The streamer and chat guess together.</p><span className="mode-card-action">Try the practical proof <span className="material-symbols-outlined">arrow_forward</span></span></div>
       </button>
     </section>
     {!twitchSession.authenticated ? <section className="mode-temp-profile" aria-label="Guest player profile">

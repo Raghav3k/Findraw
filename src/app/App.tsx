@@ -1,5 +1,4 @@
 ﻿import { useCallback, useEffect, useState } from "react";
-import { AutoDrawPage } from "../autoDraw/AutoDrawPage";
 import { Dashboard } from "../dashboard/Dashboard";
 import { ModeHome } from "../home/ModeHome";
 import { RoomModePage } from "../room/RoomModePage";
@@ -18,9 +17,7 @@ export function App() {
   const navigate = useCallback((next: string) => { window.history.pushState({}, "", next); setPath(next); window.scrollTo({ top: 0 }); }, []);
   const page = path === "/draw"
     ? <Dashboard onNavigate={navigate}/>
-    : path === "/auto-draw"
-      ? <AutoDrawPage onNavigate={navigate}/>
-      : path === "/room"
+    : path === "/room"
         ? <RoomPortalPage onNavigate={navigate}/>
         : path === "/room/private"
           ? <PrivateRoomSetupPage onNavigate={navigate}/>
@@ -28,6 +25,6 @@ export function App() {
             ? <PublicMatchPage onNavigate={navigate}/>
             : path === "/room/play"
               ? <RoomModePage onNavigate={navigate}/>
-        : <ModeHome onNavigate={navigate}/>;
+      : <ModeHome onNavigate={navigate}/>;
   return <SiteIdentityProvider>{page}</SiteIdentityProvider>;
 }

@@ -1,4 +1,4 @@
-export type FeedbackMode = "artist" | "room" | "autoDraw";
+export type FeedbackMode = "artist" | "room";
 export type WordFeedbackContext = "experience" | "skip";
 export type WordExperienceFeedbackRating = "very_good" | "mid" | "bad";
 export type WordSkipFeedbackReason = "not_interested" | "not_fun" | "unrecognized";

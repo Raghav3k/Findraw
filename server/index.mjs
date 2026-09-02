@@ -42,7 +42,7 @@ const configured = () => Boolean(
 app.use(express.json({ limit: "32kb" }));
 
 const sseClients = new Set();
-const allowedOAuthReturnPaths = new Set(["/", "/auto-draw", "/draw", "/room"]);
+const allowedOAuthReturnPaths = new Set(["/", "/draw", "/room"]);
 const createOAuthState = (returnTo) => {
   const payload = Buffer.from(JSON.stringify({
     returnTo,

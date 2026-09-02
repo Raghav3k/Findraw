@@ -1,6 +1,6 @@
 # General Word Catalog
 
-Readable review copy for Findraw's General word pool. These words are used by Artist Mode and Room Mode. Auto Draw has a separate asset-backed dataset.
+Readable review copy for Findraw's General word pool. These words are used by Artist Mode and Room Mode.
 
 Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable; **medium** means familiar but more challenging; **hard** means niche, technical, specific, or harder to draw/guess.
 
@@ -2117,4 +2117,3 @@ Difficulty is Findraw-specific: **easy** means broadly recognizable and drawable
 - Branch Prediction
 - Differential Privacy
 - Homomorphic Encryption
-

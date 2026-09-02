@@ -1,6 +1,6 @@
-import { AUTO_DRAW_ASSETS } from "../autoDraw/autoDrawAssets";
 import type { CategoryPickerDomain, CategoryPickerGroup, CategoryPickerSection } from "../ui/CategoryPickerWindow";
 import artistWordsRaw from "./artistWords.json";
+import gameWordsRaw from "./gameWords.json";
 import { normalizeWordFeedbackStats, type FeedbackMode, type WordFeedbackMap } from "../feedback/wordFeedback";
 
 export type RoundPrompt = {
@@ -25,7 +25,7 @@ export type WordCategory = {
 };
 
 export type CategorySelection = "random" | string;
-export type FindrawModePool = "artist" | "autoDraw" | "room";
+export type FindrawModePool = "artist" | "room";
 
 export const DEFAULT_WORD_SECONDS = 180;
 export const MAX_CORRECT_GUESSERS = 100;
@@ -60,7 +60,6 @@ export type FindrawDomainId = "games" | "world" | "culture" | "everyday";
 
 export type FindrawPrompt = UnifiedAsset & {
   modes: FindrawModePool[];
-  hasAutoDrawAsset: boolean;
 };
 
 export type FindrawDeck = {
@@ -98,7 +97,7 @@ export type CategorySelectionChip = {
 };
 
 export const UNIFIED_ASSETS: UnifiedAsset[] = [
-  ...AUTO_DRAW_ASSETS.map((asset) => ({
+  ...(gameWordsRaw as RawWordAsset[]).map((asset) => ({
     id: asset.id,
     answer: asset.answer,
     aliases: asset.aliases || [],
@@ -116,15 +115,6 @@ export const UNIFIED_ASSETS: UnifiedAsset[] = [
 
 const MODE_ASSET_POOLS: Record<FindrawModePool, UnifiedAsset[]> = {
   artist: UNIFIED_ASSETS,
-  autoDraw: AUTO_DRAW_ASSETS.map((asset) => ({
-    id: asset.id,
-    answer: asset.answer,
-    aliases: asset.aliases || [],
-    category: asset.category,
-    difficulty: normalizeDifficulty(asset.difficulty),
-  })),
-  // Room mode is not implemented yet. Start from the artist-safe drawing pool so
-  // existing category selections keep working when the mode gets its first UI.
   room: UNIFIED_ASSETS,
 };
 
@@ -320,8 +310,6 @@ function getDeckContextLabel(deckId: string): string | null {
 
 const categoryModelCache = new Map<FindrawModePool, FindrawDomain[]>();
 const categoryDomainsCache = new Map<FindrawModePool, CategoryPickerDomain[]>();
-const autoDrawAssetIds = new Set(AUTO_DRAW_ASSETS.map((asset) => asset.id));
-
 function getCategoryDeckInfo(category: string): Omit<FindrawDeck, "promptCount"> | null {
   const gameMatch = GAME_TITLES.find((game) => category.toLowerCase().startsWith(game.id));
   if (gameMatch) {
@@ -354,17 +342,11 @@ function getCategoryDeckInfo(category: string): Omit<FindrawDeck, "promptCount">
   };
 }
 
-function getPromptModes(asset: UnifiedAsset): FindrawModePool[] {
-  const hasAutoDrawAsset = autoDrawAssetIds.has(asset.id);
-  return hasAutoDrawAsset ? ["artist", "autoDraw", "room"] : ["artist", "room"];
-}
-
 export function getPromptsForMode(mode: FindrawModePool): FindrawPrompt[] {
   return UNIFIED_ASSETS
     .map((asset) => ({
       ...asset,
-      modes: getPromptModes(asset),
-      hasAutoDrawAsset: autoDrawAssetIds.has(asset.id),
+      modes: ["artist", "room"] as FindrawModePool[],
     }))
     .filter((prompt) => prompt.modes.includes(mode));
 }
@@ -951,7 +933,7 @@ function getFeedbackWeight(asset: UnifiedAsset, options?: PromptPickOptions): nu
   if (stats.submitted + stats.skipped < 2) return 1;
 
   const positive = stats.veryGood * 1.15;
-  const negativeMultiplier = options?.mode === "room" ? 1.45 : options?.mode === "autoDraw" ? 1.05 : 1.22;
+  const negativeMultiplier = options?.mode === "room" ? 1.45 : 1.22;
   const skipReasonPenalty =
     stats.notInterested * 0.22 +
     stats.notFun * negativeMultiplier +

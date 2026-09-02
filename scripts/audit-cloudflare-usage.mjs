@@ -2,7 +2,7 @@
 // Success-path logical operations, NOT measured Cloudflare billing/CPU/hibernation.
 // Transactions below are sequential in-memory fixtures, not a concurrency/rollback test.
 import worker, { FindrawChannel, FindrawSession, FindrawRoom } from '../cloudflare/backend/src/index.js';
-import { readdirSync, statSync, readFileSync, existsSync } from 'node:fs';
+import { readdirSync, statSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { channelPointsStorage } from '../shared/channelPointsStorage.mjs';
 const out = console.log;
@@ -99,14 +99,8 @@ function walk(dir) {
   if (!existsSync(dir)) return [];
   return readdirSync(dir, { withFileTypes: true }).flatMap(e => e.isDirectory() ? walk(path.join(dir, e.name)) : [{ file: path.join(dir,e.name), bytes: statSync(path.join(dir,e.name)).size }]);
 }
-for (const dir of ['public/auto-draw', 'public/category-art', 'dist']) {
+for (const dir of ['public', 'dist']) {
   const files = walk(dir), types = {};
   for (const f of files) { const type = path.extname(f.file); types[type] ||= { count: 0, bytes: 0 }; types[type].count++; types[type].bytes += f.bytes; }
   out(JSON.stringify({ name: 'local assets', dir, count: files.length, bytes: files.reduce((s,f)=>s+f.bytes,0), types, largest: files.sort((a,b)=>b.bytes-a.bytes).slice(0,3) }));
-}
-const progress = '.tmp/r2-upload-complete.jsonl';
-if (existsSync(progress)) {
-  const rows = readFileSync(progress, 'utf8').trim().split(/\r?\n/).flatMap(s=>{ try { return [JSON.parse(s)]; } catch { return []; } });
-  const unique = new Map(rows.map(r=>[r.key,r]));
-  out(JSON.stringify({ name: 'historical upload log, not live bucket inventory', count: unique.size, bytes: [...unique.values()].reduce((s,r)=>s+r.bytes,0), lastUpload: rows.at(-1)?.uploadedAt }));
 }

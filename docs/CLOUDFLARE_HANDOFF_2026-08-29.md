@@ -27,7 +27,7 @@ tree completed after `6e792fd`.
 
 ### 1. Dockable and resizable game workspaces
 
-- Added constrained dock layouts for Artist, Auto Draw, and Room modes.
+- Added constrained dock layouts for the game workspaces available at that checkpoint.
 - Panels can be rearranged and resized while staying inside safe layout bounds.
 - Divider resizing has snap points and clearer snap feedback.
 - Scrollable panels use the shared Findraw scrollbar treatment.
@@ -111,7 +111,7 @@ tree completed after `6e792fd`.
 
 - Chatter names now receive stable colors from a restrained Findraw palette, so
   the same name stays recognizable without depending on arbitrary Twitch colors.
-- The color behavior is shared by Artist Mode and Auto Draw.
+- The color behavior is shared by the Twitch-connected game surfaces.
 - Removed settings that were displayed but did not affect behavior, leaving the
   functional hover options, shortcuts, Twitch state, and command controls.
 
@@ -153,8 +153,8 @@ tree completed after `6e792fd`.
 
 ### 11. Central site identity
 
-- Added one site-level identity provider shared by Home, Artist Mode, Auto Draw,
-  and Room Mode. Twitch session state is fetched once and updated from one live
+- Added one site-level identity provider shared by Home, Artist Mode, and Room
+  Mode. Twitch session state is fetched once and updated from one live
   event subscription instead of each mode maintaining a separate identity copy.
 - A connected Twitch display name/avatar is now the resolved identity throughout
   the site. The persistent editable guest name is used only while disconnected.

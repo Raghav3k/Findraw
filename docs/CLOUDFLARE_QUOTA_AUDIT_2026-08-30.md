@@ -24,7 +24,7 @@ This review changes no application behavior, data or deployment. It adds this re
 | Component | Work done | What consumes quota |
 | --- | --- | --- |
 | Pages | Serves the React site, CSS, JS and bundled files | Builds/file limits; ordinary static requests are not backend requests |
-| R2 | Auto Draw images and uploaded category art | Stored bytes, object GET/HEAD operations, uploads/list operations |
+| R2 (historical, pending cleanup) | Previously uploaded image assets; the current frontend no longer references the bucket | Stored bytes until the bucket is deleted |
 | Backend Worker | Routes API calls, OAuth, matchmaking and socket upgrades | HTTP requests, CPU, subrequests |
 | `FindrawSession` DO | Browser-specific Twitch identity, chat socket, live events, round controller | Active duration, socket messages, storage, internal calls |
 | `FindrawChannel` DO | Channel-owned weekly points, sessions, rewards, deduplication | Read/write operations, internal requests, processing duration |
@@ -34,7 +34,7 @@ This review changes no application behavior, data or deployment. It adds this re
 
 The five classes are configured as **SQLite-backed Durable Objects** in `cloudflare/backend/wrangler.toml`. Using their `storage.get/put` methods does **not** mean this app uses the separate Workers KV product. No D1, Queues, Workers AI, Images transformation or Stream binding is configured here; their advertised free allowances do not add capacity to these DOs.
 
-Twitch viewers who stay on Twitch are different from Findraw website visitors: their chat arrives through the streamer's existing EventSub connection. Each Twitch viewer does not create a Findraw browser/session object. Rendering canvas frames, local word selection, the browser countdown and local test bots are browser work—not a Cloudflare call for every frame. Local `pnpm dev` backend work is also not remote Worker usage; locally loaded production R2 URLs can still consume R2 reads.
+Twitch viewers who stay on Twitch are different from Findraw website visitors: their chat arrives through the streamer's existing EventSub connection. Each Twitch viewer does not create a Findraw browser/session object. Rendering canvas frames, local word selection, the browser countdown and local test bots are browser work—not a Cloudflare call for every frame. Local `pnpm dev` backend work is also not remote Worker usage.
 
 ## 2. Relevant free-tier allowances
 
@@ -73,7 +73,7 @@ A WebSocket upgrade is one Worker request; its subsequent messages are not addit
 1. `src/identity/SiteIdentity.tsx:40` opens a live-event connection globally, including on the home page and for disconnected guests.
 2. `src/twitch/twitchApi.ts:72` turns that into a production `/api/live` WebSocket.
 3. `cloudflare/backend/src/index.js:1794` accepts it with `server.accept()`. The object cannot hibernate while that socket remains connected.
-4. Artist, Auto Draw and Room Mode open additional live-event connections (`Dashboard.tsx:342`, `AutoDrawPage.tsx:124`, `RoomModePage.tsx:408`). These normally address the same browser object, so they duplicate traffic/handling **but not that object's duration**.
+4. At the time of this audit, game surfaces opened additional live-event connections. The later shared-transport work removed the redundant connections.
 5. The shared room socket also uses standard `accept()` (`index.js:552`). Eight distinct guest browsers in one room therefore keep approximately **nine** objects active: eight session objects and the room object.
 6. Authenticated sessions additionally establish an outbound Twitch EventSub socket. Closing a UI socket alone does not solve that object's lifecycle; chat must be explicitly demand-managed.
 
@@ -195,31 +195,11 @@ These are JSON byte sizes, not Cloudflare's exact structured-clone encoding. The
 
 Fix: normalize into bounded records/tables for channel/week/player scores, hosted-session participants, rewards and scoring events; index leaderboard queries; paginate history and archive/export under a defined retention policy. Indexes themselves add write costs, so measure the chosen schema. Keep a tested, recoverable migration. Do not discard unfulfilled rewards or deduplication safety just to trim storage.
 
-## 6. Asset audit
+## 6. Historical asset audit
 
-Local inventory: **6,005 files, 3,535,351,957 bytes (3.54 decimal GB)** across the two upload roots. The historical successful-upload manifest has the same count/bytes, last entry August 9. This is evidence of what was uploaded then, not proof of today's bucket occupancy.
+This section originally recorded a multi-gigabyte experimental image library in R2. That mode, its catalog, upload tooling, local images, and production asset URL were later moved into a separate private local project. The current frontend build no longer references `r2.dev` and copies only the small public assets that remain in this repository.
 
-Of this, Auto Draw PNGs account for about 3.48 GB. Examples still referenced by the catalog:
-
-- `valorant/maps/basic-training.png`: 72,897,954 bytes.
-- `valorant/maps/the-range-2.png`: 72,897,954 bytes.
-- `arc-raiders/maps/the-blue-gate-thebluegate.png`: 43,722,117 bytes.
-
-At a constant 3.54 GB with no other objects/buckets, storage would use about 35% of the R2 free storage allowance. New art, duplicate versions, backups and unrelated buckets consume the rest. The large PNGs are particularly bad for user downloads, decoded browser memory and round-start latency even though R2 transfer has no egress charge.
-
-Auto Draw loads the selected image plus a reusable cloud sprite; I did not find a loop fetching the entire art library on every visit. Its catalog metadata is eagerly bundled. The existing ordinary local build contains a 1.26 MB JS bundle and the full 3.5 GB public tree. `build:cloudflare` correctly disables public copying; accidentally uploading the ordinary build encounters oversized Pages assets. This review did not rebuild or overwrite `dist`.
-
-`VITE_ASSET_BASE_URL` is an `r2.dev` URL. Cloudflare labels that endpoint development-only and rate-limits it; production caching/access controls require a connected custom domain. There is no defensible fixed production RPS budget for this development URL in the cited page. [R2 public buckets](https://developers.cloudflare.com/r2/buckets/public-buckets/).
-
-Recommendations:
-
-1. Produce display-size WebP/AVIF runtime assets, retain source originals outside the public runtime upload set, and establish a per-file byte budget. Keep visual quality checked; do not blindly recompress originals.
-2. Use a properly connected R2 custom domain/cache policy, or evaluate a compact optimized Pages-hosted asset set. Do not CNAME to `r2.dev` as a shortcut.
-3. Keep versioned/hashed URLs and immutable caching. The uploader already sets a one-year cache header, but a reused filename is not content versioning. Its completion log skips already-seen keys, so changed files under the same key also need a content-aware upload strategy.
-4. Upload an explicit runtime manifest, not every file recursively; the uploader currently has no runtime-only filter.
-5. Lazy-load mode/catalog code where practical. This improves startup rather than directly fixing the DO quota.
-
-R2 read examples: 10,000 visits × 30 uncached object fetches = 300,000 Class B operations/month; 100,000 visits × 100 = 10 million. Browser/CDN cache hits reduce origin GETs; HEAD/revalidation and cache misses add operations. These assumptions must be validated with bucket metrics. Uploading 6,005 objects once is small; needless whole-library uploads and old-version retention are avoidable.
+The old R2 objects are still billable storage until the owner disables public access and deletes the bucket after deploying and verifying the replacement frontend. See [R2 public buckets](https://developers.cloudflare.com/r2/buckets/public-buckets/) and the project's separation handoff for the safe cleanup order.
 
 ## 7. Public traffic and failure recovery need budgets
 

@@ -1360,7 +1360,7 @@ const randomToken = (bytes = 24) => {
   crypto.getRandomValues(data);
   return base64Url(data);
 };
-const OAUTH_RETURN_PATHS = new Set(["/", "/auto-draw", "/draw", "/room"]);
+const OAUTH_RETURN_PATHS = new Set(["/", "/draw", "/room"]);
 
 async function oauthStateKey(secret) {
   return crypto.subtle.importKey("raw", encoder.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign", "verify"]);
