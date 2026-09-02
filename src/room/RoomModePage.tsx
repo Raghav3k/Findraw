@@ -97,8 +97,8 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const [roomReconnectToken] = useState(createRoomReconnectToken);
   const [launchIntent] = useState(readRoomLaunch);
   const [lastOnlineRoomCode, setLastOnlineRoomCode] = usePersistentState("room.lastOnlineCode.v1", "");
-  const [sourceRailWidth, setSourceRailWidth] = usePersistentState("room.layout.leftRailWidth", 320);
-  const [sidePanelWidth, setSidePanelWidth] = usePersistentState("room.layout.rightRailWidth", 300);
+  const [sourceRailWidth, setSourceRailWidth] = usePersistentState("room.layout.leftRailWidth.v2", 320);
+  const [sidePanelWidth, setSidePanelWidth] = usePersistentState("room.layout.rightRailWidth.v2", 320);
   const [joinedCode, setJoinedCode] = useState("");
   const [room, setRoom] = useState<RoomState | null>(null);
   const [roomTransport, setRoomTransport] = useState<"none" | "online" | "local">("none");
@@ -107,7 +107,9 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const [liveDrawingOperation, setLiveDrawingOperation] = useState<DrawingOperation | null>(null);
   const [notice, setNotice] = useState("");
   const [categoriesOpen, setCategoriesOpen] = useState(false);
-  const [twitchPanelOpen, setTwitchPanelOpen] = useState(false);
+  const [twitchPanelOpen, setTwitchPanelOpen] = useState(true);
+  const [roomCodePanelOpen, setRoomCodePanelOpen] = useState(false);
+  const [roomCodeRevealed, setRoomCodeRevealed] = useState(false);
   const [twitchSolvers, setTwitchSolvers] = useState<SolvedViewer[]>([]);
   const [twitchNotice, setTwitchNotice] = useState("");
   const [confirmExitOpen, setConfirmExitOpen] = useState(false);
@@ -178,6 +180,11 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   const twitchLive = roomTransport === "online"
     ? Boolean(room?.twitchOwnerConnected)
     : twitchSession.authenticated && twitchSession.eventSubStatus === "connected";
+
+  useEffect(() => {
+    setRoomCodePanelOpen(false);
+    setRoomCodeRevealed(false);
+  }, [room?.code]);
   const activeTwitchSolvers = roomTransport === "online" ? room?.twitchSolvers ?? [] : twitchSolvers;
   const twitchSolversForDisplay = activeTwitchSolvers.length > 0
     ? activeTwitchSolvers
@@ -701,7 +708,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
   };
 
   return (
-    <DockLayout panelIds={["room-players", "room-control", "room-support", "room-chat"]} slotIds={["room-left-1", "room-left-2", "room-right-1", "room-right-2"]} storageKey="room.dock.v2">
+    <DockLayout defaultSizes={{ "room-players": { height: 390 }, "room-control": { height: 430 }, "room-support": { height: 350 }, "room-chat": { height: 480 } }} panelIds={["room-players", "room-control", "room-support", "room-chat"]} slotIds={["room-left-1", "room-left-2", "room-right-1", "room-right-2"]} storageKey="room.dock.v3">
     <div className={`dashboard-layout room-mode-page ${room?.visibility === "public" ? "public-room-play" : "private-room-play"}`} style={{ "--source-rail-width": `${sourceRailWidth}px`, "--side-panel-width": `${sidePanelWidth}px` } as CSSProperties}>
       <aside className="stream-sidebar room-sidebar dock-rail" data-dock-boundary="right" aria-label="Room setup">
         <WorkspaceIdentity onModes={requestExitToHome} subtitle={room?.visibility === "public" ? "Public multiplayer" : hasApiBaseUrl ? "Private room" : "Local room fallback"} />
@@ -714,12 +721,6 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
           <header className="source-card-header">
             <div><span className="source-eyebrow">Players</span><h2>{room ? "Room lobby" : "No room"}</h2></div>
             <div className="room-player-header-actions">
-              {room ? (
-                <>
-                  {room.visibility !== "public" ? <button className="room-panel-code-button" onClick={copyRoomCode} title="Copy room code" type="button"><span>{room.code}</span><span className="material-symbols-outlined">content_copy</span></button> : null}
-                  <button className="room-panel-exit-button" onClick={() => leaveCurrentRoom(true)} title="Leave this room" type="button"><span className="material-symbols-outlined">logout</span><span>Exit room</span></button>
-                </>
-              ) : null}
               <span className="source-status">{roomPlayers.length}</span>
             </div>
           </header>
@@ -738,10 +739,25 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
           <section className="source-card camera-source-card room-camera-card">
             <header className="source-card-header">
               <div><span className="source-eyebrow">Camera frame</span><h2>{isDrawer ? "Word panel" : "Drawer on camera"}</h2></div>
-              <span className={`source-status ${room?.phase === "drawing" ? "ready" : ""}`}><i />{room?.phase === "drawing" ? "Round live" : room?.phase ?? roomConnectionStatus}</span>
+              <div className="room-camera-header-actions">
+                {room && room.visibility !== "public" ? <button aria-pressed={roomCodePanelOpen} className={`room-details-toggle ${roomCodePanelOpen ? "active" : ""}`} onClick={() => { setRoomCodePanelOpen((current) => !current); setRoomCodeRevealed(false); }} title={roomCodePanelOpen ? "Show camera frame" : "Show private room code"} type="button"><span className="material-symbols-outlined">{roomCodePanelOpen ? "videocam" : "key"}</span><span>{roomCodePanelOpen ? "Camera" : "Code"}</span></button> : null}
+                <span className={`source-status ${room?.phase === "drawing" ? "ready" : ""}`}><i />{room?.phase === "drawing" ? "Round live" : room?.phase ?? roomConnectionStatus}</span>
+              </div>
             </header>
-            <div className={`camera-preview ${room?.phase === "drawing" && isDrawer ? "source-selected round-prompt-visible" : "custom-word-position"}`}>
-              {room?.phase === "drawing" && isDrawer && room.answer ? (
+            <div className={`camera-preview ${roomCodePanelOpen ? "room-code-camera-view custom-word-position" : room?.phase === "drawing" && isDrawer ? "source-selected round-prompt-visible" : "custom-word-position"}`}>
+              {roomCodePanelOpen && room && room.visibility !== "public" ? (
+                <div className="custom-word-card room-word-card room-details-card">
+                  <small className="camera-instruction">Private invitation</small>
+                  <strong>Room code</strong>
+                  <div className="room-code-share">
+                    <button aria-label={roomCodeRevealed ? `Room code ${room.code}. Hide room code` : "Reveal private room code"} className="room-code-cover" onClick={() => setRoomCodeRevealed((current) => !current)} type="button">
+                      {roomCodeRevealed ? <span className="room-code-text">{room.code}</span> : <span className="room-code-mask" aria-hidden="true" />}
+                    </button>
+                    <button aria-label="Copy private room code" className="room-code-copy" onClick={copyRoomCode} title="Copy room code" type="button"><span className="material-symbols-outlined">content_copy</span></button>
+                  </div>
+                  <small>{roomCodeRevealed ? "Click the code to cover it again." : "Click the covered strip to reveal the code."}</small>
+                </div>
+              ) : room?.phase === "drawing" && isDrawer && room.answer ? (
                 <div className="camera-prompt-copy"><strong style={{ fontSize: Math.max(26, Math.min(60, 440 / Math.max(1, roomAnswerText.length))) + "px", lineHeight: 1.15 }}>{roomAnswerText}</strong></div>
               ) : (
                 <div className="custom-word-card room-word-card">
@@ -781,7 +797,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
       <main className="dashboard-shell room-shell">
         <section className="dashboard-grid room-grid">
           <div className="main-column room-main-column">
-            <ResizableSurface className="fixed-prompt-surface" label="guess bar" storageKey="room.guessBar.v2">
+            <ResizableSurface className="fixed-prompt-surface" label="guess bar" storageKey="room.guessBar.v3">
             <section className="prompt-board room-prompt-board">
               <div className="round-word-mask">
                 {room?.answer?.mask ?? maskedAnswer(roomAnswerText || null)}
@@ -789,7 +805,7 @@ export function RoomModePage({ onNavigate }: RoomModePageProps) {
             </section>
             </ResizableSurface>
 
-            <ResizableSurface className="fixed-canvas-surface" label="drawing canvas" storageKey="room.canvas.v2">
+            <ResizableSurface className="fixed-canvas-surface" label="drawing canvas" storageKey="room.canvas.v3">
             <section className="canvas-card room-canvas-card">
               <header className="room-canvas-header">
                 <span className="room-round-indicator">Round {room ? Math.min(room.roundsPerPlayer, room.roundIndex + 1) : 1}/{room?.roundsPerPlayer ?? 3}</span>

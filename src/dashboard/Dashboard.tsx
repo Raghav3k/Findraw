@@ -114,8 +114,8 @@ type DashboardProps = { onNavigate: (path: string) => void };
 
 export function Dashboard({ onNavigate }: DashboardProps) {
   const { displayName: communityCreatorName, setTwitchSession, twitchSession } = useSiteIdentity();
-  const [sourceRailWidth, setSourceRailWidth] = usePersistentState("layout.sourceRailWidth", 380);
-  const [sidePanelWidth, setSidePanelWidth] = usePersistentState("layout.sidePanelWidth", 280);
+  const [sourceRailWidth, setSourceRailWidth] = usePersistentState("layout.sourceRailWidth.v2", 340);
+  const [sidePanelWidth, setSidePanelWidth] = usePersistentState("layout.sidePanelWidth.v2", 300);
   const [canvasColor, setCanvasColor] = usePersistentState("canvas.background", "#FFF2CF");
   const [gridSize, setGridSize] = usePersistentState("grid.size", 24);
   const [hoverMenusEnabled, setHoverMenusEnabled] = usePersistentState("hover.enabled", true);
@@ -719,7 +719,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
   };
 
   return (
-    <DockLayout panelIds={["artist-camera", "artist-chat", "artist-support", "artist-solved", "artist-leaderboard"]} slotIds={["artist-left-1", "artist-left-2", "artist-right-1", "artist-right-2", "artist-right-3"]} storageKey="artist.dock.v2">
+    <DockLayout defaultSizes={{ "artist-camera": { height: 360 }, "artist-chat": { height: 470 }, "artist-support": { height: 300 }, "artist-solved": { height: 330 }, "artist-leaderboard": { height: 360 } }} panelIds={["artist-camera", "artist-chat", "artist-support", "artist-solved", "artist-leaderboard"]} slotIds={["artist-left-1", "artist-left-2", "artist-right-1", "artist-right-2", "artist-right-3"]} storageKey="artist.dock.v3">
     <div
       className="dashboard-layout"
       style={{
@@ -744,7 +744,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
 
         <section className="dashboard-grid">
           <div className="main-column">
-            <ResizableSurface className="fixed-prompt-surface" label="guess bar" storageKey="artist.guessBar.v2">
+            <ResizableSurface className="fixed-prompt-surface" label="guess bar" storageKey="artist.guessBar.v3">
             <div className="prompt-bar-row">
               <section
                 className={`prompt-board ${solvedViewers.length > 0 ? "has-correct-guess" : ""}`}
@@ -815,7 +815,7 @@ export function Dashboard({ onNavigate }: DashboardProps) {
             </div>
             </ResizableSurface>
 
-            <ResizableSurface className="fixed-canvas-surface" label="drawing canvas" storageKey="artist.canvas.v2">
+            <ResizableSurface className="fixed-canvas-surface" label="drawing canvas" storageKey="artist.canvas.v3">
             <section className="canvas-card">
               <div className="solve-bar"><span style={{ width: `${Math.min(100, (solvedViewers.length / correctGuessTarget) * 100)}%` }} /></div>
               <div className="canvas-header simplified-canvas-header">

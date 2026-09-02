@@ -37,13 +37,15 @@ type DockContextValue = {
 
 const DockContext = createContext<DockContextValue | null>(null);
 
-export function DockLayout({ children, panelIds, slotIds, storageKey }: { children: ReactNode; panelIds: string[]; slotIds: string[]; storageKey: string }) {
+export function DockLayout({ children, defaultSizes = {}, panelIds, slotIds, storageKey }: { children: ReactNode; defaultSizes?: Record<string, PanelSize>; panelIds: string[]; slotIds: string[]; storageKey: string }) {
   const panelIdsRef = useRef(panelIds);
   const slotIdsRef = useRef(slotIds);
+  const defaultSizesRef = useRef(defaultSizes);
   const stablePanelIds = panelIdsRef.current;
   const stableSlotIds = slotIdsRef.current;
+  const stableDefaultSizes = defaultSizesRef.current;
   const [storedOrder, setStoredOrder] = usePersistentState<string[]>(`${storageKey}.order`, stablePanelIds);
-  const [sizes, setSizes] = usePersistentState<Record<string, PanelSize>>(`${storageKey}.sizes`, {});
+  const [sizes, setSizes] = usePersistentState<Record<string, PanelSize>>(`${storageKey}.sizes`, stableDefaultSizes);
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
   const [hoveredSlotId, setHoveredSlotId] = useState<string | null>(null);
@@ -104,7 +106,7 @@ export function DockLayout({ children, panelIds, slotIds, storageKey }: { childr
   }, []);
 
   const getAssignedPanelId = useCallback((slotId: string) => order[stableSlotIds.indexOf(slotId)] ?? stablePanelIds[stableSlotIds.indexOf(slotId)] ?? "", [order, stablePanelIds, stableSlotIds]);
-  const getPanelSize = useCallback((panelId: string) => sizes[panelId] ?? {}, [sizes]);
+  const getPanelSize = useCallback((panelId: string) => sizes[panelId] ?? stableDefaultSizes[panelId] ?? {}, [sizes, stableDefaultSizes]);
   const setPanelSize = useCallback((panelId: string, size: PanelSize) => {
     setSizes((current) => {
       const next = { ...current, [panelId]: { ...current[panelId], ...size } };
@@ -175,10 +177,10 @@ export function DockLayout({ children, panelIds, slotIds, storageKey }: { childr
   const isSnapping = useCallback((panelId: string) => snappingIds.includes(panelId), [snappingIds]);
   const resetLayout = useCallback(() => {
     setStoredOrder([...stablePanelIds]);
-    setSizes({});
+    setSizes({ ...stableDefaultSizes });
     setSnappingIds([]);
     window.dispatchEvent(new CustomEvent("findraw:reset-dock-layout"));
-  }, [setSizes, setStoredOrder, stablePanelIds]);
+  }, [setSizes, setStoredOrder, stableDefaultSizes, stablePanelIds]);
   const toggleEditing = useCallback(() => {
     setEditing((current) => !current);
     setDraggingId(null);
